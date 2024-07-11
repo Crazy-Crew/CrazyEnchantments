@@ -208,6 +208,8 @@ public class ScrollListener implements Listener {
         List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
+        if (data == null) return item; // Only order if it has CE_Enchants
+
         for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
             enchantments.put(enchantment,ColorUtils.stripStringColour((enchantment.getCustomName() + " " +
