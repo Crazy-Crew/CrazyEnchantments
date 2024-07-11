@@ -120,7 +120,7 @@ public class ScrollListener implements Listener {
             }
 
             case "TransmogScroll" -> {
-                if (!this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
+                if (this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
                 if (item.lore() == null) return;
 
                 ItemStack orderedItem = newOrderNewEnchantments(item.clone());
