@@ -55,7 +55,7 @@ hangarPublish {
 
         version.set(rootProject.version as String)
 
-        channel.set(if (isSnapshot) "Snapshot" else "Release")
+        channel.set(if (isSnapshot) "Beta" else "Release")
 
         changelog.set(content)
 
