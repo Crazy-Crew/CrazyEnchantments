@@ -183,11 +183,12 @@ public class CECommand implements CommandExecutor {
                 if (hasPermission(sender, "reload")) {
                     this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
                     this.fileManager.setup();
+                    MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
                     this.crazyManager.load();
 
                     BlackSmithManager.load();
                     KitsManager.load();
-                    MenuManager.load();
+
 
                     sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
 

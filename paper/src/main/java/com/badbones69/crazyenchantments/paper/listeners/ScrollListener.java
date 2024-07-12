@@ -120,7 +120,7 @@ public class ScrollListener implements Listener {
             }
 
             case "TransmogScroll" -> {
-                if (!this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
+                if (this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
                 if (item.lore() == null) return;
 
                 ItemStack orderedItem = newOrderNewEnchantments(item.clone());
@@ -207,6 +207,8 @@ public class ScrollListener implements Listener {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
         List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
+
+        if (data == null) return item; // Only order if it has CE_Enchants
 
         for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
