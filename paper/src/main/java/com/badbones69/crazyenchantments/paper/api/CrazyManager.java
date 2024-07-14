@@ -127,7 +127,7 @@ public class CrazyManager {
     private int defaultLimit;
     private int defaultBaseLimit;
     private boolean useEnchantmentLimiter;
-    private boolean checkLimitPermission;
+    private boolean useConfigLimits;
 
     private int CESuccessOverride;
     private int CEFailureOverride;
@@ -198,7 +198,7 @@ public class CrazyManager {
         this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item", "BOOK")));
         this.useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
         this.maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
-        this.checkLimitPermission = config.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", true);
+        this.useConfigLimits = config.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
         this.defaultLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
         this.defaultBaseLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
         this.useEnchantmentLimiter = config.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
@@ -741,7 +741,7 @@ public class CrazyManager {
     public int getPlayerMaxEnchantments(Player player) {
         int limit = defaultLimit;
 
-        if (!checkLimitPermission) return limit;
+        if (useConfigLimits) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
@@ -764,7 +764,7 @@ public class CrazyManager {
     public int getPlayerBaseEnchantments(@NotNull Player player) {
         int limit = defaultBaseLimit;
 
-        if (!checkLimitPermission) return limit;
+        if (useConfigLimits) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
