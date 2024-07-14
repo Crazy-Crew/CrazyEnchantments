@@ -221,6 +221,7 @@ public class CECommand implements CommandExecutor {
                     placeholders.put("%item%", String.valueOf(item.isEmpty() ? 0 : this.enchantmentBookSettings.getEnchantmentAmount(item, this.crazyManager.checkVanillaLimit())));
                     placeholders.put("%slotCrystal%", String.valueOf(-slotModifier));
                     placeholders.put("%space%", String.valueOf(canAdd));
+                    placeholders.put("%limitSetInConfig%", String.valueOf(this.crazyManager.useConfigLimit()));
 
                     sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
                 }

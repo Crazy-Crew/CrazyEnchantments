@@ -166,9 +166,15 @@ public class PickaxeEnchantments implements Listener {
             for (int j = 0; j < oldDrops.size(); j++) {
                 Item entityItem  = oldDrops.get(j);
                 ItemStack drop = entityItem.getItemStack();
+                int amountToAdd = 0;
 
                 if (!isOre(drop.getType())) continue;
-                drop = getOreDrop(drop.getType(), drop.getAmount() + level);
+
+                for (int i = 0; i < level; i++) {
+                    if (CEnchantments.AUTOSMELT.chanceSuccessful(level)) ++amountToAdd;
+                }
+
+                drop = getOreDrop(drop.getType(), drop.getAmount() + amountToAdd);
 
                 entityItem.setItemStack(drop);
                 event.getItems().set(j, entityItem);
