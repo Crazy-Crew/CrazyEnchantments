@@ -734,6 +734,14 @@ public class CrazyManager {
     }
 
     /**
+     *
+     * @return true if the plugin uses limits listed in config.yml.
+     */
+    public boolean useConfigLimit() {
+        return useConfigLimits;
+    }
+
+    /**
      * Get a players max amount of enchantments.
      * @param player The player you are checking.
      * @return The max amount of enchantments a player can have on an item.

@@ -87,6 +87,7 @@ public enum Messages {
     "&7Current Items Slot Crystal Limit Adjustment: &6%slotCrystal%",
     "&7Current Enchantment amount on item: &6%item%",
     "&7You can add &6%space% &7more enchantments to this item.",
+    "&c&cLimit set in config.yml: %limitSetInConfig%",
     "&0======================================")),
     HELP("Help", Arrays.asList(
     "&2&l&nCrazy Enchantments",
