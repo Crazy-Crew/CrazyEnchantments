@@ -14,7 +14,7 @@ public class KitsPreviewMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        for (ItemStack itemStack : getKit().getKitItems()) {
+        for (ItemStack itemStack : getKit().getPreviewItems()) {
             getInventory().addItem(itemStack);
         }
 
