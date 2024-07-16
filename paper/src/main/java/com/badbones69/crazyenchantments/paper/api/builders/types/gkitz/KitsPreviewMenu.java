@@ -3,8 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import java.util.List;
+import org.bukkit.inventory.Inventory;
 
 public class KitsPreviewMenu extends InventoryBuilder {
 
@@ -14,14 +13,11 @@ public class KitsPreviewMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        for (ItemStack itemStack : getKit().getPreviewItems()) {
-            getInventory().addItem(itemStack);
-        }
+        Inventory inv = getInventory();
 
-        List<ItemStack> items = getKit().getPreviewItems();
-        int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
+        getKit().getPreviewItems().forEach(inv::addItem);
 
-        getInventory().setItem(slots - 1, KitsManager.getBackRight());
+        inv.setItem(inv.getSize() - 1, KitsManager.getBackRight());
 
         return this;
     }

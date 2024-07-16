@@ -132,8 +132,9 @@ public class KitsMenu extends InventoryBuilder {
             GKitz kit = this.crazyManager.getGKitFromName(nbtItem.getString("gkit"));
 
             if (event.getAction() == InventoryAction.PICKUP_HALF) {
-                List<ItemStack> items = kit.getPreviewItems();
-                int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
+
+                int amountOfItems = kit.getPreviewItems().size() + 1; // Add 1 to account for the back button.
+                int slots = Math.min(((amountOfItems / 9) + (amountOfItems % 9 > 0 ? 1 : 0)) * 9, 54);
 
                 MenuManager.openKitsPreviewMenu(player, slots, kit);
 
