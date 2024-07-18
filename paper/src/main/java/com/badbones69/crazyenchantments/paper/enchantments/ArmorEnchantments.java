@@ -301,14 +301,14 @@ public class ArmorEnchantments implements Listener {
                 Entity lightning = this.methods.lightning(damager);
 
                 // AntiCheat Support.
-                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
+                //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
                 for (LivingEntity en : this.methods.getNearbyLivingEntities(2D, player)) {
                     EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(en, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(player).withDirectEntity(lightning).build(), 5D);
                     this.methods.entityEvent(player, en, damageByEntityEvent);
                 }
 
-                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
+                //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
                 damager.damage(5D);
             }

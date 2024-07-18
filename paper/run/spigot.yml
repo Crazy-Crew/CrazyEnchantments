@@ -22,6 +22,8 @@ settings:
   user-cache-size: 1000
   netty-threads: 4
   attribute:
+    maxAbsorption:
+      max: 2048.0
     maxHealth:
       max: 2048.0
     movementSpeed:

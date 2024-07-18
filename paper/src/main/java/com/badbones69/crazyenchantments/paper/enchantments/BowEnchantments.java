@@ -129,7 +129,7 @@ public class BowEnchantments implements Listener {
             }
 
             // AntiCheat Support.
-            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(shooter);
+            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(shooter);
 
             for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, arrow.arrow())) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
@@ -145,7 +145,7 @@ public class BowEnchantments implements Listener {
                 EventUtils.removeIgnoredUUID(shooter.getUniqueId());
             }
 
-            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.denyPlayer(shooter);
+            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.denyPlayer(shooter);
         }
 
         // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
