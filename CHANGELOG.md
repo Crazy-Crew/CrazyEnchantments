@@ -1,14 +1,11 @@
-### Added:
-- 1.21 support
-- Ability to override success and failure rates in the config.yml.
-- `CESuccessOverride` and `CEFailureOverride` will be added to your config, -1 is no override but you can pick a number between `0 and 100`.
+### Fixed:
+- The preview for god kits weren't including the fake items configured.
+- Transmog scroll wasn't working due to an incorrect inversion.
+- `ce info` wasn't working due to wrong load order on startup.
 
 ### Changes:
-- Bumped internal dependencies
-- Bumped gradle version
-- Bumped java version
-- Bumped nbt api
+- Update how auto smelt calculates how many items which should fix some oddities.
+- Updated default message for `hit-enchantment-max`
 
-### Removed:
-- 1.20.6 support
-- Removed unused methods
+### Added:
+- %limitSetInConfig% placeholder to `ce limit`

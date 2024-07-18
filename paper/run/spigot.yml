@@ -59,6 +59,7 @@ players:
   disable-saving: false
 world-settings:
   default:
+    unload-frozen-chunks: false
     seed-trialchambers: 94251327
     below-zero-generation-in-existing-chunks: true
     hanging-tick-frequency: 100
