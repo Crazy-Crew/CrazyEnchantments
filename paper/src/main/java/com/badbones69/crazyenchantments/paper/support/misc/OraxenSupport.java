@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class OraxenSupport {
+    // TODO Figure out if this class is still needed. If not, nuke it. -TDL
 
     public int getMaxDurability(ItemStack itemStack) {
         String itemId = OraxenItems.getIdByItem(itemStack);
