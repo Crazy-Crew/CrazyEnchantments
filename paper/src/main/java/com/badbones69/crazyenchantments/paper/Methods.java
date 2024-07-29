@@ -36,7 +36,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class Methods {
@@ -171,8 +170,15 @@ public class Methods {
         return itemStack;
     }
 
-    public ItemStack addLore(ItemStack item, String i) {
-        Objects.requireNonNull(item.lore()).add(ColorUtils.legacyTranslateColourCodes(i));
+    public ItemStack addLore(ItemStack item, String loreString) {
+        List<net.kyori.adventure.text.Component> lore = item.lore();
+        
+        if (lore == null) return item;
+
+        lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+
+        item.lore(lore);
+
         return item;
     }
 
