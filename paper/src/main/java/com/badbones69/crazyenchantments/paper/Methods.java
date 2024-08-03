@@ -100,11 +100,11 @@ public class Methods {
     }
 
     @NotNull
-    public ItemStack getItemInHand(Player player) {
+    public ItemStack getItemInHand(@NotNull Player player) {
         return player.getInventory().getItemInMainHand();
     }
 
-    public void setItemInHand(Player player, ItemStack item) {
+    public void setItemInHand(@NotNull Player player, @Nullable ItemStack item) {
         player.getInventory().setItemInMainHand(item);
     }
 
@@ -122,11 +122,11 @@ public class Methods {
         return false;
     }
 
-    public void removeItem(ItemStack item, Player player) {
+    public void removeItem(@NotNull ItemStack item, @NotNull Player player) {
         removeItem(item, player, 1);
     }
 
-    public void removeItem(ItemStack item, Player player, int amount) {
+    public void removeItem(@NotNull ItemStack item, @NotNull Player player, int amount) {
         try {
             boolean found = false;
 
@@ -154,15 +154,17 @@ public class Methods {
         } catch (Exception ignored) {}
     }
 
-    public ItemStack removeItem(ItemStack item) {
+    @Nullable
+    public ItemStack removeItem(@NotNull ItemStack item) {
         return removeItem(item, 1);
     }
 
-    public ItemStack removeItem(ItemStack item, int amount) {
+    @Nullable
+    public ItemStack removeItem(@NotNull ItemStack item, int amount) {
         ItemStack itemStack = item.clone();
 
         if (item.getAmount() <= amount) {
-            itemStack = new ItemStack(Material.AIR);
+            itemStack = null;
         } else {
             itemStack.setAmount(item.getAmount() - amount);
         }
@@ -170,10 +172,11 @@ public class Methods {
         return itemStack;
     }
 
-    public ItemStack addLore(ItemStack item, String loreString) {
+    @NotNull
+    public ItemStack addLore(@NotNull ItemStack item, String loreString) {
         List<net.kyori.adventure.text.Component> lore = item.lore();
         
-        if (lore == null) return item;
+        if (lore == null) lore = new ArrayList<>();
 
         lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
 
@@ -182,7 +185,7 @@ public class Methods {
         return item;
     }
 
-    public boolean hasArgument(String arg, List<String> message) {
+    public boolean hasArgument(@NotNull String arg, @NotNull List<String> message) {
         for (String line : message) {
             line = ColorUtils.color(line).toLowerCase();
 
@@ -216,7 +219,7 @@ public class Methods {
      * @param player The {@link Player} who's inventory should be checked.
      * @return Returns if the player's inventory is full while letting them know.
      */
-    public boolean isInventoryFull(Player player) {
+    public boolean isInventoryFull(@NotNull Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
         player.sendMessage(Messages.INVENTORY_FULL.getMessage());
         return true;
@@ -227,14 +230,15 @@ public class Methods {
      * @param player The {@link Player} to give items to.
      * @param item The {@link ItemStack} to give to the player.
      */
-    public void addItemToInventory(Player player, ItemStack item) {
+    public void addItemToInventory(@NotNull Player player, @NotNull ItemStack item) {
         player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
-    public void addItemToInventory(Player player, List<Item> itemList) {
+    public void addItemToInventory(@NotNull Player player, @NotNull List<Item> itemList) {
         itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
     }
 
-    public List<LivingEntity> getNearbyLivingEntities(double radius, Entity entity) {
+    @NotNull
+    public List<LivingEntity> getNearbyLivingEntities(double radius, @NotNull Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
         List<LivingEntity> entities = new ArrayList<>();
 
@@ -245,15 +249,16 @@ public class Methods {
         return entities;
     }
 
-    public List<Entity> getNearbyEntities(double radius, Entity entity) {
+    @NotNull
+    public List<Entity> getNearbyEntities(double radius, @NotNull Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
     }
 
-    public void fireWork(Location loc, List<Color> colors) {
+    public void fireWork(@NotNull Location loc, @NotNull List<Color> colors) {
         fireWork(loc, new ArrayList<>(colors));
     }
 
-    public void fireWork(Location loc, ArrayList<Color> colors) {
+    public void fireWork(@NotNull Location loc, @NotNull ArrayList<Color> colors) {
         Firework firework = loc.getWorld().spawn(loc, Firework.class);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         fireworkMeta.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
@@ -270,7 +275,7 @@ public class Methods {
         this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, loc, task -> firework.detonate(), 2);
     }
 
-    public Enchantment getEnchantment(String enchantmentName) {
+    public Enchantment getEnchantment(@NotNull String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
             enchantmentName = enchantmentName.replaceAll("-|_| ", "");
@@ -284,13 +289,13 @@ public class Methods {
         return null;
     }
 
-    public int getMaxDurability(ItemStack item) {
+    public int getMaxDurability(@NotNull ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) return item.getType().getMaxDurability();
 
         return this.oraxenSupport.getMaxDurability(item);
     }
 
-    public int getDurability(ItemStack item) {
+    public int getDurability(@NotNull ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
             ItemMeta meta = item.getItemMeta();
             if (meta instanceof Damageable) return ((Damageable) item.getItemMeta()).getDamage();
@@ -300,7 +305,7 @@ public class Methods {
         return this.oraxenSupport.getDamage(item);
     }
 
-    public void setDurability(ItemStack item, int newDamage) {
+    public void setDurability(@NotNull ItemStack item, int newDamage) {
         newDamage = Math.max(newDamage, 0);
 
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
@@ -317,7 +322,7 @@ public class Methods {
         this.oraxenSupport.setDamage(item, newDamage);
     }
 
-    public void removeDurability(ItemStack item, Player player) {
+    public void removeDurability(@NotNull ItemStack item, @NotNull Player player) {
         if (getMaxDurability(item) == 0) return;
 
         if (item.hasItemMeta()) {
@@ -351,8 +356,8 @@ public class Methods {
         }
     }
 
-    public void explode(Entity player) {
-        spawnExplodeParticles(player, player.getWorld(), player.getLocation());
+    public void explode(@NotNull Entity player) {
+        spawnExplodeParticles(player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
             if (this.pluginSupport.allowCombat(entity.getLocation())) {
@@ -371,18 +376,17 @@ public class Methods {
         }
     }
 
-    private void spawnExplodeParticles(Entity player, World world, Location location) {
-        if (player.getLocation().getWorld() != null) {
-            player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
-            player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
-            player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation(), 2);
-        }
+    private void spawnExplodeParticles(@NotNull World world, @NotNull Location location) {
+
+        world.spawnParticle(Particle.FLAME, location, 200);
+        world.spawnParticle(Particle.CLOUD, location, 30, .4F, .5F, .4F);
+        world.spawnParticle(Particle.EXPLOSION, location, 2);
 
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
     }
 
-    public void explode(Entity entity, Entity arrow) {
-        spawnExplodeParticles(arrow, entity.getWorld(), entity.getLocation());
+    public void explode(@NotNull Entity entity, @NotNull Entity arrow) {
+        spawnExplodeParticles(entity.getWorld(), entity.getLocation());
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
             if (this.pluginSupport.allowCombat(value.getLocation())) {
@@ -408,7 +412,8 @@ public class Methods {
         }
     }
 
-    public HashSet<Block> getEnchantBlocks(Location loc, Location loc2) {
+    @NotNull
+    public HashSet<Block> getEnchantBlocks(@NotNull Location loc, @NotNull Location loc2) {
         HashSet<Block> blockList = new HashSet<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
         int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
@@ -428,7 +433,7 @@ public class Methods {
         return blockList;
     }
 
-    public void entityEvent(Player damager, LivingEntity entity, EntityDamageEvent damageByEntityEvent) {
+    public void entityEvent(@NotNull Player damager, @NotNull LivingEntity entity, @NotNull EntityDamageEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
         this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
@@ -439,8 +444,8 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public Entity lightning(LivingEntity en) {
-        Location loc = en.getLocation();
+    public Entity lightning(@NotNull LivingEntity entity) {
+        Location loc = entity.getLocation();
         Entity lightning = null;
         if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
@@ -452,7 +457,7 @@ public class Methods {
         return lightning;
     }
 
-    public void switchCurrency(Player player, Currency option, String one, String two, String cost) {
+    public void switchCurrency(@NotNull Player player, @NotNull Currency option, @NotNull String one, @NotNull String two, @NotNull String cost) {
         HashMap<String, String> placeholders = new HashMap<>();
 
         placeholders.put(one, cost);
@@ -530,7 +535,7 @@ public class Methods {
      * @param block The block that is dropping xp.
      * @param expToDrop The amount of xp it should drop.
      */
-    private void dropXP(Block block, int expToDrop) {
+    private void dropXP(@NotNull Block block, int expToDrop) {
         if (expToDrop < 1) return;
 
         ExperienceOrb exp = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
