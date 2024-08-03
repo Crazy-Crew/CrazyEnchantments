@@ -173,7 +173,7 @@ public class Methods {
     public ItemStack addLore(ItemStack item, String loreString) {
         List<net.kyori.adventure.text.Component> lore = item.lore();
         
-        if (lore == null) return item;
+        if (lore == null) lore = new ArrayList<>();
 
         lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
 
