@@ -385,8 +385,8 @@ public class Methods {
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
     }
 
-    public void explode(@NotNull Entity entity, @NotNull Entity arrow) {
-        spawnExplodeParticles(entity.getWorld(), entity.getLocation());
+    public void explode(@NotNull Entity shooter, @NotNull Entity arrow) {
+        spawnExplodeParticles(shooter.getWorld(), arrow.getLocation());
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
             if (this.pluginSupport.allowCombat(value.getLocation())) {
@@ -396,10 +396,10 @@ public class Methods {
                 }
 
                 if (!(value instanceof LivingEntity livingEntity)) continue;
-                if (this.pluginSupport.isFriendly(entity, livingEntity)) continue;
-                if (entity.getName().equalsIgnoreCase(value.getName())) continue;
+                if (this.pluginSupport.isFriendly(shooter, livingEntity)) continue;
+                if (shooter.getName().equalsIgnoreCase(value.getName())) continue;
 
-                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).withDirectEntity(arrow).build(), 5D);
+                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
 
                 this.plugin.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) continue;
