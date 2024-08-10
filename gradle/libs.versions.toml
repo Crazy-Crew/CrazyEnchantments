@@ -1,46 +1,46 @@
 [versions]
 # Minecraft
-paper = "1.21-R0.1-SNAPSHOT"
+paper = "1.21.1-R0.1-SNAPSHOT"
 minecraft = "1.21"
 
 # Plugins
-headdatabaseapi = "1.3.1"
-placeholderapi = "2.11.6"
-worldguard = "7.0.10"
-worldedit = "7.3.3"
-oraxen = "1.175.0"
-nbtapi = "2.13.1-SNAPSHOT"
-vault = "1.7.1"
-griefprevention = "16.18.3"
-towny = "0.100.3.0"
-factions = "1.6.9.5-U0.6.40"
-skyblock = "2024.1"
-plotsquared = "6.11.1"
-mcmmo = "2.2.0-SNAPSHOT"
-kingdoms = "1.16.20.5"
+headdatabaseapi = "1.3.1"        # Not Used
+placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
+worldguard = "7.0.10"            # https://dev.bukkit.org/projects/worldguard/files
+worldedit = "7.3.5"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
+oraxen = "1.178.0"               # https://github.com/oraxen/oraxen#api
+nbtapi = "2.13.1-SNAPSHOT"       # https://github.com/tr7zw/Item-NBT-API
+vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
+griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
+towny = "0.100.3.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
+factions = "1.6.9.5-U0.6.40"     # https://www.spigotmc.org/resources/factionsuuid.1035/
+skyblock = "2024.1"              # https://bg-software.com/superiorskyblock/
+plotsquared = "7.3.8"            # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
+mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
+kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
 
 # AniCheat
-nocheatsplus = "3.16.1-SNAPSHOT"
+nocheatsplus = "3.16.1-SNAPSHOT" # https://ci.codemc.io/job/Updated-NoCheatPlus/
 
 # Libraries
-triumph-cmd = "2.0.0-ALPHA-10"
-tirumph-gui = "3.1.7"
-config-me = "1.4.1"
-jetbrains = "24.1.0"
-kyori = "4.17.0"
-vital = "1.5.9"
-metrics = "3.0.2"
+triumph-cmd = "2.0.0-ALPHA-10"   # Version=MIA https://github.com/TriumphTeam/triumph-cmds?tab=readme-ov-file
+tirumph-gui = "3.1.10"           # https://mvnrepository.com/artifact/dev.triumphteam/triumph-gui
+config-me = "1.4.1"              # https://mvnrepository.com/artifact/ch.jalu/configme
+jetbrains = "24.1.0"             # Not Used
+kyori = "4.17.0"                 # Not Used
+vital = "1.5.9"                  # Not Used
+metrics = "3.0.2"                # https://mvnrepository.com/artifact/org.bstats/bstats-bukkit
 
 # Paper
-paperweight="1.7.1"
-runPaper = "2.3.0"
-hangar = "0.1.2"
+paperweight="1.7.2"              # https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
+runPaper = "2.3.0"               # https://plugins.gradle.org/plugin/xyz.jpenilla.run-paper
+hangar = "0.1.2"                 # https://plugins.gradle.org/plugin/io.papermc.hangar-publish-plugin
 
 # Other
-shadowJar = "8.1.7"
+shadowJar = "8.1.8"              # https://plugins.gradle.org/plugin/io.github.goooler.shadow
 
 # Modrinth
-minotaur = "2.+"
+minotaur = "2.8.7"               # https://plugins.gradle.org/plugin/com.modrinth.minotaur
 
 [plugins]
 paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
@@ -65,13 +65,13 @@ vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 metrics = { module = "org.bstats:bstats-bukkit", version.ref = "metrics" }
 config-me = { module = "ch.jalu:configme", version.ref = "config-me" }
 
-griefprevention = { module = "com.github.TechFortress:GriefPrevention", version.ref = "griefprevention" }
+griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
 
 skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
-plotsquared = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plotsquared" }
-mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" } # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
+plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
+mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
 
 kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
 

@@ -52,7 +52,7 @@ dependencies {
 val component: SoftwareComponent = components["java"]
 
 paperweight {
-    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
+    paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 }
 
 tasks {
@@ -88,11 +88,9 @@ tasks {
     }
 
     assemble {
-        dependsOn(reobfJar)
-
         doLast {
             copy {
-                from(reobfJar.get())
+                from(shadowJar.get())
                 into(rootProject.projectDir.resolve("jars"))
             }
         }

@@ -16,12 +16,12 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -50,7 +50,9 @@ public class EnchantmentBookSettings {
         return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
     }
 
+    @Deprecated(since = "1.20.6")
     public boolean hasEnchantment(ItemMeta meta, CEnchantment enchantment) {
+        getEnchantments(meta);
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
         if (!data.has(DataKeys.enchantments.getNamespacedKey())) return false;
@@ -92,6 +94,7 @@ public class EnchantmentBookSettings {
      * @param book The old book.
      * @return A new scrambled book.
      */
+    @Nullable
     public ItemStack getNewScrambledBook(ItemStack book) {
         if (!book.hasItemMeta()) return null;
 
@@ -106,7 +109,7 @@ public class EnchantmentBookSettings {
             bookLevel = data.getLevel();
         }
 
-        if (enchantment == null) return new ItemStack(Material.AIR);
+        if (enchantment == null) return null;
 
         return new CEBook(enchantment, bookLevel, EnchantUtils.getHighestEnchantmentCategory(enchantment)).buildBook();
     }
@@ -135,6 +138,7 @@ public class EnchantmentBookSettings {
      *
      * @return A list of all active enchantments.
      */
+    @NotNull
     public List<CEnchantment> getRegisteredEnchantments() {
         return this.registeredEnchantments;
     }
@@ -150,6 +154,7 @@ public class EnchantmentBookSettings {
     /**
      * @return the itemstack of the enchantment book.
      */
+    @NotNull
     public ItemStack getEnchantmentBookItem() {
         return new ItemBuilder(this.enchantmentBook).build();
     }
@@ -158,7 +163,7 @@ public class EnchantmentBookSettings {
      *
      * @param enchantmentBook The book data to use for the itemBuilder.
      */
-    public void setEnchantmentBook(ItemBuilder enchantmentBook) {
+    public void setEnchantmentBook(@NotNull ItemBuilder enchantmentBook) {
         this.enchantmentBook = enchantmentBook;
     }
 
@@ -167,19 +172,22 @@ public class EnchantmentBookSettings {
      * @param item Item you want to get the enchantments from.
      * @return A Map of all enchantments and their levels on the item.
      */
-    public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
+    @NotNull
+    public Map<CEnchantment, Integer> getEnchantments(@Nullable ItemStack item) {
         if (item == null || item.getItemMeta() == null) return Collections.emptyMap();
 
         return getEnchantments(item.getItemMeta());
     }
 
-    public Map<CEnchantment, Integer> getEnchantments(ItemMeta meta) {
+    @NotNull
+    public Map<CEnchantment, Integer> getEnchantments(@Nullable ItemMeta meta) {
         if (meta == null) return Collections.emptyMap();
 
         return getEnchantments(meta.getPersistentDataContainer());
     }
 
-    public Map<CEnchantment, Integer> getEnchantments(PersistentDataContainer container) {
+    @NotNull
+    public Map<CEnchantment, Integer> getEnchantments(@NotNull PersistentDataContainer container) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
         String data = container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
@@ -204,6 +212,7 @@ public class EnchantmentBookSettings {
      * @param item Item you want to get the enchantments from.
      * @return A list of enchantments the item has.
      */
+    @Deprecated(since = "1.20", forRemoval = true)
     public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
         return new ArrayList<>(getEnchantments(item).keySet());
     }
@@ -213,8 +222,8 @@ public class EnchantmentBookSettings {
      * @param item to check.
      * @return Amount of enchantments on the item.
      */
-    public int getEnchantmentAmount(ItemStack item, boolean includeVanillaEnchantments) {
-        int amount = getEnchantmentsOnItem(item).size();
+    public int getEnchantmentAmount(@NotNull ItemStack item, boolean includeVanillaEnchantments) {
+        int amount = getEnchantments(item).size();
 
         if (includeVanillaEnchantments) {
             if (item.hasItemMeta()) {
@@ -229,6 +238,7 @@ public class EnchantmentBookSettings {
      * Get all the categories that can be used.
      * @return List of all the categories.
      */
+    @NotNull
     public List<Category> getCategories() {
         return this.categories;
     }
@@ -285,6 +295,7 @@ public class EnchantmentBookSettings {
      * @param name The name of the category you want.
      * @return The category object.
      */
+    @Nullable
     public Category getCategory(String name) {
         for (Category category : this.categories) {
             if (category.getName().equalsIgnoreCase(name)) return category;
@@ -305,7 +316,7 @@ public class EnchantmentBookSettings {
      * @param enchant The enchantment you want the level from.
      * @return The level the enchantment has.
      */
-    public int getLevel(ItemStack item, CEnchantment enchant) {
+    public int getLevel(@NotNull ItemStack item, @NotNull CEnchantment enchant) {
         String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
 
         int level = data == null ? 0 : this.gson.fromJson(data, Enchant.class).getLevel(enchant.getName());
@@ -320,7 +331,8 @@ public class EnchantmentBookSettings {
      * @param enchant Enchantment you want removed.
      * @return Item without the enchantment.
      */
-    public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
+    @NotNull
+    public ItemStack removeEnchantment(@NotNull ItemStack item, @NotNull CEnchantment enchant) {
         if (!item.hasItemMeta()) return item;
 
         item.setItemMeta(removeEnchantment(item.getItemMeta(), enchant));
@@ -328,7 +340,8 @@ public class EnchantmentBookSettings {
         return item;
     }
 
-    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) {
+    @NotNull
+    public ItemMeta removeEnchantment(@NotNull ItemMeta meta, @NotNull CEnchantment enchant) {
         List<Component> lore = meta.lore();
 
         if (lore != null) {
@@ -357,7 +370,8 @@ public class EnchantmentBookSettings {
         return meta;
     }
 
-    public ItemMeta removeEnchantments(ItemMeta meta, List<CEnchantment> enchants) {
+    @NotNull
+    public ItemMeta removeEnchantments(@NotNull ItemMeta meta, @NotNull List<CEnchantment> enchants) {
 
         List<Component> lore = meta.lore();
 
