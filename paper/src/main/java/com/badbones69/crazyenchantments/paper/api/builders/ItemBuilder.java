@@ -12,6 +12,8 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.support.SkullCreator;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Color;
@@ -503,6 +505,7 @@ public class ItemBuilder {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
             //todo() this is broke
             //potionMeta.setBasePotionData(new PotionData(this.potionType));
+            
         }
 
         if (this.isLeatherArmor && this.armorColor != null) {
@@ -867,42 +870,14 @@ public class ItemBuilder {
         return this;
     }
 
-    /**
-     * Add patterns to the item.
-     *
-     * @param stringPattern The pattern you wish to add.
-     */
-    private void addPatterns(String stringPattern) {
-        String[] split = stringPattern.split(":");
-
-        if (split.length < 2) return;
-
-        addPattern(split[0], split[1]);
-    }
-
     private void addPattern(String patternName, String stringColour) {
-        try {
-            for (PatternType pattern : PatternType.values()) { // TODO Use Registry
 
-                if (patternName.equalsIgnoreCase(pattern.name())) {
-                    DyeColor colour = getDyeColor(stringColour);
+        PatternType pattern = RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).get(NamespacedKey.minecraft(patternName));
+        DyeColor colour = getDyeColor(stringColour);
 
-                    if (colour != null) addPattern(new Pattern(colour, pattern));
+        if (pattern == null || colour == null) return;
 
-                    break;
-                }
-            }
-        } catch (Exception ignored) {}
-    }
-
-    /**
-     * @param patterns The list of Patterns to add.
-     * @return The ItemBuilder with updated patterns.
-     */
-    public ItemBuilder addPatterns(List<String> patterns) {
-        patterns.forEach(this :: addPatterns);
-
-        return this;
+        addPattern(new Pattern(colour, pattern));
     }
 
     /**
