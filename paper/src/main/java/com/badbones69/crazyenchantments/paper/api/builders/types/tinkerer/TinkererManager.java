@@ -84,7 +84,7 @@ public class TinkererManager {
 
         assert id != null;
 
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.experience.getNamespacedKey(), amount).build();
+        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).addStringPDC(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
     public static int getTotalXP(ItemStack item, FileConfiguration config) {

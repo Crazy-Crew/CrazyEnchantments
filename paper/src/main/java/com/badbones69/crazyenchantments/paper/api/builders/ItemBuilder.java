@@ -37,10 +37,12 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.NotNull;
 import org.jline.utils.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,8 +120,7 @@ public class ItemBuilder {
     // Custom Data
     private int customModelData;
     private boolean useCustomModelData;
-    private NamespacedKey nameSpacedKey;
-    private String nameSpacedData;
+    private Map<NamespacedKey, String> stringPDC;
 
     /**
      * Create a blank item builder.
@@ -170,8 +171,7 @@ public class ItemBuilder {
 
         this.itemFlags = new ArrayList<>();
 
-        this.nameSpacedKey = null;
-        this.nameSpacedData = null;
+        this.stringPDC = null;
 
     }
 
@@ -234,8 +234,7 @@ public class ItemBuilder {
         this.namePlaceholders = new HashMap<>(itemBuilder.namePlaceholders);
         this.lorePlaceholders = new HashMap<>(itemBuilder.lorePlaceholders);
         this.itemFlags = new ArrayList<>(itemBuilder.itemFlags);
-        this.nameSpacedKey = itemBuilder.nameSpacedKey;
-        this.nameSpacedData = itemBuilder.nameSpacedData;
+        this.stringPDC = itemBuilder.stringPDC;
     }
 
     /**
@@ -402,7 +401,10 @@ public class ItemBuilder {
             assert itemMeta != null;
             if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
             if (!newLore.isEmpty()) itemMeta.lore(newLore);
-            if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
+            if (this.stringPDC != null) {
+                PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+                stringPDC.forEach((nameSpace, data) -> container.set(nameSpace, PersistentDataType.STRING, data));
+            }
 
             if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
 
@@ -424,7 +426,10 @@ public class ItemBuilder {
         assert itemMeta != null;
         if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
-        if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
+        if (this.stringPDC != null) {
+            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+            stringPDC.forEach((nameSpace, data) -> container.set(nameSpace, PersistentDataType.STRING, data));
+        }
         if (!this.crazyEnchantments.isEmpty()) itemMeta = addEnchantments(itemMeta, this.crazyEnchantments);
 
         if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(this.damage);
@@ -1319,9 +1324,9 @@ public class ItemBuilder {
      * @param data The data that the key holds.
      * @return The ItemBuilder with an updated item count.
      */
-    public ItemBuilder setStringPDC(NamespacedKey key, String data) {
-        this.nameSpacedKey = key;
-        this.nameSpacedData = data;
+    public ItemBuilder addStringPDC(NamespacedKey key, String data) {
+        if (this.stringPDC == null) this.stringPDC = new HashMap<>();
+        this.stringPDC.put(key, data);
 
         return this;
     }
