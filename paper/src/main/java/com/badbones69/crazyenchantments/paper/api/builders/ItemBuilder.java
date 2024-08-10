@@ -873,15 +873,21 @@ public class ItemBuilder {
      * @param stringPattern The pattern you wish to add.
      */
     private void addPatterns(String stringPattern) {
-        try {
-            String[] split = stringPattern.split(":");
+        String[] split = stringPattern.split(":");
 
+        if (split.length < 2) return;
+
+        addPattern(split[0], split[1]);
+    }
+
+    private void addPattern(String patternName, String stringColour) {
+        try {
             for (PatternType pattern : PatternType.values()) { // TODO Use Registry
 
-                if (split[0].equalsIgnoreCase(pattern.name())) {
-                    DyeColor color = getDyeColor(split[1]);
+                if (patternName.equalsIgnoreCase(pattern.name())) {
+                    DyeColor colour = getDyeColor(stringColour);
 
-                    if (color != null) addPattern(new Pattern(color, pattern));
+                    if (colour != null) addPattern(new Pattern(colour, pattern));
 
                     break;
                 }
@@ -1255,15 +1261,8 @@ public class ItemBuilder {
                             }
                         }
 
-                        try {
-                            for (PatternType pattern : PatternType.values()) { // TODO Use Registry
-                                if (option.equalsIgnoreCase(pattern.name())) {
-                                    DyeColor color = getDyeColor(value);
-                                    if (color != null) itemBuilder.addPattern(new Pattern(color, pattern));
-                                    break;
-                                }
-                            }
-                        } catch (Exception ignored) {}
+                        itemBuilder.addPattern(option, value);
+
                     }
                 }
             }
