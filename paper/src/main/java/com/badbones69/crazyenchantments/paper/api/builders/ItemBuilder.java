@@ -25,6 +25,7 @@ import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -502,10 +503,8 @@ public class ItemBuilder {
         }
 
         if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
-            PotionMeta potionMeta = (PotionMeta) itemMeta;
-            //todo() this is broke
-            //potionMeta.setBasePotionData(new PotionData(this.potionType));
-            
+            Arrow arrowMeta = (Arrow) itemMeta;
+            arrowMeta.setBasePotionType(this.potionType);
         }
 
         if (this.isLeatherArmor && this.armorColor != null) {
