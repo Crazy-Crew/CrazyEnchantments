@@ -388,7 +388,7 @@ public class ItemBuilder {
 
         ItemStack item = this.referenceItem != null ? this.referenceItem : new ItemStack(this.material);
 
-        if (item.getType().isAir()) return item;
+        if (item.isEmpty()) return item;
 
         if (this.isHead) { // Has to go 1st due to it removing all data when finished.
             if (this.isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
@@ -407,63 +407,6 @@ public class ItemBuilder {
             if (!newLore.isEmpty()) itemMeta.lore(newLore);
             if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
 
-            if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(this.damage);
-
-            if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
-                PotionMeta potionMeta = (PotionMeta) itemMeta;
-
-                //todo() this is broke
-                //if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
-
-                if (this.potionColor != null) potionMeta.setColor(this.potionColor);
-            }
-
-            if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
-                PotionMeta potionMeta = (PotionMeta) itemMeta;
-                //todo() this is broke
-                //potionMeta.setBasePotionData(new PotionData(this.potionType));
-            }
-
-            if (isArmor()) {
-                if (this.trimPattern != null && this.trimMaterial != null) {
-                    ((ArmorMeta) itemMeta).setTrim(new ArmorTrim(this.trimMaterial, this.trimPattern));
-                }
-            }
-
-            if (this.isMap) {
-                MapMeta mapMeta = (MapMeta) itemMeta;
-
-                if (this.mapColor != null) mapMeta.setColor(this.mapColor);
-            }
-
-            if (itemMeta instanceof Damageable) {
-                if (this.damage >= 1) {
-                    if (this.damage >= item.getType().getMaxDurability()) {
-                        ((Damageable) itemMeta).setDamage(item.getType().getMaxDurability());
-                    } else {
-                        ((Damageable) itemMeta).setDamage(this.damage);
-                    }
-                }
-            }
-
-            if (this.isLeatherArmor && this.armorColor != null) {
-                LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
-                leatherMeta.setColor(this.armorColor);
-            }
-
-            if (this.isBanner && !this.patterns.isEmpty()) {
-                BannerMeta bannerMeta = (BannerMeta) itemMeta;
-                bannerMeta.setPatterns(this.patterns);
-            }
-
-            if (this.isShield && !this.patterns.isEmpty()) {
-                BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
-                Banner banner = (Banner) shieldMeta.getBlockState();
-                banner.setPatterns(this.patterns);
-                banner.update();
-                shieldMeta.setBlockState(banner);
-            }
-
             if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
 
             this.itemFlags.forEach(itemMeta :: addItemFlags);
@@ -473,11 +416,7 @@ public class ItemBuilder {
             addGlow(item);
             NBTItem nbt = new NBTItem(item);
 
-            if (this.isHead && !this.isHash) nbt.setString("SkullOwner", this.player);
-
-            if (this.isMobEgg) {
-                if (this.entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
-            }
+            if (!this.isHash) nbt.setString("SkullOwner", this.player);
 
             return nbt.getItem();
         }
@@ -495,7 +434,7 @@ public class ItemBuilder {
 
         if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
-            
+
             if (this.potionType != null) potionMeta.setBasePotionType(this.potionType);
 
             if (this.potionColor != null) potionMeta.setColor(this.potionColor);
