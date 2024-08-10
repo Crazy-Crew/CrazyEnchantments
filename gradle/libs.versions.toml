@@ -1,6 +1,6 @@
 [versions]
 # Minecraft
-paper = "1.21-R0.1-SNAPSHOT"
+paper = "1.21.1-R0.1-SNAPSHOT"
 minecraft = "1.21"
 
 # Plugins
@@ -32,7 +32,7 @@ vital = "1.5.9"                  # Not Used
 metrics = "3.0.2"                # https://mvnrepository.com/artifact/org.bstats/bstats-bukkit
 
 # Paper
-paperweight="1.7.1"              # https://docs.papermc.io/paper/dev/userdev
+paperweight="1.7.2"              # https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
 runPaper = "2.3.0"               # https://plugins.gradle.org/plugin/xyz.jpenilla.run-paper
 hangar = "0.1.2"                 # https://plugins.gradle.org/plugin/io.papermc.hangar-publish-plugin
 
