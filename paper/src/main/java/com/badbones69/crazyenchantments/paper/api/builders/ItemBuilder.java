@@ -495,9 +495,8 @@ public class ItemBuilder {
 
         if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
-
-            //todo() this is broke
-            //if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
+            
+            if (this.potionType != null) potionMeta.setBasePotionType(this.potionType);
 
             if (this.potionColor != null) potionMeta.setColor(this.potionColor);
         }
