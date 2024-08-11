@@ -20,7 +20,9 @@ public enum DataKeys {
     scroll("Crazy_Scroll", PersistentDataType.STRING),
     experience("Experience", PersistentDataType.STRING),
     limit_reducer("Limit_Reducer", PersistentDataType.INTEGER),
-    slot_crystal("Slot_Crystal", PersistentDataType.BOOLEAN);
+    slot_crystal("Slot_Crystal", PersistentDataType.BOOLEAN),
+    gkit_type("gkit", PersistentDataType.STRING),
+    random_number("random_number", PersistentDataType.STRING);
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
