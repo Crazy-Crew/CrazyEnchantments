@@ -9,7 +9,7 @@ placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/Placeholder
 worldguard = "7.0.10"            # https://dev.bukkit.org/projects/worldguard/files
 worldedit = "7.3.5"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
 oraxen = "1.178.0"               # https://github.com/oraxen/oraxen#api
-nbtapi = "2.13.1-SNAPSHOT"       # https://github.com/tr7zw/Item-NBT-API
+nbtapi = "2.13.2"                # https://github.com/tr7zw/Item-NBT-API
 vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
 griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.100.3.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
