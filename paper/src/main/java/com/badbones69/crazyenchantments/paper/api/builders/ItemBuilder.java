@@ -11,7 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SkullCreator;
 import com.google.gson.Gson;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
@@ -29,12 +28,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -42,7 +36,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
 import org.jline.utils.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +49,6 @@ import static com.badbones69.crazyenchantments.paper.api.utils.ColorUtils.getCol
 
 public class ItemBuilder {
 
-    private NBTItem nbtItem;
 
     // Item Data
     private Material material;
@@ -126,7 +118,6 @@ public class ItemBuilder {
      * Create a blank item builder.
      */
     public ItemBuilder() {
-        this.nbtItem = null;
         this.material = Material.STONE;
         this.trimMaterial = null;
         this.trimPattern = null;
@@ -187,7 +178,6 @@ public class ItemBuilder {
      * @param itemBuilder The item builder to deduplicate.
      */
     public ItemBuilder(ItemBuilder itemBuilder) {
-        this.nbtItem = itemBuilder.nbtItem;
         this.material = itemBuilder.material;
         this.trimMaterial = itemBuilder.trimMaterial;
         this.trimPattern = itemBuilder.trimPattern;
@@ -235,15 +225,6 @@ public class ItemBuilder {
         this.lorePlaceholders = new HashMap<>(itemBuilder.lorePlaceholders);
         this.itemFlags = new ArrayList<>(itemBuilder.itemFlags);
         this.stringPDC = itemBuilder.stringPDC;
-    }
-
-    /**
-     * Gets the nbt item.
-     */
-    public NBTItem getNBTItem() {
-        this.nbtItem = new NBTItem(build());
-
-        return this.nbtItem;
     }
 
     /**
@@ -380,7 +361,6 @@ public class ItemBuilder {
      * @return The result of all the info that was given to the builder as an ItemStack.
      */
     public ItemStack build() {
-        if (this.nbtItem != null) this.referenceItem = this.nbtItem.getItem();
 
         ItemStack item = this.referenceItem != null ? this.referenceItem : new ItemStack(this.material);
 
@@ -396,7 +376,7 @@ public class ItemBuilder {
             }
 
             item.setAmount(this.itemAmount);
-            ItemMeta itemMeta = item.getItemMeta();
+            SkullMeta itemMeta = (SkullMeta) item.getItemMeta();
             List<Component> newLore = getUpdatedLore();
             assert itemMeta != null;
             if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
@@ -409,15 +389,13 @@ public class ItemBuilder {
             if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
 
             this.itemFlags.forEach(itemMeta :: addItemFlags);
+            itemMeta.setOwner(this.player); //TODO Replace with better method.
             item.setItemMeta(itemMeta);
             hideItemFlags(item);
             item.addUnsafeEnchantments(this.enchantments);
             addGlow(item);
-            NBTItem nbt = new NBTItem(item);
 
-            if (!this.isHash) nbt.setString("SkullOwner", this.player);
-
-            return nbt.getItem();
+            return item;
         }
 
         item.setAmount(this.itemAmount);
@@ -473,15 +451,12 @@ public class ItemBuilder {
         hideItemFlags(item);
         item.addUnsafeEnchantments(this.enchantments);
         addGlow(item);
-        NBTItem nbt = new NBTItem(item);
 
-        if (this.isHead && !this.isHash) nbt.setString("SkullOwner", this.player);
-
-        if (this.isMobEgg) {
-            if (this.entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + this.entityType.name());
+        if (this.isMobEgg && itemMeta instanceof SpawnEggMeta) {
+            ((SpawnEggMeta) itemMeta).setCustomSpawnedType(this.entityType);
         }
 
-        return nbt.getItem();
+        return item;
     }
 
     public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) { //TODO Stop CrazyManager from being null to replace this method.
@@ -1080,10 +1055,6 @@ public class ItemBuilder {
 
             assert itemMeta != null;
             itemBuilder.setName(itemMeta.getDisplayName()).lore(itemMeta.lore());
-
-            NBTItem nbt = new NBTItem(item);
-
-            if (nbt.hasKey("Unbreakable")) itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
 
             if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) itemBuilder.setDamage(((org.bukkit.inventory.meta.Damageable) itemMeta).getDamage());
         }
