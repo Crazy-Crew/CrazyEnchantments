@@ -67,6 +67,7 @@ misc:
   chat-threads:
     chat-executor-core-size: -1
     chat-executor-max-size: -1
+  client-interaction-leniency-distance: default
   compression-level: default
   fix-entity-position-desync: true
   load-permissions-yml-before-plugins: true
@@ -106,6 +107,9 @@ spam-limiter:
   recipe-spam-limit: 20
   tab-spam-increment: 1
   tab-spam-limit: 500
+spark:
+  enable-immediately: false
+  enabled: true
 timings:
   enabled: false
   hidden-config-entries:
