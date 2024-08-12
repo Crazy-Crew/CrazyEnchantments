@@ -325,16 +325,13 @@ public class Methods {
         if (getMaxDurability(item) == 0) return;
 
         if (item.hasItemMeta()) {
-            try {
-                if (item.getItemMeta().isUnbreakable()) return;
-            } catch (NoSuchMethodError ignored) {}
 
+            ItemMeta meta = item.getItemMeta();
 
-//            NBTItem nbtItem = new NBTItem(item); //TODO Figure out why this was here.
-//            if (nbtItem.hasNBTData() && nbtItem.hasTag("Unbreakable") && nbtItem.getBoolean("Unbreakable")) return;
+            if (meta.isUnbreakable()) return;
 
-            if (item.getItemMeta().hasEnchants()) {
-                if (item.getItemMeta().hasEnchant(Enchantment.UNBREAKING)) {
+            if (meta.hasEnchants()) {
+                if (meta.hasEnchant(Enchantment.UNBREAKING)) {
                     if (randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.UNBREAKING))) {
                         if (getDurability(item) > getMaxDurability(item)) {
                             player.getInventory().remove(item);
