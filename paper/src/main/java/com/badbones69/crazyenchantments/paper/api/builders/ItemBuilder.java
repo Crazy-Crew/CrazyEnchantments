@@ -36,6 +36,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.Nullable;
 import org.jline.utils.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -785,8 +786,15 @@ public class ItemBuilder {
     }
 
     private void addPattern(String patternName, String stringColour) {
+        NamespacedKey key;
 
-        PatternType pattern = RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).get(NamespacedKey.minecraft(patternName));
+        try {
+            key = NamespacedKey.minecraft(patternName.toLowerCase());
+        } catch (Exception ignored) {
+            return;
+        }
+
+        PatternType pattern = RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).get(key);
         DyeColor colour = getDyeColor(stringColour);
 
         if (pattern == null || colour == null) return;
@@ -1278,8 +1286,17 @@ public class ItemBuilder {
      * @param enchantmentName The string of the enchantment.
      * @return The enchantment from the string.
      */
+    @Nullable
     private static Enchantment getEnchantment(String enchantmentName) {
-        return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.minecraft(enchantmentName));
+        NamespacedKey key;
+
+        try {
+            key = NamespacedKey.minecraft(enchantmentName.toLowerCase());
+        } catch (Exception ignored) {
+            return null;
+        }
+
+        return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
     }
 
     private ItemFlag getFlag(String flagString) {
