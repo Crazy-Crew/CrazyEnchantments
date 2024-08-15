@@ -556,6 +556,10 @@ public class Methods {
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
         this.plugin.getServer().getPluginManager().callEvent(event);
 
+        // If cancelled, removes the blocks as they should have never been there.
+        // This mimics the method that the base server uses.
+        if (event.isCancelled()) dropItems.forEach(Entity::remove);
+
     }
 
     /**
