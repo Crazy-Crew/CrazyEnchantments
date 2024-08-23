@@ -103,6 +103,7 @@ entities:
       skeletons: false
       zombies: false
     nerf-pigmen-from-nether-portals: false
+    only-merge-items-horizontally: false
     parrots-are-unaffected-by-player-movement: false
     phantoms-do-not-spawn-on-creative-players: true
     phantoms-only-attack-insomniacs: true
