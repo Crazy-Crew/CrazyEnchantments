@@ -13,8 +13,6 @@ base {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
 
-    implementation(libs.nbtapi)
-
     compileOnly(libs.informative.annotations)
 
     compileOnly(libs.vault) {

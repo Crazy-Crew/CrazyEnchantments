@@ -10,7 +10,6 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -326,16 +325,13 @@ public class Methods {
         if (getMaxDurability(item) == 0) return;
 
         if (item.hasItemMeta()) {
-            try {
-                if (item.getItemMeta().isUnbreakable()) return;
-            } catch (NoSuchMethodError ignored) {}
 
-            NBTItem nbtItem = new NBTItem(item);
+            ItemMeta meta = item.getItemMeta();
 
-            if (nbtItem.hasNBTData() && nbtItem.hasTag("Unbreakable") && nbtItem.getBoolean("Unbreakable")) return;
+            if (meta.isUnbreakable()) return;
 
-            if (item.getItemMeta().hasEnchants()) {
-                if (item.getItemMeta().hasEnchant(Enchantment.UNBREAKING)) {
+            if (meta.hasEnchants()) {
+                if (meta.hasEnchant(Enchantment.UNBREAKING)) {
                     if (randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.UNBREAKING))) {
                         if (getDurability(item) > getMaxDurability(item)) {
                             player.getInventory().remove(item);

@@ -7,12 +7,12 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,17 +120,18 @@ public class KitsMenu extends InventoryBuilder {
 
             ItemStack itemStack = event.getCurrentItem();
 
-            if (itemStack == null || itemStack.isEmpty()) return;
+            if (itemStack == null || itemStack.isEmpty() || !itemStack.hasItemMeta()) return;
 
             CEPlayer cePlayer = this.crazyManager.getCEPlayer(player.getUniqueId());
 
-            NBTItem nbtItem = new NBTItem(itemStack);
-
             if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
 
-            if (!nbtItem.hasTag("gkit")) return;
 
-            GKitz kit = this.crazyManager.getGKitFromName(nbtItem.getString("gkit"));
+            String kitName = itemStack.getItemMeta().getPersistentDataContainer().get(DataKeys.gkit_type.getNamespacedKey(), PersistentDataType.STRING);
+
+            if (kitName == null) return;
+
+            GKitz kit = this.crazyManager.getGKitFromName(kitName);
 
             if (event.getAction() == InventoryAction.PICKUP_HALF) {
 

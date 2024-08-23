@@ -96,6 +96,6 @@ public class LostBook {
         .setNamePlaceholders(placeholders)
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders)
-        .setStringPDC(DataKeys.lost_book.getNamespacedKey(), category.getName());
+        .addStringPDC(DataKeys.lost_book.getNamespacedKey(), category.getName());
     }
 }

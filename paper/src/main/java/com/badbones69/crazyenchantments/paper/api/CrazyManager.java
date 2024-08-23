@@ -33,7 +33,6 @@ import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
 import com.google.gson.Gson;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -50,6 +49,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -259,17 +259,20 @@ public class CrazyManager {
                 int slot = gkit.getInt(path + "Display.Slot");
                 String time = gkit.getString(path + "Cooldown");
                 boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
-                NBTItem displayItem = new NBTItem(new ItemBuilder()
-                .setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
-                .setName(gkit.getString(path + "Display.Name", "Error getting name."))
-                .setLore(gkit.getStringList(path + "Display.Lore"))
-                .setGlow(gkit.getBoolean(path + "Display.Glowing")).build());
-                displayItem.setString("gkit", kit);
+
+                ItemStack displayItem = new ItemBuilder()
+                  .setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
+                  .setName(gkit.getString(path + "Display.Name", "Error getting name."))
+                  .setLore(gkit.getStringList(path + "Display.Lore"))
+                  .setGlow(gkit.getBoolean(path + "Display.Glowing"))
+                  .addStringPDC(DataKeys.gkit_type.getNamespacedKey(), kit)
+                .build();
+
                 List<String> commands = gkit.getStringList(path + "Commands");
                 List<String> itemStrings = gkit.getStringList(path + "Items");
                 List<ItemStack> previewItems = getInfoGKit(itemStrings);
                 previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
-                this.gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, itemStrings, autoEquip));
+                this.gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, itemStrings, autoEquip));
             }
         }
 
@@ -924,11 +927,8 @@ public class CrazyManager {
             itemBuilder.getLore().addAll(0, customEnchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList());
             itemBuilder.setEnchantments(enchantments);
 
-            NBTItem nbtItem = new NBTItem(itemBuilder.build());
+            items.add(itemBuilder.addStringPDC(DataKeys.random_number.getNamespacedKey(), String.valueOf(methods.getRandomNumber(0, Integer.MAX_VALUE))).build());
             // This is done so items do not stack if there are multiple of the same.
-
-            nbtItem.setInteger("random-number", new Random().nextInt(Integer.MAX_VALUE));
-            items.add(nbtItem.getItem());
         }
 
         return items;
