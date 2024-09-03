@@ -1,3 +1,10 @@
+[plugins]
+paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
+hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
+runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
 [versions]
 # Minecraft
 paper = "1.21.1-R0.1-SNAPSHOT"
@@ -36,17 +43,10 @@ runPaper = "2.3.0"               # https://plugins.gradle.org/plugin/xyz.jpenill
 hangar = "0.1.2"                 # https://plugins.gradle.org/plugin/io.papermc.hangar-publish-plugin
 
 # Other
-shadowJar = "8.3.0"              # https://gradleup.com/shadow/
+shadow = "8.3.0"              # https://gradleup.com/shadow/
 
 # Modrinth
 minotaur = "2.8.7"               # https://plugins.gradle.org/plugin/com.modrinth.minotaur
-
-[plugins]
-paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
-hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
-shadowJar = { id = "com.gradleup.shadow", version.ref = "shadowJar" }
-runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 
 [libraries]
 oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
