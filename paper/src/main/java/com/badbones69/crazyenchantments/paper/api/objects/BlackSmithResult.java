@@ -55,10 +55,10 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && subCE.hasVanillaEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
-                            mainCE.setVanillaEnchantment(enchantment, level + 1);
+                            mainCE.addVanillaEnchantment(enchantment, level + 1);
                             this.cost += BlackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
-                            mainCE.setVanillaEnchantment(enchantment, subLevel);
+                            mainCE.addVanillaEnchantment(enchantment, subLevel);
                             this.cost += BlackSmithManager.getLevelUp();
                         }
                     }
@@ -72,10 +72,10 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && subCE.hasCEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
-                            mainCE.setCEnchantment(enchantment, level + 1);
+                            mainCE.addCEnchantment(enchantment, level + 1);
                             this.cost += BlackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
-                            mainCE.setCEnchantment(enchantment, subLevel);
+                            mainCE.addCEnchantment(enchantment, subLevel);
                             this.cost += BlackSmithManager.getLevelUp();
                         }
                     }
@@ -85,8 +85,8 @@ public class BlackSmithResult {
                 for (Entry<Enchantment, Integer> entry : compare.getNewVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
 
-                    if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem)) {
-                        mainCE.setVanillaEnchantment(enchantment, entry.getValue());
+                    if (enchantment.canEnchantItem(subItem) && mainCE.canAddEnchantment(player)) {
+                        mainCE.addVanillaEnchantment(enchantment, entry.getValue());
                         this.cost += BlackSmithManager.getAddEnchantment();
                     }
                 }
@@ -94,8 +94,8 @@ public class BlackSmithResult {
                 for (Entry<CEnchantment, Integer> entry : compare.getNewCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
 
-                    if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem) && crazyManager.canAddEnchantment(player, subItem)) {
-                        mainCE.setCEnchantment(enchantment, entry.getValue());
+                    if (enchantment.canEnchantItem(mainItem) && mainCE.canAddEnchantment(player)) {
+                        mainCE.addCEnchantment(enchantment, entry.getValue());
                         this.cost += BlackSmithManager.getAddEnchantment();
                     }
                 }

@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +60,7 @@ public class CEItem {
         return this.vanillaEnchantments;
     }
     
-    public void setVanillaEnchantment(Enchantment enchantment, int level) {
+    public void addVanillaEnchantment(Enchantment enchantment, int level) {
         this.vanillaEnchantments.put(enchantment, level);
     }
     
@@ -79,14 +80,18 @@ public class CEItem {
         return this.cEnchantments;
     }
     
-    public void setCEnchantment(CEnchantment enchantment, int level) {
+    public void addCEnchantment(CEnchantment enchantment, int level) {
         this.cEnchantments.put(enchantment, level);
     }
     
     public void removeCEnchantment(CEnchantment enchantment) {
         this.cEnchantmentRemove.add(enchantment);
     }
-    
+
+    public boolean canAddEnchantment(Player player) {
+        return crazyManager.canAddEnchantment(player, this.cEnchantments.size(), this.vanillaEnchantments.size());
+    }
+
     public ItemStack build() {
         this.vanillaEnchantmentRemove.forEach(this.item::removeEnchantment);
         this.vanillaEnchantments.keySet().forEach(enchantment -> this.item.addUnsafeEnchantment(enchantment, this.vanillaEnchantments.get(enchantment)));
