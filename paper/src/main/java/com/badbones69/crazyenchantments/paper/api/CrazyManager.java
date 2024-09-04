@@ -804,6 +804,22 @@ public class CrazyManager {
                 Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
+    /**
+     * Checks if the player can add more enchants to the current item based on set limits without the enchant limiter.
+     * @param player The {@link Player} that has the item.
+     * @param cEnchantments The amount of crazy enchants on the item.
+     * @param vanillaEnchantments The amount of vanilla enchantments on the item.
+     * @return True if they are able to add more enchants.
+     */
+    public boolean canAddEnchantment(@NotNull Player player, int cEnchantments, int vanillaEnchantments) {
+        if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+
+        int enchantAmount = cEnchantments;
+        if (this.checkVanillaLimit) enchantAmount += vanillaEnchantments;
+
+        return enchantAmount < getPlayerMaxEnchantments(player);
+    }
+
     public int randomLevel(CEnchantment enchantment, Category category) {
         int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment.
         int randomLevel = 1 + new Random().nextInt(enchantmentMax);
