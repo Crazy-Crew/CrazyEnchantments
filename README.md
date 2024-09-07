@@ -23,9 +23,17 @@
 [![purpur software](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/supported/purpur_vector.svg)](https://purpurmc.org/)
 
 <big>**Initial Plugin Setup**</big><br>
-CrazyEnchantments as first install will come with a set of default files in the `crates` folder which are to help you figure out how to use the plugin.
-You can simply create more crates by copying the files or creating new ones than doing `/crazyenchantments reload`<br>
-Testing your crates is even easier, if you simply want to test prizes. We have a command for that called `/crazyenchantments debug <crate>`
+CrazyEnchantments as first install will come with `config.yml`, `Gkitz.yml`, `HeadMap.yml`, `Messages.yml`, `Tinker.yml`, `Enchantments.yml`, `Enchantment-Types.yml`
+
+`Enchantments.yml` and `Enchantment-Types.yml` handles how the enchantments look and function in the game.
+
+`Gkitz.yml` are a similar system to Essentials /kit, but with support for Custom Enchantments.
+
+`Tinker.yml` is for /tinkerer, which allows you to recycle enchanted items.
+
+`config.yml`, `Messages.yml` and `HeadMap.yml` allow to configure other aspects of the plugin.
+
+Simply edit these files, most options you need are in these files described with comments, After any changes. Run the command /crazyenchantments reload!
 
 ![Features Banner](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/crazyenchantments/banner/webp/features.webp)<br>
 **80+ enchantments to pick from!**<br>
