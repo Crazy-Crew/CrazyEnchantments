@@ -66,7 +66,7 @@ config-me = { module = "ch.jalu:configme", version.ref = "config-me" }
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
-lands = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
+lands = { module = "com.github.Angeschossen:LandsAPI", version.ref = "lands" }
 
 skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
 plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
