@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
@@ -101,10 +102,12 @@ public class BowUtils {
         return this.webBlocks;
     }
 
-    public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
+    public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow) {
         if (enchantedArrow == null) return;
 
-        if (!isBowEnchantActive(CEnchantments.STICKY_SHOT, enchantedArrow)) return;
+        Arrow arrow = enchantedArrow.getArrow();
+
+        if (!(EnchantUtils.isEventActive(CEnchantments.STICKY_SHOT, enchantedArrow.getShooter(), enchantedArrow.arrow().getWeapon(), enchantedArrow.getEnchantments()))) return;
 
         if (hitEntity == null) {
             Location entityLocation = arrow.getLocation();
@@ -114,16 +117,15 @@ public class BowUtils {
             entityLocation.getBlock().setType(Material.COBWEB);
             this.webBlocks.add(entityLocation.getBlock());
 
-            arrow.remove();
-
             this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, entityLocation, scheduledTask -> {
                 entityLocation.getBlock().setType(Material.AIR);
                 webBlocks.remove(entityLocation.getBlock());
             }, 5 * 20);
         } else {
-            arrow.remove();
             setWebBlocks(hitEntity);
         }
+
+        arrow.remove();
     }
 
     private void setWebBlocks(Entity hitEntity) {
