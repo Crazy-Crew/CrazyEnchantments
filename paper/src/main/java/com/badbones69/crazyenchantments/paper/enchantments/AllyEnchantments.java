@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
@@ -22,6 +23,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +58,7 @@ public class AllyEnchantments implements Listener {
         if (event.getEntity() instanceof Player player && event.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
             if (!inCoolDown(player)) {
                 if (enemy instanceof Player) { // Checks armor and spawn allies when getting attacked.
-                    Arrays.stream(player.getEquipment().getArmorContents()).map(this.bookSettings::getEnchantments).filter(enchants -> !enchants.isEmpty()).forEach(enchants -> checkAllyType(enemy, player, enchants));
+                    checkAndSpawn(player, enemy);
                 }
             } else {
                 this.allyManager.setEnemy(player, enemy);
@@ -75,35 +77,43 @@ public class AllyEnchantments implements Listener {
             }
 
             // Checks armor and spawns allies when attacking
-            Arrays.stream(player.getEquipment().getArmorContents()).map(this.bookSettings::getEnchantments).filter(enchants -> !enchants.isEmpty()).forEach(enchants -> checkAllyType(enemy, player, enchants));
+            checkAndSpawn(player, enemy);
         }
     }
 
-    private void checkAllyType(LivingEntity enemy, Player player, Map<CEnchantment, Integer> enchants) {
-        if (enchants.containsKey(CEnchantments.TAMER.getEnchantment())) {
+    private void checkAndSpawn(Player player, LivingEntity enemy) {
+        for (ItemStack armor : player.getEquipment().getArmorContents()) {
+            Map<CEnchantment, Integer> enchants = this.bookSettings.getEnchantments(armor);
+            if (enchants.isEmpty()) continue;
+
+            checkAllyType(enemy, player, enchants, armor);
+        }
+    }
+
+    private void checkAllyType(LivingEntity enemy, Player player, Map<CEnchantment, Integer> enchants, ItemStack item) {
+
+        if (EnchantUtils.isEventActive(CEnchantments.TAMER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.TAMER.getEnchantment());
             spawnAllies(player, enemy, AllyType.WOLF, power);
         }
 
-        if (enchants.containsKey(CEnchantments.GUARDS.getEnchantment())) {
+        if (EnchantUtils.isEventActive(CEnchantments.GUARDS, player, item, enchants)) {
             int power = enchants.get(CEnchantments.GUARDS.getEnchantment());
             spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
         }
 
-        if (enchants.containsKey(CEnchantments.BEEKEEPER.getEnchantment())) {
+        if (EnchantUtils.isEventActive(CEnchantments.BEEKEEPER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.BEEKEEPER.getEnchantment());
             spawnAllies(player, enemy, AllyType.BEE, power);
         }
 
-        if (enchants.containsKey(CEnchantments.NECROMANCER.getEnchantment())) {
+        if (EnchantUtils.isEventActive(CEnchantments.NECROMANCER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.NECROMANCER.getEnchantment());
-
             spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
         }
 
-        if (enchants.containsKey(CEnchantments.INFESTATION.getEnchantment())) {
+        if (EnchantUtils.isEventActive(CEnchantments.INFESTATION, player, item, enchants)) {
             int power = enchants.get(CEnchantments.INFESTATION.getEnchantment());
-
             spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
             spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
         }
