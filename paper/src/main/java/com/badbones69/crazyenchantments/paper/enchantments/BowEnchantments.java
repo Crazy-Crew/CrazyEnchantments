@@ -73,13 +73,13 @@ public class BowEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
-        if (!(event.getEntity() instanceof Player entity)) return;
+        if (!(event.getEntity() instanceof Player player)) return;
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getEntity().getUniqueId())) return;
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
 
         ItemStack bow = event.getBow();
 
-        if (!this.bowUtils.allowsCombat(entity)) return;
+        if (!this.bowUtils.allowsCombat(player)) return;
 
         Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(bow);
         if (enchants.isEmpty()) return;
@@ -88,14 +88,12 @@ public class BowEnchantments implements Listener {
         this.bowUtils.addArrow(arrow, bow, enchants);
 
         // MultiArrow only code below.
-        if (!enchants.containsKey(CEnchantments.MULTIARROW.getEnchantment())) return;
+        if (EnchantUtils.isEventActive(CEnchantments.MULTIARROW, player, bow, enchants)) {
+            int power = enchants.get(CEnchantments.MULTIARROW.getEnchantment());
 
-        int power = enchants.get(CEnchantments.MULTIARROW.getEnchantment());
+            for (int i = 1; i <= power; i++) this.bowUtils.spawnArrows(player, arrow, bow);
+        }
 
-        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(entity, CEnchantments.MULTIARROW, bow);
-        this.plugin.getServer().getPluginManager().callEvent(useEvent);
-
-        if (!useEvent.isCancelled()) for (int i = 1; i <= power; i++) this.bowUtils.spawnArrows(entity, arrow, bow);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -104,20 +102,20 @@ public class BowEnchantments implements Listener {
         if (!(event.getEntity() instanceof Arrow entityArrow)) return;
         if (!this.bowUtils.allowsCombat(event.getEntity())) return;
 
-        EnchantedArrow arrow = this.bowUtils.getEnchantedArrow(entityArrow);
+        EnchantedArrow enchantedArrow = this.bowUtils.getEnchantedArrow(entityArrow);
 
-        if (arrow == null) return;
+        if (enchantedArrow == null) return;
 
         // Spawn webs related to STICKY_SHOT.
-        this.bowUtils.spawnWebs(event.getHitEntity(), arrow, entityArrow);
+        this.bowUtils.spawnWebs(event.getHitEntity(), enchantedArrow);
 
-        if (EnchantUtils.isEventActive(CEnchantments.BOOM, shooter, arrow.bow(), arrow.enchantments())) {
-            this.methods.explode(arrow.getShooter(), arrow.arrow());
-            arrow.arrow().remove();
+        if (EnchantUtils.isEventActive(CEnchantments.BOOM, shooter, enchantedArrow.bow(), enchantedArrow.enchantments())) {
+            this.methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
+            enchantedArrow.arrow().remove();
         }
 
-        if (EnchantUtils.isEventActive(CEnchantments.LIGHTNING, shooter, arrow.bow(), arrow.enchantments())) {
-            Location location = arrow.arrow().getLocation();
+        if (EnchantUtils.isEventActive(CEnchantments.LIGHTNING, shooter, enchantedArrow.bow(), enchantedArrow.enchantments())) {
+            Location location = enchantedArrow.arrow().getLocation();
 
             Entity lightning = location.getWorld().strikeLightningEffect(location);
 
@@ -131,14 +129,14 @@ public class BowEnchantments implements Listener {
             // AntiCheat Support.
             //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(shooter);
 
-            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, arrow.arrow())) {
+            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
                 EventUtils.addIgnoredUUID(shooter.getUniqueId());
                 shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-                if (!damageByEntityEvent.isCancelled() && !this.pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId()))
+                if (!damageByEntityEvent.isCancelled() && !this.pluginSupport.isFriendly(enchantedArrow.getShooter(), entity) && !enchantedArrow.getShooter().getUniqueId().equals(entity.getUniqueId()))
                     entity.damage(5D);
 
                 EventUtils.removeIgnoredEvent(damageByEntityEvent);
@@ -149,7 +147,7 @@ public class BowEnchantments implements Listener {
         }
 
         // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
-        entityArrow.getScheduler().runDelayed(this.plugin, (arrowTask) -> this.bowUtils.removeArrow(arrow),  null, 5);
+        entityArrow.getScheduler().runDelayed(this.plugin, (arrowTask) -> this.bowUtils.removeArrow(enchantedArrow),  null, 5);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -158,15 +156,14 @@ public class BowEnchantments implements Listener {
         if (!(event.getDamager() instanceof Arrow entityArrow)) return;
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
 
-        EnchantedArrow arrow = this.bowUtils.getEnchantedArrow(entityArrow);
-        if (arrow == null) return;
+        EnchantedArrow enchantedArrow = this.bowUtils.getEnchantedArrow(entityArrow);
+        if (enchantedArrow == null) return;
 
-        if (!this.pluginSupport.allowCombat(arrow.arrow().getLocation())) return;
-        ItemStack bow = arrow.bow();
+        if (!this.pluginSupport.allowCombat(enchantedArrow.arrow().getLocation())) return;
         // Damaged player is friendly.
 
-        if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, arrow.getShooter(), arrow.bow(), arrow.enchantments()) && this.pluginSupport.isFriendly(arrow.getShooter(), event.getEntity())) {
-            int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
+        if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.pluginSupport.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
+            int heal = 1 + enchantedArrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
@@ -177,25 +174,25 @@ public class BowEnchantments implements Listener {
         }
 
         // Damaged player is an enemy.
-        if (this.pluginSupport.isFriendly(arrow.getShooter(), entity)) return;
+        if (this.pluginSupport.isFriendly(enchantedArrow.getShooter(), entity)) return;
 
-        this.bowUtils.spawnWebs(event.getEntity(), arrow, entityArrow);
+        this.bowUtils.spawnWebs(event.getEntity(), enchantedArrow);
 
-        if (EnchantUtils.isEventActive(CEnchantments.PULL, arrow.getShooter(), arrow.bow(), arrow.enchantments())) {
-            Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
+        if (EnchantUtils.isEventActive(CEnchantments.PULL, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments())) {
+            Vector v = enchantedArrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
             entity.setVelocity(v);
         }
 
         for (BowEnchantment bowEnchantment : this.bowEnchantmentManager.getBowEnchantments()) {
             CEnchantments enchantment = bowEnchantment.getEnchantment();
 
-            if (!EnchantUtils.isEventActive(enchantment, arrow.getShooter(), arrow.bow(), arrow.enchantments())) continue;
+            if (!EnchantUtils.isEventActive(enchantment, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments())) continue;
 
             if (bowEnchantment.isPotionEnchantment()) {
                 bowEnchantment.getPotionEffects().forEach(effect -> entity.addPotionEffect(new PotionEffect(effect.potionEffect(), effect.duration(),
-                        (bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + effect.amplifier())));
+                        (bowEnchantment.isLevelAddedToAmplifier() ? enchantedArrow.getLevel(enchantment) : 0) + effect.amplifier())));
             } else {
-                event.setDamage(event.getDamage() * ((bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + bowEnchantment.getDamageAmplifier()));
+                event.setDamage(event.getDamage() * ((bowEnchantment.isLevelAddedToAmplifier() ? enchantedArrow.getLevel(enchantment) : 0) + bowEnchantment.getDamageAmplifier()));
             }
         }
     }

@@ -24,4 +24,12 @@ public record EnchantedArrow(Arrow arrow, ItemStack bow, Map<CEnchantment, Integ
     public boolean hasEnchantment(CEnchantments enchantment) {
         return hasEnchantment(enchantment.getEnchantment());
     }
+
+    public Map<CEnchantment, Integer> getEnchantments() {
+        return this.enchantments;
+    }
+
+    public Arrow getArrow() {
+        return this.arrow;
+    }
 }
