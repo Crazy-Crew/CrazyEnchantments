@@ -18,6 +18,7 @@ softdepend:
   - GriefPrevention
   - Towny
   - Factions
+  - Lands
   - StackMob
   - Vault
   - Oraxen

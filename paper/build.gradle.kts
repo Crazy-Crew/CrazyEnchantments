@@ -38,6 +38,8 @@ dependencies {
 
     compileOnly(libs.towny)
 
+    compileOnly(libs.lands)
+
     compileOnly(libs.paster)
 
     compileOnly(libs.skyblock)

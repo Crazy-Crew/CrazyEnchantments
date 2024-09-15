@@ -20,6 +20,7 @@ vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Va
 griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.100.3.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
 factions = "1.6.9.5-U0.6.40"     # https://www.spigotmc.org/resources/factionsuuid.1035/
+lands = "7.8.10"                 # https://github.com/Angeschossen/LandsAPI/wiki
 skyblock = "2024.3"              # https://bg-software.com/superiorskyblock/
 plotsquared = "7.3.10"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
 mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
@@ -65,6 +66,7 @@ config-me = { module = "ch.jalu:configme", version.ref = "config-me" }
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
+lands = { module = "com.github.Angeschossen:LandsAPI", version.ref = "lands" }
 
 skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
 plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }

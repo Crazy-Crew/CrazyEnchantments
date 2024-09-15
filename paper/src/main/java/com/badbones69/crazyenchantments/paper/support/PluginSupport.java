@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WorldGuardUtils;
 import com.badbones69.crazyenchantments.paper.support.claims.GriefPreventionSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.LandsSupport;
 import com.badbones69.crazyenchantments.paper.support.claims.TownySupport;
 import com.badbones69.crazyenchantments.paper.support.factions.FactionsUUIDSupport;
 import com.badbones69.crazyenchantments.paper.support.interfaces.claims.ClaimSupport;
@@ -119,6 +120,7 @@ public class PluginSupport {
         switch (supportedPlugin) {
             case GRIEF_PREVENTION -> this.claimPlugin = new GriefPreventionSupport();
             case TOWNYADVANCED -> this.claimPlugin = new TownySupport();
+            case LANDS -> this.claimPlugin = new LandsSupport();
             case FACTIONS_UUID -> this.claimPlugin = new FactionsUUIDSupport();
         }
     }
@@ -160,6 +162,8 @@ public class PluginSupport {
         WORLDEDIT("WorldEdit"),
 
         TOWNYADVANCED("Towny"),
+
+        LANDS("Lands"),
 
         PLOT_SQUARED("PlotSquared"),
 
