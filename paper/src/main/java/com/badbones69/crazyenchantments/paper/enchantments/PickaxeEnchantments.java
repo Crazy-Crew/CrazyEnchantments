@@ -174,7 +174,7 @@ public class PickaxeEnchantments implements Listener {
                     if (CEnchantments.AUTOSMELT.chanceSuccessful(level)) ++amountToAdd;
                 }
 
-                drop = getOreDrop(drop.getType(), drop.getAmount() + amountToAdd);
+                drop = getOreDrop(drop, drop.getAmount() + amountToAdd);
 
                 entityItem.setItemStack(drop);
                 event.getItems().set(j, entityItem);
@@ -190,7 +190,7 @@ public class PickaxeEnchantments implements Listener {
                 ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
-                drop = getOreDrop(drop.getType(), drop.getAmount());
+                drop = getOreDrop(drop, drop.getAmount());
 
                 entityItem.setItemStack(drop);
                 event.getItems().set(j, entityItem);
@@ -319,8 +319,11 @@ public class PickaxeEnchantments implements Listener {
         };
     }
 
-    private ItemStack getOreDrop(Material material, int amount) {
-        ItemStack item = new ItemStack(switch (material) {
+    private ItemStack getOreDrop(ItemStack item, int amount) {
+        Material material = item.getType();
+        ItemStack returnItem;
+
+        Material smeltedMaterial = switch (material) {
             case COAL -> Material.COAL;
             case RAW_COPPER -> Material.COPPER_INGOT;
             case DIAMOND -> Material.DIAMOND;
@@ -332,9 +335,11 @@ public class PickaxeEnchantments implements Listener {
             case GOLD_NUGGET -> Material.GOLD_NUGGET;
             case QUARTZ -> Material.QUARTZ;
             default -> Material.AIR;
-        });
+        };
 
-        item.setAmount(amount);
-        return item;
+        returnItem = (material == smeltedMaterial) ? item : new ItemStack(smeltedMaterial);
+
+        returnItem.setAmount(amount);
+        return returnItem;
     }
 }
