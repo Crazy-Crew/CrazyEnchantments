@@ -12,10 +12,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,14 +68,14 @@ public class BowUtils {
 
     // Multi Arrow Start!
 
-    public void spawnArrows(Entity entity, Entity projectile, ItemStack bow) {
-        Arrow spawnedArrow = entity.getWorld().spawn(projectile.getLocation(), Arrow.class);
+    public void spawnArrows(LivingEntity shooter, Entity projectile, ItemStack bow) {
+        Arrow spawnedArrow = shooter.getWorld().spawn(projectile.getLocation(), Arrow.class);
 
         EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, bow, enchantmentBookSettings.getEnchantments(bow));
 
         this.enchantedArrows.add(enchantedMultiArrow);
 
-        spawnedArrow.setShooter((ProjectileSource) entity);
+        spawnedArrow.setShooter(shooter);
 
         Vector vector = new Vector(randomSpread(), 0, randomSpread());
 
@@ -87,8 +86,6 @@ public class BowUtils {
         if (projectile.getFireTicks() > 0) spawnedArrow.setFireTicks(projectile.getFireTicks());
 
         spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-
-        this.enchantedArrows.remove(enchantedMultiArrow);
     }
 
     private float randomSpread() {
