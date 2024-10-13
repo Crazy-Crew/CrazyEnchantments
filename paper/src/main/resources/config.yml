@@ -281,6 +281,7 @@ Settings:
       Check-Perms: false # If false, the limit permissions will be used, otherwise the the limits listed below.
       Default-Limit: 3 # Use the permission crazyenchantments.limit.# to edit it per player.
       Default-Base-Limit: 0 # Use the permission crazyenchantments.base-limit.# to edit it per player.
+      Change-On-Fail: true # If the enchantment limiter should be reduced on enchant fail.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also.
     Enchant-Stacked-Items: false #Turn on if you wish for enchantment books to enchant stacked items.
     MaxRageLevel: 4 #The max amount of rage that scan stack when fighting.
