@@ -167,7 +167,7 @@ public class EnchantmentControl implements Listener {
 
         player.sendMessage(Messages.BOOK_FAILED.getMessage());
         methods.playItemBreak(player, book);
-        event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, 1));
+        if (config.getBoolean("Settings.EnchantmentOptions.Limit.Change-On-Fail", true)) event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, 1));
         player.setItemOnCursor(null);
     }
 
