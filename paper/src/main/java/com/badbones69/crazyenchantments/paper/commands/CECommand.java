@@ -189,10 +189,7 @@ public class CECommand implements CommandExecutor {
                     BlackSmithManager.load();
                     KitsManager.load();
 
-
                     sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
-
-                    this.pluginSupport.updateHooks();
 
                     FileUtils.loadFiles();
                 }
