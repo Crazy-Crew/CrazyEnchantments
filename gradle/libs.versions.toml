@@ -13,16 +13,16 @@ minecraft = "1.21.1"
 # Plugins
 headdatabaseapi = "1.3.1"        # Not Used
 placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
-worldguard = "7.0.10"            # https://dev.bukkit.org/projects/worldguard/files
-worldedit = "7.3.6"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
-oraxen = "1.181.0"               # https://github.com/oraxen/oraxen#api
+worldguard = "7.0.12"            # https://dev.bukkit.org/projects/worldguard/files
+worldedit = "7.3.7"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
+oraxen = "1.183.0"               # https://github.com/oraxen/oraxen#api
 vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
 griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
-towny = "0.100.3.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
+towny = "0.100.4.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
 factions = "1.6.9.5-U0.6.40"     # https://www.spigotmc.org/resources/factionsuuid.1035/
-lands = "7.8.10"                 # https://github.com/Angeschossen/LandsAPI/wiki
+lands = "7.9.17"                 # https://github.com/Angeschossen/LandsAPI/wiki
 skyblock = "2024.3"              # https://bg-software.com/superiorskyblock/
-plotsquared = "7.3.10"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
+plotsquared = "7.3.11"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
 mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
 kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
 
@@ -36,15 +36,15 @@ config-me = "1.4.1"              # https://mvnrepository.com/artifact/ch.jalu/co
 jetbrains = "24.1.0"             # Not Used
 kyori = "4.17.0"                 # Not Used
 vital = "1.5.9"                  # Not Used
-metrics = "3.0.3"                # https://mvnrepository.com/artifact/org.bstats/bstats-bukkit
+metrics = "3.1.0"                # https://mvnrepository.com/artifact/org.bstats/bstats-bukkit
 
 # Paper
-paperweight = "1.7.2"            # https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
+paperweight = "1.7.3"            # https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
 runPaper = "2.3.1"               # https://plugins.gradle.org/plugin/xyz.jpenilla.run-paper
 hangar = "0.1.2"                 # https://plugins.gradle.org/plugin/io.papermc.hangar-publish-plugin
 
 # Other
-shadow = "8.3.0"                 # https://gradleup.com/shadow/
+shadow = "8.3.3"                 # https://gradleup.com/shadow/
 
 # Modrinth
 minotaur = "2.8.7"               # https://plugins.gradle.org/plugin/com.modrinth.minotaur
