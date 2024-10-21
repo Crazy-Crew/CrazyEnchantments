@@ -1201,19 +1201,8 @@ public class ItemBuilder {
      * @param item The item to add glow to.
      */
     private void addGlow(ItemStack item) {
-        if (this.glowing) {
-            try {
-                if (item != null) {
-                    ItemMeta itemMeta = item.getItemMeta();
-
-                    if (itemMeta != null) {
-                        if (itemMeta.hasEnchants()) return;
-                    }
-
-                    itemMeta.setEnchantmentGlintOverride(true);
-                    item.setItemMeta(itemMeta);
-                }
-            } catch (NoClassDefFoundError ignored) {}
+        if (item != null && this.glowing) {
+            item.editMeta(itemMeta -> itemMeta.setEnchantmentGlintOverride(true));
         }
     }
 
