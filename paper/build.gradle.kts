@@ -1,13 +1,28 @@
 plugins {
-    alias(libs.plugins.paperweight)
     alias(libs.plugins.runPaper)
     alias(libs.plugins.shadow)
 
-    `paper-plugin`
+    alias(libs.plugins.paperweight)
 }
 
 base {
     archivesName.set(rootProject.name)
+}
+
+repositories {
+    maven("https://repo.papermc.io/repository/maven-public")
+
+    maven("https://repo.md-5.net/content/repositories/snapshots")
+
+    maven("https://ci.ender.zone/plugin/repository/everything")
+
+    maven("https://repo.glaremasters.me/repository/towny")
+
+    maven("https://repo.bg-software.com/repository/api")
+
+    maven("https://maven.enginehub.org/repo")
+
+    maven("https://repo.oraxen.com/releases")
 }
 
 dependencies {
@@ -99,22 +114,15 @@ tasks {
     shadowJar {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
-
-        listOf(
-            "de.tr7zw.changeme.nbtapi"
-        ).forEach {
-            relocate(it, "libs.$it")
-        }
     }
 
     processResources {
         inputs.properties("name" to rootProject.name)
         inputs.properties("version" to project.version)
         inputs.properties("group" to "${project.group}.paper")
-        inputs.properties("description" to project.properties["description"])
+        inputs.properties("description" to project.description)
         inputs.properties("apiVersion" to libs.versions.minecraft.get())
-        inputs.properties("authors" to project.properties["authors"])
-        inputs.properties("website" to project.properties["website"])
+        inputs.properties("website" to "https://modrinth.com/plugin/crazyenchantments")
 
         filesMatching("plugin.yml") {
             expand(inputs.properties)

@@ -1,68 +1,52 @@
 plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.hangar)
-
-    `java-plugin`
+    `maven-publish`
+    `java-library`
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
 rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "2.5.1"
 
-val isSnapshot = false
-
-val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
-
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
 }
 
-modrinth {
-    token.set(System.getenv("MODRINTH_TOKEN"))
+subprojects {
+    apply(plugin = "maven-publish")
+    apply(plugin = "java-library")
 
-    projectId.set(rootProject.name.lowercase())
+    group = "com.badbones69.crazyenchantments"
+    description = "Adds over 80 unique enchantments to your server and more!"
 
-    versionType.set(if (isSnapshot) "beta" else "release")
+    repositories {
+        maven("https://repo.codemc.io/repository/maven-public")
 
-    versionName.set("${rootProject.name} ${rootProject.version}")
-    versionNumber.set(rootProject.version as String)
+        maven("https://repo.crazycrew.us/libraries")
+        maven("https://repo.crazycrew.us/releases")
 
-    changelog.set(content)
+        maven("https://jitpack.io")
 
-    uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
+        mavenCentral()
+    }
 
-    gameVersions.set(listOf(libs.versions.minecraft.get()))
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
 
-    loaders.addAll(listOf("purpur", "paper", "folia"))
+    tasks {
+        compileJava {
+            options.encoding = Charsets.UTF_8.name()
+            options.release.set(21)
+        }
 
-    autoAddDependsOn.set(false)
-    detectLoaders.set(false)
-}
+        javadoc {
+            options.encoding = Charsets.UTF_8.name()
+        }
 
-hangarPublish {
-    publications.register("plugin") {
-        apiKey.set(System.getenv("HANGAR_KEY"))
-
-        id.set(rootProject.name.lowercase())
-
-        version.set(rootProject.version as String)
-
-        channel.set(if (isSnapshot) "Beta" else "Release")
-
-        changelog.set(content)
-
-        platforms {
-            paper {
-                jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
-
-                platformVersions.set(listOf(libs.versions.minecraft.get()))
-
-                dependencies {
-                    hangar("PlaceholderAPI") {
-                        required = false
-                    }
-                }
-            }
+        processResources {
+            filteringCharset = Charsets.UTF_8.name()
         }
     }
 }
