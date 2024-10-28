@@ -22,7 +22,6 @@ import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.SkullCreator;
-import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,7 +49,6 @@ public class Starter {
     private PluginSupport pluginSupport;
     private VaultSupport vaultSupport;
     private OraxenSupport oraxenSupport;
-    private NoCheatPlusSupport noCheatPlusSupport;
 
     // Plugin Managers.
     private ArmorEnchantmentManager armorEnchantmentManager;
@@ -77,8 +75,6 @@ public class Starter {
         this.pluginSupport.initializeWorldGuard();
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
-
-        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport = new NoCheatPlusSupport();
 
         if (SupportedPlugins.ORAXEN.isPluginLoaded()) this.oraxenSupport = new OraxenSupport();
 
@@ -168,10 +164,6 @@ public class Starter {
 
     public OraxenSupport getOraxenSupport() {
         return this.oraxenSupport;
-    }
-
-    public NoCheatPlusSupport getNoCheatPlusSupport() {
-        return this.noCheatPlusSupport;
     }
 
     // Economy Management.

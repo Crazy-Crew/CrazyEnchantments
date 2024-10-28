@@ -36,8 +36,6 @@ dependencies {
 
     compileOnly(libs.griefprevention)
 
-    //compileOnly(libs.nocheatplus)
-
     compileOnly(libs.oraxen)
 
     compileOnly(libs.worldguard)

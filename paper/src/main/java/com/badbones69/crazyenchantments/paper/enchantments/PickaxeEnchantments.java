@@ -11,8 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -51,10 +49,6 @@ public class PickaxeEnchantments implements Listener {
 
     @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Support.
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
     private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
@@ -100,8 +94,6 @@ public class PickaxeEnchantments implements Listener {
             if (damage) this.methods.removeDurability(currentItem, player);
         }
         if (!damage) this.methods.removeDurability(currentItem, player);
-
-        antiCheat(player);
     }
 
 
@@ -134,9 +126,6 @@ public class PickaxeEnchantments implements Listener {
         }
 
         if (!damage) this.methods.removeDurability(currentItem, player);
-
-        antiCheat(player);
-
     }
 
     private boolean massBlockBreakCheck(Player player, Set<Block> blockList) {
@@ -144,10 +133,6 @@ public class PickaxeEnchantments implements Listener {
         this.plugin.getServer().getPluginManager().callEvent(event);
 
         return event.isCancelled();
-    }
-
-    private void antiCheat(Player player) {
-        //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
