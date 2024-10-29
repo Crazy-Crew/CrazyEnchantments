@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -15,8 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -60,9 +57,6 @@ public class BowEnchantments implements Listener {
     // Plugin Support.
     @NotNull
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
-
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
     // Plugin Managers.
     @NotNull
@@ -126,9 +120,6 @@ public class BowEnchantments implements Listener {
             } catch (Exception ignore) {
             }
 
-            // AntiCheat Support.
-            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(shooter);
-
             for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
@@ -143,7 +134,6 @@ public class BowEnchantments implements Listener {
                 EventUtils.removeIgnoredUUID(shooter.getUniqueId());
             }
 
-            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.denyPlayer(shooter);
         }
 
         // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.

@@ -146,9 +146,6 @@ public class PluginSupport {
         // Random Plugins
         MCMMO("McMMO"),
 
-        // Anti Cheats
-        NO_CHEAT_PLUS("NoCheatPlus"),
-
         // Faction Plugins
         FACTIONS_UUID("Factions"),
 

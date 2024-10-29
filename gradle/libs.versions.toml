@@ -26,9 +26,6 @@ plotsquared = "7.3.11"           # https://intellectualsites.gitbook.io/plotsqua
 mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
 kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
 
-# AniCheat
-nocheatsplus = "3.16.1-SNAPSHOT" # https://ci.codemc.io/job/Updated-NoCheatPlus/
-
 # Libraries
 triumph-cmd = "2.0.0-ALPHA-10"   # Version=MIA https://github.com/TriumphTeam/triumph-cmds?tab=readme-ov-file
 tirumph-gui = "3.1.10"           # https://mvnrepository.com/artifact/dev.triumphteam/triumph-gui
@@ -76,8 +73,6 @@ kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms
 
 informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.5" } #https://central.sonatype.com/artifact/com.intellectualsites.informative-annotations/informative-annotations
 paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" } #https://mvnrepository.com/artifact/com.intellectualsites.paster
-
-nocheatplus = { module = "fr.neatmonster:nocheatplus", version.ref = "nocheatsplus" }
 
 [bundles]
 triumph = ["triumph-cmds", "triumph-gui"]
