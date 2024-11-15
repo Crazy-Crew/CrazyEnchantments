@@ -35,8 +35,6 @@ CrazyEnchantments as first install will come with `config.yml`, `Gkitz.yml`, `He
 
 Simply edit these files, most options you need are in these files described with comments, After any changes. Run the command /crazyenchantments reload!
 
-[![Partnered with ApexHosting](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/apex-banner-transparent.webp)](https://billing.apexminecrafthosting.com/aff.php?aff=5511)
-
 ![Features Banner](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/crazyenchantments/banner/webp/features.webp)<br>
 **80+ enchantments to pick from!**<br>
 **A mountain of customization.**<br>
