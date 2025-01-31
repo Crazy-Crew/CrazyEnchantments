@@ -187,6 +187,8 @@ public class PickaxeEnchantments implements Listener {
     public void onExperience(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
+        if (event.getExpToDrop() <= 0) return; // If block doesn't drop xp on break, return.
+
         ItemStack item = this.methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(item);
 
