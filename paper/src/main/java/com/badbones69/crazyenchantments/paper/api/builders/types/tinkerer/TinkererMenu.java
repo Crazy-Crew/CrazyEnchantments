@@ -213,9 +213,10 @@ public class TinkererMenu extends InventoryBuilder {
                     } else {
                         player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
                     }
-
-                    holder.getInventory().clear();
                 }
+
+                holder.getInventory().clear();
+
             }, null, 0);
         }
     }
