@@ -83,7 +83,7 @@ public class ArmorProcessor extends PoolProcessor {
 
         player.getScheduler().run(this.plugin, playerTask -> {
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
-                PotionEffect fastDigging = new PotionEffect(PotionEffectType.MINING_FATIGUE, 3 * 20, 1);
+                PotionEffect fastDigging = new PotionEffect(PotionEffectType.HASTE, 3 * 20, 1);
                 for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
                     e.getScheduler().run(plugin, task -> {
                         if (e instanceof Player otherPlayer && this.pluginSupport.isFriendly(player, otherPlayer)) {
