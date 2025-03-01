@@ -25,6 +25,8 @@ Tinker:
     DEPTH_STRIDER: '15, 1'
     FROST_WALKER: '30, 1'
     VANISHING_CURSE: '25, 1'
+    SWIFT_SNEAK: '10, 1'
+    SOUL_SPEED: '10, 1'
     #Sword/Axe Enchantments
     DAMAGE_ALL: '20, 1'
     DAMAGE_UNDEAD: '10, 1'
@@ -34,7 +36,7 @@ Tinker:
     LOOT_BONUS_MOBS: '15, 1'
     BINDING_CURSE: '25, 1'
     MENDING: '25, 1'
-    SWEEPING: '35, 1'
+    SWEEPING_EDGE: '35, 1'
     #Tool Enchantments
     DIG_SPEED: '20, 1'
     SILK_TOUCH: '35, 1'
@@ -45,9 +47,22 @@ Tinker:
     ARROW_KNOCKBACK: '20, 1'
     ARROW_FIRE: '25, 1'
     ARROW_INFINITE: '25, 1'
+    #Crossbow Enchantments
+    QUICK_CHARGE: '10, 1'
+    MULTISHOT: '10, 1'
+    PIERCING: '10, 1'
     #Fishing Pole Enchantments
     LUCK: '15, 1'
     LURE: '15, 1'
+    #Mace Enchantments
+    DENSITY: '10, 1'
+    WIND_BURST: '10, 1'
+    BREACH: '10, 1'
+    #Trident Enchantments
+    RIPTIDE: '10, 1'
+    IMPALING: '10, 1'
+    LOYALTY: '10, 1'
+    CHANNELING: '10, 1'
   Crazy-Enchantments:
     Glowing: #Enchantment name (Not custom name)
       Items: '20, 1' #Amount of Xp(Lvl/Total) or Money
