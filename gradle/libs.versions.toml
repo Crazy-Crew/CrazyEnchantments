@@ -7,13 +7,12 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [versions]
 # Minecraft
-paper = "1.21.1-R0.1-SNAPSHOT"
-minecraft = "1.21.1"
+paper = "1.21.4-R0.1-SNAPSHOT"
+minecraft = "1.21.4"
 
 # Plugins
-headdatabaseapi = "1.3.1"        # Not Used
 placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
-worldguard = "7.0.12"            # https://dev.bukkit.org/projects/worldguard/files
+worldguard = "7.0.13"            # https://dev.bukkit.org/projects/worldguard/files
 worldedit = "7.3.7"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
 oraxen = "1.183.0"               # https://github.com/oraxen/oraxen#api
 vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
@@ -30,18 +29,15 @@ kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.
 triumph-cmd = "2.0.0-ALPHA-10"   # Version=MIA https://github.com/TriumphTeam/triumph-cmds?tab=readme-ov-file
 tirumph-gui = "3.1.10"           # https://mvnrepository.com/artifact/dev.triumphteam/triumph-gui
 config-me = "1.4.1"              # https://mvnrepository.com/artifact/ch.jalu/configme
-jetbrains = "24.1.0"             # Not Used
-kyori = "4.17.0"                 # Not Used
-vital = "1.5.9"                  # Not Used
 metrics = "3.1.0"                # https://mvnrepository.com/artifact/org.bstats/bstats-bukkit
 
 # Paper
-paperweight = "1.7.3"            # https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
+paperweight = "2.0.0-beta.13"    # https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
 runPaper = "2.3.1"               # https://plugins.gradle.org/plugin/xyz.jpenilla.run-paper
 hangar = "0.1.2"                 # https://plugins.gradle.org/plugin/io.papermc.hangar-publish-plugin
 
 # Other
-shadow = "8.3.3"                 # https://gradleup.com/shadow/
+shadow = "9.0.0-beta4"           # https://gradleup.com/shadow/
 
 # Modrinth
 minotaur = "2.8.7"               # https://plugins.gradle.org/plugin/com.modrinth.minotaur

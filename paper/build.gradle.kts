@@ -1,8 +1,8 @@
 plugins {
+    alias(libs.plugins.paperweight)
+
     alias(libs.plugins.runPaper)
     alias(libs.plugins.shadow)
-
-    alias(libs.plugins.paperweight)
 }
 
 base {
@@ -69,6 +69,15 @@ paperweight {
 }
 
 tasks {
+    configurations.all { //todo() FIX ME later, fucking forced dependencies, give me a fucking break
+        resolutionStrategy {
+            force("org.apache.logging.log4j:log4j-bom:2.24.1")
+            force("com.google.guava:guava:33.3.1-jre")
+            force("com.google.code.gson:gson:2.11.0")
+            force("it.unimi.dsi:fastutil:8.5.15")
+        }
+    }
+
     publishing {
         repositories {
             maven {
