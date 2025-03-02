@@ -1,16 +1,5 @@
-### Changes:
-- Updated to 1.21.1 (ryderbelserion)
-- Updated how glow is added to an item. (ryderbelserion)
-- Remove unnecessary logging. (TDL)
-- Stopped updating plugin hooks twice on `/ce reload` (ryderbelserion)
-
-### Additions:
-- Added a new config option, `Settings.EnchantmentOptions.Limit.Change-On-Fail` (TDL)
-  - If true, the enchant limit will change.
-- Added untested support for the Lands plugin. (TDL)
-
-### Fixed:
-- Fixed an issue with enchantments not working with multi arrow. (TDL)
-- Fixed an issue with checking if an enchant is activated. (TDL)
-- Fixed an issue with blacksmith max enchants (TDL)
-- Fixed an issue with ore drops. (TDL)
+- Fixed an issue with the tinkerer inventory closing [#881](https://github.com/Crazy-Crew/CrazyEnchantments/pull/881)
+- Added missing enchantments to default config file [#880](https://github.com/Crazy-Crew/CrazyEnchantments/pull/880)
+- Fixed the potion effect for `Commander` [#879](https://github.com/Crazy-Crew/CrazyEnchantments/pull/879)
+- Fixed the experience enchantment [#875](https://github.com/Crazy-Crew/CrazyEnchantments/pull/875)
+- Removed NoCheatPlus support [#864](https://github.com/Crazy-Crew/CrazyEnchantments/pull/864)
