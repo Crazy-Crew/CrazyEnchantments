@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,7 +16,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.*;
 
 public class ArmorProcessor extends PoolProcessor {
@@ -39,7 +37,7 @@ public class ArmorProcessor extends PoolProcessor {
     }
 
     public void process(UUID playerId) {
-        Player player = Bukkit.getPlayer(playerId);
+        Player player = this.plugin.getServer().getPlayer(playerId);
 
         if (player == null) return;
 
@@ -49,7 +47,7 @@ public class ArmorProcessor extends PoolProcessor {
 
             int heal = 1;
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+            double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue();
 
             if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                 checkNursery(armor, player, enchantments, heal, maxHealth);

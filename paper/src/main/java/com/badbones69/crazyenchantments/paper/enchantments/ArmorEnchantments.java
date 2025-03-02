@@ -253,7 +253,7 @@ public class ArmorEnchantments implements Listener {
             }
 
             if (player.getHealth() <= event.getFinalDamage() && EnchantUtils.isEventActive(CEnchantments.SYSTEMREBOOT, player, armor, enchants)) {
-                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
                 event.setCancelled(true);
 
                 return;
@@ -277,7 +277,7 @@ public class ArmorEnchantments implements Listener {
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
                 double heal = enchants.get(CEnchantments.ENLIGHTENED.getEnchantment());
                 // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
 
                 if (player.getHealth() + heal < maxHealth) player.setHealth(player.getHealth() + heal);
 

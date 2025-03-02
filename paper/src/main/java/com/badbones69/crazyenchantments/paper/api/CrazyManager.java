@@ -160,7 +160,7 @@ public class CrazyManager {
             loadCEPlayer(player);
 
             // Check if we need to patch playerHealth.
-            Attribute genericAttribute = Attribute.GENERIC_MAX_HEALTH;
+            Attribute genericAttribute = Attribute.MAX_HEALTH;
 
             double baseValue = player.getAttribute(genericAttribute).getBaseValue();
 

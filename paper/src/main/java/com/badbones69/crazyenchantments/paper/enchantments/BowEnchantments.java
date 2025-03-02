@@ -155,7 +155,7 @@ public class BowEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.pluginSupport.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
             int heal = 1 + enchantedArrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
 
             if (entity.getHealth() < maxHealth) {
                 if (entity.getHealth() + heal < maxHealth) entity.setHealth(entity.getHealth() + heal);

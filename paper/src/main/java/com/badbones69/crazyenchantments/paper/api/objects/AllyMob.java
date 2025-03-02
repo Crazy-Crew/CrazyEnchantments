@@ -63,7 +63,7 @@ public class AllyMob {
 
         this.ally = (LivingEntity) location.getWorld().spawnEntity(location, this.type.entityType);
 
-        this.ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.type.maxHealth);
+        this.ally.getAttribute(Attribute.MAX_HEALTH).setBaseValue(this.type.maxHealth);
 
         this.ally.setHealth(this.type.maxHealth);
 

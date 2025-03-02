@@ -217,7 +217,7 @@ public class SwordEnchantments implements Listener {
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.LIFESTEAL, damager, item, enchantments)) {
             int steal = enchantments.get(CEnchantments.LIFESTEAL.getEnchantment());
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue();
 
             if (damager.getHealth() + steal < maxHealth) damager.setHealth(damager.getHealth() + steal);
 
@@ -232,7 +232,7 @@ public class SwordEnchantments implements Listener {
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VAMPIRE, damager, item, enchantments)) {
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue();
 
             if (damager.getHealth() + event.getDamage() / 2 < maxHealth) damager.setHealth(damager.getHealth() + event.getDamage() / 2);
 
