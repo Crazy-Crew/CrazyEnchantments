@@ -161,7 +161,6 @@ public class PickaxeEnchantments implements Listener {
                 entityItem.setItemStack(drop);
                 event.getItems().set(j, entityItem);
             }
-
             return;
         }
 
@@ -226,18 +225,18 @@ public class PickaxeEnchantments implements Listener {
         }
 
         return blocks;
-    } 
-    
+    }
+
     private HashSet<Block> getSurroundingBlocks(Location loc) {
         HashSet<Block> locations = new HashSet<>();
-        
+
         locations.add(loc.clone().add(0,1,0).getBlock());
         locations.add(loc.clone().add(0,-1,0).getBlock());
         locations.add(loc.clone().add(1,0,0).getBlock());
         locations.add(loc.clone().add(-1,0,0).getBlock());
         locations.add(loc.clone().add(0,0,1).getBlock());
         locations.add(loc.clone().add(0,0,-1).getBlock());
-        
+
         return locations;
     }
 
