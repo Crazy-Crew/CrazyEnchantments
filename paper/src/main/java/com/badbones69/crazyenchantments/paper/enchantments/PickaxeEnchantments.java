@@ -161,7 +161,6 @@ public class PickaxeEnchantments implements Listener {
                 entityItem.setItemStack(drop);
                 event.getItems().set(j, entityItem);
             }
-
             return;
         }
 
