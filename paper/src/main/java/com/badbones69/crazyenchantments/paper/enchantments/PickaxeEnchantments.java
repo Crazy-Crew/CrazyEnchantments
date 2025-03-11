@@ -81,10 +81,6 @@ public class PickaxeEnchantments implements Listener {
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
 
         Integer level = this.enchantmentBookSettings.getLevel(currentItem, CEnchantments.BLAST.getEnchantment());
-        if (level == null) {
-            this.plugin.getLogger().severe("Blast enchantment level is null for player: " + player.getName());
-            return;
-        }
 
         Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), level - 1);
         this.blocks.remove(player);
