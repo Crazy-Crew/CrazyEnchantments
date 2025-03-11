@@ -76,13 +76,17 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         Block initialBlock = event.getBlock();
         ItemStack currentItem = this.methods.getItemInHand(player);
-        //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
-        //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
 
-        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (enchantmentBookSettings.getLevel(currentItem, CEnchantments.BLAST.getEnchantment()) - 1));
+        Integer level = this.enchantmentBookSettings.getLevel(currentItem, CEnchantments.BLAST.getEnchantment());
+        if (level == null) {
+            this.plugin.getLogger().severe("Blast enchantment level is null for player: " + player.getName());
+            return;
+        }
+
+        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), level - 1);
         this.blocks.remove(player);
 
         if (massBlockBreakCheck(player, blockList)) return;
@@ -91,13 +95,12 @@ public class PickaxeEnchantments implements Listener {
         for (Block block : blockList) {
             if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
             if (this.methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksBlast())) continue;
-            if (damage) this.methods.removeDurability(currentItem, player);
+            if (!block.isEmpty()) if (damage) this.methods.removeDurability(currentItem, player);
         }
         if (!damage) this.methods.removeDurability(currentItem, player);
     }
 
-
-    @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onVeinMinerBreak(BlockBreakEvent event) {
         if (!isOreBlock(event.getBlock().getType())
                 || !event.isDropItems()
@@ -169,7 +172,6 @@ public class PickaxeEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.FURNACE, player, item, enchants)) {
-
             for (int j = 0; j < oldDrops.size(); j++) {
                 Item entityItem  = oldDrops.get(j);
                 ItemStack drop = entityItem.getItemStack();
@@ -181,20 +183,31 @@ public class PickaxeEnchantments implements Listener {
                 event.getItems().set(j, entityItem);
             }
         }
+
+        if (EnchantUtils.isEventActive(CEnchantments.BLAST, player, item, enchants)) {
+            Set<Block> blocksToRemove = new HashSet<>();
+            for (Item entityItem : oldDrops) {
+                Block block = entityItem.getLocation().getBlock();
+                if (blocksToRemove.contains(block)) {
+                    event.getItems().remove(entityItem);
+                } else {
+                    blocksToRemove.add(block);
+                }
+            }
+        }
     }
+
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onExperience(BlockBreakEvent event) {
         Player player = event.getPlayer();
-
-        if (event.getExpToDrop() <= 0) return; // If block doesn't drop xp on break, return.
-
         ItemStack item = this.methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(item);
 
         if (!EnchantUtils.isEventActive(CEnchantments.EXPERIENCE, player, item, enchants)) return;
 
-        event.setExpToDrop(event.getExpToDrop() + (enchants.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
+        int enchantmentLevel = enchants.get(CEnchantments.EXPERIENCE.getEnchantment());
+        event.setExpToDrop(event.getExpToDrop() + (enchantmentLevel * 2));
     }
 
     private HashSet<Block> getOreBlocks(Location loc, int amount) {
