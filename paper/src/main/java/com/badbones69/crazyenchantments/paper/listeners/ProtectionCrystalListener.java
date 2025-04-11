@@ -69,23 +69,12 @@ public class ProtectionCrystalListener implements Listener {
 
         Player player = event.getEntity();
         List<ItemStack> savedItems = new ArrayList<>();
-        List<ItemStack> droppedItems = new ArrayList<>();
 
         for (ItemStack item : event.getDrops()) {
-
-            if (item != null) {
-
-                if (ProtectionCrystalSettings.isProtected(item) && this.protectionCrystalSettings.isProtectionSuccessful(player)) {
-                    savedItems.add(item);
-                    continue;
-                }
-
-                droppedItems.add(item);
-            }
+            if (ProtectionCrystalSettings.isProtected(item) && this.protectionCrystalSettings.isProtectionSuccessful(player)) savedItems.add(item);
         }
 
-        event.getDrops().clear();
-        event.getDrops().addAll(droppedItems);
+        savedItems.forEach(item -> event.getDrops().remove(item));
 
         this.protectionCrystalSettings.addPlayer(player, savedItems);
     }
