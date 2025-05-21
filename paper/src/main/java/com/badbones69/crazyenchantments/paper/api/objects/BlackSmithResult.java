@@ -9,7 +9,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class BlackSmithResult {
 
@@ -35,7 +38,7 @@ public class BlackSmithResult {
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
             // Books have to be the same level.
             mainBook.getLevel() == subBook.getLevel() &&
-            // Makes sure level doesn't go passed max.
+            // Makes sure level doesn't go past max.
             mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
                 this.resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
                 this.cost += BlackSmithManager.getBookUpgrade();
@@ -85,7 +88,7 @@ public class BlackSmithResult {
                 for (Entry<Enchantment, Integer> entry : compare.getNewVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
 
-                    if (enchantment.canEnchantItem(subItem) && mainCE.canAddEnchantment(player)) {
+                    if (enchantment.canEnchantItem(subItem) && mainCE.canAddEnchantment(player) && !hasConflictingEnchant(mainCE.getVanillaEnchantments().keySet(), enchantment)) {
                         mainCE.addVanillaEnchantment(enchantment, entry.getValue());
                         this.cost += BlackSmithManager.getAddEnchantment();
                     }
@@ -104,7 +107,23 @@ public class BlackSmithResult {
             }
         }
     }
-    
+
+    /**
+     * Check if this enchantment conflicts with another enchantment.
+     *
+     * @param vanillaEnchantments The enchants to check if they are conflicting.
+     * @param enchantment The enchant to check the others against.
+     * @return True if there is a conflict.
+     */
+    private boolean hasConflictingEnchant(Set<Enchantment> vanillaEnchantments, Enchantment enchantment) {
+
+        for (Enchantment enchant : vanillaEnchantments) {
+            if (enchantment.conflictsWith(enchant)) return true;
+        }
+
+        return false;
+    }
+
     public int getCost() {
         return this.cost;
     }
