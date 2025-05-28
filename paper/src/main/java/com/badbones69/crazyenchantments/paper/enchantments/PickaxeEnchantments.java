@@ -76,8 +76,8 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         Block initialBlock = event.getBlock();
         ItemStack currentItem = this.methods.getItemInHand(player);
-        //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+        //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         // if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
 
