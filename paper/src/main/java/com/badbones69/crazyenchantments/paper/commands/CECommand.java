@@ -209,15 +209,17 @@ public class CECommand implements CommandExecutor {
                     int limit = this.crazyManager.getPlayerMaxEnchantments(player);
                     int baseLimit = this.crazyManager.getPlayerBaseEnchantments(player);
                     int slotModifier = item.isEmpty() ? 0 : this.crazyManager.getEnchantmentLimiter(item);
+                    int enchantAmount = item.isEmpty() ? 0 : this.enchantmentBookSettings.getEnchantmentAmount(item, this.crazyManager.checkVanillaLimit());
 
                     int canAdd = Math.min(baseLimit - slotModifier, limit);
 
                     placeholders.put("%limit%", String.valueOf(limit));
                     placeholders.put("%baseLimit%", String.valueOf(baseLimit));
                     placeholders.put("%vanilla%", String.valueOf(this.crazyManager.checkVanillaLimit()));
-                    placeholders.put("%item%", String.valueOf(item.isEmpty() ? 0 : this.enchantmentBookSettings.getEnchantmentAmount(item, this.crazyManager.checkVanillaLimit())));
+                    placeholders.put("%item%", String.valueOf(enchantAmount));
                     placeholders.put("%slotCrystal%", String.valueOf(-slotModifier));
-                    placeholders.put("%space%", String.valueOf(canAdd));
+                    placeholders.put("%space%", String.valueOf(canAdd - enchantAmount));
+                    placeholders.put("%canHave%", String.valueOf(canAdd));
                     placeholders.put("%limitSetInConfig%", String.valueOf(this.crazyManager.useConfigLimit()));
 
                     sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
