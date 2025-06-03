@@ -58,11 +58,9 @@ public class PickaxeEnchantments implements Listener {
 
         if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
 
-        ItemStack item = this.methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
         if (block == null || block.isEmpty() || !this.crazyManager.getBlastBlockList().contains(block.getType())) return;
-        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item))) return; // TODO Move over to block break.
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
@@ -76,11 +74,11 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         Block initialBlock = event.getBlock();
         ItemStack currentItem = this.methods.getItemInHand(player);
-        //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
-        //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return;
 
         Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (enchantmentBookSettings.getLevel(currentItem, CEnchantments.BLAST.getEnchantment()) - 1));
         this.blocks.remove(player);
