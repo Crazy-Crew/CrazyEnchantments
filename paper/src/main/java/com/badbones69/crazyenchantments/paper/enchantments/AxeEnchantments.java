@@ -4,7 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
@@ -13,12 +15,14 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -32,6 +36,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class AxeEnchantments implements Listener {
 
@@ -53,6 +61,61 @@ public class AxeEnchantments implements Listener {
     // Plugin Support.
     @NotNull
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onTreeFeller(BlockBreakEvent event) {
+        if (!event.isDropItems() || EventUtils.isIgnoredEvent(event)) return;
+
+        Player player = event.getPlayer();
+        ItemStack currentItem = methods.getItemInHand(player);
+
+        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
+
+        Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
+        boolean damage = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
+
+        if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
+
+        for (Block block : blockList) {
+            if (block == event.getBlock()) continue;
+            if (this.methods.playerBreakBlock(player, block, currentItem, true)) continue;
+            if (damage) this.methods.removeDurability(currentItem, player);
+        }
+
+        if (!damage) this.methods.removeDurability(currentItem, player);
+
+    }
+
+    public static Set<Block> getTree(Block startBlock, int maxBlocks) {
+        Set<Block> tree = new HashSet<>();
+        Queue<Block> queue = new LinkedList<>();
+        queue.add(startBlock);
+        tree.add(startBlock);
+
+        while (!queue.isEmpty()) {
+            Block currentBlock = queue.poll();
+
+            for (int x = -1; x < 1; x += 2) {
+                for (int z = -1; z < 1; z += 2) {
+                    for (int y = -1; y < 1; y += 2) {
+                        if (tree.size() > maxBlocks) break;
+
+                        Block neighbor = currentBlock.getRelative(x, y, z);
+                        if (tree.contains(neighbor)) continue;
+
+                        String neighborType = neighbor.getType().toString();
+
+                        if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES"))) {
+                            tree.add(neighbor);
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return tree;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {

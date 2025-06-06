@@ -148,6 +148,9 @@ Tinker:
     Rekt:
       Items: '20, 1'
       Book: '5, 1'
+    TreeFeller:
+      Items: '20, 1'
+      Book: '5, 1'
     Enlightened:
       Items: '20, 1'
       Book: '5, 1'
