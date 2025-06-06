@@ -87,27 +87,31 @@ public class AxeEnchantments implements Listener {
 
     }
 
-    public static Set<Block> getTree(Block startBlock, int maxBlocks) {
-        Set<Block> tree = new HashSet<>();
+    private Set<Block> getTree(Block startBlock, int maxBlocks) {
+        Set<Block> checkedBlocks = new HashSet<>(), tree = new HashSet<>();
         Queue<Block> queue = new LinkedList<>();
         queue.add(startBlock);
-        tree.add(startBlock);
+        checkedBlocks.add(startBlock);
+        int startX = startBlock.getX(), startZ = startBlock.getZ();
 
         while (!queue.isEmpty()) {
             Block currentBlock = queue.poll();
 
-            for (int x = -1; x < 1; x += 2) {
-                for (int z = -1; z < 1; z += 2) {
-                    for (int y = -1; y < 1; y += 2) {
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    for (int y = -1; y <= 1; y++) {
                         if (tree.size() > maxBlocks) break;
+                        if (x == 0 && y == 0 && z == 0) continue; // Skip initial block.
 
                         Block neighbor = currentBlock.getRelative(x, y, z);
-                        if (tree.contains(neighbor)) continue;
+                        if (neighbor.isEmpty() || checkedBlocks.contains(neighbor)) continue;
+                        if (notInRange(startX, neighbor.getX()) || notInRange(startZ, neighbor.getZ())) continue;
 
                         String neighborType = neighbor.getType().toString();
 
                         if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES"))) {
-                            tree.add(neighbor);
+                            if (neighborType.endsWith("LOG")) tree.add(neighbor);
+                            checkedBlocks.add(neighbor);
                             queue.add(neighbor);
                         }
                     }
@@ -115,6 +119,11 @@ public class AxeEnchantments implements Listener {
             }
         }
         return tree;
+    }
+
+    private boolean notInRange(int startPos, int pos2) {
+        int range = 5;
+        return pos2 > (startPos + range) || pos2 < (startPos - range);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
