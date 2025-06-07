@@ -6,6 +6,8 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.block.CraftBlock;
@@ -24,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class VeinMinerEnchant implements Listener {
 
@@ -156,12 +159,12 @@ public class VeinMinerEnchant implements Listener {
         
         block.setType(Material.AIR);
 
-        if (tool.getDataOrDefault(DataComponentTypes.DAMAGE, 0) <= 0) {
-
-        }
-
         // damage the tool if config option is true, adding it later...
-        player.damageItemStack(tool, 1);
+        final ItemStack itemStack = player.damageItemStack(tool, 1);
+
+        if (itemStack.isEmpty()) {
+            player.playSound(player, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, ThreadLocalRandom.current().nextFloat(0.8F, 1.2F));
+        }
     }
 
     public int getExperience(@NotNull final Block block, @NotNull final ItemStack itemStack) {
