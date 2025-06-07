@@ -97,7 +97,7 @@ public class BlackSmithResult {
                 for (Entry<CEnchantment, Integer> entry : compare.getNewCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
 
-                    if (enchantment.canEnchantItem(mainItem) && mainCE.canAddEnchantment(player)) {
+                    if (enchantment.canEnchantItem(mainItem) && mainCE.canAddEnchantment(player) && !hasConflictingCEEnchant(mainCE.getCEnchantments().keySet(), enchantment)) {
                         mainCE.addCEnchantment(enchantment, entry.getValue());
                         this.cost += BlackSmithManager.getAddEnchantment();
                     }
