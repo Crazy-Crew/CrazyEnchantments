@@ -2,26 +2,11 @@ package com.ryderbelserion.crazyenchantments.paper.loader;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
-import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
-import com.ryderbelserion.fusion.core.files.FileManager;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.TypedKey;
-import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.event.RegistryEvents;
-import io.papermc.paper.registry.event.WritableRegistry;
-import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
-import io.papermc.paper.tag.PreFlattenTagRegistrar;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.Collection;
-import java.util.Set;
 
 public class CrazyLoader implements PluginBootstrap {
 
