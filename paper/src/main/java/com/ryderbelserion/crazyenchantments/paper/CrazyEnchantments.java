@@ -1,6 +1,7 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.listeners.VeinMinerEnchant;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        getServer().getPluginManager().registerEvents(new VeinMinerEnchant(), this);
     }
 
     @Override

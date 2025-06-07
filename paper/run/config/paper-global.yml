@@ -8,11 +8,27 @@
 # The world configuration options have been moved inside
 # their respective world folder. The files are named paper-world.yml
 # 
+# File Reference: https://docs.papermc.io/paper/reference/global-configuration/
 # Docs: https://docs.papermc.io/
 # Discord: https://discord.gg/papermc
 # Website: https://papermc.io/
 
 _version: 29
+anticheat:
+  obfuscation:
+    items:
+      all-models:
+        also-obfuscate: []
+        dont-obfuscate:
+        - minecraft:lodestone_tracker
+        sanitize-count: true
+      enable-item-obfuscation: false
+      model-overrides:
+        minecraft:elytra:
+          also-obfuscate: []
+          dont-obfuscate:
+          - minecraft:damage
+          sanitize-count: true
 block-updates:
   disable-chorus-plant-updates: false
   disable-mushroom-block-updates: false
@@ -34,7 +50,7 @@ collisions:
   enable-player-collisions: true
   send-full-pos-for-hard-colliding-entities: true
 commands:
-  fix-target-selector-tag-completion: true
+  ride-command-allow-player-as-vehicle: false
   suggest-player-names-when-null-tab-completions: true
   time-command-affects-all-worlds: false
 console:
@@ -76,6 +92,7 @@ misc:
   strict-advancement-dimension-check: false
   use-alternative-luck-formula: false
   use-dimension-type-for-custom-spawners: false
+  xp-orb-groups-per-area: default
 packet-limiter:
   all-packets:
     action: KICK
@@ -125,11 +142,12 @@ unsupported-settings:
   allow-headless-pistons: false
   allow-permanent-block-break-exploits: false
   allow-piston-duplication: false
-  allow-tripwire-disarming-exploits: false
   allow-unsafe-end-portal-teleportation: false
   compression-format: ZLIB
   perform-username-validation: true
+  skip-tripwire-hook-placement-validation: false
   skip-vanilla-damage-tick-when-shield-blocked: false
+  update-equipment-on-player-actions: true
 watchdog:
   early-warning-delay: 10000
   early-warning-every: 5000

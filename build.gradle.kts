@@ -13,7 +13,7 @@ val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Cr
 
 rootProject.version = version()
 rootProject.description = "Adds custom enchantments to your server!"
-rootProject.group = "com.badbones69.crazyenchantments"
+rootProject.group = "com.ryderbelserion.crazyenchantments"
 
 fun version(): String {
     if (isSnapshot) {
