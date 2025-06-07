@@ -1,12 +1,10 @@
 name: '${name}'
-main: '${group}.CrazyEnchantments'
-#loader: '${group}.loader.CrazyLoader'
+main: '${group}.${name}'
 bootstrapper: '${group}.loader.CrazyLoader'
 
 version: '${version}'
-api-version: '${apiVersion}'
+api-version: '${minecraft}'
 description: '${description}'
-website: '${website}'
 
 folia-supported: true
 

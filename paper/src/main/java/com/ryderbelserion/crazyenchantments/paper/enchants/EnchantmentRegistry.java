@@ -1,21 +1,10 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants;
 
 import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
-import com.ryderbelserion.crazyenchantments.paper.enchants.types.DisorderEnchant;
-import com.ryderbelserion.crazyenchantments.paper.enchants.types.ViperEnchant;
-import com.ryderbelserion.crazyenchantments.paper.utils.Methods;
-import com.ryderbelserion.vital.paper.api.files.CustomFile;
-import com.ryderbelserion.vital.paper.api.files.FileManager;
-import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.TypedKey;
-import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
-import io.papermc.paper.registry.tag.TagKey;
+import com.ryderbelserion.fusion.core.files.FileManager;
 import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemType;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,7 +46,7 @@ public class EnchantmentRegistry {
     }
 
     public void populateEnchantments() {
-        final CustomFile file = this.fileManager.getFile("enchants.yml");
+        /*final CustomFile file = this.fileManager.getFile("enchants.yml");
 
         if (file == null) return;
 
@@ -109,11 +98,11 @@ public class EnchantmentRegistry {
             addEnchantment(key, enchantment);
         }
 
-        file.save();
+        file.save();*/
     }
 
     public void populateCurses() {
-        final CustomFile file = this.fileManager.getFile("curses.yml");
+        /*final CustomFile file = this.fileManager.getFile("curses.yml");
 
         if (file == null) return;
 
@@ -165,13 +154,13 @@ public class EnchantmentRegistry {
             addEnchantment(key, enchantment);
         }
 
-        file.save();
+        file.save();*/
     }
 
     private Set<TagEntry<ItemType>> getTagsFromList(List<String> tags) {
         final Set<TagEntry<ItemType>> supportedItemTags = new HashSet<>();
 
-        for (String itemTag : tags) {
+        /*for (String itemTag : tags) {
             if (itemTag == null) continue;
 
             if (itemTag.startsWith("#")) {
@@ -204,7 +193,7 @@ public class EnchantmentRegistry {
             } catch (IllegalArgumentException | NullPointerException e) {
                 this.logger.warn("Failed to create tag entry for {}", itemTag);
             }
-        }
+        }*/
 
         return supportedItemTags;
     }

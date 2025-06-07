@@ -3,9 +3,7 @@ package com.ryderbelserion.crazyenchantments.paper.loader;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
-import com.ryderbelserion.fusion.core.api.enums.FileType;
 import com.ryderbelserion.fusion.core.files.FileManager;
-import com.ryderbelserion.fusion.paper.FusionApi;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
@@ -27,13 +25,11 @@ import java.util.Set;
 
 public class CrazyLoader implements PluginBootstrap {
 
-    private final FusionApi api = FusionApi.get();
-
     private EnchantmentRegistry registry;
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
-        this.api.bootstrap(context);
+        /*this.api.bootstrap(context);
 
         final FileManager fileManager = this.api.getFusion().getFileManager();
 
@@ -99,11 +95,11 @@ public class CrazyLoader implements PluginBootstrap {
                     registry.addToTag(enchantmentTagKey, Set.of(enchant.getTagEntry()));
                 });
             }
-        }));
+        }));*/
     }
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
-        return new CrazyEnchantments(this.vital, this.registry);
+        return new CrazyEnchantments(this.registry);
     }
 }
