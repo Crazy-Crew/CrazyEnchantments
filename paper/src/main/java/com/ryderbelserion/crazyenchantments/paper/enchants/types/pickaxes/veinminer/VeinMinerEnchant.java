@@ -1,0 +1,157 @@
+package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer;
+
+import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
+import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
+import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
+import io.papermc.paper.registry.tag.TagKey;
+import io.papermc.paper.tag.TagEntry;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Server;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class VeinMinerEnchant implements CustomEnchantment {
+
+    public static final Key veinminer_key = Key.key("crazyenchantments:veinminer");
+
+    private final EnchantmentRegistry registry;
+    private final FileManager fileManager;
+    private final Path path;
+
+    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry, @NotNull final FileManager fileManager, @NotNull final Path path) {
+        this.fileManager = fileManager;
+        this.registry = registry;
+        this.path = path;
+
+        build();
+    }
+
+    private final Set<TagKey<Enchantment>> enchantTagKeys = new HashSet<>();
+    private EnchantmentRegistryEntry.EnchantmentCost minimumCost;
+    private EnchantmentRegistryEntry.EnchantmentCost maximumCost;
+    private Set<TagEntry<ItemType>> supportedItemTags;
+    private CommentedConfigurationNode config;
+    private int anvilCost, maxLevel, weight;
+    private boolean isEnabled;
+
+    @Override
+    public void init(@NotNull final JavaPlugin plugin) {
+        final Server server = plugin.getServer();
+
+        server.getPluginManager().registerEvents(new VeinMinerListener(), plugin);
+    }
+
+    @Override
+    public void build() { // used for /ce reload
+        final YamlCustomFile customFile = this.fileManager.getYamlFile(getPath());
+
+        if (customFile != null) {
+            if (!Files.exists(getPath())) {
+                customFile.save(); // save to the system
+            }
+
+            customFile.load(); // load into memory.
+
+            final CommentedConfigurationNode config = customFile.getConfiguration(); // get the node
+
+            // update the values
+            this.isEnabled = config.node("enchant", "enabled").getBoolean(false);
+            this.anvilCost = config.node("enchant", "anvil-cost").getInt(1);
+            this.maxLevel = config.node("enchant", "max-level").getInt(1);
+            this.weight = config.node("enchant", "weight").getInt(1);
+
+            this.minimumCost = EnchantmentRegistryEntry.EnchantmentCost.of(config.node("enchant", "minimum-cost", "base").getInt(1),
+                    config.node("enchant", "minimum-cost", "extra-per-level").getInt(1));
+            this.maximumCost = EnchantmentRegistryEntry.EnchantmentCost.of(config.node("enchant", "maximum-cost", "base").getInt(1),
+                    config.node("enchant", "maximum-cost", "extra-per-level").getInt(1));
+
+            final List<String> tags = customFile.getStringList("enchant", "supported-items");
+
+            this.supportedItemTags = this.registry.getTagsFromList(tags.isEmpty() ? List.of("#minecraft:enchantable/mining") : tags);
+
+            if (config.node("enchant", "enchantment-table").getBoolean(false)) {
+                this.enchantTagKeys.add(EnchantmentTagKeys.IN_ENCHANTING_TABLE);
+            }
+
+            // re-bind the config node just in case we need it.
+            this.config = config;
+        }
+    }
+
+    @Override
+    public final Path getPath() {
+        return this.path.resolve("enchants").resolve("veinminer.yml");
+    }
+
+    @Override
+    public final Key getKey() {
+        return veinminer_key;
+    }
+
+    @Override
+    public final Component getDescription() {
+        return Component.translatable("crazyenchantments.enchant.veinminer", "Veinminer");
+    }
+
+    @Override
+    public final int getAnvilCost() {
+        return this.anvilCost;
+    }
+
+    @Override
+    public final int getMaxLevel() {
+        return this.maxLevel;
+    }
+
+    @Override
+    public final int getWeight() {
+        return this.weight;
+    }
+
+    @Override
+    public final EnchantmentRegistryEntry.EnchantmentCost getMinimumCost() {
+        return this.minimumCost;
+    }
+
+    @Override
+    public final EnchantmentRegistryEntry.EnchantmentCost getMaximumCost() {
+        return this.maximumCost;
+    }
+
+    @Override
+    public final Iterable<EquipmentSlotGroup> getActiveSlots() {
+        return Set.of(EquipmentSlotGroup.HAND);
+    }
+
+    @Override
+    public final boolean isEnabled() {
+        return this.isEnabled;
+    }
+
+    @Override
+    public final Set<TagEntry<ItemType>> getSupportedItems() {
+        return this.supportedItemTags;
+    }
+
+    @Override
+    public final Set<TagKey<Enchantment>> getEnchantTagKeys() {
+        return this.enchantTagKeys;
+    }
+
+    public final CommentedConfigurationNode getConfig() {
+        return this.config;
+    }
+}

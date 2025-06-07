@@ -1,15 +1,21 @@
-package com.ryderbelserion.crazyenchantments.paper.listeners;
+package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.events.VeinMinerEvent;
+import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.objects.BlockVein;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,8 +30,10 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class VeinMinerEnchant implements Listener {
+public class VeinMinerListener implements Listener {
 
+    private final Registry<@NotNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
+    private final Enchantment veinminer = this.registry.get(VeinMinerEnchant.veinminer_key);
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private static final List<String> ores = List.of(
@@ -49,37 +57,29 @@ public class VeinMinerEnchant implements Listener {
             "minecraft:nether_quartz_ore"
     );
 
-    private static final List<String> tools = List.of(
-            "minecraft:wooden_pickaxe",
-            "minecraft:stone_pickaxe",
-            "minecraft:golden_pickaxe",
-            "minecraft:iron_pickaxe",
-            "minecraft:diamond_pickaxe",
-            "minecraft:netherite_pickaxe"
-    );
-
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isDropItems()) return;
+
+        if (this.veinminer == null) return;
+
+        final ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
+
+        if (!tool.containsEnchantment(this.veinminer)) return;
 
         final Player player = event.getPlayer();
 
         if (player.isSneaking()) return;
 
-        final Block block = event.getBlock();
-
         // VeinMinerEvent extends BlockBreakEvent, so other developers should be able to modify the event drops.
         // We simply return early if we detect that this instance of BlockBreakEvent is VeinMinerEvent.
-        if (event instanceof VeinMinerEvent) {
-            return;
-        }
+        if (event instanceof VeinMinerEvent) return;
 
-        final ItemStack tool = player.getInventory().getItemInMainHand();
-        final String toolType = tool.getType().getKey().asString();
+        final Block block = event.getBlock();
 
-        final String type = block.getType().getKey().asString();
+        final String blockType = block.getType().getKey().asString();
 
-        if (!tools.contains(toolType) || !ores.contains(type)) return;
+        if (!ores.contains(blockType)) return;
 
         final Queue<BlockVein> queue = new LinkedList<>();
 
@@ -103,7 +103,7 @@ public class VeinMinerEnchant implements Listener {
             int radius = 3;
 
             if (breakBlock) {
-                int delay = 3 * vein.distance;
+                int delay = 3 * vein.distance();
 
                 new FoliaScheduler(this.plugin, block.getLocation()) {
                     @Override
@@ -126,14 +126,14 @@ public class VeinMinerEnchant implements Listener {
 
                         final Block worldBlock = world.getBlockAt(block.getX() + x, block.getY() + y, block.getZ() + z);
 
-                        queue.add(new BlockVein(worldBlock, vein.distance + 1, getExperience(worldBlock, tool)));
+                        queue.add(new BlockVein(worldBlock, vein.distance() + 1, getExperience(worldBlock, tool)));
                     }
                 }
             }
         }
     }
 
-    public void destroy(final Player player, final ItemStack tool, final BlockVein veinBlock) {
+    private void destroy(@NotNull final Player player, @NotNull final ItemStack tool, @NotNull final BlockVein veinBlock) {
         final Block block = veinBlock.block();
 
         final VeinMinerEvent event = new VeinMinerEvent(block, player, veinBlock.experience());
@@ -150,7 +150,7 @@ public class VeinMinerEnchant implements Listener {
         }
     }
 
-    public int getExperience(@NotNull final Block block, @NotNull final ItemStack itemStack) {
+    private int getExperience(@NotNull final Block block, @NotNull final ItemStack itemStack) {
         final CraftBlock craftBlock = (CraftBlock) block;
 
         final BlockState blockState = craftBlock.getNMS();
@@ -158,16 +158,5 @@ public class VeinMinerEnchant implements Listener {
         final net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
 
         return worldBlock.getExpDrop(blockState, craftBlock.getHandle().getMinecraftWorld(), craftBlock.getPosition(), nmsItem, true);
-    }
-
-    public record BlockVein(Block block, int distance, int experience) {}
-
-    static class VeinMinerEvent extends BlockBreakEvent {
-
-        public VeinMinerEvent(@NotNull final Block block, @NotNull final Player player, final int experience) {
-            super(block, player);
-
-            setExpToDrop(experience);
-        }
     }
 }
