@@ -68,7 +68,9 @@ public class VeinMinerEnchant implements Listener {
 
         final Block block = event.getBlock();
 
-        if (event instanceof VeinMinerEvent) { // return early if we called as to not endlessly loop.
+        // VeinMinerEvent extends BlockBreakEvent, so other developers should be able to modify the event drops.
+        // We simply return early if we detect that this instance of BlockBreakEvent is VeinMinerEvent.
+        if (event instanceof VeinMinerEvent) {
             return;
         }
 
@@ -137,7 +139,7 @@ public class VeinMinerEnchant implements Listener {
         final VeinMinerEvent event = new VeinMinerEvent(block, player, veinBlock.experience());
 
         if (!event.callEvent()) return;
-        
+
         block.breakNaturally(tool, true, event.getExpToDrop() > 0);
 
         // damage the tool if config option is true, adding it later...
