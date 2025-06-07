@@ -25,6 +25,7 @@ public enum Messages {
             "#880808Use &2/ce limit #880808to check the current limit on the item.",
             "#880808For information on how to change the limit, read &2https://docs.crazycrew.us/docs/plugins/crazyenchantments/faq."
     )),
+    CONFLICTING_ENCHANT("Conflicting-Enchant", "&7This enchant conflicts with one already on the item."),
     MAX_SLOTS_UNLOCKED("Hit-Slot-Max", "&cYou have already added the maximum amount of slots to this item."),
     APPLIED_SLOT_CRYSTAL("Applied-Slot-Crystal", "&cYou have successfully added another slot to the item. The item now has %slot% extra slots."),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
