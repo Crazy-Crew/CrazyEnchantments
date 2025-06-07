@@ -64,7 +64,14 @@ public class EnchantmentType {
         return this.enchantableMaterials;
     }
 
-    public boolean canEnchantItem(ItemStack item) {
+    /**
+     * Checks if this cEnchantment may be applied to the given {@link
+     * ItemStack}.
+     *
+     * @param item Item to test
+     * @return True if the cEnchantment may be applied, otherwise False
+     */
+    public boolean canEnchantItem(@NotNull ItemStack item) {
         return this.enchantableMaterials.contains(item.getType());
     }
 

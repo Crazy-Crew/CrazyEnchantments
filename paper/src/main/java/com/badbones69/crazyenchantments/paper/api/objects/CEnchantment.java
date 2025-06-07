@@ -46,6 +46,7 @@ public class CEnchantment {
     private EnchantmentType enchantmentType;
     private final CEnchantment instance;
     private Sound sound;
+    private List<String> conflicts;
 
     public CEnchantment(String name) {
         this.instance = this;
@@ -60,6 +61,26 @@ public class CEnchantment {
         this.categories = new ArrayList<>();
         this.enchantmentType = null;
         this.sound = Sound.ENTITY_PLAYER_LEVELUP;
+        this.conflicts = new ArrayList<>();
+    }
+
+    public List<String> getConflicts() {
+        return this.conflicts;
+    }
+
+    public CEnchantment setConflicts(List<String> conflicts) {
+        this.conflicts = conflicts;
+        return this;
+    }
+
+    /**
+     * Check if this enchantment conflicts with another enchantment.
+     *
+     * @param other The enchantment to check against
+     * @return True if there is a conflict.
+     */
+    public boolean conflictsWith(CEnchantment other) {
+        return conflicts.contains(other.name);
     }
 
     @NotNull
@@ -208,7 +229,14 @@ public class CEnchantment {
         return this.enchantmentType;
     }
 
-    public boolean canEnchantItem(ItemStack item) {
+    /**
+     * Checks if this cEnchantment may be applied to the given {@link
+     * ItemStack}.
+     *
+     * @param item Item to test
+     * @return True if the cEnchantment may be applied, otherwise False
+     */
+    public boolean canEnchantItem(@NotNull ItemStack item) {
         return this.enchantmentType != null && this.enchantmentType.canEnchantItem(item);
     }
 

@@ -123,6 +123,21 @@ public class BlackSmithResult {
 
         return false;
     }
+    /**
+     * Check if this enchantment conflicts with another enchantment.
+     *
+     * @param ceEnchantments The ceEnchants to check if they are conflicting.
+     * @param cEnchantment The ceEnchant to check the others against.
+     * @return True if there is a conflict.
+     */
+    private boolean hasConflictingCEEnchant(Set<CEnchantment> ceEnchantments, CEnchantment cEnchantment) {
+
+        for (CEnchantment enchant : ceEnchantments) {
+            if (cEnchantment.conflictsWith(enchant)) return true;
+        }
+
+        return false;
+    }
 
     public int getCost() {
         return this.cost;
