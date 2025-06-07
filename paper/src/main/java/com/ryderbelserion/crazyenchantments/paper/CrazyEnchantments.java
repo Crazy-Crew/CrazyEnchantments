@@ -1,29 +1,49 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
-import com.ryderbelserion.crazyenchantments.paper.listeners.VeinMinerEnchant;
+import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
 
 public class CrazyEnchantments extends JavaPlugin {
 
     private final EnchantmentRegistry registry;
+    private final FusionPaper paper;
 
-    public CrazyEnchantments(@NotNull final EnchantmentRegistry registry) {
+    private final FileManager fileManager;
+
+    public CrazyEnchantments(@NotNull final EnchantmentRegistry registry, @NotNull final FusionPaper paper) {
         this.registry = registry;
+        this.paper = paper;
+
+        this.fileManager = this.paper.getFileManager();
     }
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new VeinMinerEnchant(), this);
+        this.paper.enable(this);
+
+        this.fileManager.addFile(getDataPath().resolve("cache").resolve("veinminer.json"), new ArrayList<>(), null);
+        
+        this.registry.getEnchantments().forEach((key, customEnchantment) -> {
+            customEnchantment.init(this); // registers listeners, or things not meant for the bootstrap loader
+        });
     }
 
     @Override
     public void onDisable() {
-
+        if (this.paper != null) {
+            this.paper.disable();
+        }
     }
 
     public @NotNull final EnchantmentRegistry getRegistry() {
         return this.registry;
+    }
+
+    public @NotNull final FusionPaper getPaper() {
+        return this.paper;
     }
 }

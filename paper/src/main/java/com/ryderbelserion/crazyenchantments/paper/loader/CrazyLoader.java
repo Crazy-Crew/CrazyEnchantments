@@ -2,36 +2,49 @@ package com.ryderbelserion.crazyenchantments.paper.loader;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
+import io.papermc.paper.registry.event.RegistryEvents;
+import io.papermc.paper.registry.event.WritableRegistry;
+import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
+import io.papermc.paper.tag.PreFlattenTagRegistrar;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Set;
 
 public class CrazyLoader implements PluginBootstrap {
 
     private EnchantmentRegistry registry;
+    private FusionPaper paper;
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
-        /*this.api.bootstrap(context);
-
-        final FileManager fileManager = this.api.getFusion().getFileManager();
-
-        fileManager.addFile("curses.yml", "types", FileType.YAML, null, false, false)
-                .addFile("enchants.yml", "types", FileType.YAML, null, false, false)
-                .init();
-
         final ComponentLogger logger = context.getLogger();
+        final Path path = context.getDataDirectory();
 
-        this.registry = new EnchantmentRegistry(fileManager, logger);
+        this.paper = new FusionPaper(logger, path);
 
-        this.registry.populateEnchantments();
-        this.registry.populateCurses();
+        this.registry = new EnchantmentRegistry(this.paper, logger, path);
+        this.registry.init();
 
         final Collection<CustomEnchantment> enchants = this.registry.getEnchantments().values();
 
-        context.getLifecycleManager().registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ITEM).newHandler((event) -> {
+        final LifecycleEventManager<@NotNull BootstrapContext> lifeCycleManager = context.getLifecycleManager();
+
+        lifeCycleManager.registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ITEM).newHandler((event) -> {
             final PreFlattenTagRegistrar<ItemType> registry = event.registrar();
 
             for (final CustomEnchantment enchant : enchants) {
@@ -43,7 +56,7 @@ public class CrazyLoader implements PluginBootstrap {
             }
         }));
 
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
+        lifeCycleManager.registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
             final WritableRegistry<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> registry = event.registry();
 
             for (final CustomEnchantment enchant : enchants) {
@@ -68,23 +81,23 @@ public class CrazyLoader implements PluginBootstrap {
             }
         }));
 
-        context.getLifecycleManager().registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ENCHANTMENT).newHandler((event) -> {
+        lifeCycleManager.registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ENCHANTMENT).newHandler((event) -> {
             final PreFlattenTagRegistrar<Enchantment> registry = event.registrar();
 
             for (final CustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
                 enchant.getEnchantTagKeys().forEach(enchantmentTagKey -> {
-                    logger.info("Registering enchantment tag {}", enchantmentTagKey.key());
+                    logger.info("Registering the enchantment tag {}", enchantmentTagKey.key());
 
                     registry.addToTag(enchantmentTagKey, Set.of(enchant.getTagEntry()));
                 });
             }
-        }));*/
+        }));
     }
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
-        return new CrazyEnchantments(this.registry);
+        return new CrazyEnchantments(this.registry, this.paper);
     }
 }

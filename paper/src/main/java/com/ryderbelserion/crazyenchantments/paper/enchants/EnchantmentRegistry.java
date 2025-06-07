@@ -1,11 +1,21 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants;
 
 import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.VeinMinerEnchant;
 import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.core.files.FileType;
+import com.ryderbelserion.fusion.paper.FusionPaper;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
+import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.inventory.ItemType;
+import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,149 +28,50 @@ public class EnchantmentRegistry {
 
     private final FileManager fileManager;
     private final ComponentLogger logger;
+    private final Path path;
 
-    public EnchantmentRegistry(final FileManager fileManager, final ComponentLogger logger) {
-        this.fileManager = fileManager;
-
+    public EnchantmentRegistry(@NotNull final FusionPaper paper, @NotNull final ComponentLogger logger, @NotNull final Path path) {
+        this.fileManager = paper.getFileManager();
         this.logger = logger;
+        this.path = path;
     }
 
-    public void addEnchantment(final Key key, final CustomEnchantment enchantment) {
+    public void init() { // runs on startup
+        this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML, new ArrayList<>(), null).addFolder(this.path.resolve("enchants"), FileType.YAML, new ArrayList<>(), null);
+
+        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fileManager, this.path));
+    }
+
+    public void reload() { // runs on reload in case they deleted a static file.
+        this.enchantments.forEach((key, enchantment) -> {
+            enchantment.build(); // this ensures that the files are always present, and refreshes config options.
+        });
+    }
+
+    public void addEnchantment(@NotNull final Key key, @NotNull final CustomEnchantment enchantment) {
         this.enchantments.put(key, enchantment);
     }
 
-    public void removeEnchantment(final Key key) {
+    public void removeEnchantment(@NotNull final Key key) {
         this.enchantments.remove(key);
     }
 
-    public final CustomEnchantment getEnchantment(final Key key) {
+    public final CustomEnchantment getEnchantment(@NotNull final Key key) {
         return this.enchantments.get(key);
     }
 
-    public final boolean hasEnchantment(final Key key) {
+    public final boolean hasEnchantment(@NotNull final Key key) {
         return this.enchantments.containsKey(key);
     }
 
-    public final Map<Key, CustomEnchantment> getEnchantments() {
+    public @NotNull final Map<Key, CustomEnchantment> getEnchantments() {
         return this.enchantments;
     }
 
-    public void populateEnchantments() {
-        /*final CustomFile file = this.fileManager.getFile("enchants.yml");
-
-        if (file == null) return;
-
-        final YamlConfiguration configuration = file.getConfiguration();
-
-        if (configuration == null) return;
-
-        final ConfigurationSection section = configuration.getConfigurationSection("enchantments");
-
-        if (section == null) return;
-
-        for (final String value : section.getKeys(false)) {
-            final ConfigurationSection enchant = section.getConfigurationSection(value);
-
-            if (enchant == null || !enchant.getBoolean("enabled", true)) continue;
-
-            CustomEnchantment enchantment = null;
-
-            Key key = null;
-
-            switch (value) {
-                case "viper" -> {
-                    enchantment = new ViperEnchant(
-                            Methods.getBoolean(enchant, "enabled", true),
-                            Methods.getInt(enchant, "anvil-cost", 1),
-                            Methods.getInt(enchant, "max-level", 1),
-                            Methods.getInt(enchant, "weight", 10),
-                            EnchantmentRegistryEntry.EnchantmentCost
-                                    .of(Methods.getInt(enchant, "minimum-cost.base", 20), Methods.getInt(enchant, "minimum-cost.extra-per-level", 1)),
-                            EnchantmentRegistryEntry.EnchantmentCost
-                                    .of(Methods.getInt(enchant, "maximum-cost.base", 60), Methods.getInt(enchant, "maximum-cost.extra-per-level", 1)),
-                            Methods.getBoolean(enchant, "enchantment-table", false),
-                            getTagsFromList(Methods.getStringList(
-                                    enchant,
-                                    "supported-items",
-                                    List.of(
-                                            "#minecraft:enchantable/sword"
-                                    )
-                            )),
-                            enchant
-                    );
-
-                    key = ViperEnchant.viper_key;
-                }
-            }
-
-            if (enchantment == null) continue;
-
-            addEnchantment(key, enchantment);
-        }
-
-        file.save();*/
-    }
-
-    public void populateCurses() {
-        /*final CustomFile file = this.fileManager.getFile("curses.yml");
-
-        if (file == null) return;
-
-        final YamlConfiguration configuration = file.getConfiguration();
-
-        if (configuration == null) return;
-
-        final ConfigurationSection section = configuration.getConfigurationSection("enchantments");
-
-        if (section == null) return;
-
-        for (final String value : section.getKeys(false)) {
-            final ConfigurationSection enchant = section.getConfigurationSection(value);
-
-            if (enchant == null || !enchant.getBoolean("enabled", true)) continue;
-
-            CustomEnchantment enchantment = null;
-
-            Key key = null;
-
-            switch (value) {
-                case "disorder" -> {
-                    enchantment = new DisorderEnchant(
-                            Methods.getBoolean(enchant, "enabled", true),
-                            Methods.getInt(enchant, "anvil-cost", 1),
-                            Methods.getInt(enchant, "max-level", 1),
-                            Methods.getInt(enchant, "weight", 10),
-                            EnchantmentRegistryEntry.EnchantmentCost
-                                    .of(Methods.getInt(enchant, "minimum-cost.base", 20), Methods.getInt(enchant, "minimum-cost.extra-per-level", 1)),
-                            EnchantmentRegistryEntry.EnchantmentCost
-                                    .of(Methods.getInt(enchant, "maximum-cost.base", 60), Methods.getInt(enchant, "maximum-cost.extra-per-level", 1)),
-                            Methods.getBoolean(enchant, "enchantment-table", false),
-                            getTagsFromList(Methods.getStringList(
-                                    enchant,
-                                    "supported-items",
-                                    List.of(
-                                            "#minecraft:enchantable/sword"
-                                    )
-                            )),
-                            enchant
-                    );
-
-                    key = DisorderEnchant.disorder_key;
-                }
-            }
-
-            if (enchantment == null) continue;
-
-            addEnchantment(key, enchantment);
-        }
-
-        file.save();*/
-    }
-
-    private Set<TagEntry<ItemType>> getTagsFromList(List<String> tags) {
+    public @NotNull final Set<TagEntry<ItemType>> getTagsFromList(@NotNull final List<String> tags) {
         final Set<TagEntry<ItemType>> supportedItemTags = new HashSet<>();
 
-        /*for (String itemTag : tags) {
+        for (String itemTag : tags) {
             if (itemTag == null) continue;
 
             if (itemTag.startsWith("#")) {
@@ -174,8 +85,8 @@ public class EnchantmentRegistry {
                     TagEntry<ItemType> tagEntry = TagEntry.tagEntry(tagKey);
 
                     supportedItemTags.add(tagEntry);
-                } catch (IllegalArgumentException e) {
-                    this.logger.warn("Failed to create tag entry for {}", itemTag);
+                } catch (final IllegalArgumentException exception) {
+                    this.logger.warn("Failed to create a tag entry for {}", itemTag);
                 }
 
                 continue;
@@ -189,11 +100,10 @@ public class EnchantmentRegistry {
                 TagEntry<ItemType> tagEntry = TagEntry.valueEntry(typedKey);
 
                 supportedItemTags.add(tagEntry);
-
-            } catch (IllegalArgumentException | NullPointerException e) {
-                this.logger.warn("Failed to create tag entry for {}", itemTag);
+            } catch (final IllegalArgumentException | NullPointerException exception) {
+                this.logger.warn("Failed to create the tag entry for {}", itemTag);
             }
-        }*/
+        }
 
         return supportedItemTags;
     }
