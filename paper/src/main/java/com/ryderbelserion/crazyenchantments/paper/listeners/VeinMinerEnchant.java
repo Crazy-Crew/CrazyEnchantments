@@ -2,9 +2,7 @@ package com.ryderbelserion.crazyenchantments.paper.listeners;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
-import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -12,7 +10,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +17,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,29 +66,14 @@ public class VeinMinerEnchant implements Listener {
 
         if (player.isSneaking()) return;
 
-        final ItemStack tool = player.getInventory().getItemInMainHand();
-        final String toolType = tool.getType().getKey().asString();
-
         final Block block = event.getBlock();
 
-        if (event instanceof VeinMinerEvent vein) {
-            final Collection<ItemStack> drops = block.getDrops(tool, player);
-
-            final Location location = block.getLocation().toCenterLocation();
-
-            final World world = block.getWorld();
-
-            drops.forEach(drop -> world.dropItem(location, drop));
-
-            final int experience = vein.getExpToDrop();
-
-            if (experience > 0) world.spawn(location, ExperienceOrb.class).setExperience(experience);
-
-            event.setDropItems(false);
-            event.setExpToDrop(0);
-
+        if (event instanceof VeinMinerEvent) { // return early if we called as to not endlessly loop.
             return;
         }
+
+        final ItemStack tool = player.getInventory().getItemInMainHand();
+        final String toolType = tool.getType().getKey().asString();
 
         final String type = block.getType().getKey().asString();
 
@@ -100,7 +81,7 @@ public class VeinMinerEnchant implements Listener {
 
         final Queue<BlockVein> queue = new LinkedList<>();
 
-        queue.add(new BlockVein(block, 0, event.getExpToDrop()));
+        queue.add(new BlockVein(block, 0, getExperience(block, tool)));
 
         final Set<Block> processed = new HashSet<>();
 
@@ -157,7 +138,7 @@ public class VeinMinerEnchant implements Listener {
 
         if (!event.callEvent()) return;
         
-        block.setType(Material.AIR);
+        block.breakNaturally(tool, true, event.getExpToDrop() > 0);
 
         // damage the tool if config option is true, adding it later...
         final ItemStack itemStack = player.damageItemStack(tool, 1);
