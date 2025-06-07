@@ -693,6 +693,30 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
+  TreeFeller:
+    Enabled: true
+    Sound: "ENTITY_PLAYER_LEVELUP"
+    Name: '&7TreeFeller'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 5
+      Increase: 1
+    Info:
+      Name: '&e&lTreeFeller &7(&bI-&bV&7)'
+      Description:
+        - '&7Lets you cut down'
+        - '&7trees a lot faster.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   #Do not change this line.
   Enlightened:
     Enabled: true

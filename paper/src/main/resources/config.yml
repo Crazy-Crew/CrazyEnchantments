@@ -292,6 +292,7 @@ Settings:
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
     VeinMiner-Full-Durability: true
+    TreeFeller-Full-Durability: true
     Drop-Blocks-For-Blast: true #Toggle if the blast enchantment drops blocks when used.
     Drop-Blocks-For-VeinMiner: true
     Right-Click-Enchantment-Table: false #When set to true if a player right-clicks an enchantment table it will open the /ce GUI.
