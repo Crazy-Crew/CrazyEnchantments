@@ -126,6 +126,9 @@ public class VeinMinerListener implements Listener {
                         }
 
                         final Block worldBlock = world.getBlockAt(block.getX() + x, block.getY() + y, block.getZ() + z);
+                        final String worldBlockType = worldBlock.getType().getKey().asString();
+
+                        if (!worldBlockType.equals(blockType)) continue; // do not add blocks if the types don't match.
 
                         queue.add(new BlockVein(worldBlock, vein.distance() + 1, getExperience(worldBlock, tool)));
                     }
