@@ -1,11 +1,13 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.events.VeinMinerEvent;
 import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.objects.BlockVein;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import net.kyori.adventure.key.Key;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,6 +26,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,8 +37,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class VeinMinerListener implements Listener {
 
     private final Registry<@NotNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
-    private final Enchantment veinminer = this.registry.get(VeinMinerEnchant.veinminer_key);
+    private final Key key = VeinMinerEnchant.veinminer_key;
+    private final Enchantment veinminer = this.registry.get(this.key);
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final EnchantmentRegistry enchantmentRegistry = this.plugin.getRegistry();
 
     private static final List<String> ores = List.of(
             "minecraft:coal_ore",
@@ -62,82 +68,85 @@ public class VeinMinerListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         final Player player = event.getPlayer();
 
-        if (!event.isDropItems() || player.getGameMode() == GameMode.CREATIVE) return;
-
-        if (this.veinminer == null) return;
+        if (!event.isDropItems() || player.getGameMode() == GameMode.CREATIVE || this.veinminer == null) return;
 
         final ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
 
-        if (!tool.containsEnchantment(this.veinminer)) return;
+        if (!tool.containsEnchantment(this.veinminer) || player.isSneaking()) return;
 
-        if (player.isSneaking()) return;
+        final VeinMinerEnchant enchant = (VeinMinerEnchant) this.enchantmentRegistry.getEnchantment(this.key);
 
-        // VeinMinerEvent extends BlockBreakEvent, so other developers should be able to modify the event drops.
-        // We simply return early if we detect that this instance of BlockBreakEvent is VeinMinerEvent.
+        if (!enchant.isEnabled()) return;
+
         if (event instanceof VeinMinerEvent) return;
 
-        final Block block = event.getBlock();
-
-        final String blockType = block.getType().getKey().asString();
+        final Block initialBlock = event.getBlock();
+        final String blockType = initialBlock.getType().getKey().asString();
 
         if (!ores.contains(blockType)) return;
 
-        final Queue<BlockVein> queue = new LinkedList<>();
+        final CommentedConfigurationNode config = enchant.getConfig();
 
-        queue.add(new BlockVein(block, 0, getExperience(block, tool)));
+        final Queue<BlockVein> queue = new LinkedList<>();
+        queue.add(new BlockVein(initialBlock, 0, getExperience(initialBlock, tool)));
 
         final Set<Block> processed = new HashSet<>();
 
-        final int maxSearch = 100;
+        final int currentLevel = tool.getEnchantmentLevel(this.veinminer);
 
-        final boolean breakBlock = true;
+        final boolean isScalingChain = config.node("enchant", "settings", "chain", "scale").getBoolean(false);
+        final int scalingChain = config.node("enchant", "settings", "chain", "max").getInt(10);
+        final int maxChain = isScalingChain ? scalingChain * currentLevel : scalingChain;
+
+        final boolean isScalingRadius = config.node("enchant", "settings", "search", "scale").getBoolean(false);
+        final int radius = config.node("enchant", "settings", "search", "max").getInt(10);
+        final int searchRadius = isScalingRadius ? radius * currentLevel : radius;
+
+        final boolean damageItem = config.node("enchant", "settings", "damage-item").getBoolean(false);
+
+        final boolean requiresCorrectTool = config.node("enchant", "settings", "need-correct-tool").getBoolean(false);
+
+        final int delay = config.node("enchant", "settings", "delay").getInt(0);
 
         while (!queue.isEmpty()) {
-            final BlockVein vein = queue.poll();
-            final Block veinBlock = vein.block();
+            final BlockVein blockVein = queue.poll();
+            final Block block = blockVein.block();
 
-            final Material material = veinBlock.getType();
+            final Material material = block.getType();
 
-            if (material.isAir() || processed.contains(veinBlock) || !ores.contains(material.getKey().asString())) continue;
-            if (processed.size() >= maxSearch) continue;
+            if (material.isAir() || processed.contains(block) || !ores.contains(material.getKey().asString())) continue;
+            if (processed.size() >= maxChain || requiresCorrectTool && tool.isEmpty()) break;
 
-            int radius = 3;
+            new FoliaScheduler(this.plugin, block.getLocation()) {
+                @Override
+                public void run() {
+                    destroy(player, tool, blockVein, damageItem);
+                }
+            }.runDelayed((long) delay * blockVein.distance());
 
-            if (breakBlock) {
-                int delay = 3 * vein.distance();
+            processed.add(block);
 
-                new FoliaScheduler(this.plugin, block.getLocation()) {
-                    @Override
-                    public void run() {
-                        destroy(player, tool, vein);
-                    }
-                }.runDelayed(delay);
-            }
+            final World world = block.getWorld();
 
-            processed.add(veinBlock);
-
-            final World world = veinBlock.getWorld();
-
-            for (int x = -radius; x <= radius; x++) {
-                for (int y = -radius; y <= radius; y++) {
-                    for (int z = -radius; z <= radius; z++) {
-                        if (x == 0 && y == 0 && z == 0) {
-                            continue;
-                        }
+            for (int x = -searchRadius; x <= searchRadius; x++) {
+                for (int y = -searchRadius; y <= searchRadius; y++) {
+                    for (int z = -searchRadius; z <= searchRadius; z++) {
+                        if (queue.size() >= maxChain) break; // break if queue size is greater than the max search
+                        if (x == 0 && y == 0 && z == 0) continue; // Skip initial block
 
                         final Block worldBlock = world.getBlockAt(block.getX() + x, block.getY() + y, block.getZ() + z);
                         final String worldBlockType = worldBlock.getType().getKey().asString();
 
                         if (!worldBlockType.equals(blockType)) continue; // do not add blocks if the types don't match.
 
-                        queue.add(new BlockVein(worldBlock, vein.distance() + 1, getExperience(worldBlock, tool)));
+                        queue.add(new BlockVein(worldBlock, blockVein.distance() + 1, getExperience(worldBlock, tool)));
                     }
                 }
             }
         }
     }
 
-    private void destroy(@NotNull final Player player, @NotNull final ItemStack tool, @NotNull final BlockVein veinBlock) {
+    private void destroy(@NotNull final Player player, @NotNull final ItemStack tool, @NotNull final BlockVein veinBlock, final boolean damageItem) {
         final Block block = veinBlock.block();
 
         final VeinMinerEvent event = new VeinMinerEvent(block, player, veinBlock.experience());
@@ -146,11 +155,12 @@ public class VeinMinerListener implements Listener {
 
         block.breakNaturally(tool, true, event.getExpToDrop() > 0);
 
-        // damage the tool if config option is true, adding it later...
-        final ItemStack itemStack = player.damageItemStack(tool, 1);
+        if (damageItem) {
+            final ItemStack itemStack = player.damageItemStack(tool, 1);
 
-        if (itemStack.isEmpty()) {
-            player.playSound(player, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, ThreadLocalRandom.current().nextFloat(0.8F, 1.2F));
+            if (itemStack.isEmpty()) {
+                player.playSound(player, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, ThreadLocalRandom.current().nextFloat(0.8F, 1.2F));
+            }
         }
     }
 

@@ -30,3 +30,25 @@ enchant:
     extra-per-level: 1
     # The maximum base cost
     base: 80
+  # Enchant specific settings
+  settings:
+    # Should the correct tool be required?
+    need-correct-tool: false
+    # Should the item be damaged when mining?
+    damage-item: true
+    # Settings related to how many blocks break.
+    chain:
+      # Should the max chain scale up based on level?
+      scale: false
+      # The max chain of ores to break, This is the default value.
+      # If the level is 1, 10 multiplied by 1 is 10.
+      max: 10
+    # Settings related to the search radius.
+    search:
+      # Should the search radius scale up based on level?
+      scale: false
+      # The radius to search around blocks, This will scale up based on the level.
+      # If the level is 1, 1 multiplied by 1 is 1.
+      max: 1
+    # The delay to mimic an animation of blocks breaking.
+    delay: 0
