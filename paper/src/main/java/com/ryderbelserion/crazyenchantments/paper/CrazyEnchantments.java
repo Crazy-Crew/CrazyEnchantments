@@ -33,7 +33,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
         final PaperCommandManager commandManager = this.paper.getCommandManager();
 
-        commandManager.enable(new BaseCommand(), "It's an enchanting plugin.", List.of("ce"));
+        commandManager.enable(new BaseCommand(), "You like my crazy enchants?", List.of("ce"));
     }
 
     @Override
