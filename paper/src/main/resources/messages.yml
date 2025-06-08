@@ -1,0 +1,26 @@
+# The root locale section which powers the entire plugin's translation system!
+#
+# Colors: black, dark_blue, dark_green, dark_aqua, dark_red, dark_purple, gold, gray, dark_gray, blue, green, aqua, red, light_purple, yellow, or white
+# Hex Colors: <color:#e91e63>text</color> or <#e91e63>text</>
+# Gradients: <gradient:#e91e63:red>text</gradient> or <#e91e63:red>text</>
+messages:
+  # Available placeholders: {prefix}
+  reload-plugin: "{prefix}<yellow>You have reloaded the plugin!"
+  # Available placeholders: {prefix}
+  feature-disabled: "{prefix}<red>This feature is disabled."
+  # All messages related to players.
+  player:
+    # A set of requirement messages
+    requirements:
+      # Available placeholders: {prefix}
+      must-be-player: "{prefix}<red>You must be a player to use this command."
+      # Available placeholders: {prefix}
+      must-be-console-sender: "{prefix}<red>You must be using console to use this command."
+    # Available placeholders: {prefix}, {player}
+    target-not-online: "{prefix}<red>{player} <gray>is not online."
+    # Available placeholders: {prefix}
+    target-same-player: "{prefix}<red>You cannot use this command on yourself."
+    # Available placeholders: {prefix}
+    no-permission: "{prefix}<red>You do not have permission to use that command!"
+    # Available placeholders: {prefix}
+    inventory-not-empty: "{prefix}<red>Inventory is not empty, Please clear up some room."

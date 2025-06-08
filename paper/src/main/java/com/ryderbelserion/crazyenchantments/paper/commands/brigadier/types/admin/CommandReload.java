@@ -2,6 +2,8 @@ package com.ryderbelserion.crazyenchantments.paper.commands.brigadier.types.admi
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.paper.api.MessageKeys;
+import com.ryderbelserion.crazyenchantments.paper.api.MessageRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -18,7 +20,9 @@ public class CommandReload extends AbstractPaperCommand {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final EnchantmentRegistry registry = this.plugin.getRegistry();
+    private final MessageRegistry messageRegistry = this.plugin.getMessageRegistry();
+
+    private final EnchantmentRegistry enchantmentRegistry = this.plugin.getEnchantmentRegistry();
 
     private final FusionPaper fusion = this.plugin.getPaper();
 
@@ -30,7 +34,11 @@ public class CommandReload extends AbstractPaperCommand {
 
         this.fileManager.refresh(false);
 
-        this.registry.reload();
+        this.messageRegistry.populateMessages();
+
+        this.enchantmentRegistry.reload();
+
+        this.messageRegistry.getMessage(MessageKeys.reload_plugin).send(context.getCommandSender());
     }
 
     @Override

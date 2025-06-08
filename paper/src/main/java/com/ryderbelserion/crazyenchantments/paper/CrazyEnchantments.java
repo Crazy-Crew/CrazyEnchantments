@@ -1,23 +1,29 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
+import com.ryderbelserion.crazyenchantments.paper.api.MessageRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
+import com.ryderbelserion.fusion.core.files.FileAction;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.commands.PaperCommandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CrazyEnchantments extends JavaPlugin {
 
-    private final EnchantmentRegistry registry;
+    private final MessageRegistry messageRegistry;
+    private final EnchantmentRegistry enchantmentRegistry;
     private final FusionPaper paper;
 
     private final FileManager fileManager;
 
-    public CrazyEnchantments(@NotNull final EnchantmentRegistry registry, @NotNull final FusionPaper paper) {
-        this.registry = registry;
+    public CrazyEnchantments(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper paper) {
+        this.messageRegistry = new MessageRegistry();
+        this.enchantmentRegistry = enchantmentRegistry;
         this.paper = paper;
 
         this.fileManager = this.paper.getFileManager();
@@ -26,8 +32,20 @@ public class CrazyEnchantments extends JavaPlugin {
     @Override
     public void onEnable() {
         this.paper.enable(this);
+
+        final Path path = getDataPath();
+
+        this.fileManager.addFile(path.resolve("config.yml"), new ArrayList<>() {{
+            add(FileAction.EXTRACT);
+        }}, null);
+
+        this.fileManager.addFile(path.resolve("messages.yml"), new ArrayList<>() {{
+            add(FileAction.EXTRACT);
+        }}, null);
+
+        this.messageRegistry.populateMessages();
         
-        this.registry.getEnchantments().forEach((key, customEnchantment) -> {
+        this.enchantmentRegistry.getEnchantments().forEach((key, customEnchantment) -> {
             customEnchantment.init(this); // registers listeners, or things not meant for the bootstrap loader
         });
 
@@ -43,8 +61,12 @@ public class CrazyEnchantments extends JavaPlugin {
         }
     }
 
-    public @NotNull final EnchantmentRegistry getRegistry() {
-        return this.registry;
+    public @NotNull final MessageRegistry getMessageRegistry() {
+        return this.messageRegistry;
+    }
+
+    public @NotNull final EnchantmentRegistry getEnchantmentRegistry() {
+        return this.enchantmentRegistry;
     }
 
     public @NotNull final FusionPaper getPaper() {

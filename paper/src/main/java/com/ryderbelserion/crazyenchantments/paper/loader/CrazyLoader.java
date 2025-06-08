@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class CrazyLoader implements PluginBootstrap {
 
-    private EnchantmentRegistry registry;
+    private EnchantmentRegistry enchantmentRegistry;
     private FusionPaper paper;
 
     @Override
@@ -48,10 +48,10 @@ public class CrazyLoader implements PluginBootstrap {
             }
         }
 
-        this.registry = new EnchantmentRegistry(this.paper, logger, path);
-        this.registry.init();
+        this.enchantmentRegistry = new EnchantmentRegistry(this.paper, logger, path);
+        this.enchantmentRegistry.init();
 
-        final Collection<CustomEnchantment> enchants = this.registry.getEnchantments().values();
+        final Collection<CustomEnchantment> enchants = this.enchantmentRegistry.getEnchantments().values();
 
         final LifecycleEventManager<@NotNull BootstrapContext> lifeCycleManager = context.getLifecycleManager();
 
@@ -109,6 +109,6 @@ public class CrazyLoader implements PluginBootstrap {
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
-        return new CrazyEnchantments(this.registry, this.paper);
+        return new CrazyEnchantments(this.enchantmentRegistry, this.paper);
     }
 }

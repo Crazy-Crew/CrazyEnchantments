@@ -1,0 +1,9 @@
+# The root config section
+root:
+  # The prefix that appears in front of commands!
+  prefix: "<dark_gray>[<green>CrazyEnchantments</green>]</dark_gray> <reset>"
+  # This option will tell the plugin to send all messages as action bars or messages in chat.
+  #
+  # send_actionbar -> sends messages in actionbar.
+  # send_message -> sends messages in chat.
+  message-action: "send_message"

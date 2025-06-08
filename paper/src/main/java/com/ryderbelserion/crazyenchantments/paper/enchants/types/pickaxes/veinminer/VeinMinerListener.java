@@ -41,7 +41,7 @@ public class VeinMinerListener implements Listener {
     private final Enchantment veinminer = this.registry.get(this.key);
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final EnchantmentRegistry enchantmentRegistry = this.plugin.getRegistry();
+    private final EnchantmentRegistry enchantmentRegistry = this.plugin.getEnchantmentRegistry();
 
     private static final List<String> ores = List.of(
             "minecraft:coal_ore",
