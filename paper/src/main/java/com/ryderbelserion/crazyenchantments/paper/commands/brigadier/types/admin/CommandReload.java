@@ -3,6 +3,7 @@ package com.ryderbelserion.crazyenchantments.paper.commands.brigadier.types.admi
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
+import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.commands.objects.AbstractPaperCommand;
 import com.ryderbelserion.fusion.paper.api.commands.objects.AbstractPaperContext;
@@ -19,11 +20,15 @@ public class CommandReload extends AbstractPaperCommand {
 
     private final EnchantmentRegistry registry = this.plugin.getRegistry();
 
+    private final FileManager fileManager = this.fusion.getFileManager();
+
     private final FusionPaper fusion = this.plugin.getPaper();
 
     @Override
     public void execute(@NotNull final AbstractPaperContext context) {
         this.fusion.reload(false);
+
+        this.fileManager.refresh(false);
 
         this.registry.reload();
     }
