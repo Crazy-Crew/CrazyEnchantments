@@ -20,9 +20,9 @@ public class CommandReload extends AbstractPaperCommand {
 
     private final EnchantmentRegistry registry = this.plugin.getRegistry();
 
-    private final FileManager fileManager = this.fusion.getFileManager();
-
     private final FusionPaper fusion = this.plugin.getPaper();
+
+    private final FileManager fileManager = this.fusion.getFileManager();
 
     @Override
     public void execute(@NotNull final AbstractPaperContext context) {
