@@ -26,8 +26,6 @@ public class CrazyEnchantments extends JavaPlugin {
     @Override
     public void onEnable() {
         this.paper.enable(this);
-
-        this.fileManager.addFile(getDataPath().resolve("cache").resolve("veinminer.json"), new ArrayList<>(), null);
         
         this.registry.getEnchantments().forEach((key, customEnchantment) -> {
             customEnchantment.init(this); // registers listeners, or things not meant for the bootstrap loader

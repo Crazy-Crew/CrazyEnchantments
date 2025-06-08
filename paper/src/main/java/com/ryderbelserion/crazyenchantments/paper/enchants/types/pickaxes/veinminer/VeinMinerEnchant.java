@@ -2,6 +2,7 @@ package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinm
 
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.fusion.core.files.FileAction;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +51,10 @@ public class VeinMinerEnchant implements CustomEnchantment {
 
     @Override
     public void init(@NotNull final JavaPlugin plugin) {
+        this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
+            add(FileAction.EXTRACT);
+        }}, null);
+
         final Server server = plugin.getServer();
 
         server.getPluginManager().registerEvents(new VeinMinerListener(), plugin);
