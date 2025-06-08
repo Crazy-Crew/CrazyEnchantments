@@ -21,6 +21,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
@@ -35,7 +36,17 @@ public class CrazyLoader implements PluginBootstrap {
         final ComponentLogger logger = context.getLogger();
         final Path path = context.getDataDirectory();
 
+        final Path cache = path.resolve("cache");
+
         this.paper = new FusionPaper(logger, path);
+
+        if (!Files.exists(cache)) {
+            try {
+                Files.createDirectories(cache);
+            } catch (final Exception exception) {
+                logger.warn("Failed to create cache directory.", exception);
+            }
+        }
 
         this.registry = new EnchantmentRegistry(this.paper, logger, path);
         this.registry.init();
