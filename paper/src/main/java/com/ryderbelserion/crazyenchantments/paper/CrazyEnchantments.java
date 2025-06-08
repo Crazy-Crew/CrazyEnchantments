@@ -1,8 +1,10 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
+import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.paper.api.commands.PaperCommandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -30,6 +32,10 @@ public class CrazyEnchantments extends JavaPlugin {
         this.registry.getEnchantments().forEach((key, customEnchantment) -> {
             customEnchantment.init(this); // registers listeners, or things not meant for the bootstrap loader
         });
+
+        final PaperCommandManager commandManager = this.paper.getCommandManager();
+
+        commandManager.enable(new BaseCommand());
     }
 
     @Override
