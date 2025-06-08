@@ -7,6 +7,7 @@ import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import net.minecraft.world.level.block.state.BlockState;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
@@ -59,15 +60,15 @@ public class VeinMinerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isDropItems()) return;
+        final Player player = event.getPlayer();
+
+        if (!event.isDropItems() || player.getGameMode() == GameMode.CREATIVE) return;
 
         if (this.veinminer == null) return;
 
         final ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
 
         if (!tool.containsEnchantment(this.veinminer)) return;
-
-        final Player player = event.getPlayer();
 
         if (player.isSneaking()) return;
 
