@@ -9,7 +9,7 @@ enchant:
   # The max level
   max-level: 1
   # The weight
-  weight: 10
+  weight: 1
   # What items will the enchantments work on? You can use materials like diamond_sword or item tags.
   # A list of item tags: https://jd.papermc.io/paper/1.21.5/io/papermc/paper/registry/keys/tags/ItemTypeTagKeys.html
   supported-items:
@@ -17,16 +17,16 @@ enchant:
   # Should this be in the enchantment table?
   enchantment-table: true
   # The cost to apply/repair an item with this enchant in the anvil.
-  anvil-cost: 1
+  anvil-cost: 12
   # The minimum cost settings
   minimum-cost:
     # The extra cost per level
     extra-per-level: 1
     # The minimum base cost
-    base: 15
+    base: 30
   # The maximum cost settings
   maximum-cost:
     # The extra cost per level
     extra-per-level: 1
     # The maximum base cost
-    base: 65
+    base: 80
