@@ -3,7 +3,6 @@ package com.ryderbelserion.crazyenchantments.paper;
 import com.ryderbelserion.crazyenchantments.paper.api.MessageRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
-import com.ryderbelserion.fusion.core.files.FileAction;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.commands.PaperCommandManager;
@@ -35,13 +34,8 @@ public class CrazyEnchantments extends JavaPlugin {
 
         final Path path = getDataPath();
 
-        this.fileManager.addFile(path.resolve("config.yml"), new ArrayList<>() {{
-            add(FileAction.EXTRACT);
-        }}, null);
-
-        this.fileManager.addFile(path.resolve("messages.yml"), new ArrayList<>() {{
-            add(FileAction.EXTRACT);
-        }}, null);
+        this.fileManager.addFile(path.resolve("config.yml"), new ArrayList<>(), null);
+        this.fileManager.addFile(path.resolve("messages.yml"), new ArrayList<>(), null);
 
         this.messageRegistry.populateMessages();
         

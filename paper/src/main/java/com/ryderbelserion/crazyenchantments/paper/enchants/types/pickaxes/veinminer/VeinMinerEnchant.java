@@ -52,7 +52,7 @@ public class VeinMinerEnchant implements CustomEnchantment {
     @Override
     public void init(@NotNull final JavaPlugin plugin) {
         this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
-            add(FileAction.EXTRACT);
+            add(FileAction.EXTRACT_FILE);
         }}, null);
 
         final Server server = plugin.getServer();
