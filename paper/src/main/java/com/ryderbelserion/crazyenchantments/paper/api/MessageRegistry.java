@@ -83,7 +83,9 @@ public class MessageRegistry {
     }
 
     public void purgeMessages() {
-        this.logger.warn("Purging all existing message keys!");
+        if (!this.messages.isEmpty()) {
+            this.logger.warn("Purging all existing message keys!");
+        }
 
         this.messages.clear();
     }
