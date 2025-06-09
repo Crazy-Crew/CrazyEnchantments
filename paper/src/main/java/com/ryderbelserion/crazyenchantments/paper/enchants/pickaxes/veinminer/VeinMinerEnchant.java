@@ -1,7 +1,7 @@
-package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer;
+package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
-import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
-import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.core.files.FileAction;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.JsonCustomFile;
@@ -18,7 +18,6 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class VeinMinerEnchant implements CustomEnchantment {
+public class VeinMinerEnchant implements ICustomEnchantment {
 
     public static final Key veinminer_key = Key.key("crazyenchantments:veinminer");
 

@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.paper.enchants.interfaces;
+package com.ryderbelserion.crazyenchantments.paper.api.interfaces;
 
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Set;
 
-public interface CustomEnchantment {
+public interface ICustomEnchantment {
 
     Path getPath();
 

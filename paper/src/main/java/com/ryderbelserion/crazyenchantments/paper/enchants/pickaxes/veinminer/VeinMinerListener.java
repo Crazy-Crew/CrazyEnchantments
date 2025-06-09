@@ -1,9 +1,9 @@
-package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer;
+package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
-import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.events.VeinMinerEvent;
-import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.objects.BlockVein;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.events.VeinMinerEvent;
+import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.objects.BlockVein;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;

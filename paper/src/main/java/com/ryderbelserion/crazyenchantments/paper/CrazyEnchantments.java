@@ -1,11 +1,14 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
-import com.ryderbelserion.crazyenchantments.paper.api.MessageRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.MessageRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
-import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.commands.PaperCommandManager;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -13,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrazyEnchantments extends JavaPlugin {
+
+    public static CrazyEnchantments getPlugin() {
+        return JavaPlugin.getPlugin(CrazyEnchantments.class);
+    }
 
     private final EnchantmentRegistry enchantmentRegistry;
     private final MessageRegistry messageRegistry;
@@ -60,6 +67,10 @@ public class CrazyEnchantments extends JavaPlugin {
         if (this.paper != null) {
             this.paper.disable();
         }
+
+        this.enchantmentRegistry.purgeEnchantments();
+        this.messageRegistry.purgeMessages();
+        this.userRegistry.purgeUsers();
     }
 
     public @NotNull final EnchantmentRegistry getEnchantmentRegistry() {

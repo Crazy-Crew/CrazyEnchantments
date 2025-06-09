@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.paper.enums;
+package com.ryderbelserion.crazyenchantments.paper.api.enums;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.fusion.core.files.FileManager;

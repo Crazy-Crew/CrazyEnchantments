@@ -1,8 +1,8 @@
 package com.ryderbelserion.crazyenchantments.paper.loader;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
-import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
@@ -41,14 +41,14 @@ public class CrazyLoader implements PluginBootstrap {
         this.enchantmentRegistry = new EnchantmentRegistry(this.paper, path);
         this.enchantmentRegistry.init();
 
-        final Collection<CustomEnchantment> enchants = this.enchantmentRegistry.getEnchantments().values();
+        final Collection<ICustomEnchantment> enchants = this.enchantmentRegistry.getEnchantments().values();
 
         final LifecycleEventManager<@NotNull BootstrapContext> lifeCycleManager = context.getLifecycleManager();
 
         lifeCycleManager.registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ITEM).newHandler((event) -> {
             final PreFlattenTagRegistrar<ItemType> registry = event.registrar();
 
-            for (final CustomEnchantment enchant : enchants) {
+            for (final ICustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
                 kyori.safe("Registering item tag {} for {}", enchant.getTagForSupportedItems().key(), enchant.getKey());
@@ -60,7 +60,7 @@ public class CrazyLoader implements PluginBootstrap {
         lifeCycleManager.registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
             final WritableRegistry<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> registry = event.registry();
 
-            for (final CustomEnchantment enchant : enchants) {
+            for (final ICustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
                 if (enchant.isCurse()) {
@@ -85,7 +85,7 @@ public class CrazyLoader implements PluginBootstrap {
         lifeCycleManager.registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ENCHANTMENT).newHandler((event) -> {
             final PreFlattenTagRegistrar<Enchantment> registry = event.registrar();
 
-            for (final CustomEnchantment enchant : enchants) {
+            for (final ICustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
                 enchant.getEnchantTagKeys().forEach(enchantmentTagKey -> {

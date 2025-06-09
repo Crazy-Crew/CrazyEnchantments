@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.objects;
+package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.objects;
 
 import org.bukkit.block.Block;
 

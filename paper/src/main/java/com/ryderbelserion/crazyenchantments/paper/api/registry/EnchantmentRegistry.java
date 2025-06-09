@@ -1,7 +1,7 @@
-package com.ryderbelserion.crazyenchantments.paper.enchants;
+package com.ryderbelserion.crazyenchantments.paper.api.registry;
 
-import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
-import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.VeinMinerEnchant;
+import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
+import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.VeinMinerEnchant;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.FileType;
 import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
@@ -13,6 +13,7 @@ import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 public class EnchantmentRegistry {
 
-    private final Map<Key, CustomEnchantment> enchantments = new HashMap<>();
+    private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
 
     private final FileManager fileManager;
     private final KyoriLogger logger;
@@ -48,7 +49,7 @@ public class EnchantmentRegistry {
         });
     }
 
-    public void addEnchantment(@NotNull final Key key, @NotNull final CustomEnchantment enchantment) {
+    public void addEnchantment(@NotNull final Key key, @NotNull final ICustomEnchantment enchantment) {
         this.enchantments.put(key, enchantment);
     }
 
@@ -56,7 +57,7 @@ public class EnchantmentRegistry {
         this.enchantments.remove(key);
     }
 
-    public final CustomEnchantment getEnchantment(@NotNull final Key key) {
+    public final ICustomEnchantment getEnchantment(@NotNull final Key key) {
         return this.enchantments.get(key);
     }
 
@@ -64,8 +65,13 @@ public class EnchantmentRegistry {
         return this.enchantments.containsKey(key);
     }
 
-    public @NotNull final Map<Key, CustomEnchantment> getEnchantments() {
+    public @NotNull final Map<Key, ICustomEnchantment> getEnchantments() {
         return this.enchantments;
+    }
+
+    @ApiStatus.Internal
+    public void purgeEnchantments() {
+        this.enchantments.clear();
     }
 
     public @NotNull final Set<TagEntry<ItemType>> getTagsFromList(@NotNull final List<String> tags) {
