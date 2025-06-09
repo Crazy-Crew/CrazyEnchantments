@@ -16,6 +16,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private final EnchantmentRegistry enchantmentRegistry;
     private final MessageRegistry messageRegistry;
+    private final UserRegistry userRegistry;
     private final FusionPaper paper;
 
     private final FileManager fileManager;
@@ -23,6 +24,8 @@ public class CrazyEnchantments extends JavaPlugin {
     public CrazyEnchantments(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper paper) {
         this.enchantmentRegistry = enchantmentRegistry;
         this.messageRegistry = new MessageRegistry();
+        this.userRegistry = new UserRegistry();
+
         this.paper = paper;
 
         this.fileManager = this.paper.getFileManager();
@@ -43,6 +46,10 @@ public class CrazyEnchantments extends JavaPlugin {
             customEnchantment.init(this); // registers listeners, or things not meant for the bootstrap loader
         });
 
+        final PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(new CacheListener(), this);
+
         final PaperCommandManager commandManager = this.paper.getCommandManager();
 
         commandManager.enable(new BaseCommand(), "You like my crazy enchants?", List.of("ce"));
@@ -61,6 +68,10 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final MessageRegistry getMessageRegistry() {
         return this.messageRegistry;
+    }
+
+    public @NotNull final UserRegistry getUserRegistry() {
+        return this.userRegistry;
     }
 
     public @NotNull final FileManager getFileManager() {
