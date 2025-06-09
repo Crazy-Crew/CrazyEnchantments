@@ -1823,8 +1823,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Conflicts:
-    - "VeinMiner"
+    Conflicts:
+      - "VeinMiner"
   #Do not change this line.
   Furnace:
     Enabled: true
