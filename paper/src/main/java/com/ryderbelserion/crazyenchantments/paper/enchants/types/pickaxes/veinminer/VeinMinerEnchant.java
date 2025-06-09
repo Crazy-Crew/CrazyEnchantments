@@ -4,6 +4,7 @@ import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
 import com.ryderbelserion.fusion.core.files.FileAction;
 import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.core.files.types.JsonCustomFile;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,14 +49,11 @@ public class VeinMinerEnchant implements CustomEnchantment {
     private Set<TagEntry<ItemType>> supportedItemTags;
     private CommentedConfigurationNode config;
     private int anvilCost, maxLevel, weight;
+    private List<String> ores;
     private boolean isEnabled;
 
     @Override
     public void init(@NotNull final JavaPlugin plugin) {
-        this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
-            add(FileAction.EXTRACT_FILE);
-        }}, null);
-
         final Server server = plugin.getServer();
 
         server.getPluginManager().registerEvents(new VeinMinerListener(), plugin);
@@ -62,6 +61,10 @@ public class VeinMinerEnchant implements CustomEnchantment {
 
     @Override
     public void build() { // used for /ce reload
+        this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
+            add(FileAction.EXTRACT_FILE);
+        }}, null);
+
         final YamlCustomFile customFile = this.fileManager.getYamlFile(getPath());
 
         if (customFile != null) {
@@ -90,6 +93,12 @@ public class VeinMinerEnchant implements CustomEnchantment {
 
             if (config.node("enchant", "enchantment-table").getBoolean(false)) {
                 this.enchantTagKeys.add(EnchantmentTagKeys.IN_ENCHANTING_TABLE);
+            }
+
+            final JsonCustomFile ores = (JsonCustomFile) this.fileManager.getCustomFile(this.path.resolve("cache").resolve("ores.json"));
+
+            if (ores != null) {
+                this.ores = ores.getStringList("blocks");
             }
 
             // re-bind the config node just in case we need it.
@@ -159,5 +168,9 @@ public class VeinMinerEnchant implements CustomEnchantment {
 
     public final CommentedConfigurationNode getConfig() {
         return this.config;
+    }
+
+    public final List<String> getOres() {
+        return this.ores;
     }
 }
