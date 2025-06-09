@@ -37,6 +37,7 @@ public class MessageRegistry {
         this.messages.remove(key);
     }
 
+    @ApiStatus.Internal
     public void populateMessages() {
         purgeMessages();
 

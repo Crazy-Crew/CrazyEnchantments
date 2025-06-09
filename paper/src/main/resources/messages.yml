@@ -24,3 +24,9 @@ messages:
     no-permission: "{prefix}<red>You do not have permission to use that command!"
     # Available placeholders: {prefix}
     inventory-not-empty: "{prefix}<red>Inventory is not empty, Please clear up some room."
+  # All messages related to errors.
+  errors:
+    # Available placeholders: {prefix}
+    internal-error: "{prefix}<red>An internal error has occurred. Please check the console for the full error."
+    # Available placeholders: {prefix}
+    message-empty: "{prefix}<red>The message cannot be empty."

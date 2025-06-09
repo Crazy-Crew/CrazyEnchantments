@@ -44,7 +44,7 @@ public class User {
         final String country = locale.getCountry();
         final String language = locale.getLanguage();
 
-        this.locale = language + "-" + country;
+        this.locale = language + "-" + country + ".yml";
 
         this.logger.warn("Country: {}, Language: {}", country, language);
     }
