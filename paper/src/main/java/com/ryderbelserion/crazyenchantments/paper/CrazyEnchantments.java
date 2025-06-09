@@ -6,8 +6,8 @@ import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
 import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.core.files.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
-import com.ryderbelserion.fusion.paper.api.commands.PaperCommandManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -44,8 +44,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
         final Path path = getDataPath();
 
-        this.fileManager.addFile(path.resolve("config.yml"), new ArrayList<>(), null);
-        this.fileManager.addFile(path.resolve("messages.yml"), new ArrayList<>(), null);
+        this.fileManager.addFolder(path.resolve("locale"), FileType.YAML, new ArrayList<>(), null)
+                .addFile(path.resolve("messages.yml"), new ArrayList<>(), null)
+                .addFile(path.resolve("config.yml"), new ArrayList<>(), null);
 
         this.messageRegistry.populateMessages();
         
@@ -57,9 +58,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
         pluginManager.registerEvents(new CacheListener(), this);
 
-        final PaperCommandManager commandManager = this.paper.getCommandManager();
-
-        commandManager.enable(new BaseCommand(), "You like my crazy enchants?", List.of("ce"));
+        this.paper.getCommandManager().enable(new BaseCommand(), "You like my crazy enchants?", List.of("ce"));
     }
 
     @Override
