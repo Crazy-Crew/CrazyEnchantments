@@ -1,4 +1,8 @@
-# The root config section
+# Support: https://discord.gg/badbones-s-live-chat-182615261403283459
+# Github: https://github.com/Crazy-Crew
+#
+# Issues: https://github.com/Crazy-Crew/CrazyEnchantments/issues
+# Features: https://github.com/Crazy-Crew/CrazyEnchantments/issues
 root:
   # The prefix that appears in front of commands!
   prefix: "<dark_gray>[<green>CrazyEnchantments</green>]</dark_gray> <reset>"

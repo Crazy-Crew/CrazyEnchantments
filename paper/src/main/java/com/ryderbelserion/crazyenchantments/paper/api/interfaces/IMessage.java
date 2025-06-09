@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IMessage {
 
-    void broadcast(@NotNull Audience audience);
+    void broadcast(@NotNull final Audience audience);
 
     void send(@NotNull final Audience audience);
 

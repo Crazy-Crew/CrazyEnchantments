@@ -1,4 +1,4 @@
-# The root locale section which powers the entire plugin's translation system!
+# The message section which powers the entire plugin's translation system!
 #
 # Colors: black, dark_blue, dark_green, dark_aqua, dark_red, dark_purple, gold, gray, dark_gray, blue, green, aqua, red, light_purple, yellow, or white
 # Hex Colors: <color:#e91e63>text</color> or <#e91e63>text</>
@@ -10,7 +10,7 @@ messages:
   feature-disabled: "{prefix}<red>This feature is disabled."
   # All messages related to players.
   player:
-    # A set of requirement messages
+    # A set of requirement messages.
     requirements:
       # Available placeholders: {prefix}
       must-be-player: "{prefix}<red>You must be a player to use this command."

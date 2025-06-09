@@ -16,7 +16,7 @@ public enum Files {
     config("config.yml");
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    private final FileManager fileManager = this.plugin.getPaper().getFileManager();
+    private final FileManager fileManager = this.plugin.getFileManager();
 
     private final Path path;
 

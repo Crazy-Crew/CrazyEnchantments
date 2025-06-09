@@ -63,6 +63,10 @@ public class CrazyEnchantments extends JavaPlugin {
         return this.enchantmentRegistry;
     }
 
+    public @NotNull final FileManager getFileManager() {
+        return this.fileManager;
+    }
+
     public @NotNull final FusionPaper getPaper() {
         return this.paper;
     }
