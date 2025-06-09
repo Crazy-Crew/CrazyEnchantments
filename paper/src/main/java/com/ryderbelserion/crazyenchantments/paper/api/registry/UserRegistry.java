@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,7 +19,15 @@ public class UserRegistry {
     public void addUser(@NotNull final Audience audience) {
         final Optional<UUID> uuid = audience.get(Identity.UUID);
 
-        uuid.ifPresent(value -> this.users.put(value, new User(audience)));
+        uuid.ifPresent(value -> {
+            final User user = new User(audience);
+
+            final Optional<Locale> locale = audience.get(Identity.LOCALE);
+
+            locale.ifPresent(user::setLocale);
+
+            this.users.put(value, user);
+        });
     }
 
     public void removeUser(@NotNull final Audience audience) {
