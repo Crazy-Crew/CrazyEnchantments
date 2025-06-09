@@ -14,15 +14,15 @@ import java.util.List;
 
 public class CrazyEnchantments extends JavaPlugin {
 
-    private final MessageRegistry messageRegistry;
     private final EnchantmentRegistry enchantmentRegistry;
+    private final MessageRegistry messageRegistry;
     private final FusionPaper paper;
 
     private final FileManager fileManager;
 
     public CrazyEnchantments(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper paper) {
-        this.messageRegistry = new MessageRegistry();
         this.enchantmentRegistry = enchantmentRegistry;
+        this.messageRegistry = new MessageRegistry();
         this.paper = paper;
 
         this.fileManager = this.paper.getFileManager();
@@ -55,12 +55,12 @@ public class CrazyEnchantments extends JavaPlugin {
         }
     }
 
-    public @NotNull final MessageRegistry getMessageRegistry() {
-        return this.messageRegistry;
-    }
-
     public @NotNull final EnchantmentRegistry getEnchantmentRegistry() {
         return this.enchantmentRegistry;
+    }
+
+    public @NotNull final MessageRegistry getMessageRegistry() {
+        return this.messageRegistry;
     }
 
     public @NotNull final FileManager getFileManager() {
