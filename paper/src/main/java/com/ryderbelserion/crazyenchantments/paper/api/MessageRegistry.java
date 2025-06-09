@@ -3,6 +3,8 @@ package com.ryderbelserion.crazyenchantments.paper.api;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.IMessage;
 import com.ryderbelserion.crazyenchantments.paper.enums.Files;
 import com.ryderbelserion.crazyenchantments.paper.objects.Message;
+import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -11,13 +13,27 @@ import java.util.Map;
 
 public class MessageRegistry {
 
+    private final FusionCore core = FusionCore.Provider.get();
+
+    private final ILogger logger = this.core.getLogger();
+
     private final Map<Key, IMessage> messages = new HashMap<>();
 
     public void addMessage(@NotNull final Key key, @NotNull final IMessage message) {
+        this.logger.safe("Registering the message {}", key.asString());
+
         this.messages.put(key, message);
     }
 
     public void removeMessage(@NotNull final Key key) {
+        if (!this.messages.containsKey(key)) {
+            this.logger.warn("No message with key {}", key.asString());
+
+            return;
+        }
+
+        this.logger.safe("Unregistering the message {}", key.asString());
+
         this.messages.remove(key);
     }
 
@@ -67,6 +83,8 @@ public class MessageRegistry {
     }
 
     public void purgeMessages() {
+        this.logger.warn("Purging all existing message keys!");
+
         this.messages.clear();
     }
 

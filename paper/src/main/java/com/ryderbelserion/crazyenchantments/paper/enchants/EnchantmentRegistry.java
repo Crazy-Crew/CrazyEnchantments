@@ -4,6 +4,7 @@ import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnch
 import com.ryderbelserion.crazyenchantments.paper.enchants.types.pickaxes.veinminer.VeinMinerEnchant;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.FileType;
+import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
@@ -11,7 +12,6 @@ import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -27,12 +27,12 @@ public class EnchantmentRegistry {
     private final Map<Key, CustomEnchantment> enchantments = new HashMap<>();
 
     private final FileManager fileManager;
-    private final ComponentLogger logger;
+    private final KyoriLogger logger;
     private final Path path;
 
-    public EnchantmentRegistry(@NotNull final FusionPaper paper, @NotNull final ComponentLogger logger, @NotNull final Path path) {
+    public EnchantmentRegistry(@NotNull final FusionPaper paper, @NotNull final Path path) {
         this.fileManager = paper.getFileManager();
-        this.logger = logger;
+        this.logger = paper.getLogger();
         this.path = path;
     }
 
@@ -86,7 +86,7 @@ public class EnchantmentRegistry {
 
                     supportedItemTags.add(tagEntry);
                 } catch (final IllegalArgumentException exception) {
-                    this.logger.warn("Failed to create a tag entry for {}", itemTag);
+                    this.logger.error("<red>Failed to create a tag entry for <gold>{}", itemTag);
                 }
 
                 continue;
@@ -101,7 +101,7 @@ public class EnchantmentRegistry {
 
                 supportedItemTags.add(tagEntry);
             } catch (final IllegalArgumentException | NullPointerException exception) {
-                this.logger.warn("Failed to create the tag entry for {}", itemTag);
+                this.logger.error("<red>Failed to create the tag entry for <gold>{}", itemTag);
             }
         }
 

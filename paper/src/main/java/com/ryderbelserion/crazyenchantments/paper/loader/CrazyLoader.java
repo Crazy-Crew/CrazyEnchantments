@@ -3,6 +3,7 @@ package com.ryderbelserion.crazyenchantments.paper.loader;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.paper.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.interfaces.CustomEnchantment;
+import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -16,7 +17,6 @@ import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.event.WritableRegistry;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import io.papermc.paper.tag.PreFlattenTagRegistrar;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,12 +32,13 @@ public class CrazyLoader implements PluginBootstrap {
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
-        final ComponentLogger logger = context.getLogger();
         final Path path = context.getDataDirectory();
 
-        this.paper = new FusionPaper(logger, path);
+        this.paper = new FusionPaper(context.getLogger(), path);
 
-        this.enchantmentRegistry = new EnchantmentRegistry(this.paper, logger, path);
+        final KyoriLogger kyori = this.paper.getLogger();
+
+        this.enchantmentRegistry = new EnchantmentRegistry(this.paper, path);
         this.enchantmentRegistry.init();
 
         final Collection<CustomEnchantment> enchants = this.enchantmentRegistry.getEnchantments().values();
@@ -50,7 +51,7 @@ public class CrazyLoader implements PluginBootstrap {
             for (final CustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
-                logger.info("Registering item tag {}", enchant.getTagForSupportedItems().key());
+                kyori.safe("Registering item tag {} for {}", enchant.getTagForSupportedItems().key(), enchant.getKey());
 
                 registry.addToTag(ItemTypeTagKeys.create(enchant.getTagForSupportedItems().key()), enchant.getSupportedItems());
             }
@@ -63,9 +64,9 @@ public class CrazyLoader implements PluginBootstrap {
                 if (!enchant.isEnabled()) continue;
 
                 if (enchant.isCurse()) {
-                    logger.info("Registering curse {}", enchant.getKey());
+                    kyori.safe("Registering curse {}", enchant.getKey());
                 } else {
-                    logger.info("Registering enchantment {}", enchant.getKey());
+                    kyori.safe("Registering enchantment {}", enchant.getKey());
                 }
 
                 registry.register(TypedKey.create(RegistryKey.ENCHANTMENT, enchant.getKey()), enchantment -> {
@@ -88,7 +89,7 @@ public class CrazyLoader implements PluginBootstrap {
                 if (!enchant.isEnabled()) continue;
 
                 enchant.getEnchantTagKeys().forEach(enchantmentTagKey -> {
-                    logger.info("Registering the enchantment tag {}", enchantmentTagKey.key());
+                    kyori.safe("Registering the enchantment tag {} for {}", enchantmentTagKey.key(), enchant.getKey());
 
                     registry.addToTag(enchantmentTagKey, Set.of(enchant.getTagEntry()));
                 });
