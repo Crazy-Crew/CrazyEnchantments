@@ -44,7 +44,7 @@ public class Message implements IMessage {
 
         if (component.equals(Component.empty())) return;
 
-        this.chatManager.broadcast(Component.empty());
+        this.chatManager.broadcast(component);
     }
 
     @Override
