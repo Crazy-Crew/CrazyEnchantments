@@ -1,5 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.api.interfaces;
 
+import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
@@ -10,7 +11,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Set;
@@ -39,7 +39,7 @@ public interface ICustomEnchantment {
 
     Set<TagKey<Enchantment>> getEnchantTagKeys();
 
-    default void init(@NotNull final JavaPlugin plugin) {
+    default void init(@NotNull final CrazyEnchantmentsPlugin plugin) {
 
     }
 

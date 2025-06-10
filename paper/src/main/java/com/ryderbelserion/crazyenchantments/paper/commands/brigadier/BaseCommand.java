@@ -1,6 +1,7 @@
 package com.ryderbelserion.crazyenchantments.paper.commands.brigadier;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlatform;
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.types.admin.CommandReload;
 import com.ryderbelserion.fusion.paper.api.commands.objects.AbstractPaperCommand;
 import com.ryderbelserion.fusion.paper.api.commands.objects.AbstractPaperContext;
@@ -11,6 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class BaseCommand extends AbstractPaperCommand {
+
+    private final CrazyEnchantmentsPlatform platform;
+
+    public BaseCommand(@NotNull final CrazyEnchantmentsPlatform platform) {
+        this.platform = platform;
+    }
 
     @Override
     public void execute(@NotNull final AbstractPaperContext context) {
@@ -39,6 +46,6 @@ public class BaseCommand extends AbstractPaperCommand {
 
     @Override
     public @NotNull final List<AbstractPaperCommand> getChildren() {
-        return List.of(new CommandReload());
+        return List.of(new CommandReload(this.platform));
     }
 }

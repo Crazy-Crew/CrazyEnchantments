@@ -6,6 +6,8 @@ project.description = "Paper version of CrazyEnchantments!!"
 project.group = "${rootProject.group}.paper"
 
 dependencies {
+    implementation(project(":crazyenchantments-common"))
+
     implementation(libs.fusion.paper)
 }
 

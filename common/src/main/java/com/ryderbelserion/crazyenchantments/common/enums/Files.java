@@ -1,9 +1,9 @@
-package com.ryderbelserion.crazyenchantments.paper.api.enums;
+package com.ryderbelserion.crazyenchantments.common.enums;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.ryderbelserion.fusion.kyori.FusionKyori;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -15,13 +15,14 @@ public enum Files {
     messages("messages.yml"),
     config("config.yml");
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    private final FileManager fileManager = this.plugin.getFileManager();
+    private final FusionKyori kyori = (FusionKyori) FusionCore.Provider.get();
+    private final FileManager fileManager = this.kyori.getFileManager();
+    private final Path path = this.kyori.getPath();
 
-    private final Path path;
+    private final Path relativePath;
 
     Files(@NotNull final String fileName) {
-        this.path = this.plugin.getDataPath().resolve(fileName);
+        this.relativePath = this.path.resolve(fileName);
     }
 
     public @NotNull final CommentedConfigurationNode getConfig() {
@@ -29,10 +30,10 @@ public enum Files {
     }
 
     public @Nullable final YamlCustomFile getCustomFile() {
-        return this.fileManager.getYamlFile(this.path);
+        return this.fileManager.getYamlFile(this.relativePath);
     }
 
     public @NotNull final Path getPath() {
-        return this.path;
+        return this.relativePath;
     }
 }

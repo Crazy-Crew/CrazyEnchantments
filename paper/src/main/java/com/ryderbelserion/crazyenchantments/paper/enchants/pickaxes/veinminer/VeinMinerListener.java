@@ -1,6 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.events.VeinMinerEvent;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.objects.BlockVein;
@@ -24,7 +24,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.HashSet;
@@ -39,9 +38,14 @@ public class VeinMinerListener implements Listener {
     private final Registry<@NotNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
     private final Key key = VeinMinerEnchant.veinminer_key;
     private final Enchantment veinminer = this.registry.get(this.key);
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final EnchantmentRegistry enchantmentRegistry = this.plugin.getEnchantmentRegistry();
+    private final EnchantmentRegistry enchantmentRegistry;
+    private final CrazyEnchantmentsPlugin plugin;
+
+    public VeinMinerListener(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final EnchantmentRegistry enchantmentRegistry) {
+        this.enchantmentRegistry = enchantmentRegistry;
+        this.plugin = plugin;
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {

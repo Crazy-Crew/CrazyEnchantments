@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.paper.api;
+package com.ryderbelserion.crazyenchantments.common.constants;
 
 import net.kyori.adventure.key.Key;
 
@@ -14,5 +14,7 @@ public class MessageKeys {
     public static final Key target_same_player = Key.key(namespace, "target_same_player");
     public static final Key no_permission = Key.key(namespace, "no_permission");
     public static final Key inventory_not_empty = Key.key(namespace, "inventory_not_empty");
+    public static final Key internal_error = Key.key(namespace, "internal_error");
+    public static final Key message_empty = Key.key(namespace, "message_empty");
     
 }

@@ -1,6 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.loader;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
@@ -99,6 +99,6 @@ public class CrazyLoader implements PluginBootstrap {
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
-        return new CrazyEnchantments(this.enchantmentRegistry, this.paper);
+        return new CrazyEnchantmentsPlugin(this.enchantmentRegistry, this.paper);
     }
 }

@@ -1,21 +1,21 @@
-package com.ryderbelserion.crazyenchantments.paper.api.registry;
+package com.ryderbelserion.crazyenchantments.common.registry;
 
-import com.ryderbelserion.crazyenchantments.paper.api.objects.User;
+import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IUserRegistry;
+import com.ryderbelserion.crazyenchantments.common.objects.User;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UserRegistry {
+public class UserRegistry implements IUserRegistry<Audience, User> {
 
     private final Map<UUID, User> users = new HashMap<>();
 
+    @Override
     public void addUser(@NotNull final Audience audience) {
         final Optional<UUID> uuid = audience.get(Identity.UUID);
 
@@ -30,24 +30,28 @@ public class UserRegistry {
         });
     }
 
+    @Override
     public void removeUser(@NotNull final Audience audience) {
         final Optional<UUID> uuid = audience.get(Identity.UUID);
 
         uuid.ifPresent(this.users::remove);
     }
 
-    public Optional<User> getUser(@NotNull final Audience audience) {
-        final Optional<UUID> uuid = audience.get(Identity.UUID);
-
-        return uuid.map(this.users::get);
+    @Override
+    public final boolean hasUser(@NotNull final UUID uuid) {
+        return this.users.containsKey(uuid);
     }
 
-    public final Map<UUID, User> getUsers() {
-        return Collections.unmodifiableMap(this.users);
+    @Override
+    public @NotNull final User getUser(@NotNull final Audience audience) {
+        final Optional<UUID> optional = audience.get(Identity.UUID);
+
+        //noinspection OptionalGetWithoutIsPresent
+        return this.users.get(optional.get());
     }
 
-    @ApiStatus.Internal
-    public void purgeUsers() {
-        this.users.clear();
+    @Override
+    public @NotNull final Map<UUID, User> getUsers() {
+        return this.users;
     }
 }

@@ -1,24 +1,27 @@
 package com.ryderbelserion.crazyenchantments.paper.listeners;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.paper.api.registry.UserRegistry;
+import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class CacheListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final UserRegistry userRegistry;
 
-    private final UserRegistry userRegistry = this.plugin.getUserRegistry();
+    public CacheListener(@NotNull final UserRegistry userRegistry) {
+        this.userRegistry = userRegistry;
+    }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         this.userRegistry.addUser(event.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.userRegistry.removeUser(event.getPlayer());
     }

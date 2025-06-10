@@ -1,5 +1,5 @@
 name: '${name}'
-main: '${group}.${name}'
+main: '${group}.CrazyEnchantmentsPlugin'
 bootstrapper: '${group}.loader.CrazyLoader'
 
 version: '${version}'

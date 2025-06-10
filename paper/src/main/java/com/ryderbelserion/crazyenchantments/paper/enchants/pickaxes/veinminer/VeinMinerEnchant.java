@@ -1,5 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
+import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.core.files.FileAction;
@@ -16,7 +17,6 @@ import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Files;
@@ -52,10 +52,10 @@ public class VeinMinerEnchant implements ICustomEnchantment {
     private boolean isEnabled;
 
     @Override
-    public void init(@NotNull final JavaPlugin plugin) {
+    public void init(@NotNull final CrazyEnchantmentsPlugin plugin) {
         final Server server = plugin.getServer();
 
-        server.getPluginManager().registerEvents(new VeinMinerListener(), plugin);
+        server.getPluginManager().registerEvents(new VeinMinerListener(plugin, this.registry), plugin);
     }
 
     @Override

@@ -1,12 +1,12 @@
-package com.ryderbelserion.crazyenchantments.paper.api.objects;
+package com.ryderbelserion.crazyenchantments.common.objects;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.paper.api.enums.Files;
+import com.ryderbelserion.crazyenchantments.common.enums.Files;
+import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
+import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
@@ -14,13 +14,13 @@ import java.util.Locale;
 
 public class User {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final FusionKyori kyori = (FusionKyori) FusionCore.Provider.get();
 
-    private final FileManager fileManager = this.plugin.getFileManager();
+    private final FileManager fileManager = this.kyori.getFileManager();
 
-    private final Path path = this.plugin.getDataPath().resolve("locale");
+    private final KyoriLogger logger = this.kyori.getLogger();
 
-    private final KyoriLogger logger = this.plugin.getPaper().getLogger();
+    private final Path path = this.kyori.getPath();
 
     private final Audience audience;
 
@@ -29,7 +29,7 @@ public class User {
     }
 
     public CommentedConfigurationNode locale() {
-        final YamlCustomFile customFile = this.fileManager.getYamlFile(this.path.resolve(getLocale()));
+        final YamlCustomFile customFile = this.fileManager.getYamlFile(this.path.resolve(String.format("%s.yml", getLocale())));
 
         if (customFile == null) {
             return Files.messages.getConfig();
@@ -44,9 +44,9 @@ public class User {
         final String country = locale.getCountry();
         final String language = locale.getLanguage();
 
-        this.locale = language + "-" + country + ".yml";
+        this.locale = String.format("%s-%s", language, country);
 
-        this.logger.warn("Country: {}, Language: {}", country, language);
+        this.logger.warn("Locale Debug: Country: {}, Language: {}", country, language);
     }
 
     public @NotNull final Audience getAudience() {
