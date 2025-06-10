@@ -32,8 +32,8 @@ tasks {
         options.isDocFilesSubDirs = true
         options.windowTitle("$name $projectVersion API Documentation")
         options.docTitle("<h1>$name $projectVersion API</h1>")
-        options.header = """<img src="https://cdn.modrinth.com/data/IwVOgYiT/cd62e2f6dfe377838f4c387462c19dbb3ca5a39c.webp" style="height:100%">"""
-        options.bottom("Copyright © 2025 Ryder Belserion")
+        options.header = """<img src="https://cdn.modrinth.com/data/krxPuhWb/af2ac4ec0d3f3183bde58911a75b54b04499eeb0_96.webp" style="height:100%">"""
+        options.bottom("Copyright © 2015-2025 Ryder Belserion, BadBones69")
         options.linkSource(true)
         options.addBooleanOption("html5", true)
     }
