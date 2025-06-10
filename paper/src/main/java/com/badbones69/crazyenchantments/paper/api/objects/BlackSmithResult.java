@@ -97,7 +97,7 @@ public class BlackSmithResult {
                 for (Entry<CEnchantment, Integer> entry : compare.getNewCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
 
-                    if (enchantment.canEnchantItem(mainItem) && mainCE.canAddEnchantment(player)) {
+                    if (enchantment.canEnchantItem(mainItem) && mainCE.canAddEnchantment(player) && !hasConflictingCEEnchant(mainCE.getCEnchantments().keySet(), enchantment)) {
                         mainCE.addCEnchantment(enchantment, entry.getValue());
                         this.cost += BlackSmithManager.getAddEnchantment();
                     }
@@ -119,6 +119,21 @@ public class BlackSmithResult {
 
         for (Enchantment enchant : vanillaEnchantments) {
             if (enchantment.conflictsWith(enchant)) return true;
+        }
+
+        return false;
+    }
+    /**
+     * Check if this enchantment conflicts with another enchantment.
+     *
+     * @param ceEnchantments The ceEnchants to check if they are conflicting.
+     * @param cEnchantment The ceEnchant to check the others against.
+     * @return True if there is a conflict.
+     */
+    private boolean hasConflictingCEEnchant(Set<CEnchantment> ceEnchantments, CEnchantment cEnchantment) {
+
+        for (CEnchantment enchant : ceEnchantments) {
+            if (cEnchantment.conflictsWith(enchant)) return true;
         }
 
         return false;

@@ -139,6 +139,13 @@ public class EnchantmentControl implements Listener {
             return;
         }
 
+        for (CEnchantment enchant : enchantments.keySet()) {
+            if (enchant.conflictsWith(enchantment)) {
+                player.sendMessage(Messages.CONFLICTING_ENCHANT.getMessage());
+                return;
+            }
+        }
+
         event.setCancelled(true);
 
         if (preApplyEvent.getSuccessful()) {

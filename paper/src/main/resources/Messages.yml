@@ -11,6 +11,7 @@ Messages:
     - '#ff0000That item already has the maximum amount of enchantments that you can add to it.'
     - '#880808Use &2/ce limit #880808to check the current limit on the item.'
     - '#880808For information on how to change the limit, read &2https://docs.crazycrew.us/docs/plugins/crazyenchantments/faq.'
+  Conflicting-Enchant: '&7This enchant conflicts with one already on the item.'
   Hit-Slot-Max: '&cYou have already added the maximum amount of slots to this item.'
   Applied-Slot-Crystal: '&cYou have successfully added another slot to the item. The item now has %slot% extra slots.'
   Inventory-Full: '&cYour inventory is too full. Please open up some space to buy that.'

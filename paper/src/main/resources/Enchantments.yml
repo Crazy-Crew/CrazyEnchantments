@@ -47,6 +47,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
+    # List of cEnchants that can't be added to the item if this one is on it.
+    Conflicts: []
   #Do not change this line.
   BurnShield:
     Enabled: true
@@ -1821,6 +1823,8 @@ Enchantments:
         - '&6Enchantable Items: &aPickaxes'
     Categories:
       - 'Mythical'
+    Conflicts:
+      - "Blast"
   #Do not change this line.
   Blast:
     Enabled: true
@@ -1843,6 +1847,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
+    Conflicts:
+      - "VeinMiner"
   #Do not change this line.
   Furnace:
     Enabled: true
