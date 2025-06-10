@@ -6,8 +6,10 @@ import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegist
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
 import com.ryderbelserion.fusion.paper.FusionPaper;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
@@ -66,6 +68,11 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
 
         this.server.getGlobalRegionScheduler().cancelTasks(this.plugin);
         this.server.getAsyncScheduler().cancelTasks(this.plugin);
+    }
+
+    @Override
+    public final boolean isConsoleSender(@NotNull final Audience audience) {
+        return audience instanceof ConsoleCommandSender;
     }
 
     @Override
