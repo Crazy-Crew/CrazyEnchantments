@@ -25,7 +25,7 @@ fabric-loader = "0.16.14"
 fabric-loom = "1.10-SNAPSHOT"
 
 ## Other
-fusion = "1.20.3" # https://github.com/ryderbelserion/Fusion
+fusion = "1.20.4" # https://github.com/ryderbelserion/Fusion
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
