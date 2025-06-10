@@ -1,5 +1,6 @@
 package com.ryderbelserion.crazyenchantments.common.objects;
 
+import com.ryderbelserion.crazyenchantments.api.interfaces.IUser;
 import com.ryderbelserion.crazyenchantments.common.enums.Files;
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.files.FileManager;
@@ -12,7 +13,7 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
 import java.util.Locale;
 
-public class User {
+public class User implements IUser {
 
     private final FusionKyori kyori = (FusionKyori) FusionCore.Provider.get();
 
@@ -28,6 +29,7 @@ public class User {
         this.audience = audience;
     }
 
+    @Override
     public CommentedConfigurationNode locale() {
         final YamlCustomFile customFile = this.fileManager.getYamlFile(this.path.resolve(String.format("%s.yml", getLocale())));
 
@@ -40,6 +42,7 @@ public class User {
 
     private String locale = "en-US";
 
+    @Override
     public void setLocale(@NotNull final Locale locale) {
         final String country = locale.getCountry();
         final String language = locale.getLanguage();
@@ -49,10 +52,12 @@ public class User {
         this.logger.warn("Locale Debug: Country: {}, Language: {}", country, language);
     }
 
+    @Override
     public @NotNull final Audience getAudience() {
         return this.audience;
     }
 
+    @Override
     public @NotNull final String getLocale() {
         return this.locale;
     }
