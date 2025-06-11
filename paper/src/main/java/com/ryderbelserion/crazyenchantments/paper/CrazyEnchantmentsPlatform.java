@@ -5,6 +5,7 @@ import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
+import com.ryderbelserion.fusion.kyori.enums.Support;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -18,6 +19,7 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
 
     private final CrazyEnchantmentsPlugin plugin;
     private final EnchantmentRegistry enchantmentRegistry;
+    private boolean isYardWatchEnabled = false;
     private final FusionPaper fusion;
     private final Server server;
 
@@ -41,6 +43,8 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
 
         final PluginManager pluginManager = this.server.getPluginManager();
         final UserRegistry userRegistry = this.getUserRegistry();
+
+        this.isYardWatchEnabled = Support.yard_watch.isEnabled();
 
         this.enchantmentRegistry.getEnchantments().forEach((key, customEnchantment) -> {
             customEnchantment.init(this.plugin); // registers listeners, or things not meant for the bootstrap loader
@@ -97,5 +101,9 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
 
     public @NotNull final FusionPaper getFusion() {
         return this.fusion;
+    }
+
+    public final boolean isYardWatchEnabled() {
+        return this.isYardWatchEnabled;
     }
 }

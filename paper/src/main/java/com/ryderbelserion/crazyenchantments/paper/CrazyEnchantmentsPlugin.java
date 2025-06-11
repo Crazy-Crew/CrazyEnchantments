@@ -33,6 +33,10 @@ public class CrazyEnchantmentsPlugin extends JavaPlugin {
         return this.enchantmentRegistry;
     }
 
+    public @NotNull final CrazyEnchantmentsPlatform getPlatform() {
+        return this.platform;
+    }
+
     public @NotNull final FusionPaper getPaper() {
         return this.paper;
     }
