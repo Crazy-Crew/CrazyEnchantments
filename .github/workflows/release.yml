@@ -24,6 +24,10 @@ jobs:
         run: ./gradlew modrinth --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      - name: Publish to Hangar
+        run: ./gradlew publishAllPublicationsToHangar --stacktrace
+        env:
+          HANGAR_KEY: ${{ secrets.HANGAR_TOKEN }}
       - name: Notify Discord
         if: success()
         run: ./gradlew release-build --stacktrace

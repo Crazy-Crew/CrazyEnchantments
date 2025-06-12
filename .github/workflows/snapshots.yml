@@ -26,6 +26,11 @@ jobs:
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, '<br>') }}
+      - name: Publish to Hangar
+        run: ./gradlew publishAllPublicationsToHangar --stacktrace
+        env:
+          HANGAR_KEY: ${{ secrets.HANGAR_TOKEN }}
+          COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, '<br>') }}
       - name: Notify Discord
         if: success()
         run: ./gradlew dev-build --stacktrace
