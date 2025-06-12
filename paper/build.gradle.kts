@@ -1,17 +1,10 @@
 plugins {
-    alias(libs.plugins.paperweight)
-
-    alias(libs.plugins.runPaper)
-    alias(libs.plugins.shadow)
+    `config-paper`
 }
 
-base {
-    archivesName.set(rootProject.name)
-}
+project.group = "${rootProject.group}.paper"
 
 repositories {
-    maven("https://repo.papermc.io/repository/maven-public")
-
     maven("https://repo.md-5.net/content/repositories/snapshots")
 
     maven("https://ci.ender.zone/plugin/repository/everything")
@@ -26,8 +19,6 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.paper)
-
     compileOnly(libs.informative.annotations)
 
     compileOnly(libs.vault) {
@@ -62,12 +53,6 @@ dependencies {
     compileOnly(libs.mcmmo)
 }
 
-val component: SoftwareComponent = components["java"]
-
-paperweight {
-    paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
-}
-
 tasks {
     configurations.all { //todo() FIX ME later, fucking forced dependencies, give me a fucking break
         resolutionStrategy {
@@ -78,61 +63,11 @@ tasks {
         }
     }
 
-    publishing {
-        repositories {
-            maven {
-                url = uri("https://repo.crazycrew.us/releases")
-
-                credentials {
-                    this.username = System.getenv("gradle_username")
-                    this.password = System.getenv("gradle_password")
-                }
-            }
-        }
-
-        publications{
-            create<MavenPublication>("maven") {
-                groupId = rootProject.group.toString()
-                artifactId = "${rootProject.name.lowercase()}-paper-api"
-                version = rootProject.version.toString()
-
-                from(component)
-            }
-        }
-    }
-
     runServer {
         jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
         minecraftVersion(libs.versions.minecraft.get())
-    }
-
-    assemble {
-        doLast {
-            copy {
-                from(shadowJar.get())
-                into(rootProject.projectDir.resolve("jars"))
-            }
-        }
-    }
-
-    shadowJar {
-        archiveBaseName.set(rootProject.name)
-        archiveClassifier.set("")
-    }
-
-    processResources {
-        inputs.properties("name" to rootProject.name)
-        inputs.properties("version" to project.version)
-        inputs.properties("group" to "${project.group}.paper")
-        inputs.properties("description" to project.description)
-        inputs.properties("apiVersion" to libs.versions.minecraft.get())
-        inputs.properties("website" to "https://modrinth.com/plugin/crazyenchantments")
-
-        filesMatching("plugin.yml") {
-            expand(inputs.properties)
-        }
     }
 }
