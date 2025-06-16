@@ -162,10 +162,7 @@ public class PluginSupport {
 
         LANDS("Lands"),
 
-        PLOT_SQUARED("PlotSquared"),
-
-        // Custom Items
-        ORAXEN("Oraxen");
+        PLOT_SQUARED("PlotSquared");
 
         private final String pluginName;
 

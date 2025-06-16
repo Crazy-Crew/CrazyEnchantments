@@ -24,7 +24,6 @@ softdepend:
   - Lands
   - StackMob
   - Vault
-  - Oraxen
   - MCMMO
 
 commands:

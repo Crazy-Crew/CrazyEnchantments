@@ -14,8 +14,6 @@ repositories {
     maven("https://repo.bg-software.com/repository/api")
 
     maven("https://maven.enginehub.org/repo")
-
-    maven("https://repo.oraxen.com/releases")
 }
 
 dependencies {
@@ -26,8 +24,6 @@ dependencies {
     }
 
     compileOnly(libs.griefprevention)
-
-    compileOnly(libs.oraxen)
 
     compileOnly(libs.worldguard)
     compileOnly(libs.worldedit)
