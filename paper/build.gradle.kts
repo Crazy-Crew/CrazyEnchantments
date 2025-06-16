@@ -27,8 +27,6 @@ dependencies {
 
     compileOnly(libs.griefprevention)
 
-    compileOnly(libs.oraxen)
-
     compileOnly(libs.worldguard)
     compileOnly(libs.worldedit)
 

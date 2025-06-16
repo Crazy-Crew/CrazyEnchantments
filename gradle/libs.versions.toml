@@ -8,7 +8,6 @@ kotlin = "2.1.20" # https://github.com/JetBrains/kotlin
 placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
 worldguard = "7.0.13"            # https://dev.bukkit.org/projects/worldguard/files
 worldedit = "7.3.11"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
-oraxen = "1.190.0"               # https://github.com/oraxen/oraxen#api
 vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
 griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.101.0.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
@@ -42,7 +41,6 @@ minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
 
 [libraries]
-oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
 
 worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
