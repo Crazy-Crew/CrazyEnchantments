@@ -2,9 +2,9 @@ package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlatform;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
+import com.ryderbelserion.crazyenchantments.paper.api.objects.types.CEBlock;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.events.VeinMinerEvent;
-import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.objects.BlockVein;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
@@ -81,8 +81,8 @@ public class VeinMinerListener implements Listener {
 
         final CommentedConfigurationNode config = enchant.getConfig();
 
-        final Queue<BlockVein> queue = new LinkedList<>();
-        queue.add(new BlockVein(initialBlock, 0, getExperience(initialBlock, tool)));
+        final Queue<CEBlock> queue = new LinkedList<>();
+        queue.add(new CEBlock(initialBlock, 0).setExperience(getExperience(initialBlock, tool)));
 
         final Set<Block> processed = new HashSet<>();
 
@@ -103,8 +103,8 @@ public class VeinMinerListener implements Listener {
         final int delay = config.node("enchant", "settings", "delay").getInt(0);
 
         while (!queue.isEmpty()) {
-            final BlockVein blockVein = queue.poll();
-            final Block block = blockVein.block();
+            final CEBlock ceBlock = queue.poll();
+            final Block block = ceBlock.getBlock();
 
             final Material material = block.getType();
 
@@ -121,9 +121,9 @@ public class VeinMinerListener implements Listener {
             new FoliaScheduler(this.plugin, block.getLocation()) {
                 @Override
                 public void run() {
-                    destroy(player, tool, blockVein, damageItem);
+                    destroy(player, tool, ceBlock, damageItem);
                 }
-            }.runDelayed((long) delay * blockVein.distance());
+            }.runDelayed((long) delay * ceBlock.getDistance());
 
             processed.add(block);
 
@@ -140,17 +140,17 @@ public class VeinMinerListener implements Listener {
 
                         if (!worldBlockType.equals(blockType)) continue; // do not add blocks if the types don't match.
 
-                        queue.add(new BlockVein(worldBlock, blockVein.distance() + 1, getExperience(worldBlock, tool)));
+                        queue.add(new CEBlock(worldBlock, ceBlock.getDistance() + 1).setExperience(getExperience(worldBlock, tool)));
                     }
                 }
             }
         }
     }
 
-    private void destroy(@NotNull final Player player, @NotNull final ItemStack tool, @NotNull final BlockVein veinBlock, final boolean damageItem) {
-        final Block block = veinBlock.block();
+    private void destroy(@NotNull final Player player, @NotNull final ItemStack tool, @NotNull final CEBlock ceBlock, final boolean damageItem) {
+        final Block block = ceBlock.getBlock();
 
-        final VeinMinerEvent event = new VeinMinerEvent(block, player, veinBlock.experience());
+        final VeinMinerEvent event = new VeinMinerEvent(block, player, ceBlock.getExperience());
 
         if (!event.callEvent()) return;
 

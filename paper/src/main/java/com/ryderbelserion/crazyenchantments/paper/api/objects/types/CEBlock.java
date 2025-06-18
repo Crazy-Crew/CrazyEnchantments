@@ -17,8 +17,10 @@ public class CEBlock {
 
     private int experience = 0;
 
-    public void setExperience(final int experience) {
+    public final CEBlock setExperience(final int experience) {
         this.experience = experience;
+
+        return this;
     }
 
     public final Block getBlock() {
