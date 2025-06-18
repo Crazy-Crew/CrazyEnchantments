@@ -6,13 +6,20 @@ import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.TagEntry;
+import me.youhavetrouble.yardwatch.Protection;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicesManager;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Set;
 
 public interface ICustomEnchantment {
@@ -62,5 +69,31 @@ public interface ICustomEnchantment {
 
     default TagEntry<Enchantment> getTagEntry() {
         return TagEntry.valueEntry(TypedKey.create(RegistryKey.ENCHANTMENT, getKey()));
+    }
+
+    default boolean canBreakBlock(final boolean isYardWatchEnabled, @NotNull final Player player, @NotNull final Block block) {
+        if (!isYardWatchEnabled) return true;
+
+        final ServicesManager service = player.getServer().getServicesManager();
+
+        final Collection<RegisteredServiceProvider<Protection>> protections = service.getRegistrations(Protection.class);
+
+        boolean canBreakBlock = true;
+
+        final BlockState state = block.getState(true);
+
+        for (final RegisteredServiceProvider<Protection> protection : protections) {
+            final Protection provider = protection.getProvider();
+
+            if (provider.canBreakBlock(player, state)) {
+                continue;
+            }
+
+            canBreakBlock = false;
+
+            break;
+        }
+
+        return canBreakBlock;
     }
 }

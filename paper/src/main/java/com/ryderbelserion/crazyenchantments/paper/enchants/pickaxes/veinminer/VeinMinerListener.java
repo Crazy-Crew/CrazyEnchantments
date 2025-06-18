@@ -1,5 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
+import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlatform;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.events.VeinMinerEvent;
@@ -41,9 +42,14 @@ public class VeinMinerListener implements Listener {
 
     private final EnchantmentRegistry enchantmentRegistry;
     private final CrazyEnchantmentsPlugin plugin;
+    private final boolean isYardWatchEnabled;
 
     public VeinMinerListener(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final EnchantmentRegistry enchantmentRegistry) {
         this.enchantmentRegistry = enchantmentRegistry;
+
+        final CrazyEnchantmentsPlatform platform = plugin.getPlatform();
+
+        this.isYardWatchEnabled = platform.isYardWatchEnabled();
         this.plugin = plugin;
     }
 
@@ -64,6 +70,9 @@ public class VeinMinerListener implements Listener {
         if (event instanceof VeinMinerEvent) return;
 
         final Block initialBlock = event.getBlock();
+
+        if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, initialBlock)) return;
+
         final String blockType = initialBlock.getType().getKey().asString();
 
         final List<String> ores = enchant.getOres();
@@ -99,8 +108,15 @@ public class VeinMinerListener implements Listener {
 
             final Material material = block.getType();
 
-            if (material.isAir() || processed.contains(block) || !ores.contains(material.getKey().asString())) continue;
-            if (processed.size() >= maxChain || requiresCorrectTool && tool.isEmpty()) break;
+            if (material.isAir() || !ores.contains(material.getKey().asString())) continue; // if is air, and ores do not contain the material string, continue.
+            if (processed.size() >= maxChain || requiresCorrectTool && tool.isEmpty()) break; // if the processed size is greater than max chain, break... or if the tool is empty, break...
+            if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, block)) { // prevent blocks player can't break
+                processed.add(block); // add to processed, because the player can't break the block.
+
+                continue;
+            }
+
+            if (processed.contains(block)) continue; // if processed continue
 
             new FoliaScheduler(this.plugin, block.getLocation()) {
                 @Override

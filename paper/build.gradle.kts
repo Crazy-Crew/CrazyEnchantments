@@ -9,6 +9,8 @@ dependencies {
     implementation(project(":crazyenchantments-common"))
 
     implementation(libs.fusion.paper)
+
+    implementation(libs.yardwatch)
 }
 
 tasks {
