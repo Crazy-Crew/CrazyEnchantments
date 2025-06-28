@@ -56,6 +56,10 @@ dependencies {
 }
 
 tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+
     configurations.all { //todo() FIX ME later, fucking forced dependencies, give me a fucking break
         resolutionStrategy {
             force("org.apache.logging.log4j:log4j-bom:2.24.1")
