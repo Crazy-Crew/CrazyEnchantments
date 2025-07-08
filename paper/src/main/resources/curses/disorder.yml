@@ -4,8 +4,12 @@ curse:
   enabled: true
   # The cosmetic look of the enchantment.
   display:
-    # The name of the enchantment.
+    # This currently only works as a cosmetic function for our internal menus as Mojang provides no way to change the display name of the enchantment book when given through vanilla means.
+    # The functionality of /ce when giving enchants randomly the same functionality as if it were an enchantment table. We do not handle anything internally.
     name: "<red>Disorder"
+    # The description of the enchantment that appears on the enchantment book.
+    description:
+      - "<yellow>Chance to shuffle the player's inventory you attack when in combat."
   # The max level.
   max-level: 3
   # The weight.
