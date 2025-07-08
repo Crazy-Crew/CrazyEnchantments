@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.crazyenchantments.objects.ConfigOptions;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -46,7 +46,7 @@ public enum Scrolls {
             final CommentedConfigurationNode child = config.node(scroll.getConfigName());
 
             itemBuilderScrolls.put(scroll, new ItemBuilder().setName(config.node("Name").getString("Error getting name."))
-            .setLore(Methods.getStringList(child, "Item-Lore"))
+            .setLore(ConfigUtils.getStringList(child, "Item-Lore"))
             .setMaterial(child.node("Item").getString("BOOK"))
             .setGlow(config.node("Glowing").getBoolean(false)));
         }

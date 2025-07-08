@@ -1,14 +1,12 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.crazyenchantments.objects.ConfigOptions;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -131,16 +129,12 @@ public class BlackSmithManager {
         return maxEnchantments;
     }
 
-    private static ConfigurationSection getSection(@NotNull final FileConfiguration config) {
-        return config.getConfigurationSection("Settings.BlackSmith");
-    }
-
     private static void get(@NotNull final CommentedConfigurationNode config) {
         final CommentedConfigurationNode child = config.node("Settings", "BlackSmith");
 
         exitButton = new ItemBuilder().setMaterial(Material.BARRIER)
                 .setName(child.node("Results", "None").getString("&c&lNo Results."))
-                .setLore(Methods.getStringList(child, List.of(
+                .setLore(ConfigUtils.getStringList(child, List.of(
                         "&7No results could be found.",
                         "&7Please put in two books of",
                         "&7the same enchantment and level.",

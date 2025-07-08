@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.google.common.collect.Lists;
 import com.ryderbelserion.crazyenchantments.enums.FileKeys;
 import com.ryderbelserion.crazyenchantments.objects.ConfigOptions;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -244,7 +245,7 @@ public class EnchantmentBookSettings {
                     lostBook.node("InGUI").getBoolean(true),
                     new ItemBuilder().setMaterial(lostBook.node("Item").getString("BOOK"))
                             .setPlayerName(lostBook.node("Player").getString(""))
-                            .setLore(Methods.getStringList(lostBook, "Lore"))
+                            .setLore(ConfigUtils.getStringList(lostBook, "Lore"))
                             .setGlow(lostBook.node("Glowing").getBoolean(true)),
                     lostBook.node("Cost").getInt(10000),
                     Currency.getCurrency(lostBook.node("Currency").getString("Vault")),
@@ -260,7 +261,7 @@ public class EnchantmentBookSettings {
                     new ItemBuilder().setMaterial(child.node("Item").getString(ColorUtils.getRandomPaneColor().getName()))
                             .setPlayerName(child.node("Player").getString(""))
                             .setName(child.node("Name").getString(""))
-                            .setLore(Methods.getStringList(child, "Lore"))
+                            .setLore(ConfigUtils.getStringList(child, "Lore"))
                             .setGlow(child.node("Glowing").getBoolean(false)),
                     child.node("Cost").getInt(10000),
                     Currency.getCurrency(child.node("Currency").getString("Vault")),

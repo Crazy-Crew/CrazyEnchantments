@@ -140,7 +140,7 @@ public class CECommand implements CommandExecutor {
 
             case "reload" -> { // /ce reload
                 if (hasPermission(sender, "reload")) {
-                    this.fusion.reload(false); // reload fusion api
+                    this.fusion.reload(); // reload fusion api
 
                     this.fusion.getFileManager().refresh(false); // refresh files
 

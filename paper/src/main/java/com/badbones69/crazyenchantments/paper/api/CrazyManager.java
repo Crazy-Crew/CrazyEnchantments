@@ -35,6 +35,7 @@ import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
 import com.ryderbelserion.crazyenchantments.enums.FileKeys;
 import com.ryderbelserion.crazyenchantments.objects.ConfigOptions;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
 import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
@@ -322,7 +323,7 @@ public class CrazyManager {
         // Loads Slot Crystal.
         this.slot_crystal = new ItemBuilder().setMaterial(config.node("Settings", "Slot_Crystal", "Item").getString("RED_WOOL"))
                 .setName(config.node("Settings", "Slot_Crystal", "Name").getString("&5&lSlot &b&lCrystal"))
-                .setLore(Methods.getStringList(config, List.of(
+                .setLore(ConfigUtils.getStringList(config, List.of(
                         "&7A rare crystal that is said to",
                         "&7increase the amount of enchants",
                         "&7that can be added onto an item.",
@@ -379,8 +380,8 @@ public class CrazyManager {
     public void addShopOption(final ShopOption shopOption, final CommentedConfigurationNode itemNode, final CommentedConfigurationNode costNode, final String namePath, final String lorePath) {
         try {
             final CEOption option = new CEOption(
-                    new ItemBuilder().setMaterial(itemNode.node("Item").getString("CHEST")).setName(itemNode.node(namePath).getString(""))
-                            .setLore(Methods.getStringList(itemNode, lorePath))
+                    new ItemBuilder().setMaterial(itemNode.node("Item").getString("CHEST")).setName(itemNode.node(namePath).getString(shopOption.getDefaultName()))
+                            .setLore(ConfigUtils.getStringList(itemNode, shopOption.getDefaultLore(), lorePath))
                             .setPlayerName(itemNode.node("Player").getString(""))
                             .setGlow(itemNode.node("Glowing").getBoolean(false)),
                     itemNode.node("Slot").getInt(1)-1,

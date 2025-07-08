@@ -11,30 +11,13 @@ val git = feather.getGit()
 val commitHash: String? = git.getCurrentCommitHash().subSequence(0, 7).toString()
 val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Crew/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
-val minecraft = libs.versions.minecraft.get()
-
-val versions = listOf(
-    minecraft
-)
-
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
+val minecraft = libs.versions.minecraft.get()
+val versions = listOf(minecraft)
 
-rootProject.version = version()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else if (buildNumber != null) "$minecraft-$buildNumber" else libs.versions.crazyenchantments.get();
 rootProject.description = "Adds over 80 unique enchantments to your server and more!"
 rootProject.group = "com.badbones69.crazyenchantments"
-
-fun version(): String {
-    if (isSnapshot) {
-        return "$minecraft-$commitHash"
-    }
-
-
-    if (buildNumber != null) {
-        return "$minecraft-$buildNumber"
-    }
-
-    return "2.5.2"
-}
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()

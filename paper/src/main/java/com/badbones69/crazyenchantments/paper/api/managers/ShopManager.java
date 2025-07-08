@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -9,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -42,7 +42,7 @@ public class ShopManager {
         this.inventorySize = config.node("Settings", "GUISize").getInt(54);
         this.enchantmentTableShop = config.node("Settings", "EnchantmentOptions", "Right-Click-Enchantment-Table").getBoolean(false);
 
-        for (final String customItemString : Methods.getStringList(config, "Settings", "GUICustomization")) {
+        for (final String customItemString : ConfigUtils.getStringList(config, "Settings", "GUICustomization")) {
             int slot = 0;
 
             for (String option : customItemString.split(", ")) {

@@ -58,7 +58,7 @@ public class HoeEnchantments implements Listener {
     @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final HashMap<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
+    private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
 
     private final Set<Material> harvesterCrops = Set.of(Material.WHEAT, Material.CARROTS, Material.BEETROOTS, Material.POTATOES, Material.NETHER_WART, Material.COCOA);
 

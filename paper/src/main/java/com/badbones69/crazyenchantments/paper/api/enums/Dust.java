@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.ryderbelserion.crazyenchantments.enums.FileKeys;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -56,7 +57,7 @@ public enum Dust {
             final CommentedConfigurationNode child = config.node("Settings", "Dust", dust.getConfigName());
 
             Dust.itemBuilderDust.put(dust, new ItemBuilder().setName(child.node("Name").getString("Error getting name."))
-            .setLore(Methods.getStringList(child, "Lore"))
+            .setLore(ConfigUtils.getStringList(child, "Lore"))
             .setMaterial(config.node("Item").getString("GLOWSTONE_DUST")));
         }
     }

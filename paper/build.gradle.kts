@@ -42,15 +42,15 @@ dependencies {
         exclude("com.darkblade12")
     }
 
-    compileOnly(libs.towny)
-
-    compileOnly(libs.lands)
-
-    compileOnly(libs.paster)
+    compileOnly(libs.plotsquared)
 
     compileOnly(libs.skyblock)
 
-    compileOnly(libs.plotsquared)
+    compileOnly(libs.paster)
+
+    compileOnly(libs.towny)
+
+    compileOnly(libs.lands)
 
     compileOnly(libs.mcmmo)
 }
@@ -58,6 +58,14 @@ dependencies {
 tasks {
     build {
         dependsOn(shadowJar)
+    }
+
+    shadowJar {
+        listOf(
+            "org.bstats"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     configurations.all { //todo() FIX ME later, fucking forced dependencies, give me a fucking break
@@ -82,13 +90,5 @@ tasks {
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
         minecraftVersion(libs.versions.minecraft.get())
-    }
-
-    shadowJar {
-        listOf(
-            "org.bstats"
-        ).forEach {
-            relocate(it, "libs.$it")
-        }
     }
 }

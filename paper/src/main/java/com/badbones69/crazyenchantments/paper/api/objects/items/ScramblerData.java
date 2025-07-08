@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.objects.items;
 
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -18,12 +18,12 @@ public class ScramblerData {
     public void loadScrambler(final CommentedConfigurationNode config) {
         this.scramblerItem = new ItemBuilder().setMaterial(config.node("Settings", "Scrambler", "Item").getString("SUNFLOWER"))
                 .setName(config.node("Settings", "Scrambler", "Name").getString("&e&lThe Grand Scrambler"))
-                .setLore(Methods.getStringList(config, "Settings", "Scrambler", "Lore"))
+                .setLore(ConfigUtils.getStringList(config, "Settings", "Scrambler", "Lore"))
                 .setGlow(config.node("Settings", "Scrambler", "Glowing").getBoolean(false));
 
         this.pointer = new ItemBuilder().setMaterial(config.node("Settings", "Scrambler", "GUI", "Pointer", "Item").getString("REDSTONE_TORCH"))
                 .setName(config.node("Settings", "Scrambler", "GUI", "Pointer", "Name").getString("&c&lPointer"))
-                .setLore(Methods.getStringList(config, "Settings", "Scrambler", "GUI", "Pointer", "Lore"));
+                .setLore(ConfigUtils.getStringList(config, "Settings", "Scrambler", "GUI", "Pointer", "Lore"));
 
         this.animationToggle = config.node("Settings", "Scrambler", "GUI", "Toggle").getBoolean(true);
 

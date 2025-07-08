@@ -59,11 +59,10 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private CrazyManager crazyManager;
 
-    private FusionPaper fusion;
     private FileManager fileManager;
-    private ConfigOptions options;
-
     private CrazyInstance instance;
+    private ConfigOptions options;
+    private FusionPaper fusion;
 
     @Override
     public void onEnable() {

@@ -2,9 +2,9 @@ package com.ryderbelserion.crazyenchantments;
 
 import com.ryderbelserion.crazyenchantments.interfaces.ICrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.objects.ConfigOptions;
-import com.ryderbelserion.fusion.core.files.FileAction;
+import com.ryderbelserion.fusion.core.api.enums.FileAction;
+import com.ryderbelserion.fusion.core.api.utils.FileUtils;
 import com.ryderbelserion.fusion.core.files.FileManager;
-import com.ryderbelserion.fusion.core.utils.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class CrazyInstance implements ICrazyEnchantments {
 
     @Override
     public void init() {
-        this.fileManager.addFile(this.path.resolve("config.yml"), new ArrayList<>(), null);
+        this.fileManager.addFile(this.path.resolve("config.yml"), new ArrayList<>(), options -> options.shouldCopyDefaults(true));
 
         List.of(
                 "BlockList.yml",
@@ -37,7 +37,7 @@ public class CrazyInstance implements ICrazyEnchantments {
                 "Tinker.yml"
         ).forEach(name -> FileUtils.extract(name, this.path.resolve("examples"), new ArrayList<>() {{
             add(FileAction.EXTRACT_FOLDER);
-            add(FileAction.DELETE);
+            add(FileAction.DELETE_FILE);
         }}));
 
         this.options = new ConfigOptions();
@@ -57,7 +57,7 @@ public class CrazyInstance implements ICrazyEnchantments {
                 "Tinker.yml"
         ).forEach(name -> FileUtils.extract(name, this.path.resolve("examples"), new ArrayList<>() {{
             add(FileAction.EXTRACT_FOLDER);
-            add(FileAction.DELETE);
+            add(FileAction.DELETE_FILE);
         }}));
 
         this.options = new ConfigOptions();

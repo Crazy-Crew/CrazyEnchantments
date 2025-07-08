@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.ryderbelserion.crazyenchantments.utils.ConfigUtils;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -34,17 +34,17 @@ public class WingsManager {
 
         this.whitelistWorlds.clear();
 
-        Methods.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Worlds", "Whitelist").forEach(world -> this.whitelistWorlds.add(world.toLowerCase()));
+        ConfigUtils.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Worlds", "Whitelist").forEach(world -> this.whitelistWorlds.add(world.toLowerCase()));
 
         this.blacklistWorlds.clear();
 
-        Methods.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Worlds", "Blacklisted").forEach(world -> this.blacklistWorlds.add(world.toLowerCase()));
+        ConfigUtils.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Worlds", "Blacklisted").forEach(world -> this.blacklistWorlds.add(world.toLowerCase()));
 
         this.limitlessFlightWorlds.clear();
 
-        Methods.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Worlds", "Limitless-Flight-Worlds").forEach(world -> this.limitlessFlightWorlds.add(world.toLowerCase()));
+        ConfigUtils.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Worlds", "Limitless-Flight-Worlds").forEach(world -> this.limitlessFlightWorlds.add(world.toLowerCase()));
 
-        this.regions = Methods.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Regions");
+        this.regions = ConfigUtils.getStringList(config, "Settings", "EnchantmentOptions", "Wings", "Regions");
 
         this.ownersCanFly = config.node("Settings", "EnchantmentOptions", "Wings", "Owners-Can-Fly").getBoolean(true);
         this.membersCanFly = config.node("Settings", "EnchantmentOptions", "Wings", "Members-Can-Fly").getBoolean(true);

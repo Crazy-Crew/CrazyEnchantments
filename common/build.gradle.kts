@@ -5,5 +5,5 @@ plugins {
 project.group = "${rootProject.group}.common"
 
 dependencies {
-    implementation(libs.fusion.core)
+    api(libs.fusion.core)
 }

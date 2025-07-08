@@ -47,7 +47,7 @@ public class AllyEnchantments implements Listener {
     @NotNull
     private final AllyManager allyManager = this.starter.getAllyManager();
 
-    private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
+    private final Map<UUID, Calendar> allyCoolDown = new HashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAllySpawn(EntityDamageByEntityEvent event) {

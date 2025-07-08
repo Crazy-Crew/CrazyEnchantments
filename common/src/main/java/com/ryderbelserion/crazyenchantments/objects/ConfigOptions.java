@@ -70,6 +70,7 @@ public class ConfigOptions {
 
     public void init() {
         final YamlCustomFile config = FileKeys.config.getCustomFile();
+        final CommentedConfigurationNode node = config.getConfiguration();
 
         this.prefix = config.getStringValueWithDefault("&8[&aCrazyEnchantments&8]: ", "Settings", "Prefix");
 
@@ -93,10 +94,6 @@ public class ConfigOptions {
         this.transmogAddBlankLines = config.getBooleanValueWithDefault(true, "Settings", "TransmogScroll", "Add-Blank-Lines");
 
         this.transmogLoreOrder = config.getStringList(List.of("CE_Enchantments", "Protection", "Normal_Lore"), "Settings", "TransmogScroll", "Lore-Order");
-
-        if (this.transmogLoreOrder.isEmpty()) {
-            this.transmogLoreOrder = List.of("CE_Enchantments", "Protection", "Normal_Lore");
-        }
 
         this.whiteScrollProtectedName = config.getStringValueWithDefault("&b&lPROTECTED", "Settings", "WhiteScroll", "ProtectedName");
 
@@ -142,8 +139,6 @@ public class ConfigOptions {
         ), "Settings", "LostBook", "Lore");
 
         this.maxAmountOfEnchantsToggle = config.getBooleanValueWithDefault(true, "Settings", "EnchantmentOptions", "MaxAmountOfEnchantmentsToggle");
-
-        final CommentedConfigurationNode node = config.getConfiguration();
     }
 
     public final boolean isRefreshingEffectsOnWorldChange() {
