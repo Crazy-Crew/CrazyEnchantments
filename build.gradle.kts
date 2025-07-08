@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.feather)
+    alias(libs.plugins.hangar)
 
     `config-java`
 }
@@ -8,25 +9,21 @@ plugins {
 val git = feather.getGit()
 
 val commitHash: String? = git.getCurrentCommitHash().subSequence(0, 7).toString()
-val isSnapshot: Boolean = System.getenv("IS_SNAPSHOT") != null
+val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Crew/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
+val minecraft = libs.versions.minecraft.get()
+val versions = listOf(minecraft)
 
-rootProject.version = version()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyenchantments.get();
 rootProject.description = "Adds custom enchantments to your server!"
 rootProject.group = "com.ryderbelserion.crazyenchantments"
-
-fun version(): String {
-    if (isSnapshot) {
-        return "${libs.versions.minecraft.get()}-$commitHash"
-    }
-
-    return "3.0.0"
-}
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()
 
-    val data = git.getCurrentCommitAuthorData().copy(author = git.getCurrentCommitAuthorName())
+    val data = git.getGithubCommit("Crazy-Crew/${rootProject.name}")
+
+    val user = data.user
 
     discord {
         webhook {
@@ -37,9 +34,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(data.author)
+            username(user.getName())
 
-            avatar(data.avatar)
+            avatar(user.avatar)
 
             embeds {
                 embed {
@@ -50,7 +47,11 @@ feather {
                     fields {
                         field(
                             "Version ${rootProject.version}",
-                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
+                            listOf(
+                                "*Click below to download!*",
+                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/CrazyCrew/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList()
                         )
 
                         field(
@@ -75,9 +76,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(data.author)
+            username(user.getName())
 
-            avatar(data.avatar)
+            avatar(user.avatar)
 
             content("<@&929463452232192063>")
 
@@ -90,7 +91,11 @@ feather {
                     fields {
                         field(
                             "Version ${rootProject.version}",
-                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
+                            listOf(
+                                "*Click below to download!*",
+                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/CrazyCrew/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList()
                         )
 
                         field(
@@ -109,6 +114,16 @@ feather {
     }
 }
 
+fun List<String>.convertList(): String {
+    val builder = StringBuilder(size)
+
+    forEach {
+        builder.append(it).append("\n")
+    }
+
+    return builder.toString()
+}
+
 allprojects {
     apply(plugin = "java-library")
 }
@@ -117,10 +132,6 @@ tasks {
     withType<Jar> {
         subprojects {
             dependsOn(project.tasks.build)
-        }
-
-        manifest {
-            attributes["Git-Commit"] = commitHash
         }
 
         // get subproject's built jars
@@ -151,13 +162,13 @@ modrinth {
 
     projectId = rootProject.name
 
-    versionName = "${rootProject.version}"
+    versionName = "${rootProject.name} ${rootProject.version}"
     versionNumber = "${rootProject.version}"
     versionType = if (isSnapshot) "beta" else "release"
 
     changelog = content
 
-    gameVersions.addAll(listOf(libs.versions.minecraft.get()))
+    gameVersions.addAll(versions)
 
     uploadFile = tasks.jar.get().archiveFile.get()
 
@@ -167,4 +178,53 @@ modrinth {
 
     autoAddDependsOn = false
     detectLoaders = false
+
+    dependencies {
+        optional.project("GriefPrevention")
+
+        optional.project("WorldGuard")
+        optional.project("WorldEdit")
+
+        optional.project("Towny")
+    }
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        apiKey.set(System.getenv("HANGAR_KEY"))
+
+        id.set(rootProject.name)
+
+        version.set("${rootProject.version}")
+
+        channel.set(if (isSnapshot) "Beta" else "Release")
+
+        changelog.set(content)
+
+        platforms {
+            paper {
+                jar = tasks.jar.flatMap { it.archiveFile }
+
+                platformVersions.set(versions)
+
+                dependencies {
+                    hangar("GriefPrevention") {
+                        required = false
+                    }
+
+                    hangar("PlaceholderAPI") {
+                        required = false
+                    }
+
+                    hangar("WorldEdit") {
+                        required = false
+                    }
+
+                    hangar("Towny") {
+                        required = false
+                    }
+                }
+            }
+        }
+    }
 }
