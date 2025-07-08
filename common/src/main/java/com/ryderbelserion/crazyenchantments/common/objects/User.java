@@ -2,11 +2,11 @@ package com.ryderbelserion.crazyenchantments.common.objects;
 
 import com.ryderbelserion.crazyenchantments.api.interfaces.IUser;
 import com.ryderbelserion.crazyenchantments.common.enums.Files;
-import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.FusionCore;
+import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
-import com.ryderbelserion.fusion.kyori.FusionKyori;
-import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -15,13 +15,13 @@ import java.util.Locale;
 
 public class User implements IUser {
 
-    private final FusionKyori kyori = (FusionKyori) FusionCore.Provider.get();
+    private final FusionCore fusion = FusionProvider.get();
 
-    private final FileManager fileManager = this.kyori.getFileManager();
+    private final FileManager fileManager = this.fusion.getFileManager();
 
-    private final KyoriLogger logger = this.kyori.getLogger();
+    private final ILogger logger = this.fusion.getLogger();
 
-    private final Path path = this.kyori.getPath();
+    private final Path path = this.fusion.getPath();
 
     private final Audience audience;
 

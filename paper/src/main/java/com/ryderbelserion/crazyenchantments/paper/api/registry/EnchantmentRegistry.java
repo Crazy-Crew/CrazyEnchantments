@@ -2,9 +2,9 @@ package com.ryderbelserion.crazyenchantments.paper.api.registry;
 
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.VeinMinerEnchant;
+import com.ryderbelserion.fusion.core.api.enums.FileType;
+import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
 import com.ryderbelserion.fusion.core.files.FileManager;
-import com.ryderbelserion.fusion.core.files.FileType;
-import com.ryderbelserion.fusion.kyori.components.KyoriLogger;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
@@ -28,12 +28,12 @@ public class EnchantmentRegistry {
     private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
 
     private final FileManager fileManager;
-    private final KyoriLogger logger;
+    private final ILogger logger;
     private final Path path;
 
-    public EnchantmentRegistry(@NotNull final FusionPaper paper, @NotNull final Path path) {
-        this.fileManager = paper.getFileManager();
-        this.logger = paper.getLogger();
+    public EnchantmentRegistry(@NotNull final FusionPaper fusion, @NotNull final Path path) {
+        this.fileManager = fusion.getFileManager();
+        this.logger = fusion.getLogger();
         this.path = path;
     }
 

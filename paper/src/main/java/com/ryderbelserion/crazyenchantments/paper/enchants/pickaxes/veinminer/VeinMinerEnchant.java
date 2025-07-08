@@ -3,7 +3,7 @@ package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
-import com.ryderbelserion.fusion.core.files.FileAction;
+import com.ryderbelserion.fusion.core.api.enums.FileAction;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.JsonCustomFile;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;

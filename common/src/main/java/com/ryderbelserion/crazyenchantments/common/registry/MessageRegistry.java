@@ -4,9 +4,9 @@ import com.ryderbelserion.crazyenchantments.api.interfaces.IMessage;
 import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IMessageRegistry;
 import com.ryderbelserion.crazyenchantments.common.constants.MessageKeys;
 import com.ryderbelserion.crazyenchantments.common.objects.Message;
-import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.FusionCore;
 import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
-import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
@@ -14,9 +14,9 @@ import java.util.Map;
 
 public class MessageRegistry implements IMessageRegistry {
 
-    private final FusionKyori kyori = (FusionKyori) FusionCore.Provider.get();
+    private final FusionCore fusion = FusionProvider.get();
 
-    private final ILogger logger = this.kyori.getLogger();
+    private final ILogger logger = this.fusion.getLogger();
 
     private final Map<Key, IMessage> messages = new HashMap<>();
 

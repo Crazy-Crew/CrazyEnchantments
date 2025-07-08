@@ -4,15 +4,14 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlatform;
 import com.ryderbelserion.crazyenchantments.common.constants.MessageKeys;
 import com.ryderbelserion.crazyenchantments.common.registry.MessageRegistry;
-import com.ryderbelserion.fusion.paper.api.commands.objects.AbstractPaperCommand;
-import com.ryderbelserion.fusion.paper.api.commands.objects.AbstractPaperContext;
+import com.ryderbelserion.fusion.paper.api.commands.objects.PaperCommand;
+import com.ryderbelserion.fusion.paper.api.commands.objects.PaperCommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
-public class CommandReload extends AbstractPaperCommand {
+public class CommandReload extends PaperCommand {
 
     private final CrazyEnchantmentsPlatform platform;
     private final MessageRegistry messageRegistry;
@@ -23,7 +22,7 @@ public class CommandReload extends AbstractPaperCommand {
     }
 
     @Override
-    public void execute(@NotNull final AbstractPaperContext context) {
+    public void execute(@NotNull final PaperCommandContext context) {
         this.platform.reload();
 
         this.messageRegistry.getMessage(MessageKeys.reload_plugin).send(context.getCommandSender());
@@ -39,15 +38,10 @@ public class CommandReload extends AbstractPaperCommand {
         return Commands.literal("reload")
                 .requires(this::requirement)
                 .executes(context -> {
-                    execute(new AbstractPaperContext(context));
+                    execute(new PaperCommandContext(context));
 
                     return com.mojang.brigadier.Command.SINGLE_SUCCESS;
                 }).build();
-    }
-
-    @Override
-    public @NotNull final PermissionDefault getPermissionMode() {
-        return PermissionDefault.OP;
     }
 
     @Override

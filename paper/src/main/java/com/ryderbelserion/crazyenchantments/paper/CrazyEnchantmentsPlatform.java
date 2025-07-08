@@ -5,7 +5,7 @@ import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
-import com.ryderbelserion.fusion.kyori.enums.Support;
+import com.ryderbelserion.fusion.core.api.enums.Support;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -59,7 +59,7 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
 
     @Override
     public void reload() {
-        this.fusion.reload(false);
+        this.fusion.reload();
 
         super.reload();
 

@@ -5,10 +5,10 @@ import com.ryderbelserion.crazyenchantments.api.interfaces.IMessage;
 import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.common.enums.Files;
-import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.FusionCore;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
-import com.ryderbelserion.fusion.kyori.FusionKyori;
-import com.ryderbelserion.fusion.kyori.utils.StringUtils;
+import com.ryderbelserion.fusion.core.api.utils.StringUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class Message implements IMessage {
 
-    private final FusionKyori kyori = (FusionKyori) FusionCore.Provider.get();
+    private final FusionCore fusion = FusionProvider.get();
 
     private final CrazyEnchantments chatManager = (CrazyEnchantments) CrazyEnchantmentsProvider.getInstance();
     private final CommentedConfigurationNode config = Files.config.getConfig();
@@ -93,7 +93,7 @@ public class Message implements IMessage {
     private @NotNull Component parse(@NotNull final String message, @NotNull final Audience audience, @NotNull final Map<String, String> placeholders) {
         placeholders.putIfAbsent("{prefix}", this.config.node("root", "prefix").getString("<blue>[<gold>ChatManager<blue>] <reset>"));
 
-        return this.kyori.color(audience, message, placeholders);
+        return this.fusion.color(audience, message, placeholders);
     }
 
     private @NotNull List<String> getStringList(@NotNull final CommentedConfigurationNode node) {
