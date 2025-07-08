@@ -1,12 +1,15 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
+import com.ryderbelserion.crazyenchantments.common.utils.ConfigUtils;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.core.api.enums.FileAction;
+import com.ryderbelserion.fusion.core.api.utils.StringUtils;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.types.JsonCustomFile;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
 import io.papermc.paper.registry.tag.TagKey;
@@ -32,11 +35,13 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     private final EnchantmentRegistry registry;
     private final FileManager fileManager;
+    private final FusionPaper fusion;
     private final Path path;
 
-    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry, @NotNull final FileManager fileManager, @NotNull final Path path) {
+    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry, @NotNull final FusionPaper fusion, @NotNull final FileManager fileManager, @NotNull final Path path) {
         this.fileManager = fileManager;
         this.registry = registry;
+        this.fusion = fusion;
         this.path = path;
 
         build();
@@ -117,7 +122,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public final Component getDescription() {
-        return Component.translatable("crazyenchantments.enchant.veinminer", "Veinminer");
+        return this.fusion.color(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
     }
 
     @Override

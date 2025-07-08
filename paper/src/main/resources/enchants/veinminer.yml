@@ -7,6 +7,10 @@ enchant:
     # The name of the enchantment
     name: '<gold>Veinminer'
   # The max level
+    # The description of the enchantment.
+    description:
+      - "<yellow>Mines all blocks connected to a vein."
+  # The max level.
   max-level: 1
   # The weight
   weight: 1

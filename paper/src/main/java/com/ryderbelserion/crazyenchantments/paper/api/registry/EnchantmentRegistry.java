@@ -28,19 +28,21 @@ public class EnchantmentRegistry {
     private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
 
     private final FileManager fileManager;
+    private final FusionPaper fusion;
     private final ILogger logger;
     private final Path path;
 
     public EnchantmentRegistry(@NotNull final FusionPaper fusion, @NotNull final Path path) {
-        this.fileManager = fusion.getFileManager();
-        this.logger = fusion.getLogger();
+        this.fusion = fusion;
+        this.fileManager = this.fusion.getFileManager();
+        this.logger = this.fusion.getLogger();
         this.path = path;
     }
 
     public void init() { // runs on startup
         this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML, new ArrayList<>(), null).addFolder(this.path.resolve("enchants"), FileType.YAML, new ArrayList<>(), null);
 
-        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fileManager, this.path));
+        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fusion, this.fileManager, this.path));
     }
 
     public void reload() { // runs on reload in case they deleted a static file.
