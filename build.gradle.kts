@@ -14,7 +14,7 @@ val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Cr
 val minecraft = libs.versions.minecraft.get()
 val versions = listOf(minecraft)
 
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyenchantments.get();
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyenchantments.get()
 rootProject.description = "Adds custom enchantments to your server!"
 rootProject.group = "com.ryderbelserion.crazyenchantments"
 
