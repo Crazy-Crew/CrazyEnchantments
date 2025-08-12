@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
 import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
 import com.badbones69.crazyenchantments.paper.commands.TinkerCommand;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
-import com.badbones69.crazyenchantments.paper.controllers.CommandChecker;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.ArmorEnchantments;
@@ -128,7 +127,6 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new AuraListener(), this);
 
         this.pluginManager.registerEvents(new LostBookController(), this);
-        this.pluginManager.registerEvents(new CommandChecker(), this);
 
         this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
