@@ -7,7 +7,7 @@ authors:
   - TDL
 
 version: '${version}'
-api-version: '${apiVersion}'
+api-version: '${minecraft}'
 description: '${description}'
 folia-supported: true
 
