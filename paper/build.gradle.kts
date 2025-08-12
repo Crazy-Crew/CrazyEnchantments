@@ -1,32 +1,27 @@
 plugins {
-    alias(libs.plugins.paperweight)
-
-    alias(libs.plugins.runPaper)
-    alias(libs.plugins.shadow)
+    `config-paper`
 }
 
-base {
-    archivesName.set(rootProject.name)
-}
+project.group = "${rootProject.group}.paper"
 
 repositories {
-    maven("https://repo.papermc.io/repository/maven-public")
+    maven("https://repo.md-5.net/content/repositories/snapshots/")
 
-    maven("https://repo.md-5.net/content/repositories/snapshots")
+    maven("https://ci.ender.zone/plugin/repository/everything/")
 
-    maven("https://ci.ender.zone/plugin/repository/everything")
+    maven("https://repo.glaremasters.me/repository/towny/")
 
-    maven("https://repo.glaremasters.me/repository/towny")
+    maven("https://repo.bg-software.com/repository/api/")
 
-    maven("https://repo.bg-software.com/repository/api")
-
-    maven("https://maven.enginehub.org/repo")
-
-    maven("https://repo.oraxen.com/releases")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.paper)
+    //implementation(project(":common"))
+
+    implementation(libs.fusion.paper)
+
+    implementation(libs.metrics)
 
     compileOnly(libs.informative.annotations)
 
@@ -35,8 +30,6 @@ dependencies {
     }
 
     compileOnly(libs.griefprevention)
-
-    compileOnly(libs.oraxen)
 
     compileOnly(libs.worldguard)
     compileOnly(libs.worldedit)
@@ -49,26 +42,32 @@ dependencies {
         exclude("com.darkblade12")
     }
 
+    compileOnly(libs.plotsquared)
+
+    compileOnly(libs.skyblock)
+
+    compileOnly(libs.paster)
+
     compileOnly(libs.towny)
 
     compileOnly(libs.lands)
 
-    compileOnly(libs.paster)
-
-    compileOnly(libs.skyblock)
-
-    compileOnly(libs.plotsquared)
-
     compileOnly(libs.mcmmo)
 }
 
-val component: SoftwareComponent = components["java"]
-
-paperweight {
-    paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
-}
-
 tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+
+    shadowJar {
+        listOf(
+            "org.bstats"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
+    }
+
     configurations.all { //todo() FIX ME later, fucking forced dependencies, give me a fucking break
         resolutionStrategy {
             force("org.apache.logging.log4j:log4j-bom:2.24.1")
@@ -78,61 +77,18 @@ tasks {
         }
     }
 
-    publishing {
-        repositories {
-            maven {
-                url = uri("https://repo.crazycrew.us/releases")
-
-                credentials {
-                    this.username = System.getenv("gradle_username")
-                    this.password = System.getenv("gradle_password")
-                }
-            }
-        }
-
-        publications{
-            create<MavenPublication>("maven") {
-                groupId = rootProject.group.toString()
-                artifactId = "${rootProject.name.lowercase()}-paper-api"
-                version = rootProject.version.toString()
-
-                from(component)
-            }
-        }
-    }
+    runPaper.folia.registerTask()
 
     runServer {
         jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+        jvmArgs("-Dcom.mojang.eula.agree=true")
+
+        downloadPlugins {
+            modrinth("luckperms", "v5.5.0-bukkit")
+        }
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
         minecraftVersion(libs.versions.minecraft.get())
-    }
-
-    assemble {
-        doLast {
-            copy {
-                from(shadowJar.get())
-                into(rootProject.projectDir.resolve("jars"))
-            }
-        }
-    }
-
-    shadowJar {
-        archiveBaseName.set(rootProject.name)
-        archiveClassifier.set("")
-    }
-
-    processResources {
-        inputs.properties("name" to rootProject.name)
-        inputs.properties("version" to project.version)
-        inputs.properties("group" to "${project.group}.paper")
-        inputs.properties("description" to project.description)
-        inputs.properties("apiVersion" to libs.versions.minecraft.get())
-        inputs.properties("website" to "https://modrinth.com/plugin/crazyenchantments")
-
-        filesMatching("plugin.yml") {
-            expand(inputs.properties)
-        }
     }
 }
