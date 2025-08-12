@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -48,9 +47,6 @@ public class Methods {
     // Plugin Support.
     @NotNull
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
-
-    @NotNull
-    private final OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
 
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
@@ -289,36 +285,24 @@ public class Methods {
     }
 
     public int getMaxDurability(@NotNull ItemStack item) {
-        if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) return item.getType().getMaxDurability();
-
-        return this.oraxenSupport.getMaxDurability(item);
+        return item.getType().getMaxDurability();
     }
 
     public int getDurability(@NotNull ItemStack item) {
-        if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta instanceof Damageable) return ((Damageable) item.getItemMeta()).getDamage();
-            return 0;
-        }
-
-        return this.oraxenSupport.getDamage(item);
+        ItemMeta meta = item.getItemMeta();
+        if (meta instanceof Damageable) return ((Damageable) item.getItemMeta()).getDamage();
+        return 0;
     }
 
     public void setDurability(@NotNull ItemStack item, int newDamage) {
         newDamage = Math.max(newDamage, 0);
 
-        if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
-            ItemMeta meta = item.getItemMeta();
+        ItemMeta meta = item.getItemMeta();
 
-            if (meta instanceof Damageable damageable) {
-                damageable.setDamage(newDamage);
-                item.setItemMeta(damageable);
-            }
-
-            return;
+        if (meta instanceof Damageable damageable) {
+            damageable.setDamage(newDamage);
+            item.setItemMeta(damageable);
         }
-
-        this.oraxenSupport.setDamage(item, newDamage);
     }
 
     public void removeDurability(@NotNull ItemStack item, @NotNull Player player) {

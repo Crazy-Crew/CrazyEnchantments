@@ -23,7 +23,6 @@ import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.SkullCreator;
 import com.badbones69.crazyenchantments.paper.support.claims.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +47,6 @@ public class Starter {
     private SuperiorSkyBlockSupport superiorSkyBlockSupport;
     private PluginSupport pluginSupport;
     private VaultSupport vaultSupport;
-    private OraxenSupport oraxenSupport;
 
     // Plugin Managers.
     private ArmorEnchantmentManager armorEnchantmentManager;
@@ -75,8 +73,6 @@ public class Starter {
         this.pluginSupport.initializeWorldGuard();
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
-
-        if (SupportedPlugins.ORAXEN.isPluginLoaded()) this.oraxenSupport = new OraxenSupport();
 
         // Methods
         this.methods = new Methods();
@@ -160,10 +156,6 @@ public class Starter {
         if (this.superiorSkyBlockSupport == null) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
         return this.superiorSkyBlockSupport;
-    }
-
-    public OraxenSupport getOraxenSupport() {
-        return this.oraxenSupport;
     }
 
     // Economy Management.
