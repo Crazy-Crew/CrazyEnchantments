@@ -31,6 +31,7 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -38,6 +39,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class CrazyEnchantments extends JavaPlugin {
 
@@ -51,8 +53,12 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private final BossBarController bossBarController = new BossBarController(this);
 
+    private FusionPaper fusion;
+
     @Override
     public void onEnable() {
+        this.fusion = new FusionPaper(this);
+
         this.starter = new Starter();
         this.starter.run();
 
@@ -183,5 +189,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public boolean isLogging() {
         return true;
+    }
+
+    public @NotNull final FusionPaper getFusion() {
+        return this.fusion;
     }
 }
