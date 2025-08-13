@@ -49,7 +49,7 @@ public class ProtectionCrystalListener implements Listener {
 
         if (this.protectionCrystalSettings.isProtectionCrystal(item)) return;
 
-        if (ProtectionCrystalSettings.isProtected(item)) return;
+        if (ProtectionCrystalSettings.isProtected(item.getPersistentDataContainer())) return;
 
         if (item.getAmount() > 1 || crystalItem.getAmount() > 1) {
             player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
@@ -71,7 +71,7 @@ public class ProtectionCrystalListener implements Listener {
         List<ItemStack> savedItems = new ArrayList<>();
 
         for (ItemStack item : event.getDrops()) {
-            if (ProtectionCrystalSettings.isProtected(item) && this.protectionCrystalSettings.isProtectionSuccessful(player)) savedItems.add(item);
+            if (ProtectionCrystalSettings.isProtected(item.getPersistentDataContainer()) && this.protectionCrystalSettings.isProtectionSuccessful(player)) savedItems.add(item);
         }
 
         savedItems.forEach(item -> event.getDrops().remove(item));
@@ -101,10 +101,6 @@ public class ProtectionCrystalListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCrystalClick(PlayerInteractEvent event) {
-        ItemStack item = this.methods.getItemInHand(event.getPlayer());
-
-        if (!item.hasItemMeta()) return;
-
-        if (this.protectionCrystalSettings.isProtectionCrystal(item)) event.setCancelled(true);
+        if (this.protectionCrystalSettings.isProtectionCrystal(this.methods.getItemInHand(event.getPlayer()))) event.setCancelled(true);
     }
 }

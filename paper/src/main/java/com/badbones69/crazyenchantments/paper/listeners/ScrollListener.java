@@ -13,11 +13,12 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.google.gson.Gson;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,16 +29,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import org.jetbrains.annotations.NotNull;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
@@ -144,76 +139,58 @@ public class ScrollListener implements Listener {
 
     }
 
-    private boolean checkScroll(ItemStack scroll, Player player, PlayerInteractEvent event) {
-        if (scroll.isEmpty() || !scroll.hasItemMeta()) return false;
-        PersistentDataContainer container = scroll.getItemMeta().getPersistentDataContainer();
+    private boolean checkScroll(final ItemStack scroll, final Player player, final PlayerInteractEvent event) {
+        if (scroll.isEmpty()) return false;
+
+        final PersistentDataContainerView container = scroll.getPersistentDataContainer();
+
         if (!container.has(DataKeys.scroll.getNamespacedKey())) return false;
 
-        String data = container.get(DataKeys.scroll.getNamespacedKey(), PersistentDataType.STRING);
+        final String data = container.get(DataKeys.scroll.getNamespacedKey(), PersistentDataType.STRING);
 
-        assert data != null;
+        if (data == null) return false;
 
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
+
             player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {
             event.setCancelled(true);
+
             return true;
         }
+
         return false;
     }
 
-    @Deprecated
-    private ItemStack orderNewEnchantments(ItemStack item) {
-        HashMap<CEnchantment, Integer> enchantmentLevels = new HashMap<>();
-        HashMap<CEnchantment, Integer> categories = new HashMap<>();
-        List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
-
-        for (Map.Entry<CEnchantment, Integer> enchantment : this.enchantmentBookSettings.getEnchantments(item).entrySet()) {
-            enchantmentLevels.put(enchantment.getKey(), enchantment.getValue());
-            categories.put(enchantment.getKey(), EnchantUtils.getHighestEnchantmentCategory(enchantment.getKey()).getRarity());
-            newEnchantmentOrder.add(enchantment.getKey());
-        }
-
-        orderInts(newEnchantmentOrder, categories);
-        ItemMeta newMeta = item.getItemMeta();
-
-        List<Component> newLore = new ArrayList<>();
-
-        newEnchantmentOrder.forEach(enchantment ->
-                newLore.add(ColorUtils.legacyTranslateColourCodes(
-                        enchantment.getCustomName() + " " + NumberUtils.convertLevelString(enchantmentLevels.get(enchantment)))));
-
-        newMeta.lore(newLore);
-
-        useSuffix(item, newMeta, newEnchantmentOrder);
-
-        item.setItemMeta(newMeta);
-        return item;
-    }
-
     private ItemStack newOrderNewEnchantments(ItemStack item) {
-        Gson gson = new Gson();
+        final FileConfiguration configuration = Files.CONFIG.getFile();
 
-        ItemMeta meta = item.getItemMeta();
-        List<Component> lore = item.lore();
-        assert meta != null && lore != null;
+        final List<Component> lore = item.lore();
 
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        Enchant data = gson.fromJson(container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
-        boolean addSpaces = Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
-        List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
-        Map<CEnchantment, Integer> enchantments = new HashMap<>();
-        List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
+        final PersistentDataContainerView container = item.getPersistentDataContainer();
+
+        final Enchant data = Methods.getGson().fromJson(container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
+
+        final boolean addSpaces = configuration.getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
+
+        final List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
+
+        final Map<CEnchantment, Integer> enchantments = new HashMap<>();
+
+        List<String> order = configuration.getStringList("Settings.TransmogScroll.Lore-Order");
+
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
         if (data == null) return item; // Only order if it has CE_Enchants
 
-        for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
+        for (final CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
-            enchantments.put(enchantment,ColorUtils.stripStringColour((enchantment.getCustomName() + " " +
-                    NumberUtils.toRoman(data.getLevel(enchantment.getName())))).length());
+
+            enchantments.put(enchantment,ColorUtils.stripStringColour((enchantment.getCustomName() + " " + NumberUtils.toRoman(data.getLevel(enchantment.getName())))).length());
+
             newEnchantmentOrder.add(enchantment);
         }
 
@@ -221,10 +198,13 @@ public class ScrollListener implements Listener {
 
         List<Component> enchantLore = newEnchantmentOrder.stream().map(i ->
                 ColorUtils.legacyTranslateColourCodes("%s %s".formatted(i.getCustomName(), NumberUtils.toRoman(data.getLevel(i.getName()))))).collect(Collectors.toList());
-        List<Component> normalLore = stripNonNormalLore(lore, newEnchantmentOrder);
+
+        List<Component> normalLore = stripNonNormalLore(lore == null ? new ArrayList<>() : lore, newEnchantmentOrder);
+
         List<Component> protectionLore = getAllProtectionLore(container);
 
         List<Component> newLore = new ArrayList<>();
+
         boolean wasEmpty = true;
 
         for (String selection : order) {
@@ -232,29 +212,34 @@ public class ScrollListener implements Listener {
                 case "CE_Enchantments" -> {
                     if (addSpaces && !wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(enchantLore);
+
                     wasEmpty = enchantLore.isEmpty();
                 }
+
                 case "Protection" -> {
                     if (addSpaces && !wasEmpty && !protectionLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(protectionLore);
+
                     wasEmpty = protectionLore.isEmpty();
                 }
+
                 case "Normal_Lore" -> {
                     if (addSpaces && !wasEmpty && !normalLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(normalLore);
+
                     wasEmpty = normalLore.isEmpty();
                 }
             }
         }
 
-        useSuffix(item, meta, newEnchantmentOrder);
+        useSuffix(item, newEnchantmentOrder);
 
-        meta.lore(newLore);
-        item.setItemMeta(meta);
+        item.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(newLore).build());
+
         return item;
     }
 
-    private List<Component> getAllProtectionLore(PersistentDataContainer container) {
+    private List<Component> getAllProtectionLore(@NotNull PersistentDataContainerView container) {
         List<Component> lore = new ArrayList<>();
 
         if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
@@ -284,25 +269,28 @@ public class ScrollListener implements Listener {
         return lore;
     }
 
-    private void useSuffix(ItemStack item, ItemMeta meta, List<CEnchantment> newEnchantmentOrder) {
+    private void useSuffix(final ItemStack item, final List<CEnchantment> newEnchantmentOrder) {
         if (this.useSuffix) {
-            String newName = meta.hasDisplayName() ? ColorUtils.toLegacy(meta.displayName()) :
+            final boolean hasName = item.hasData(DataComponentTypes.ITEM_NAME);
+
+            String newName = hasName ? ColorUtils.toLegacy(item.getData(DataComponentTypes.ITEM_NAME)) :
                     "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
 
-            if (meta.hasDisplayName()) {
+            if (hasName) {
                 for (int i = 0; i <= 100; i++) {
                     String suffixWithAmount = this.suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
 
                     if (!newName.endsWith(suffixWithAmount)) continue;
 
                     newName = newName.substring(0, newName.length() - suffixWithAmount.length());
+
                     break;
                 }
             }
 
             String amount = String.valueOf(this.countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
 
-            meta.displayName(ColorUtils.legacyTranslateColourCodes(newName + this.suffix.replace("%Amount%", amount).replace("%amount%", amount)));
+            item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.suffix.replace("%Amount%", amount).replace("%amount%", amount)));
         }
     }
 

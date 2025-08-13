@@ -17,8 +17,9 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -44,7 +45,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -97,30 +97,30 @@ public class ArmorEnchantments implements Listener {
         new FoliaScheduler(this.plugin, null, player) {
             @Override
             public void run() {
-                newUpdateEffects(player, air, air);
+                updateEffects(player, air, air);
             }
         }.runDelayed(10);
     }
 
     @EventHandler
-    public void onEquip(PlayerArmorChangeEvent event) {
-        NamespacedKey key = DataKeys.enchantments.getNamespacedKey();
-        Player player = event.getPlayer();
-        ItemStack newItem = event.getNewItem();
-        ItemStack oldItem = event.getOldItem();
-        boolean oldHasMeta = oldItem.hasItemMeta();
-        boolean newHasMeta = newItem.hasItemMeta();
+    public void onEquip(EntityEquipmentChangedEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
 
-        // Return if no enchants would effect the player with the change.
-        if ((!newHasMeta || !newItem.getItemMeta().getPersistentDataContainer().has(key))
-             && (!oldHasMeta || !oldItem.getItemMeta().getPersistentDataContainer().has(key))) return;
+        final NamespacedKey key = DataKeys.enchantments.getNamespacedKey();
 
-        // Added to prevent armor change event being called on damage.
-        if (newHasMeta && oldHasMeta
-            && Objects.equals(newItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING),
-                              oldItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING))) return;
+        event.getEquipmentChanges().forEach((slot, action) -> {
+            final ItemStack newItem = action.newItem();
+            final ItemStack oldItem = action.oldItem();
 
-        newUpdateEffects(player, newItem, oldItem);
+            final PersistentDataContainerView newView = newItem.getPersistentDataContainer();
+            final PersistentDataContainerView oldView = oldItem.getPersistentDataContainer();
+
+            if (!newView.has(key) && oldView.has(key)) return;
+
+            if (Objects.equals(newView.get(key, PersistentDataType.STRING), oldView.get(key, PersistentDataType.STRING))) return;
+
+            updateEffects(player, newItem, oldItem);
+        });
     }
 
     /**
@@ -131,8 +131,8 @@ public class ArmorEnchantments implements Listener {
      * @param newItem The new item equipped.
      * @param oldItem The item that had previously been equipped.
      */
-    private void newUpdateEffects(@NotNull Player player, @NotNull ItemStack newItem, @NotNull ItemStack oldItem) {
-        Map<CEnchantment, Integer> topEnchants = currentEnchantsOnPlayerAdded(player, newItem);
+    private void updateEffects(@NotNull Player player, @NotNull ItemStack newItem, @NotNull ItemStack oldItem) {
+        final Map<CEnchantment, Integer> topEnchants = getCurrentEnchants(player, newItem);
 
         // Remove all effects that they no longer should have from the armor.
         if (!oldItem.isEmpty()) {
@@ -145,14 +145,16 @@ public class ArmorEnchantments implements Listener {
         }
 
         // Add all new effects that said player should now have.
-        for (Map.Entry<PotionEffectType, Integer> effect : getTopPotionEffects(topEnchants).entrySet()) {
-            for (PotionEffect currentEffect : player.getActivePotionEffects()) {
+        for (final Map.Entry<PotionEffectType, Integer> effect : getTopPotionEffects(topEnchants).entrySet()) {
+            for (final PotionEffect currentEffect : player.getActivePotionEffects()) {
                 if (!currentEffect.getType().equals(effect.getKey())) continue;
                 if (currentEffect.getAmplifier() >= effect.getValue() - 1) break;
 
                 player.removePotionEffect(effect.getKey());
+
                 break;
             }
+
             player.addPotionEffect(new PotionEffect(effect.getKey(), -1, effect.getValue() - 1));
         }
     }
@@ -183,8 +185,8 @@ public class ArmorEnchantments implements Listener {
      * @return Returns a map of all current active enchants on the specified player.
      */
     @NotNull
-    private HashMap<CEnchantment, Integer> currentEnchantsOnPlayerAdded(@NotNull Player player, @NotNull ItemStack newItem) {
-        HashMap<CEnchantment, Integer> toAdd = getTopEnchantsOnPlayer(player);
+    private Map<CEnchantment, Integer> getCurrentEnchants(@NotNull Player player, @NotNull ItemStack newItem) {
+        Map<CEnchantment, Integer> toAdd = getUpperEnchants(player);
 
         if (!newItem.isEmpty()) {
             this.enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
@@ -202,7 +204,7 @@ public class ArmorEnchantments implements Listener {
      * @return A list of {@link CEnchantments}'s on the player.
      */
     @NotNull
-    private HashMap<CEnchantment, Integer> getTopEnchantsOnPlayer(@NotNull Player player) {
+    private HashMap<CEnchantment, Integer> getUpperEnchants(@NotNull Player player) {
         HashMap<CEnchantment, Integer> topEnchants = new HashMap<>();
 
         Arrays.stream(player.getEquipment().getArmorContents())
@@ -399,8 +401,8 @@ public class ArmorEnchantments implements Listener {
 
             if (EnchantUtils.isEventActive(CEnchantments.SELFDESTRUCT, player, item, enchantments)) {
                 this.methods.explode(player);
-                List<ItemStack> items = event.getDrops().stream().filter(drop ->
-                        ProtectionCrystalSettings.isProtected(drop) && this.protectionCrystalSettings.isProtectionSuccessful(player)).toList();
+
+                List<ItemStack> items = event.getDrops().stream().filter(drop -> ProtectionCrystalSettings.isProtected(drop.getPersistentDataContainer()) && this.protectionCrystalSettings.isProtectionSuccessful(player)).toList();
 
                 event.getDrops().clear();
                 event.getDrops().addAll(items);

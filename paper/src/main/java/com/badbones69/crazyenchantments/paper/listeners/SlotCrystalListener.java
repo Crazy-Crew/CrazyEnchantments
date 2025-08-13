@@ -13,8 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
@@ -39,11 +37,7 @@ public class SlotCrystalListener implements Listener {
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
                 .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
-                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).build();
-        ItemMeta meta = slot_crystal.getItemMeta();
-        meta.getPersistentDataContainer().set(DataKeys.slot_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-
-        slot_crystal.setItemMeta(meta);
+                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -83,9 +77,9 @@ public class SlotCrystalListener implements Listener {
     }
 
     private boolean isSlotCrystal(ItemStack crystalItem) {
-        if (crystalItem == null || !crystalItem.hasItemMeta() || crystalItem.isEmpty()) return false;
+        if (crystalItem == null || crystalItem.isEmpty()) return false;
 
-        return crystalItem.getItemMeta().getPersistentDataContainer().has(DataKeys.slot_crystal.getNamespacedKey());
+        return crystalItem.getPersistentDataContainer().has(DataKeys.slot_crystal.getNamespacedKey());
     }
 
     public ItemStack getSlotCrystal() {

@@ -52,7 +52,7 @@ public class GKitzItem {
         ItemStack item = this.itemBuilder.build();
 
         for (Map.Entry<CEnchantment, Integer> enchantment : this.ceEnchantments.entrySet()) {
-            item = this.crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
+            this.crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
         }
 
         return item;

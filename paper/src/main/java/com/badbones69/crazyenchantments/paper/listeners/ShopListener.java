@@ -169,7 +169,7 @@ public class ShopListener implements Listener {
                     }
 
                     case INFO -> MenuManager.openInfoMenu(player);
-                    case PROTECTION_CRYSTAL -> player.getInventory().addItem(this.protectionCrystalSettings.getCrystals());
+                    case PROTECTION_CRYSTAL -> player.getInventory().addItem(this.protectionCrystalSettings.getCrystal());
                     case SCRAMBLER -> player.getInventory().addItem(this.scramblerListener.getScramblers());
                     case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                     case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());

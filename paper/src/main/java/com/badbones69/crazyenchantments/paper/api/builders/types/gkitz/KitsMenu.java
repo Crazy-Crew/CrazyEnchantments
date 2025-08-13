@@ -13,6 +13,9 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -21,7 +24,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
@@ -41,12 +43,12 @@ public class KitsMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        FileConfiguration configuration = Files.GKITZ.getFile();
+        final FileConfiguration configuration = Files.GKITZ.getFile();
 
         for (String value : configuration.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
 
-            for (String option : value.split(", ")) {
+            for (final String option : value.split(", ")) {
                 if (option.contains("Slot:")) {
                     slot = Integer.parseInt(option.replace("Slot:", ""));
 
@@ -59,25 +61,25 @@ public class KitsMenu extends InventoryBuilder {
             getInventory().setItem(slot, ItemBuilder.convertString(value).build());
         }
 
-        CEPlayer cePlayer = this.crazyManager.getCEPlayer(getPlayer().getUniqueId());
+        final CEPlayer cePlayer = this.crazyManager.getCEPlayer(getPlayer().getUniqueId());
 
-        for (GKitz kit : this.crazyManager.getGKitz()) {
-            ItemStack displayItem = kit.getDisplayItem().clone();
-            ItemMeta itemMeta = displayItem.getItemMeta();
-            List<Component> lore = new ArrayList<>();
-            GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
+        for (final GKitz kit : this.crazyManager.getGKitz()) {
+            final ItemStack displayItem = kit.getDisplayItem().clone();
+            final List<Component> lore = new ArrayList<>();
+            final GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
 
-            if (displayItem.lore() != null) {
-                for (Component line : displayItem.lore()) {
+
+            final List<Component> currentLore = displayItem.lore();
+
+            if (currentLore != null) {
+                for (Component line : currentLore) {
                     String legacyLoreLine = ColorUtils.toLegacy(line);
-                    if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*"))
-                        line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
+                    if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
                     lore.add(line);
                 }
             }
 
-            itemMeta.lore(lore);
-            displayItem.setItemMeta(itemMeta);
+            displayItem.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
 
             getInventory().setItem(kit.getSlot() - 1, displayItem);
         }
@@ -101,7 +103,7 @@ public class KitsMenu extends InventoryBuilder {
 
             if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
 
-            ItemStack currentItem = event.getCurrentItem();
+            final ItemStack currentItem = event.getCurrentItem();
 
             if (currentItem == null) return;
 
@@ -116,34 +118,36 @@ public class KitsMenu extends InventoryBuilder {
 
             event.setCancelled(true);
 
-            Player player = holder.getPlayer();
+            final Player player = holder.getPlayer();
 
-            ItemStack itemStack = event.getCurrentItem();
+            final ItemStack itemStack = event.getCurrentItem();
 
-            if (itemStack == null || itemStack.isEmpty() || !itemStack.hasItemMeta()) return;
+            if (itemStack == null || itemStack.isEmpty()) return;
 
-            CEPlayer cePlayer = this.crazyManager.getCEPlayer(player.getUniqueId());
+            final CEPlayer cePlayer = this.crazyManager.getCEPlayer(player.getUniqueId());
 
             if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
 
+            final PersistentDataContainerView container = itemStack.getPersistentDataContainer();
 
-            String kitName = itemStack.getItemMeta().getPersistentDataContainer().get(DataKeys.gkit_type.getNamespacedKey(), PersistentDataType.STRING);
+            if (!container.has(DataKeys.gkit_type.getNamespacedKey())) return;
+
+            final String kitName = container.get(DataKeys.gkit_type.getNamespacedKey(), PersistentDataType.STRING);
 
             if (kitName == null) return;
 
-            GKitz kit = this.crazyManager.getGKitFromName(kitName);
+            final GKitz kit = this.crazyManager.getGKitFromName(kitName);
 
             if (event.getAction() == InventoryAction.PICKUP_HALF) {
-
-                int amountOfItems = kit.getPreviewItems().size() + 1; // Add 1 to account for the back button.
-                int slots = Math.min(((amountOfItems / 9) + (amountOfItems % 9 > 0 ? 1 : 0)) * 9, 54);
+                final int amountOfItems = kit.getPreviewItems().size() + 1; // Add 1 to account for the back button.
+                final int slots = Math.min(((amountOfItems / 9) + (amountOfItems % 9 > 0 ? 1 : 0)) * 9, 54);
 
                 MenuManager.openKitsPreviewMenu(player, slots, kit);
 
                 return;
             }
 
-            Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
+            final Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
 
             if (cePlayer.hasGkitPermission(kit)) {
                 if (cePlayer.canUseGKit(kit)) {

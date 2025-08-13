@@ -22,7 +22,11 @@ public enum DataKeys {
     limit_reducer("Limit_Reducer", PersistentDataType.INTEGER),
     slot_crystal("Slot_Crystal", PersistentDataType.BOOLEAN),
     gkit_type("gkit", PersistentDataType.STRING),
-    random_number("random_number", PersistentDataType.STRING);
+    random_number("random_number", PersistentDataType.STRING),
+
+    trade_button("trade_button", PersistentDataType.STRING),
+    back_left("back_left", PersistentDataType.STRING),
+    back_right("back_right", PersistentDataType.STRING);
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);

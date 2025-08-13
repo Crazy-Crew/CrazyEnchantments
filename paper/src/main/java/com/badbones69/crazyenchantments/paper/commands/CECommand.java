@@ -43,11 +43,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 //TODO() Update commands
@@ -116,48 +113,7 @@ public class CECommand implements CommandExecutor {
 
                 return true;
             }
-            case "updateenchants" -> {
 
-                if (!isPlayer) return true;
-                if (!hasPermission(sender, "updateenchants")) return true;
-
-                Gson gson = new Gson();
-                Player player = (Player) sender;
-                Enchant enchants = new Enchant(null);
-                ArrayList<Component> lore = new ArrayList<>();
-                ItemStack item = player.getInventory().getItemInMainHand();
-                if (!item.hasItemMeta() || item.lore() == null) return true;
-                ItemMeta meta = item.getItemMeta();
-
-                if (meta.getPersistentDataContainer().has(DataKeys.enchantments.getNamespacedKey())) {
-                    enchants = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
-                }
-
-                for (Component line : meta.lore()) {
-                    String strippedName = ColorUtils.toPlainText(line);
-                    boolean addedLine = false;
-
-                    for (CEnchantment activeEnchant : this.enchantmentBookSettings.getRegisteredEnchantments()) {
-                        if (!strippedName.toLowerCase().contains(ColorUtils.stripStringColour(activeEnchant.getCustomName()).toLowerCase()) &&
-                                !strippedName.toLowerCase().contains(activeEnchant.getName().toLowerCase())) continue;
-
-                        if (enchants.hasEnchantment(activeEnchant.getName())) break;
-
-                        enchants.addEnchantment(activeEnchant.getName(), NumberUtils.convertLevelInteger(strippedName.split(" ")[strippedName.split(" ").length - 1]));
-                        lore.add(ColorUtils.legacyTranslateColourCodes(activeEnchant.getCustomName() + " " + NumberUtils.toRoman(enchants.getLevel(activeEnchant.getName()))));
-                        addedLine = true;
-                        break;
-                    }
-                    if (!addedLine) lore.add(line);
-                }
-
-                meta.lore(lore);
-                if (!enchants.isEmpty())
-                    meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(enchants));
-                item.setItemMeta(meta);
-                player.getInventory().setItemInMainHand(item);
-                return true;
-            }
             case "convert" -> {
                 if (hasPermission(sender, "convert")) {
                     sender.sendMessage(ColorUtils.color("""
@@ -581,7 +537,7 @@ public class CECommand implements CommandExecutor {
                     if (this.methods.isInventoryFull(player)) return true;
 
 
-                    this.methods.addItemToInventory(player, this.protectionCrystalSettings.getCrystals(amount));
+                    this.methods.addItemToInventory(player, this.protectionCrystalSettings.getCrystal(amount));
                     HashMap<String, String> placeholders = new HashMap<>();
                     placeholders.put("%Amount%", String.valueOf(amount));
                     placeholders.put("%Player%", player.getName());
@@ -773,11 +729,17 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (isVanilla) {
-                            ItemStack item = this.methods.getItemInHand(player).clone();
+                            final ItemStack item = this.methods.getItemInHand(player).clone();
+
                             item.addUnsafeEnchantment(vanillaEnchantment, Integer.parseInt(level));
+
                             this.methods.setItemInHand(player, item);
                         } else {
-                            this.methods.setItemInHand(player, this.crazyManager.addEnchantment(this.methods.getItemInHand(player), ceEnchantment, Integer.parseInt(level)));
+                            final ItemStack item = this.methods.getItemInHand(player).clone();
+
+                            this.crazyManager.addEnchantment(item, ceEnchantment, Integer.parseInt(level));
+
+                            this.methods.setItemInHand(player, item);
                         }
 
                         return true;

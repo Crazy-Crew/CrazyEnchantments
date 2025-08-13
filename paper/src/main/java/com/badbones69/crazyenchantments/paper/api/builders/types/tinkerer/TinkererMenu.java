@@ -4,14 +4,15 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -28,7 +29,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class TinkererMenu extends InventoryBuilder {
 
@@ -40,10 +40,10 @@ public class TinkererMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        ItemStack button = new ItemBuilder()
-                .setMaterial(Material.RED_STAINED_GLASS_PANE)
-                        .setName(this.configuration.getString("Settings.TradeButton"))
-                .setLore(this.configuration.getStringList("Settings.TradeButton-Lore")).build();
+        final ItemStack button = new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE)
+                .setName(this.configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
+                .setLore(this.configuration.getStringList("Settings.TradeButton-Lore"))
+                .addKey(DataKeys.trade_button.getNamespacedKey(), "").build();
 
         getInventory().setItem(0, button);
         getInventory().setItem(8, button);
@@ -62,7 +62,7 @@ public class TinkererMenu extends InventoryBuilder {
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-        private final Server server = this.plugin.getServer();
+        private final CurrencyAPI api = this.plugin.getStarter().getCurrencyAPI();
 
         private final Map<Integer, Integer> slots = TinkererManager.getSlots();
 
@@ -90,27 +90,24 @@ public class TinkererMenu extends InventoryBuilder {
 
             ItemStack current = event.getCurrentItem();
 
-            if (current == null || current.isEmpty() || !current.hasItemMeta()) return;
-
-            ItemStack button = new ItemBuilder()
-                    .setMaterial(Material.RED_STAINED_GLASS_PANE)
-                    .setName(this.configuration.getString("Settings.TradeButton"))
-                    .setLore(this.configuration.getStringList("Settings.TradeButton-Lore")).build();
+            if (current == null || current.isEmpty()) return;
 
             Inventory inventory = holder.getInventory();
             Inventory topInventory = player.getOpenInventory().getTopInventory();
             Inventory bottomInventory = player.getOpenInventory().getBottomInventory();
 
             // Recycling things.
-            if (Objects.equals(current, button)) {
+            if (current.getPersistentDataContainer().has(DataKeys.trade_button.getNamespacedKey())) {
                 int total = 0;
                 boolean toggle = false;
+
+                final Currency currency = Currency.getCurrency(this.configuration.getString("Settings.Currency", "Vault"));
 
                 for (Map.Entry<Integer, Integer> slot : this.slots.entrySet()) {
                     ItemStack reward = inventory.getItem(slot.getValue());
 
                     if (reward != null) {
-                        if (Currency.getCurrency(this.configuration.getString("Settings.Currency")) == Currency.VAULT) {
+                        if (currency == Currency.VAULT) {
                             total = TinkererManager.getTotalXP(inventory.getItem(slot.getKey()), this.configuration);
                         } else {
                             bottomInventory.addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
@@ -126,14 +123,7 @@ public class TinkererMenu extends InventoryBuilder {
                 player.closeInventory();
 
                 if (total != 0) {
-                    int finalTotal = total;
-
-                    new FoliaScheduler(this.plugin, null, player) {
-                        @Override
-                        public void run() {
-                            server.dispatchCommand(server.getConsoleSender(), "eco give " + player.getName() + " " + finalTotal);
-                        }
-                    }.execute();
+                    this.api.giveCurrency(player, currency, total);
                 }
 
                 if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());

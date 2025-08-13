@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,16 +25,18 @@ public class KitsManager {
 
         backRight = new ItemBuilder()
                 .setMaterial(file.getString(path + ".Back-Item.Right.Item", "NETHER_STAR"))
-                .setPlayerName(file.getString(path + ".Back-Item.Right.Player"))
+                .setPlayerName(file.getString(path + ".Back-Item.Right.Player", ""))
                 .setName(file.getString(path + ".Back-Item.Right.Name", "&7&l<<&b&lBack"))
                 .setLore(file.getStringList(path + ".Back-Item.Right.Lore"))
+                .addKey(DataKeys.back_right.getNamespacedKey(), "")
                 .build();
 
         backLeft = new ItemBuilder()
                 .setMaterial(file.getString(path + ".Back-Item.Left.Item", "NETHER_STAR"))
-                .setPlayerName(file.getString(path + ".Back-Item.Left.Player"))
+                .setPlayerName(file.getString(path + ".Back-Item.Left.Player", ""))
                 .setName(file.getString(path + ".Back-Item.Left.Name", "&b&lBack&7&l>>"))
                 .setLore(file.getStringList(path + ".Back-Item.Left.Lore"))
+                .addKey(DataKeys.back_left.getNamespacedKey(), "")
                 .build();
     }
 

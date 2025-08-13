@@ -6,14 +6,11 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.google.gson.Gson;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -91,19 +88,13 @@ public enum Dust {
     public ItemStack getDust(int amount) {
         return getDust(this.methods.percentPick(this.max, this.min), amount);
     }
-    
-    public ItemStack getDust(int percent, int amount) {
-        ItemStack item = itemBuilderDust.get(this).addLorePlaceholder("%Percent%", String.valueOf(percent)).setAmount(amount).build();
+
+    public ItemStack getDust(final int percent, final int amount) {
+        final ItemStack item = itemBuilderDust.get(this).addLorePlaceholder("%Percent%", String.valueOf(percent)).setAmount(amount).build();
 
         if (Objects.equals(getName(), FAILED_DUST.getName())) return item;
 
-        // PDC Start
-        Gson gson = new Gson();
-
-        ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), this.min, this.max, percent)));
-        item.setItemMeta(meta);
-        // PDC End
+        item.editPersistentDataContainer(container -> container.set(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(new DustData(getConfigName(), this.min, this.max, percent))));
 
         return item;
     }

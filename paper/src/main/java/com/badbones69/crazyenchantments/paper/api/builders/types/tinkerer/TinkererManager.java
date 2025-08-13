@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -16,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -44,13 +44,13 @@ public class TinkererManager {
 
         ItemStack item = mainHand ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
 
-        if (item.isEmpty() || !item.hasItemMeta()) return false;
+        if (item.isEmpty()) return false;
 
-        ItemMeta itemMeta = item.getItemMeta();
+        final PersistentDataContainerView container = item.getPersistentDataContainer();
 
-        if (!itemMeta.getPersistentDataContainer().has(DataKeys.experience.getNamespacedKey())) return false;
+        if (!container.has(DataKeys.experience.getNamespacedKey())) return false;
 
-        int amount = Integer.parseInt(item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.experience.getNamespacedKey(), PersistentDataType.STRING, "0"));
+        int amount = Integer.parseInt(container.getOrDefault(DataKeys.experience.getNamespacedKey(), PersistentDataType.STRING, "0"));
 
         event.setCancelled(true);
 
@@ -83,8 +83,7 @@ public class TinkererManager {
         }
 
         assert id != null;
-
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).addStringPDC(DataKeys.experience.getNamespacedKey(), amount).build();
+        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
     public static int getTotalXP(ItemStack item, FileConfiguration config) {
@@ -103,6 +102,7 @@ public class TinkererManager {
             }
         }
 
+        //todo() test data component usage here
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) { // Vanilla Enchantments
             for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
                 String[] values = config.getString("Tinker.Vanilla-Enchantments." + convertToLegacy(enchantment.getKey().getKey().value()).toUpperCase(), "0").replaceAll(" ", "").split(",");

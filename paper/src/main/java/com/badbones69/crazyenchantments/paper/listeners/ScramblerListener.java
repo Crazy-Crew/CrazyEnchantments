@@ -24,7 +24,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -85,17 +84,16 @@ public class ScramblerListener implements Listener {
      */
     public ItemStack getScramblers(int amount) {
         ItemStack item = this.scramblerItem.setAmount(amount).build();
-        ItemMeta meta = item.getItemMeta();
 
-        meta.getPersistentDataContainer().set(DataKeys.scrambler.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-        item.setItemMeta(meta);
+        item.editPersistentDataContainer(container -> {
+            container.set(DataKeys.scrambler.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
+        });
 
         return item;
     }
 
     public boolean isScrambler(ItemStack item) {
-        if (!item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey());
+        return item.getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey());
     }
 
     private void setGlass(Inventory inv) {
@@ -112,6 +110,7 @@ public class ScramblerListener implements Listener {
 
     public void openScrambler(Player player, ItemStack book) {
         Inventory inventory = this.plugin.getServer().createInventory(null, 27, this.guiName);
+
         setGlass(inventory);
 
         for (int slot = 9; slot > 8 && slot < 18; slot++) {
@@ -257,9 +256,9 @@ public class ScramblerListener implements Listener {
     public void onScramblerClick(PlayerInteractEvent event) {
         ItemStack item = this.methods.getItemInHand(event.getPlayer());
 
-        if (item.isEmpty() || !item.hasItemMeta()) return;
+        if (item.isEmpty()) return;
 
-        if (item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey())) event.setCancelled(true);
+        if (item.getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey())) event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)

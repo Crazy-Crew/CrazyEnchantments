@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 
 public class LostBookController implements Listener {
@@ -50,12 +49,13 @@ public class LostBookController implements Listener {
 
         ItemStack item = this.methods.getItemInHand(player);
 
-        if (!item.hasItemMeta()) return;
-        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.lost_book.getNamespacedKey(), PersistentDataType.STRING);
+        String data = item.getPersistentDataContainer().get(DataKeys.lost_book.getNamespacedKey(), PersistentDataType.STRING);
+
         if (data == null) return;
 
         for (Category eachCategory : enchantmentBookSettings.getCategories()) {
             if (!data.equalsIgnoreCase(eachCategory.getName())) continue;
+
             category = eachCategory;
         }
 
@@ -66,7 +66,9 @@ public class LostBookController implements Listener {
         if (this.methods.isInventoryFull(player)) return;
 
         LostBook lostBook = category.getLostBook();
+
         this.methods.removeItem(item, player);
+
         CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
         if (book == null) {
@@ -77,6 +79,7 @@ public class LostBookController implements Listener {
         player.getInventory().addItem(book.buildBook());
 
         HashMap<String, String> placeholders = new HashMap<>();
+
         placeholders.put("%Found%", book.getItemBuilder().getName());
 
         player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));

@@ -3,16 +3,17 @@ package com.badbones69.crazyenchantments.paper.api.builders.types;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
@@ -63,15 +64,9 @@ public class BaseMenu extends InventoryBuilder {
 
             if (itemStack == null) return;
 
-            if (!itemStack.hasItemMeta()) return;
+            final PersistentDataContainerView view = itemStack.getPersistentDataContainer();
 
-            ItemMeta itemMeta = itemStack.getItemMeta();
-
-            if (itemMeta == null) return;
-
-            if (!itemMeta.hasDisplayName()) return;
-
-            if (itemStack.isSimilar(KitsManager.getBackLeft()) || itemStack.isSimilar(KitsManager.getBackRight())) {
+            if (view.has(DataKeys.back_left.getNamespacedKey()) || view.has(DataKeys.back_right.getNamespacedKey())) {
                 MenuManager.openInfoMenu(player);
 
                 return;

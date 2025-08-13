@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.google.gson.Gson;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -245,19 +244,7 @@ public class CEBook {
      * @return Return the book as an ItemStack.
      */
     public ItemStack buildBook() {
-        ItemStack item = getItemBuilder().build(); //TODO Directly set data instead of reconstructing the item.
-        ItemMeta meta = item.getItemMeta();
-
-        // PDC Start
-        Gson gson = new Gson();
-
-        String data = gson.toJson(new EnchantedBook(this.enchantment.getName(), this.successRate, this.destroyRate, this.level), EnchantedBook.class);
-
-        meta.getPersistentDataContainer().set(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING, data);
-        // PDC End
-        item.setItemMeta(meta);
-
-        return item;
+        return getItemBuilder().addKey(DataKeys.stored_enchantments.getNamespacedKey(), Methods.getGson().toJson(new EnchantedBook(this.enchantment.getName(), this.successRate, this.destroyRate, this.level), EnchantedBook.class)).build();
     }
 
     /**

@@ -137,7 +137,8 @@ public class GkitzCommand implements CommandExecutor {
                         CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Player%", player.getName());
-                        placeholders.put("%Kit%", kit.getDisplayItem().getItemMeta().getDisplayName());
+                        placeholders.put("%Gkit%", kit.getName());
+                        placeholders.put("%Kit%", kit.getName());
 
                         if (cePlayer.hasGkitPermission(kit) || adminGive) {
                             if (cePlayer.canUseGKit(kit) || adminGive) {
