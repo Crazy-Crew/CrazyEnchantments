@@ -4,13 +4,16 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.paper.scheduler.FoliaRunnable;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.interfaces.claims.WorldGuardVersion;
+import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,8 +29,12 @@ public class WingsUtils {
     @NotNull
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private static final Server server = plugin.getServer();
+
     @NotNull
     private static final Starter starter = plugin.getStarter();
+
+    private static final EnchantmentBookSettings settings = starter.getEnchantmentBookSettings();
 
     @NotNull
     private static final PluginSupport pluginSupport = starter.getPluginSupport();
@@ -38,25 +45,27 @@ public class WingsUtils {
     public static void startWings() {
         if (!wingsManager.isWingsEnabled()) wingsManager.endWingsTask();
 
-        wingsManager.setWingsTask(new FoliaRunnable(plugin.getServer().getAsyncScheduler(), TimeUnit.MILLISECONDS) {
+        wingsManager.setWingsTask(new FoliaScheduler(plugin, Scheduler.async_scheduler, TimeUnit.MILLISECONDS) {
             @Override
             public void run() {
                 for (UUID uuid : wingsManager.getFlyingPlayers()) {
-                    Player player = plugin.getServer().getPlayer(uuid);
+                    final Player player = server.getPlayer(uuid);
 
                     if (player == null) return;
 
-                    player.getScheduler().run(plugin, task -> {
-                        if (player.isFlying() && player.getEquipment().getBoots() != null && starter.getEnchantmentBookSettings().getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
-                            Location location = player.getLocation().subtract(0, .25, 0);
+                    new FoliaScheduler(plugin, null, player) {
+                        @Override
+                        public void run() {
+                            if (player.isFlying() && player.getEquipment().getBoots() != null && settings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
+                                final Location location = player.getLocation().subtract(0, .25, 0);
 
-                            if (wingsManager.isCloudsEnabled())
-                                player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
+                                if (wingsManager.isCloudsEnabled()) player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
+                            }
                         }
-                    }, null);
+                    }.runNextTick();
                 }
             }
-        }.runAtFixedRate(plugin, 50L, 50L));
+        }.runAtFixedRate(50L, 50L));
     }
 
     public static void checkArmor(ItemStack newArmorPiece, boolean newArmor, ItemStack oldArmorPiece, Player player) {

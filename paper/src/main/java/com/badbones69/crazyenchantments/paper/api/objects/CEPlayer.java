@@ -5,7 +5,11 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
+import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import org.bukkit.Server;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +26,8 @@ public class CEPlayer {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final Server server = this.plugin.getServer();
 
     @NotNull
     private final Methods methods = this.plugin.getStarter().getMethods();
@@ -91,10 +97,17 @@ public class CEPlayer {
             this.methods.addItemToInventory(this.player, item);
         }
 
-        for (String cmd : kit.getCommands()) {
-            this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), cmd
-            .replace("%Player%", this.player.getName()).replace("%player%", this.player.getName()));
-        }
+        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+            @Override
+            public void run() {
+                final String name = player.getName();
+                final ConsoleCommandSender sender = server.getConsoleSender();
+
+                for (final String cmd : kit.getCommands()) {
+                    server.dispatchCommand(sender, cmd.replace("%Player%", name).replace("%player%", name));
+                }
+            }
+        }.runNow();
     }
     
     /**
@@ -272,12 +285,18 @@ public class CEPlayer {
      * @param delay Delay in ticks to add a cooldown for.
      * @return True if they already had a cooldown.
      */
-    public boolean onEnchantCooldown(CEnchantments enchant, int delay) {
+    public boolean onEnchantCooldown(final CEnchantments enchant, final int delay) {
         if (this.onCooldown.contains(enchant)) return true;
 
         this.onCooldown.add(enchant);
+
         // Limit players to using each enchant only once per second.
-        this.plugin.getServer().getAsyncScheduler().runDelayed(this.plugin, (task) -> this.onCooldown.remove(enchant), delay * 50L, TimeUnit.MILLISECONDS);
+        new FoliaScheduler(this.plugin, Scheduler.async_scheduler, TimeUnit.MILLISECONDS) {
+            @Override
+            public void run() {
+                onCooldown.remove(enchant);
+            }
+        }.runDelayed(delay * 50L);
 
         return false;
     }

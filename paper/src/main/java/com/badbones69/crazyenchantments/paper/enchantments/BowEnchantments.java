@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -136,8 +137,12 @@ public class BowEnchantments implements Listener {
 
         }
 
-        // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
-        entityArrow.getScheduler().runDelayed(this.plugin, (arrowTask) -> this.bowUtils.removeArrow(enchantedArrow),  null, 5);
+        new FoliaScheduler(this.plugin, null, entityArrow) {
+            @Override
+            public void run() {
+                bowUtils.removeArrow(enchantedArrow);
+            }
+        }.runDelayed(5);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

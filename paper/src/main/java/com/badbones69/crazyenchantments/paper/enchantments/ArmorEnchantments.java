@@ -18,6 +18,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -93,7 +94,12 @@ public class ArmorEnchantments implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack air = new ItemStack(Material.AIR);
 
-        player.getScheduler().runDelayed(this.plugin, playerTask -> newUpdateEffects(player, air, air), null, 10);
+        new FoliaScheduler(this.plugin, null, player) {
+            @Override
+            public void run() {
+                newUpdateEffects(player, air, air);
+            }
+        }.runDelayed(10);
     }
 
     @EventHandler
@@ -265,13 +271,24 @@ public class ArmorEnchantments implements Listener {
 
             if (player.getHealth() <= 8 && EnchantUtils.isEventActive(CEnchantments.ROCKET, player, armor, enchants)) {
                 // Anti cheat support here with AAC or any others.
-                player.getScheduler().runDelayed(this.plugin, playerTask -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), null, 1);
+                new FoliaScheduler(this.plugin, null, player) {
+                    @Override
+                    public void run() {
+                        player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1));
+                    }
+                }.runDelayed(1);
+
                 this.fallenPlayers.add(player.getUniqueId());
 
                 //todo() is this EXPLOSION_HUGE?
                 player.getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation(), 1);
 
-                player.getScheduler().runDelayed(this.plugin, playerTask -> fallenPlayers.remove(player.getUniqueId()), null, 8 * 20);
+                new FoliaScheduler(this.plugin, null, player) {
+                    @Override
+                    public void run() {
+                        fallenPlayers.remove(player.getUniqueId());
+                    }
+                }.runDelayed(8 * 20);
             }
 
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {

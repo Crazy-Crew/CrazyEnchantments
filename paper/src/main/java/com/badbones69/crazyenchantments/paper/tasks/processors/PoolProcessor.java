@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.tasks.processors;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.scheduler.FoliaRunnable;
+import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -53,13 +54,13 @@ public abstract class PoolProcessor {
      * This should ensure that with a higher player count, that all tasks are processed.
      */
     private void resizeChecker() {
-        taskId = new FoliaRunnable(this.plugin.getServer().getAsyncScheduler(), TimeUnit.SECONDS) {
+        this.taskId = new FoliaScheduler(this.plugin, Scheduler.async_scheduler, TimeUnit.SECONDS) {
             @Override
             public void run() {
                 if ((executor.getQueue().size() / executor.getCorePoolSize() > maxQueueSize / 5) && !(executor.getMaximumPoolSize() <= executor.getCorePoolSize() + 1)) {
                     executor.setCorePoolSize(executor.getCorePoolSize() + 1);
                 }
             }
-        }.runAtFixedRate(plugin, 20, 100);
+        }.runAtFixedRate(20, 100);
     }
 }

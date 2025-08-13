@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -114,10 +115,13 @@ public class BowUtils {
             entityLocation.getBlock().setType(Material.COBWEB);
             this.webBlocks.add(entityLocation.getBlock());
 
-            this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, entityLocation, scheduledTask -> {
-                entityLocation.getBlock().setType(Material.AIR);
-                webBlocks.remove(entityLocation.getBlock());
-            }, 5 * 20);
+            new FoliaScheduler(this.plugin, entityLocation) {
+                @Override
+                public void run() {
+                    entityLocation.getBlock().setType(Material.AIR);
+                    webBlocks.remove(entityLocation.getBlock());
+                }
+            }.runDelayed(5 * 20);
         } else {
             setWebBlocks(hitEntity);
         }
@@ -126,20 +130,29 @@ public class BowUtils {
     }
 
     private void setWebBlocks(Entity hitEntity) {
-        this.plugin.getServer().getRegionScheduler().execute(this.plugin, hitEntity.getLocation(), () -> {
-            for (Block block : getCube(hitEntity.getLocation())) {
+        final Location location = hitEntity.getLocation();
 
-                block.setType(Material.COBWEB);
-                this.webBlocks.add(block);
+        new FoliaScheduler(this.plugin, location) {
+            @Override
+            public void run() {
+                for (final Block block : getCube(hitEntity.getLocation())) {
 
-                this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, block.getLocation(), scheduledTask -> {
-                    if (block.getType() == Material.COBWEB) {
-                        block.setType(Material.AIR);
-                        webBlocks.remove(block);
-                    }
-                }, 5 * 20);
+                    block.setType(Material.COBWEB);
+
+                    webBlocks.add(block);
+
+                    new FoliaScheduler(plugin, block.getLocation()) {
+                        @Override
+                        public void run() {
+                            if (block.getType() == Material.COBWEB) {
+                                block.setType(Material.AIR);
+                                webBlocks.remove(block);
+                            }
+                        }
+                    }.runDelayed(5 * 20);
+                }
             }
-        });
+        }.execute();
     }
 
     // Sticky Shot End!

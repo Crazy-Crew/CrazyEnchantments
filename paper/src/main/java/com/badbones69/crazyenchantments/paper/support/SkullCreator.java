@@ -1,8 +1,11 @@
 package com.badbones69.crazyenchantments.paper.support;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
@@ -26,6 +29,8 @@ public class SkullCreator {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final Server server = this.plugin.getServer();
 
     /**
      * Creates a player skull based on a player's name.
@@ -56,7 +61,7 @@ public class SkullCreator {
         notNull(item, "item");
         notNull(name, "name");
 
-        return this.plugin.getServer().getUnsafe().modifyItemStack(item, "{SkullOwner:\"" + name + "\"}");
+        return this.server.getUnsafe().modifyItemStack(item, "{SkullOwner:\"" + name + "\"}");
     }
 
     /**
@@ -84,7 +89,7 @@ public class SkullCreator {
 
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         assert meta != null;
-        meta.setOwningPlayer(this.plugin.getServer().getOfflinePlayer(id));
+        meta.setOwningPlayer(this.server.getOfflinePlayer(id));
         item.setItemMeta(meta);
 
         return item;
@@ -140,7 +145,7 @@ public class SkullCreator {
         notNull(base64, "base64");
 
         UUID hashAsId = new UUID(base64.hashCode(), base64.hashCode());
-        return this.plugin.getServer().getUnsafe().modifyItemStack(item, "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}");
+        return this.server.getUnsafe().modifyItemStack(item, "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}");
     }
 
     /**
@@ -207,7 +212,12 @@ public class SkullCreator {
                 "{Owner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}"
         );
 
-        this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), "data merge block " + args);
+        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+            @Override
+            public void run() {
+                server.dispatchCommand(server.getConsoleSender(), "data merge block " + args);
+            }
+        }.execute();
     }
 
     private boolean newerApi() {

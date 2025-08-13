@@ -9,8 +9,9 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.scheduler.FoliaRunnable;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,6 +36,8 @@ public class ScramblerListener implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ComponentLogger logger = this.plugin.getComponentLogger();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -120,7 +123,7 @@ public class ScramblerListener implements Listener {
     }
 
     private void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
-        this.roll.put(player, new FoliaRunnable(player.getScheduler(), null) {
+        this.roll.put(player, new FoliaScheduler(this.plugin, null, player) {
             int time = 1;
             int full = 0;
             int open = 0;
@@ -129,7 +132,9 @@ public class ScramblerListener implements Listener {
             public void run() {
                 if (this.full <= 50) { // When spinning.
                     moveItems(inventory, book);
+
                     setGlass(inventory);
+
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                 }
 
@@ -137,6 +142,7 @@ public class ScramblerListener implements Listener {
 
                 if (this.open >= 5) {
                     player.openInventory(inventory);
+
                     this.open = 0;
                 }
 
@@ -145,7 +151,9 @@ public class ScramblerListener implements Listener {
                 if (this.full > 51) {
                     if (slowSpin().contains(this.time)) { // When Slowing Down
                         moveItems(inventory, book);
+
                         setGlass(inventory);
+
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                     }
 
@@ -153,22 +161,31 @@ public class ScramblerListener implements Listener {
 
                     if (this.time == 60) { // When done
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+
                         cancel();
+
                         roll.remove(player);
 
-                        ItemStack item = inventory.getItem(13).clone();
+                        final ItemStack item = inventory.getItem(13);
 
-                        item.setType(enchantmentBookSettings.getEnchantmentBookItem().getType());
-                        methods.setDurability(item, methods.getDurability(enchantmentBookSettings.getEnchantmentBookItem()));
+                        if (item != null) {
+                            ItemStack clone;
 
-                        methods.addItemToInventory(player, item);
+                            clone = item.withType(enchantmentBookSettings.getEnchantmentBookItem().getType());
+
+                            methods.setDurability(item, methods.getDurability(enchantmentBookSettings.getEnchantmentBookItem()));
+
+                            methods.addItemToInventory(player, clone);
+                        } else {
+                            logger.error("The item at slot 13 is null, We cannot continue!");
+                        }
 
                     } else if (this.time > 60) { // Just in case the cancel fails.
                         cancel();
                     }
                 }
             }
-        }.runAtFixedRate(this.plugin, 1, 1));
+        }.runAtFixedRate(1, 1));
     }
 
     private List<Integer> slowSpin() {

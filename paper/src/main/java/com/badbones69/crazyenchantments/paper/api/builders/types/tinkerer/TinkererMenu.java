@@ -9,7 +9,9 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -59,6 +61,8 @@ public class TinkererMenu extends InventoryBuilder {
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+        private final Server server = this.plugin.getServer();
 
         private final Map<Integer, Integer> slots = TinkererManager.getSlots();
 
@@ -121,7 +125,16 @@ public class TinkererMenu extends InventoryBuilder {
 
                 player.closeInventory();
 
-                if (total != 0) this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
+                if (total != 0) {
+                    int finalTotal = total;
+
+                    new FoliaScheduler(this.plugin, null, player) {
+                        @Override
+                        public void run() {
+                            server.dispatchCommand(server.getConsoleSender(), "eco give " + player.getName() + " " + finalTotal);
+                        }
+                    }.execute();
+                }
 
                 if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 
@@ -199,25 +212,27 @@ public class TinkererMenu extends InventoryBuilder {
             if (!(event.getInventory().getHolder() instanceof TinkererMenu holder)) return;
 
             Player player = holder.getPlayer();
-            player.getScheduler().execute(this.plugin, () -> {
 
-                Inventory inventory = holder.getInventory();
+            new FoliaScheduler(this.plugin, null, player) {
+                @Override
+                public void run() {
+                    final Inventory inventory = holder.getInventory();
 
-                for (int slot : this.slots.keySet()) {
-                    ItemStack item = inventory.getItem(slot);
+                    for (final int slot : slots.keySet()) {
+                        final ItemStack item = inventory.getItem(slot);
 
-                    if (item == null || item.isEmpty()) continue;
+                        if (item == null || item.isEmpty()) continue;
 
-                    if (player.isDead()) {
-                        player.getWorld().dropItem(player.getLocation(), item);
-                    } else {
-                        player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
+                        if (player.isDead()) {
+                            player.getWorld().dropItem(player.getLocation(), item);
+                        } else {
+                            player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
+                        }
                     }
+
+                    holder.getInventory().clear();
                 }
-
-                holder.getInventory().clear();
-
-            }, null, 0);
+            }.execute();
         }
     }
 }

@@ -17,8 +17,8 @@ import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.scheduler.FoliaRunnable;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
@@ -187,7 +187,7 @@ public class SwordEnchantments implements Listener {
                 rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.crazyManager.getRageMaxLevel()));
             }
 
-            cePlayer.setRageTask(new FoliaRunnable(cePlayer.getPlayer().getScheduler(), null) {
+            cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, cePlayer.getPlayer()) {
                 @Override
                 public void run() {
                     cePlayer.setRageMultiplier(0.0);
@@ -196,7 +196,7 @@ public class SwordEnchantments implements Listener {
 
                     rageInformPlayer(damager, Messages.RAGE_COOLED_DOWN, 0f);
                 }
-            }.runDelayed(plugin, 80));
+            }.runDelayed(80));
         }
 
         if (en instanceof Player player && EnchantUtils.isEventActive(CEnchantments.SKILLSWIPE, damager, item, enchantments)) {

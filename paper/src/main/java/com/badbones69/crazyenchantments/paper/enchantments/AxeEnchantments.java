@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -165,13 +166,17 @@ public class AxeEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
             for (Entity nearbyEntity : damager.getNearbyEntities(3, 3, 3)) {
-                entity.getScheduler().run(plugin, task -> {
-                    if (!this.pluginSupport.isFriendly(damager, nearbyEntity)) {
-                        Vector vector = damager.getLocation().toVector().normalize().setY(.5);
-                        Vector vector1 = nearbyEntity.getLocation().toVector().subtract(vector);
-                        nearbyEntity.setVelocity(vector1);
+                new FoliaScheduler(this.plugin, null, entity) {
+                    @Override
+                    public void run() {
+                        if (!pluginSupport.isFriendly(damager, nearbyEntity)) {
+                            Vector vector = damager.getLocation().toVector().normalize().setY(.5);
+                            Vector vector1 = nearbyEntity.getLocation().toVector().subtract(vector);
+
+                            nearbyEntity.setVelocity(vector1);
+                        }
                     }
-                }, null);
+                }.runNextTick();
             }
         }
 

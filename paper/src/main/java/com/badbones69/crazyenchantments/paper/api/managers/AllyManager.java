@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -66,33 +67,51 @@ public class AllyManager {
             }
         }
     }
-    
+
     public void forceRemoveAllies() {
         if (!this.allyMobs.isEmpty()) {
-            for (AllyMob ally : this.allyMobs) {
-                LivingEntity allyLE = ally.getAlly();
-                allyLE.getScheduler().run(plugin, task -> allyLE.remove(), null);
+            for (final AllyMob ally : this.allyMobs) {
+                final LivingEntity entity = ally.getAlly();
+
+                new FoliaScheduler(this.plugin, null, entity) {
+                    @Override
+                    public void run() {
+                        entity.remove();;
+                    }
+                }.runNextTick();
             }
+
             this.allyMobs.clear();
             this.allyOwners.clear();
         }
     }
-    
-    public void forceRemoveAllies(Player owner) {
-        for (AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
-            LivingEntity allyLE = ally.getAlly();
-            allyLE.getScheduler().run(plugin, task -> {
-                allyLE.remove();
-                this.allyMobs.remove(ally);
-            }, null);
+
+    public void forceRemoveAllies(final Player owner) {
+        for (final AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
+            final LivingEntity entity = ally.getAlly();
+
+            new FoliaScheduler(this.plugin, null, entity) {
+                @Override
+                public void run() {
+                    entity.remove();
+
+                    allyMobs.remove(ally);
+                }
+            }.runNextTick();
         }
 
         this.allyOwners.remove(owner.getUniqueId());
     }
-    
-    public void setEnemy(Player owner, Entity enemy) {
-        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally ->
-            ally.getAlly().getScheduler().run(plugin, task -> ally.attackEnemy((LivingEntity) enemy), null));
+
+    public void setEnemy(final Player owner, final Entity enemy) {
+        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> {
+            new FoliaScheduler(this.plugin, null, ally.getAlly()) {
+                @Override
+                public void run() {
+                    ally.attackEnemy((LivingEntity) enemy);
+                }
+            }.runNextTick();
+        });
     }
     
     public Map<AllyType, String> getAllyTypeNameCache() {
