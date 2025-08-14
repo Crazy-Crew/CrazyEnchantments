@@ -32,6 +32,7 @@ import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -67,6 +68,8 @@ public class CrazyManager {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
     
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -187,7 +190,9 @@ public class CrazyManager {
 
         ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
 
-        if (headSec != null) {
+        if (headSec == null) {
+            this.fusion.log("warn", "HeadOdds could not be found in HeadMap.yml!");
+        } else {
             headSec.getKeys(false).forEach(id -> {
                 try {
                     Material mat = new ItemBuilder().setMaterial(id).getMaterial();
@@ -258,23 +263,30 @@ public class CrazyManager {
         }
 
         if (this.gkitzToggle) {
-            for (String kit : gkit.getConfigurationSection("GKitz").getKeys(false)) {
-                String path = "GKitz." + kit + ".";
-                int slot = gkit.getInt(path + "Display.Slot");
-                String time = gkit.getString(path + "Cooldown");
-                boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
+            final ConfigurationSection section = gkit.getConfigurationSection("Gkitz");
 
-                ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
-                        .setName(gkit.getString(path + "Display.Name", "Error getting name."))
-                        .setLore(gkit.getStringList(path + "Display.Lore"))
-                        .setGlow(gkit.getBoolean(path + "Display.Glowing", false))
-                        .addKey(DataKeys.gkit_type.getNamespacedKey(), kit).build();
+            if (section == null) {
+                this.fusion.log("warn", "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
+            } else {
+                for (final String kit : section.getKeys(false)) {
+                    String path = "GKitz." + kit + ".";
 
-                List<String> commands = gkit.getStringList(path + "Commands");
-                List<String> itemStrings = gkit.getStringList(path + "Items");
-                List<ItemStack> previewItems = getInfoGKit(itemStrings);
-                previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
-                this.gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, itemStrings, autoEquip));
+                    int slot = gkit.getInt(path + "Display.Slot");
+                    String time = gkit.getString(path + "Cooldown");
+                    boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
+
+                    ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
+                            .setName(gkit.getString(path + "Display.Name", "Error getting name."))
+                            .setLore(gkit.getStringList(path + "Display.Lore"))
+                            .setGlow(gkit.getBoolean(path + "Display.Glowing", false))
+                            .addKey(DataKeys.gkit_type.getNamespacedKey(), kit).build();
+
+                    List<String> commands = gkit.getStringList(path + "Commands");
+                    List<String> itemStrings = gkit.getStringList(path + "Items");
+                    List<ItemStack> previewItems = getInfoGKit(itemStrings);
+                    previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
+                    this.gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, itemStrings, autoEquip));
+                }
             }
         }
 

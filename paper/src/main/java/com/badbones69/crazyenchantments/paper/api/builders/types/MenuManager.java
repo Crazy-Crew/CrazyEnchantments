@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
@@ -11,12 +12,19 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuManager {
+
+    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private static final FusionPaper fusion = plugin.getFusion();
 
     private static final List<EnchantmentType> enchantmentTypes = new ArrayList<>();
 
@@ -25,9 +33,16 @@ public class MenuManager {
 
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
 
-        for (String type : file.getConfigurationSection("Types").getKeys(false)) {
-            EnchantmentType enchantmentType = new EnchantmentType(type);
-            enchantmentTypes.add(enchantmentType);
+        final ConfigurationSection section = file.getConfigurationSection("Types");
+
+        if (section == null) {
+            fusion.log("warn", "The types section cannot be found in enchantment-types.yml, It's possible the file is badly formatted!");
+
+            return;
+        }
+
+        for (String type : section.getKeys(false)) {
+            enchantmentTypes.add(new EnchantmentType(type));
         }
     }
 

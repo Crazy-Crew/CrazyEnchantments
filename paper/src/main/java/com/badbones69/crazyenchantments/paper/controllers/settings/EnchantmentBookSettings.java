@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.controllers.settings;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
@@ -15,14 +16,17 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
@@ -33,13 +37,15 @@ import java.util.Map;
 
 public class EnchantmentBookSettings {
 
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
+
     private ItemBuilder enchantmentBook;
 
     private final List<Category> categories = Lists.newArrayList();
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
-
-    private final Gson gson = new Gson();
 
     /**
      *
@@ -222,10 +228,19 @@ public class EnchantmentBookSettings {
      * Loads in all config options.
      */
     public void populateMaps() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = Files.CONFIG.getFile();
 
-        for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
+        final ConfigurationSection section = config.getConfigurationSection("Categories");
+
+        if (section == null) {
+            this.fusion.log("warn", "The categories section cannot be found in config.yml, It's possible the file is badly formatted!");
+
+            return;
+        }
+
+        for (String category : section.getKeys(false)) {
             String path = "Categories." + category;
+
             LostBook lostBook = new LostBook(
                     config.getInt(path + ".LostBook.Slot"),
                     config.getBoolean(path + ".LostBook.InGUI"),

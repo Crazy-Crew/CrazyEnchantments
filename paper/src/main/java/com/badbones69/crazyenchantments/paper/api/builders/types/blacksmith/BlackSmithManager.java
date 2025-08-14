@@ -1,15 +1,22 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class BlackSmithManager {
+
+    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private static final FusionPaper fusion = plugin.getFusion();
 
     private static ItemStack exitButton;
     private static ItemStack redGlass,blueGlass,grayGlass;
@@ -129,7 +136,11 @@ public class BlackSmithManager {
         ConfigurationSection section = getSection(config);
 
         // If section is null, do nothing.
-        if (section == null) return;
+        if (section == null) {
+            fusion.log("warn", "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+
+            return;
+        }
 
         exitButton = new ItemBuilder()
                 .setMaterial(Material.BARRIER)

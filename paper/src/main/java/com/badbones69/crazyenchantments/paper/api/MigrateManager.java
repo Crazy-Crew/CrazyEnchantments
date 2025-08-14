@@ -2,6 +2,8 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.ryderbelserion.fusion.paper.FusionPaper;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +14,8 @@ public class MigrateManager {
 
     @NotNull
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private static final FusionPaper fusion = plugin.getFusion();
 
     public static void convert() {
         double tinkerVersion = 1.1;
@@ -40,24 +44,49 @@ public class MigrateManager {
 
         YamlConfiguration secondConfiguration = YamlConfiguration.loadConfiguration(secondFile);
 
-        // Settings
-        for (String settings : secondConfiguration.getConfigurationSection("Settings").getKeys(false)) {
-            TINKER.set("Settings." + settings, secondConfiguration.get("Settings." + settings));
+        final ConfigurationSection settings = secondConfiguration.getConfigurationSection("Settings");
+
+        if (settings == null) {
+            fusion.log("warn", "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+        } else {
+            // Settings
+            for (String setting : settings.getKeys(false)) {
+                TINKER.set("Settings." + setting, secondConfiguration.get("Settings." + setting));
+            }
         }
 
-        // Vanilla Enchantments
-        for (String enchantment : secondConfiguration.getConfigurationSection("Tinker.Vanilla-Enchantments").getKeys(false)) {
-            int amount = secondConfiguration.getInt("Tinker.Vanilla-Enchantments." + enchantment);
+        final ConfigurationSection enchantments = secondConfiguration.getConfigurationSection("Tinker.Vanilla-Enchantments");
 
-            TINKER.set("Tinker.Vanilla-Enchantments." + enchantment, amount + ", " + 1);
+        if (enchantments == null) {
+            fusion.log("warn", "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+        } else {
+            // Vanilla Enchantments
+            for (String enchantment : enchantments.getKeys(false)) {
+                int amount = secondConfiguration.getInt("Tinker.Vanilla-Enchantments." + enchantment);
+
+                TINKER.set("Tinker.Vanilla-Enchantments." + enchantment, amount + ", " + 1);
+            }
         }
 
-        //Custom Enchantments
-        for (String enchantment : secondConfiguration.getConfigurationSection("Tinker.Crazy-Enchantments").getKeys(false)) {
-            for(String itemBook : secondConfiguration.getConfigurationSection("Tinker.Crazy-Enchantments." + enchantment).getKeys(false)) {
-                int value = secondConfiguration.getInt("Tinker.Crazy-Enchantments." + enchantment + "." + itemBook);
+        final ConfigurationSection custom = secondConfiguration.getConfigurationSection("Tinker.Crazy-Enchantments");
 
-                TINKER.set("Tinker.Crazy-Enchantments." + enchantment + "." + itemBook, value + ", " + 1);
+        if (custom == null) {
+            fusion.log("warn", "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+        } else {
+            for (String enchantment : custom.getKeys(false)) {
+                final ConfigurationSection type = secondConfiguration.getConfigurationSection("Tinker.Crazy-Enchantments." + enchantment);
+
+                if (type == null) {
+                    fusion.log("warn", "The enchantment {} could not be found in the tinker.yml", enchantment);
+
+                    continue;
+                }
+
+                for (String itemBook : type.getKeys(false)) {
+                    int value = secondConfiguration.getInt("Tinker.Crazy-Enchantments." + enchantment + "." + itemBook);
+
+                    TINKER.set("Tinker.Crazy-Enchantments." + enchantment + "." + itemBook, value + ", " + 1);
+                }
             }
         }
 
