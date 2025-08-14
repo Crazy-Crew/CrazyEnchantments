@@ -10,7 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.google.gson.Gson;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.*;
 import org.bukkit.block.Block;

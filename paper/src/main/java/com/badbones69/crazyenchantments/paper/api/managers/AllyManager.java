@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

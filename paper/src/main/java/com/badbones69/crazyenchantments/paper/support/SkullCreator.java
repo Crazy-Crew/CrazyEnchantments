@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.support;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;

@@ -8,8 +8,8 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.interfaces.claims.WorldGuardVersion;
-import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;

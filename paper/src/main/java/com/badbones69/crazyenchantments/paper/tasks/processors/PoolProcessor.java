@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.tasks.processors;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.concurrent.LinkedBlockingQueue;
