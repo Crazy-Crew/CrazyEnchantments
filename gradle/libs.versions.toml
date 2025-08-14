@@ -34,7 +34,7 @@ feather = "0.4.0" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.3" # https://github.com/HangarMC/hangar-publish-plugin
 shadow = "9.0.0-beta17" # https://github.com/GradleUp/shadow
 
-fusion = "1.21.6" # https://github.com/ryderbelserion/Fusion
+fusion = "2.4.3" # https://github.com/ryderbelserion/Fusion
 
 [plugins]
 # https://github.com/ryderbelserion/Feather
