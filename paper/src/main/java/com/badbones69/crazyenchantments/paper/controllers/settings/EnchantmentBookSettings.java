@@ -231,7 +231,7 @@ public class EnchantmentBookSettings {
                     config.getBoolean(path + ".LostBook.InGUI"),
                     new ItemBuilder()
                             .setMaterial(config.getString(path + ".LostBook.Item", "BOOK"))
-                            .setPlayerName(config.getString(path + ".LostBook.Player"))
+                            .setPlayerName(config.getString(path + ".LostBook.Player", ""))
                             .setName(config.getString(path + ".LostBook.Name", "Error getting name."))
                             .setLore(config.getStringList(path + ".LostBook.Lore"))
                             .setGlow(config.getBoolean(path + ".LostBook.Glowing", true)),
@@ -248,7 +248,7 @@ public class EnchantmentBookSettings {
                     config.getBoolean(path + ".InGUI", true),
                     new ItemBuilder()
                             .setMaterial(config.getString(path + ".Item", ColorUtils.getRandomPaneColor().getName()))
-                            .setPlayerName(config.getString(path + ".Player"))
+                            .setPlayerName(config.getString(path + ".Player", ""))
                             .setName(config.getString(path + ".Name", "Error getting name."))
                             .setLore(config.getStringList(path + ".Lore"))
                             .setGlow(config.getBoolean(path + ".Glowing", false)),
