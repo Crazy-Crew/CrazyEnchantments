@@ -19,8 +19,6 @@ If you do not use a personal fork, We have to manually merge your pull request w
 * Push to your branch using `git push`
 
 ### What's next?
-* The branch you open the pull request to depends on the scope of your change.
-  * Anything considered a "fix" or "internal" clean up that will not cripple a server or vastly change the experience of a server can be sent as a pull request to the `main` branch
-    * We try to follow semver so once the pull request is deemed ready to merge, The version will be bumped from 1.0.0 -> 1.0.1 as an example.
+* Send a pull request to the `dev` branch.
 
 You must explain what your pull request is changing and if needed, Supply a video of your change as Pull Requests are a way to get feedback.
