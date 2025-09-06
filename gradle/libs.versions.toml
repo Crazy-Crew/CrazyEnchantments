@@ -20,7 +20,6 @@ skyblock = "2025.1"              # https://bg-software.com/superiorskyblock/
 plotsquared = "7.5.2"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
 mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
 kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
-bStats = "3.1.0" # https://github.com/Bastian/bStats
 
 ## Paper
 paperweight = "2.0.0-beta.17" # https://github.com/PaperMC/paperweight
@@ -34,7 +33,10 @@ feather = "0.4.0" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.3" # https://github.com/HangarMC/hangar-publish-plugin
 shadow = "9.0.0-beta17" # https://github.com/GradleUp/shadow
 
+## Other
+triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 fusion = "2.4.3" # https://github.com/ryderbelserion/Fusion
+bStats = "3.1.0" # https://github.com/Bastian/bStats
 
 [plugins]
 # https://github.com/ryderbelserion/Feather
@@ -66,6 +68,10 @@ shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "s
 # https://github.com/jpenilla/run-task
 run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
 
+# https://github.com/TriumphTeam/triumph-cmds
+triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
+
+# https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
 fusion-core = { module = "com.ryderbelserion.fusion:fusion-core", version.ref = "fusion" }
 

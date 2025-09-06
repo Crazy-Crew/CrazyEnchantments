@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    //implementation(project(":common"))
+    implementation(libs.triumph.cmds)
 
     implementation(libs.fusion.paper)
 

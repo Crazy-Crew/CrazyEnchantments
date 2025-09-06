@@ -171,7 +171,7 @@ public class TinkererMenu extends InventoryBuilder {
                     // Clicking in their inventory.
                     if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(String.valueOf(totalXP), this.configuration));
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(totalXP, this.configuration));
                     inventory.setItem(inventory.firstEmpty(), current);
                 }
 

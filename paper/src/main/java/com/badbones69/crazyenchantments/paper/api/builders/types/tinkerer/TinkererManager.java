@@ -70,13 +70,15 @@ public class TinkererManager {
     }
 
     /**
-     * @param amount Amount of XP to store.
+     * @param xp Amount of XP to store.
      * @return XP Bottle with custom amount of xp stored in it.
      */
-    public static ItemStack getXPBottle(String amount, FileConfiguration config) {
+    public static ItemStack getXPBottle(int xp, FileConfiguration config) {
         String id = config.getString("Settings.BottleOptions.Item");
         String name = config.getString("Settings.BottleOptions.Name");
         List<String> lore = new ArrayList<>();
+
+        String amount = String.valueOf(xp);
 
         for (String l : config.getStringList("Settings.BottleOptions.Lore")) {
             lore.add(l.replace("%Total%", amount).replace("%total%", amount));
