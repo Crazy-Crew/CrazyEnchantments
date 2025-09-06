@@ -26,7 +26,7 @@ public class MigrateManager {
 
         FileConfiguration TINKER = Files.TINKER.getFile();
 
-        if (TINKER.getDouble("Settings.Tinker-Version") >= tinkerVersion) {
+        if (TINKER.getDouble("Settings.Tinker-Version", 1.1) >= tinkerVersion) {
             plugin.getLogger().info("Tinker.yml is up to date.");
             return;
         } else {
