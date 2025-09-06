@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.Blac
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
-import com.badbones69.crazyenchantments.paper.commands.v2.CommandManager;
+import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
