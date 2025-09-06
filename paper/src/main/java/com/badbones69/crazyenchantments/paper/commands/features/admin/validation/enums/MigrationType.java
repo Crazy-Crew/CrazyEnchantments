@@ -2,14 +2,14 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin.validatio
 
 import org.jetbrains.annotations.NotNull;
 
-public enum ValidationType {
+public enum MigrationType {
 
     config_validator("ConfigValidator"),
     enchant_validator("EnchantValidator");
 
     private final String name;
 
-    ValidationType(@NotNull final String name) {
+    MigrationType(@NotNull final String name) {
         this.name = name;
     }
 
@@ -17,10 +17,10 @@ public enum ValidationType {
         return this.name;
     }
 
-    public static ValidationType fromName(@NotNull final String name) {
-        ValidationType type = null;
+    public static MigrationType fromName(@NotNull final String name) {
+        MigrationType type = null;
 
-        for (final ValidationType key : ValidationType.values()) {
+        for (final MigrationType key : MigrationType.values()) {
             if (key.getName().equalsIgnoreCase(name)) {
                 type = key;
 

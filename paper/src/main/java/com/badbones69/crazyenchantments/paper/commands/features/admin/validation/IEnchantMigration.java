@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class IEnchantValidator {
+public abstract class IEnchantMigration {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
@@ -25,7 +25,7 @@ public abstract class IEnchantValidator {
     protected final CommandSender sender;
     protected Player player = null;
 
-    public IEnchantValidator(@NotNull final CommandSender sender) {
+    public IEnchantMigration(@NotNull final CommandSender sender) {
         this.sender = sender;
 
         if (this.sender instanceof Player human) {

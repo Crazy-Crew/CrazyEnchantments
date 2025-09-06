@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin.validatio
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.IEnchantValidator;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.IEnchantMigration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.EntityEquipment;
@@ -10,9 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
-public class EnchantValidator extends IEnchantValidator {
+public class EnchantMigration extends IEnchantMigration {
 
-    public EnchantValidator(@NotNull final CommandSender sender) {
+    public EnchantMigration(@NotNull final CommandSender sender) {
         super(sender);
     }
 

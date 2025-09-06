@@ -12,7 +12,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentTy
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.*;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.enums.ValidationType;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.features.base.CommandHelp;
 import com.badbones69.crazyenchantments.paper.commands.features.base.CommandLimit;
 import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.CommandBlackSmith;
@@ -56,7 +56,9 @@ public class CommandManager {
         commandManager.registerArgument(CEnchantment.class, (sender, argument) -> crazyManager.getEnchantmentFromName(argument));
         commandManager.registerArgument(World.class, (sender, argument) -> server.getWorld(argument));
         commandManager.registerArgument(EnchantmentType.class, (sender, argument) -> MenuManager.getEnchantmentTypes().stream().filter(filter -> !filter.getName().equalsIgnoreCase(argument)));
-        commandManager.registerArgument(PlayerBuilder.class, (sender, context) -> new PlayerBuilder(plugin, context));
+        commandManager.registerArgument(PlayerBuilder.class, (sender, argument) -> new PlayerBuilder(plugin, argument));
+
+        commandManager.registerArgument(MigrationType.class, (sender, argument) -> MigrationType.fromName(argument));
 
         commandManager.registerSuggestion(EnchantmentType.class, (context) -> MenuManager.getEnchantmentTypes().stream().map(EnchantmentType::getName).toList());
         commandManager.registerSuggestion(Player.class, (context) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
@@ -133,7 +135,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("migrators"), (context) -> {
             final List<String> migrators = new ArrayList<>();
 
-            for (ValidationType value : ValidationType.values()) {
+            for (MigrationType value : MigrationType.values()) {
                 final String name = value.getName();
 
                 migrators.add(name);
@@ -181,7 +183,7 @@ public class CommandManager {
                 new CommandLostBook(),
                 new CommandReload(),
                 new CommandSpawn(),
-                new CommandValidate(),
+                new CommandMigration(),
 
                 new CommandBlackSmith(),
                 new CommandTinker(),

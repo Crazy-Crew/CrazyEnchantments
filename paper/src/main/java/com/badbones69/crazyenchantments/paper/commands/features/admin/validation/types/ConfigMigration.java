@@ -1,14 +1,14 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.validation.types;
 
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.IEnchantValidator;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.IEnchantMigration;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
-public class ConfigValidator extends IEnchantValidator {
+public class ConfigMigration extends IEnchantMigration {
 
-    public ConfigValidator(@NotNull final CommandSender sender) {
+    public ConfigMigration(@NotNull final CommandSender sender) {
         super(sender);
     }
 
