@@ -30,13 +30,13 @@ feather {
             group(rootProject.name.lowercase())
             task("dev-build")
 
-            if (System.getenv("BUILD_WEBHOOK") != null) {
-                post(System.getenv("BUILD_WEBHOOK"))
+            if (System.getenv("CE_WEBHOOK") != null) {
+                post(System.getenv("CE_WEBHOOK"))
             }
 
-            username(user.getName())
+            username("Ryder Belserion")
 
-            avatar(user.avatar)
+            avatar("https://github.com/ryderbelserion.png")
 
             embeds {
                 embed {
