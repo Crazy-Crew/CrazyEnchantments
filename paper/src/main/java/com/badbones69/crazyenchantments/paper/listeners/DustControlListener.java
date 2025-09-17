@@ -89,10 +89,17 @@ public class DustControlListener implements Listener {
 
         if (book.getAmount() > 1) return;
 
-        final PersistentDataContainerView container = dust.getPersistentDataContainer();
+        // this new and updated code will make it parse 'bookData' as the currentItem, and 'dustData' as the cursor item.
+        // Before, it always incorrectly compared bookData and dustData to null as both were created using the same item!
+        // And a single item cannot be both a book and both dust, so one is bound to be null.
+        // However with my commit it will compare the 2 different datacontainer items. -- This code has been tested and is what made the dust work for me finally (tested on 1.21.4 folia server)
 
-        final DustData dustData = Methods.getGson().fromJson(container.get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
-        final EnchantedBook bookData = Methods.getGson().fromJson(container.get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
+        final PersistentDataContainerView dust_container = dust.getPersistentDataContainer(); // var renamed
+        final PersistentDataContainerView book_container = book.getPersistentDataContainer(); // line added
+        
+        // changed container vars of both lines
+        final DustData dustData = Methods.getGson().fromJson(dust_container.get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
+        final EnchantedBook bookData = Methods.getGson().fromJson(book_container.get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
 
         if (bookData == null || dustData == null) return;
 
