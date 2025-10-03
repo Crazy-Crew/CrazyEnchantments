@@ -170,7 +170,15 @@ public class ArmorEnchantments implements Listener {
         HashMap<PotionEffectType, Integer> topPotions = new HashMap<>();
 
         topEnchants.forEach((key, value) -> enchantmentPotions.entrySet()
-                .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(key))
+                .stream().filter(enchantedPotion -> {
+                    // What is fixed: removing an enchantment from the yml would normally make this armorchangeevent throw a massive error every 1s
+                    // Code tested and verified to work (tested on 1.21.4 folia server) and doesn't show errors anymore
+                    CEnchantment enchantment = enchantedPotion.getKey().getEnchantment();
+                    return Objects.equals(enchantment, key); // This fix makes it so if getEnchantment returns null it doesn't try to use null.equals(key)
+                    /*Used to be:
+                     * .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(key))
+                     */
+                })
                 .forEach(enchantedPotion -> enchantedPotion.getValue().entrySet().stream()
                         .filter(pot -> !topPotions.containsKey(pot.getKey()) || (topPotions.get(pot.getKey()) != -1 && topPotions.get(pot.getKey()) <= pot.getValue()))
                         .forEach(pot -> topPotions.put(pot.getKey(), value))));
