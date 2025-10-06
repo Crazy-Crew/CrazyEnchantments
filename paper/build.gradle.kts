@@ -14,6 +14,10 @@ repositories {
     maven("https://repo.bg-software.com/repository/api/")
 
     maven("https://maven.enginehub.org/repo/")
+
+    maven("https://repo.nexomc.com/releases/")
+
+    maven("https://repo.oraxen.com/releases/")
 }
 
 dependencies {
@@ -23,11 +27,11 @@ dependencies {
 
     implementation(libs.metrics)
 
-    compileOnly(libs.informative.annotations)
-
-    compileOnly(libs.vault) {
+    compileOnly(libs.bundles.shared) {
         exclude("org.bukkit", "bukkit")
     }
+
+    compileOnly(libs.informative.annotations)
 
     compileOnly(libs.griefprevention)
 
@@ -68,15 +72,6 @@ tasks {
         }
     }
 
-    configurations.all { //todo() FIX ME later, fucking forced dependencies, give me a fucking break
-        resolutionStrategy {
-            force("org.apache.logging.log4j:log4j-bom:2.24.1")
-            force("com.google.guava:guava:33.3.1-jre")
-            force("com.google.code.gson:gson:2.11.0")
-            force("it.unimi.dsi:fastutil:8.5.15")
-        }
-    }
-
     runPaper.folia.registerTask()
 
     runServer {
@@ -84,7 +79,7 @@ tasks {
         jvmArgs("-Dcom.mojang.eula.agree=true")
 
         downloadPlugins {
-            modrinth("luckperms", "v5.5.0-bukkit")
+            modrinth("luckperms", "v5.5.16-bukkit")
         }
 
         defaultCharacterEncoding = Charsets.UTF_8.name()

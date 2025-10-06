@@ -1,17 +1,14 @@
 [versions]
-crazyenchantments = "2.5.2"
+## Paper
+paperweight = "2.0.0-beta.19" # https://github.com/PaperMC/paperweight
+paper = "1.21.8-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
 # Minecraft
-minecraft = "1.21.7"
-
-## JetBrains
-annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
+minecraft = "1.21.8"
 
 # Plugins
-placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
 worldguard = "7.0.13"            # https://dev.bukkit.org/projects/worldguard/files
 worldedit = "7.3.11"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
-vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
 griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.101.0.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
 factions = "1.6.9.5-U0.6.40"     # https://www.spigotmc.org/resources/factionsuuid.1035/
@@ -21,17 +18,21 @@ plotsquared = "7.5.2"           # https://intellectualsites.gitbook.io/plotsquar
 mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
 kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
 
-## Paper
-paperweight = "2.0.0-beta.17" # https://github.com/PaperMC/paperweight
-paper = "1.21.7-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
+## Plugin API
+headdatabaseapi = "1.3.1" # https://github.com/Arcaniax-Development/HeadDatabase-API
+placeholderapi = "2.11.6" # https://github.com/placeholderapi
+itemsadder = "4.0.10" # https://github.com/ItemsAdder
+oraxen = "1.190.0" # https://github.com/oraxen
+vault = "1.7.1" # Never Updates: https://github.com/milkbowl/Vault
+nexo = "1.6.0" # https://github.com/Nexo-MC
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "2.3.1" # https://github.com/jpenilla/run-task
-minotaur = "2.8.7" # https://github.com/modrinth/minotaur
+run-paper = "3.0.0" # https://github.com/jpenilla/run-task
+minotaur = "2.8.10" # https://github.com/modrinth/minotaur
 feather = "0.4.0" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.3" # https://github.com/HangarMC/hangar-publish-plugin
-shadow = "9.0.0-beta17" # https://github.com/GradleUp/shadow
+shadow = "9.2.2" # https://github.com/GradleUp/shadow
 
 ## Other
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
@@ -39,34 +40,43 @@ fusion = "2.4.3" # https://github.com/ryderbelserion/Fusion
 bStats = "3.1.0" # https://github.com/Bastian/bStats
 
 [plugins]
-# https://github.com/ryderbelserion/Feather
-feather = { id = "com.ryderbelserion.feather.core", version.ref = "feather" }
-# https://github.com/HangarMC/hangar-publish-plugin
-hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
-# https://github.com/modrinth/minotaur
-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
 
 [libraries]
-placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
-
-worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
-
-vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
-
-# https://github.com/JetBrains/java-annotations
-annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 
 # https://github.com/PaperMC/paperweight
 paperweight = { module = "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin", version.ref = "paperweight" }
+
+# https://github.com/ryderbelserion/Feather
+feather = { module = "com.ryderbelserion.feather.core:com.ryderbelserion.feather.core.gradle.plugin", version.ref = "feather" }
+
+# https://github.com/HangarMC/hangar-publish-plugin
+hangar = { module = "io.papermc.hangar-publish-plugin:io.papermc.hangar-publish-plugin.gradle.plugin", version.ref = "hangar" }
+
+# https://github.com/modrinth/minotaur
+minotaur = { module = "com.modrinth.minotaur:com.modrinth.minotaur.gradle.plugin", version.ref = "minotaur" }
 
 # https://github.com/GradleUp/shadow
 shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
 
 # https://github.com/jpenilla/run-task
 run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
+
+# https://github.com/Arcaniax-Development/HeadDatabase-API
+headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabaseapi" }
+# https://github.com/placeholderapi
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+# https://github.com/ItemsAdder
+itemsadder = { module = "dev.lone:api-itemsadder", version.ref = "itemsadder" }
+# Never Updates: https://github.com/milkbowl/Vault
+vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+# https://github.com/oraxen
+oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
+# https://github.com/Nexo-MC
+nexo = { module = "com.nexomc:nexo", version.ref = "nexo" }
 
 # https://github.com/TriumphTeam/triumph-cmds
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
@@ -86,14 +96,28 @@ mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
 
 kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
 
-informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" } #https://central.sonatype.com/artifact/com.intellectualsites.informative-annotations/informative-annotations
-paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" } #https://mvnrepository.com/artifact/com.intellectualsites.paster
+# https://central.sonatype.com/artifact/com.intellectualsites.informative-annotations/informative-annotations
+informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" }
+# https://mvnrepository.com/artifact/com.intellectualsites.paster
+paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" }
 
 # https://github.com/Bastian/bStats
 metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
 
 [bundles]
+shared = [
+    "headdatabaseapi",
+    "placeholderapi",
+    "itemsadder",
+    "oraxen",
+    "vault",
+    "nexo"
+]
+
 build = [
+    "minotaur",
+    "feather",
+    "hangar",
     "shadow"
 ]
 
