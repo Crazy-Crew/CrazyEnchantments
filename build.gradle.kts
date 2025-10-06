@@ -133,8 +133,8 @@ feather {
             group(rootProject.name.lowercase())
             task("dev-build")
 
-            if (System.getenv("CA_WEBHOOK") != null) {
-                post(System.getenv("CA_WEBHOOK"))
+            if (System.getenv("CE_WEBHOOK") != null) {
+                post(System.getenv("CE_WEBHOOK"))
             }
 
             username("Ryder Belserion")
@@ -183,7 +183,7 @@ feather {
 
             avatar(user.avatar)
 
-            content("<@&929463450214735912>")
+            content("<@&929463452232192063>")
 
             embeds {
                 embed {
