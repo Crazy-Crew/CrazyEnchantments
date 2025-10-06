@@ -79,7 +79,7 @@ tasks {
         jvmArgs("-Dcom.mojang.eula.agree=true")
 
         downloadPlugins {
-            modrinth("luckperms", "v5.5.16-bukkit")
+            modrinth("luckperms", "v5.5.0-bukkit")
         }
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
