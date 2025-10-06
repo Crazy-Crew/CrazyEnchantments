@@ -1,5 +1,8 @@
 Messages:
   Config-Reload: '&7You have reloaded the Config.yml'
+  Console-Only: "&cOnly console can use this command."
+  Correct-Usage: "&cThe correct usage for this command is %usage%."
+  Unknown-Command: "&cThe command %command% is not known."
   Need-To-UnStack-Item: '&cYou need to unstack that item before you can use it.'
   Not-An-Enchantment: '&cThat is not an enchantment.'
   Right-Click-Black-Scroll: '&7Black scrolls will remove a random enchantment from your item.'

@@ -11,7 +11,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public enum Messages {
-    
+
+    CORRECT_USAGE("Correct-Usage", "&cThe correct usage for this command is %usage%."),
+    PLAYERS_ONLY("Players-Only", "&cOnly players can use this command."),
+    NO_PERMISSION("No-Perm", "&cYou do not have permission to use that command!"),
+    CONSOLE_ONLY("Console-Only", "&cOnly console can use this command."),
+    UNKNOWN_COMMAND("Unknown-Command", "&cThe command %command% is not known."),
+
     CONFIG_RELOAD("Config-Reload", "&7You have reloaded the Config.yml"),
     NEED_TO_UNSTACK_ITEM("Need-To-UnStack-Item", "&cYou need to unstack that item before you can use it."),
     NOT_AN_ENCHANTMENT("Not-An-Enchantment", "&cThat is not an enchantment."),
@@ -32,8 +38,6 @@ public enum Messages {
     TINKER_INVENTORY_FULL("Tinker-Inventory-Full", "&cThe inventory is full. Sell all or remove items."),
     NEED_TO_USE_PLAYER_INVENTORY("Need-To-Use-Player-Inventory", "&cYou can only use that in your player inventory."),
     TINKER_SOLD_MESSAGE("Tinker-Sold-Msg", "&7Thank you for trading at &7&lThe &4&lCrazy &c&lTinkerer&7."),
-    PLAYERS_ONLY("Players-Only", "&cOnly players can use this command."),
-    NO_PERMISSION("No-Perm", "&cYou do not have permission to use that command!"),
     NOT_ONLINE("Not-Online", "&cThat player is not online."),
     REMOVED_ENCHANTMENT("Remove-Enchantment", "&7You have removed the enchantment &a%Enchantment% &7from this item."),
     DOESNT_HAVE_ENCHANTMENT("Doesnt-Have-Enchantment", "&cYour item does not contain the enchantment &6%Enchantment%&c."),
