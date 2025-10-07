@@ -158,7 +158,7 @@ public enum CEnchantments {
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
      */
-    CEnchantments(String name, String typeName) {
+    CEnchantments(@NotNull final String name, @NotNull final String typeName) {
         this.name = name;
         this.typeName = typeName;
         this.chance = 0;
@@ -172,7 +172,7 @@ public enum CEnchantments {
      * @param chance The chance the enchantment has to active.
      * @param chanceIncrease The amount the chance increases by every level.
      */
-    CEnchantments(String name, String typeName, int chance, int chanceIncrease) {
+    CEnchantments(@NotNull final String name, @NotNull final String typeName, final int chance, final int chanceIncrease) {
         this.name = name;
         this.typeName = typeName;
         this.chance = chance;
@@ -254,7 +254,7 @@ public enum CEnchantments {
      * Check to see if the enchantment's chance is successful.
      * @return True if the chance was successful and false if not.
      */
-    public boolean chanceSuccessful(int level) {
+    public boolean chanceSuccessful(final int level) {
         return this.chanceSuccessful(level, 1.0);
     }
 
@@ -262,7 +262,7 @@ public enum CEnchantments {
      * Check to see if the enchantment's chance is successful.
      * @return True if the chance was successful and false if not.
      */
-    public boolean chanceSuccessful(int level, double multiplier) {
+    public boolean chanceSuccessful(final int level, final double multiplier) {
         return getEnchantment().chanceSuccessful(level, multiplier);
     }
 

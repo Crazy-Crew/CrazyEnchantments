@@ -1,5 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.economy;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum Currency {
     
     VAULT("Vault"),
@@ -8,7 +10,7 @@ public enum Currency {
     
     private final String name;
     
-    Currency(String name) {
+    Currency(@NotNull final String name) {
         this.name = name;
     }
     
@@ -17,7 +19,7 @@ public enum Currency {
      * @param currency The currency name you are checking.
      * @return True if it is supported and false if not.
      */
-    public static boolean isCurrency(String currency) {
+    public static boolean isCurrency(@NotNull final String currency) {
         for (Currency value : Currency.values()) {
             if (currency.equalsIgnoreCase(value.getName())) return true;
         }
@@ -30,12 +32,12 @@ public enum Currency {
      * @param currency The currency you want.
      * @return The currency enum.
      */
-    public static Currency getCurrency(String currency) {
+    public static Currency getCurrency(@NotNull final String currency) {
         for (Currency value : Currency.values()) {
             if (currency.equalsIgnoreCase(value.getName())) return value;
         }
 
-        return null;
+        return Currency.XP_LEVEL;
     }
     
     /**
@@ -43,6 +45,6 @@ public enum Currency {
      * @return The name of the currency.
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 }

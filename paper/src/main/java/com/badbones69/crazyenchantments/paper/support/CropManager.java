@@ -4,11 +4,12 @@ import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVers
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.Farmland;
+import org.jetbrains.annotations.NotNull;
 
 public class CropManager implements CropManagerVersion {
     
     @Override
-    public void fullyGrowPlant(Block block) {
+    public void fullyGrowPlant(@NotNull final Block block) {
         if (block.getBlockData() instanceof Ageable age) {
             if (age.getAge() < age.getMaximumAge()) {
                 age.setAge(age.getMaximumAge());
@@ -18,14 +19,14 @@ public class CropManager implements CropManagerVersion {
     }
     
     @Override
-    public boolean isFullyGrown(Block block) {
+    public boolean isFullyGrown(@NotNull final Block block) {
         if (block.getBlockData() instanceof Ageable age) return age.getAge() == age.getMaximumAge();
 
         return false;
     }
     
     @Override
-    public void hydrateSoil(Block soil) {
+    public void hydrateSoil(@NotNull final Block soil) {
         Farmland farmland = (Farmland) soil.getBlockData();
 
         farmland.setMoisture(farmland.getMaximumMoisture());

@@ -17,6 +17,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,22 +51,23 @@ public class MenuManager {
         return enchantmentTypes;
     }
 
-    public static void openKitsMenu(Player player) {
+    public static void openKitsMenu(@NotNull final Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
 
         player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size"), gkitz.getString("Settings.Inventory-Name")).build().getInventory());
     }
 
-    public static void openKitsPreviewMenu(Player player, int slots, GKitz kit) {
+    public static void openKitsPreviewMenu(@NotNull final Player player, final int slots, @NotNull final GKitz kit) {
         player.openInventory(new KitsPreviewMenu(player, slots, ColorUtils.toLegacy(kit.getDisplayItem().displayName()), kit).build().getInventory());
     }
 
-    public static void openInfoMenu(Player player) {
+    public static void openInfoMenu(@NotNull final Player player) {
         player.openInventory(new BaseMenu(player, KitsManager.getInventorySize(), ColorUtils.toLegacy(KitsManager.getInventoryName())).build().getInventory());
     }
 
-    public static void openInfoMenu(Player player, EnchantmentType type) {
+    public static void openInfoMenu(@NotNull final Player player, @NotNull final EnchantmentType type) {
         List<CEnchantment> enchantments = type.getEnchantments();
+
         int slots = 9;
 
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
@@ -73,15 +75,11 @@ public class MenuManager {
         player.openInventory(new BaseMenu(player, slots, ColorUtils.toLegacy(KitsManager.getInventoryName())).setEnchantmentType(type).build().getInventory());
     }
 
-    public static void openBlackSmithMenu(Player player) {
+    public static void openBlackSmithMenu(@NotNull final Player player) {
         player.openInventory(new BlackSmithMenu(player, 27, BlackSmithManager.getInventoryName()).build().getInventory());
     }
 
-    public static void openTinkererMenu(Player player) {
-        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.GUIName")).build().getInventory());
-    }
-
-    public static int getInventorySize(FileConfiguration configuration) {
-        return configuration.getInt("Settings.GUISize");
+    public static void openTinkererMenu(@NotNull final Player player) {
+        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
     }
 }

@@ -22,11 +22,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +52,7 @@ public class HoeEnchantments implements Listener {
     @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
 
     private final Set<Material> harvesterCrops = Set.of(Material.WHEAT, Material.CARROTS, Material.BEETROOTS, Material.POTATOES, Material.NETHER_WART, Material.COCOA);
 
@@ -67,15 +67,17 @@ public class HoeEnchantments implements Listener {
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack hoe = this.methods.getItemInHand(player);
+
             Block block = event.getClickedBlock();
+
             if (block == null) return;
+
             Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(hoe);
 
             // Crop is not fully grown.
-            if (this.seedlings.contains(block.getType())
-                    && !this.crazyManager.getNMSSupport().isFullyGrown(block)
-                    && EnchantUtils.isEventActive(CEnchantments.GREENTHUMB, player, hoe, enchantments)) {
+            if (this.seedlings.contains(block.getType()) && !this.crazyManager.getNMSSupport().isFullyGrown(block) && EnchantUtils.isEventActive(CEnchantments.GREENTHUMB, player, hoe, enchantments)) {
                 fullyGrowPlant(block);
+
                 if (player.getGameMode() != GameMode.CREATIVE) this.methods.removeDurability(hoe, player);
             }
 
@@ -91,6 +93,7 @@ public class HoeEnchantments implements Listener {
                             for (Block water : getAreaBlocks(soil, 4)) {
                                 if (water.getType() == Material.WATER) {
                                     this.crazyManager.getNMSSupport().hydrateSoil(soil);
+
                                     break;
                                 }
                             }
@@ -105,15 +108,15 @@ public class HoeEnchantments implements Listener {
 
                 // Take durability from players not in Creative
                 // Checking else to make sure the item does have Tiller.
-                if (player.getGameMode() != GameMode.CREATIVE && CEnchantments.PLANTER.isActivated()
-                        && enchantments.containsKey(CEnchantments.PLANTER.getEnchantment())
-                        && !enchantments.containsKey(CEnchantments.TILLER.getEnchantment())
+                if (player.getGameMode() != GameMode.CREATIVE && CEnchantments.PLANTER.isActivated() && enchantments.containsKey(CEnchantments.PLANTER.getEnchantment()) && !enchantments.containsKey(CEnchantments.TILLER.getEnchantment())
                         && plantSeedSuccess(block, player, hasGreenThumb)) this.methods.removeDurability(hoe, player);
             }
         } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated()
                 && this.enchantmentBookSettings.getEnchantments(this.methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
-            HashMap<Block, BlockFace> blockFace = new HashMap<>();
+            Map<Block, BlockFace> blockFace = new HashMap<>();
+
             blockFace.put(event.getClickedBlock(), event.getBlockFace());
+
             this.blocks.put(player.getUniqueId(), blockFace);
         }
     }
@@ -129,12 +132,15 @@ public class HoeEnchantments implements Listener {
             if (!this.harvesterCrops.contains(plant.getType())) return;
 
             ItemStack hoe = this.methods.getItemInHand(player);
+
             Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(hoe);
+
             if (!this.blocks.containsKey(player.getUniqueId())) return;
 
             if (!EnchantUtils.isEventActive(CEnchantments.HARVESTER, player, hoe, enchantments)) return;
 
             BlockFace blockFace = this.blocks.get(player.getUniqueId()).get(plant);
+
             this.blocks.remove(player.getUniqueId());
 
             if (!this.crazyManager.getNMSSupport().isFullyGrown(plant)) return;
@@ -143,12 +149,13 @@ public class HoeEnchantments implements Listener {
         }
     }
 
-    private void fullyGrowPlant(Block block) {
+    private void fullyGrowPlant(@NotNull final Block block) {
         this.crazyManager.getNMSSupport().fullyGrowPlant(block);
+
         block.getLocation().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, block.getLocation(), 20, .25F, .25F, .25F);
     }
 
-    private boolean plantSeedSuccess(Block soil, Player player, boolean hasGreenThumb) {
+    private boolean plantSeedSuccess(@NotNull final Block soil, @NotNull final Player player, final boolean hasGreenThumb) {
         boolean isSoulSand = soil.getType() == Material.SOUL_SAND;
         Material seedType;
         ItemStack playerSeedItem;
@@ -156,8 +163,10 @@ public class HoeEnchantments implements Listener {
 
         if (!plant.isEmpty()) return false;
 
-        seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
-        playerSeedItem = player.getEquipment().getItemInOffHand();
+        final EntityEquipment equipment = player.getEquipment();
+
+        seedType = getPlanterSeed(equipment.getItemInOffHand());
+        playerSeedItem = equipment.getItemInOffHand();
 
         if (isSoulSand) { // If on soul sand we want it to plant Nether Warts not normal seeds.
             if (playerSeedItem.getType() != Material.NETHER_WART) seedType = null;
@@ -167,13 +176,15 @@ public class HoeEnchantments implements Listener {
 
         if (seedType == null) {
             for (int slot = 0; slot < 9; slot++) {
-                seedType = getPlanterSeed(player.getInventory().getItem(slot));
-                playerSeedItem = player.getInventory().getItem(slot);
+                final ItemStack itemStack = player.getInventory().getItem(slot);
+
+                seedType = getPlanterSeed(itemStack == null ? ItemStack.empty() : itemStack);
+                playerSeedItem = itemStack == null ? ItemStack.empty() : itemStack;
 
                 if (isSoulSand) { // If on soul sand we want it to plant Nether Warts not normal seeds.
-                    if (playerSeedItem != null && playerSeedItem.getType() != Material.NETHER_WART) seedType = null;
+                    if (playerSeedItem.getType() != Material.NETHER_WART) seedType = null;
                 } else {
-                    if (playerSeedItem != null && playerSeedItem.getType() == Material.NETHER_WART) seedType = null; // Makes sure nether warts are not put on soil.
+                    if (playerSeedItem.getType() == Material.NETHER_WART) seedType = null; // Makes sure nether warts are not put on soil.
                 }
 
                 if (seedType != null) break;
@@ -183,7 +194,7 @@ public class HoeEnchantments implements Listener {
         if (seedType != null) {
             if (soil.getType() != Material.FARMLAND && !isSoulSand) soil.setType(Material.FARMLAND);
 
-            if (player.getGameMode() != GameMode.CREATIVE) methods.removeItem(playerSeedItem, player); // Take seed from player
+            if (player.getGameMode() != GameMode.CREATIVE && !playerSeedItem.isEmpty()) this.methods.removeItem(playerSeedItem, player); // Take seed from player
 
             plant.setType(seedType);
 
@@ -195,7 +206,7 @@ public class HoeEnchantments implements Listener {
         return false;
     }
 
-    private final HashMap<Material, Material> planterSeeds = new HashMap<>(){{
+    private final Map<Material, Material> planterSeeds = new HashMap<>(){{
         put(Material.WHEAT_SEEDS, Material.WHEAT);
         put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
         put(Material.POTATO, Material.POTATOES);
@@ -205,13 +216,13 @@ public class HoeEnchantments implements Listener {
         put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
     }};
 
-    public Material getPlanterSeed(ItemStack item) {
-        if (item == null) return null;
+    public Material getPlanterSeed(@NotNull final ItemStack item) {
+        if (item.isEmpty()) return null;
 
         return this.planterSeeds.get(item.getType());
     }
 
-    private List<Block> getAreaCrops(Block block, BlockFace blockFace) {
+    private List<Block> getAreaCrops(@NotNull final Block block, @NotNull final BlockFace blockFace) {
         List<Block> blockList = new ArrayList<>();
 
         for (Block crop : getAreaBlocks(block, blockFace, 1)) { // Radius of 1 is 3x3
@@ -223,7 +234,7 @@ public class HoeEnchantments implements Listener {
         return blockList;
     }
 
-    private List<Block> getSoil(Player player, Block block) {
+    private List<Block> getSoil(@NotNull final Player player, @NotNull final Block block) {
         List<Block> soilBlocks = new ArrayList<>();
 
         for (Block soil : getAreaBlocks(block, 1)) {
@@ -244,11 +255,11 @@ public class HoeEnchantments implements Listener {
         return soilBlocks;
     }
 
-    private Set<Block> getAreaBlocks(Block block, int radius) {
+    private Set<Block> getAreaBlocks(@NotNull final Block block, final int radius) {
         return getAreaBlocks(block, BlockFace.UP, radius);
     }
 
-    private Set<Block> getAreaBlocks(Block block, BlockFace blockFace, int radius) {
+    private Set<Block> getAreaBlocks(@NotNull final Block block, @NotNull final BlockFace blockFace, final int radius) {
         Location loc = block.getLocation();
         Location loc2 = block.getLocation();
 

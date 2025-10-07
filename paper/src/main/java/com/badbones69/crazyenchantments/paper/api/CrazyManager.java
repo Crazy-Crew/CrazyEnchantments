@@ -52,6 +52,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -230,32 +231,24 @@ public class CrazyManager {
 
             if (enchants.contains(path)) { // To make sure the enchantment isn't broken.
                 CEnchantment enchantment = new CEnchantment(name)
-                .setCustomName(enchants.getString(path + ".Name"))
-                .setActivated(enchants.getBoolean(path + ".Enabled"))
-                .setMaxLevel(enchants.getInt(path + ".MaxPower"))
+                .setCustomName(enchants.getString(path + ".Name", name))
+                .setActivated(enchants.getBoolean(path + ".Enabled", false))
+                .setMaxLevel(enchants.getInt(path + ".MaxPower")) //todo() default power
                 .setEnchantmentType(cEnchantment.getType())
-                .setInfoName(enchants.getString(path + ".Info.Name"))
+                .setInfoName(enchants.getString(path + ".Info.Name")) //todo() default name
                 .setInfoDescription(enchants.getStringList(path + ".Info.Description"))
                 .setCategories(enchants.getStringList(path + ".Categories"))
                 .setChance(cEnchantment.getChance())
                 .setChanceIncrease(cEnchantment.getChanceIncrease())
-                .setSound(enchants.getString(path + ".Sound"))
+                .setSound(enchants.getString(path + ".Sound")) //todo() default sound
                 .setConflicts(enchants.getStringList(path + ".Conflicts"));
 
                 if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(this.methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
 
                 if (cEnchantment.hasChanceSystem()) {
-                    if (enchants.contains(path + ".Chance-System.Base")) {
-                        enchantment.setChance(enchants.getInt(path + ".Chance-System.Base"));
-                    } else {
-                        enchantment.setChance(cEnchantment.getChance());
-                    }
+                    enchantment.setChance(enchants.getInt(path + ".Chance-System.Base", cEnchantment.getChance()));
 
-                    if (enchants.contains(path + ".Chance-System.Increase")) {
-                        enchantment.setChanceIncrease(enchants.getInt(path + ".Chance-System.Increase"));
-                    } else {
-                        enchantment.setChanceIncrease(cEnchantment.getChanceIncrease());
-                    }
+                    enchantment.setChanceIncrease(enchants.getInt(path + ".Chance-System.Increase", cEnchantment.getChanceIncrease()));
                 }
 
                 enchantment.registerEnchantment();
@@ -272,7 +265,7 @@ public class CrazyManager {
                     String path = "GKitz." + kit + ".";
 
                     int slot = gkit.getInt(path + "Display.Slot");
-                    String time = gkit.getString(path + "Cooldown");
+                    String time = gkit.getString(path + "Cooldown", "");
                     boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
 
                     ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
@@ -338,7 +331,7 @@ public class CrazyManager {
      * This plugin does it automatically, so there is no need to use it unless you have to.
      * @param player The player you wish to load.
      */
-    public void loadCEPlayer(Player player) {
+    public void loadCEPlayer(@NotNull final Player player) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getUniqueId().toString();
 
@@ -360,7 +353,7 @@ public class CrazyManager {
      * This plugin removes the player automatically, so don't use this method unless needed for some reason.
      * @param player Player you wish to remove.
      */
-    public void unloadCEPlayer(Player player) {
+    public void unloadCEPlayer(@NotNull final Player player) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getUniqueId().toString();
         CEPlayer cePlayer = getCEPlayer(player);
@@ -380,7 +373,7 @@ public class CrazyManager {
      * This backup all the players data stored by this plugin.
      * @param player The player you wish to back up.
      */
-    public void backupCEPlayer(Player player) {
+    public void backupCEPlayer(@NotNull final Player player) {
         backupCEPlayer(getCEPlayer(player));
     }
 
@@ -388,7 +381,7 @@ public class CrazyManager {
      * This backup all the players data stored by this plugin.
      * @param cePlayer The player you wish to back up.
      */
-    private void backupCEPlayer(CEPlayer cePlayer) {
+    private void backupCEPlayer(@NotNull final CEPlayer cePlayer) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
 
@@ -423,7 +416,7 @@ public class CrazyManager {
      * @param kitName The kit you wish to get.
      * @return The kit as a GKitz object.
      */
-    public GKitz getGKitFromName(String kitName) {
+    public GKitz getGKitFromName(@NotNull final String kitName) {
         for (GKitz kit : getGKitz()) {
             if (kit.getName().equalsIgnoreCase(kitName)) return kit;
         }
@@ -444,7 +437,7 @@ public class CrazyManager {
      * @param player The player you want to get as a CEPlayer.
      * @return The player but as a CEPlayer. Will return null if not found.
      */
-    public CEPlayer getCEPlayer(Player player) {
+    public CEPlayer getCEPlayer(@NotNull final Player player) {
         for (CEPlayer cePlayer : getCEPlayers()) {
             if (cePlayer.getPlayer() == player) return cePlayer;
         }
@@ -452,7 +445,7 @@ public class CrazyManager {
         return null;
     }
 
-    public CEPlayer getCEPlayer(UUID uuid) {
+    public CEPlayer getCEPlayer(@NotNull final UUID uuid) {
         for (CEPlayer cePlayer : getCEPlayers()) {
             if (cePlayer.getPlayer().getUniqueId().equals(uuid)) return cePlayer;
         }
@@ -468,7 +461,7 @@ public class CrazyManager {
         return this.players;
     }
     
-    public CEBook getRandomEnchantmentBook(Category category) {
+    public CEBook getRandomEnchantmentBook(@NotNull final Category category) {
         try {
             List<CEnchantment> enchantments = category.getEnabledEnchantments();
             CEnchantment enchantment = enchantments.get(new Random().nextInt(enchantments.size()));
@@ -512,7 +505,7 @@ public class CrazyManager {
      * Register a new enchantment into the plugin.
      * @param enchantment The enchantment you wish to register.
      */
-    public void registerEnchantment(CEnchantment enchantment) {
+    public void registerEnchantment(@NotNull final CEnchantment enchantment) {
         this.enchantmentBookSettings.getRegisteredEnchantments().add(enchantment);
     }
 
@@ -520,11 +513,11 @@ public class CrazyManager {
      * Unregister an enchantment that is registered into plugin.
      * @param enchantment The enchantment you wish to unregister.
      */
-    public void unregisterEnchantment(CEnchantment enchantment) {
+    public void unregisterEnchantment(@NotNull final CEnchantment enchantment) {
         this.enchantmentBookSettings.getRegisteredEnchantments().remove(enchantment);
     }
 
-    public void addEnchantment(final ItemStack item, final CEnchantment enchantment, final int level) {
+    public void addEnchantment(@NotNull final ItemStack item, @NotNull final CEnchantment enchantment, final int level) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
         enchantments.put(enchantment, level);
@@ -536,7 +529,7 @@ public class CrazyManager {
      * @param itemStack The meta you want to add the enchantment to.
      * @param enchantments The enchantments to be added.
      */
-    public void addEnchantments(final ItemStack itemStack, final Map<CEnchantment, Integer> enchantments) {
+    public void addEnchantments(@NotNull final ItemStack itemStack, @NotNull final Map<CEnchantment, Integer> enchantments) {
         final Map<CEnchantment, Integer> currentEnchantments = this.enchantmentBookSettings.getEnchantments(itemStack);
 
         this.enchantmentBookSettings.removeEnchantments(itemStack, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
@@ -583,7 +576,7 @@ public class CrazyManager {
         final int newAmount = type += amount; //todo() this needs to be tested.
 
         itemStack.editPersistentDataContainer(container -> {
-            if (newAmount == 0) {
+            if (newAmount <= 0) {
                 container.remove(DataKeys.limit_reducer.getNamespacedKey());
             } else {
                 container.set(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, newAmount);
@@ -598,8 +591,9 @@ public class CrazyManager {
      * @param item The {@link ItemStack} to check.
      * @return The limit set on the item by slot crystals.
      */
-    public int getEnchantmentLimiter(@NotNull ItemStack item) {
-        if (!useEnchantmentLimiter) return 0;
+    public int getEnchantmentLimiter(@NotNull final ItemStack item) {
+        if (!this.useEnchantmentLimiter) return 0;
+
         return item.getPersistentDataContainer().getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
     }
 
@@ -607,28 +601,37 @@ public class CrazyManager {
      * Force an update of a players armor potion effects.
      * @param player The player you are updating the effects of.
      */
-    public void updatePlayerEffects(Player player) { // TODO Remove this method.
+    public void updatePlayerEffects(@Nullable final Player player) { // TODO Remove this method.
         if (player == null) return;
+
         Set<CEnchantments> allEnchantPotionEffects = getEnchantmentPotions().keySet();
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
-            for (CEnchantments ench : allEnchantPotionEffects) {
+            final ItemStack safeArmor = armor == null ? ItemStack.empty() : armor;
+
+            final Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(safeArmor);
+
+            for (final CEnchantments ench : allEnchantPotionEffects) {
                 if (!enchantments.containsKey(ench.getEnchantment())) continue;
-                Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
+
+                final Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, safeArmor, ItemStack.empty(), ench);
+
                 checkPotions(effects, player);
             }
         }
     }
 
-    public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) { //TODO Remove this Method
+    public void checkPotions(@NotNull final Map<PotionEffectType, Integer> effects, @NotNull final Player player) { //TODO Remove this Method
         for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
             int value = type.getValue();
             PotionEffectType key = type.getKey();
 
             player.removePotionEffect(key);
+
             if (value == 0) continue; //TODO check usage with new addition of infinity.
+
             PotionEffect potionEffect = new PotionEffect(key, PotionEffect.INFINITE_DURATION, value);
+
             player.addPotionEffect(potionEffect);
         }
     }
@@ -640,25 +643,29 @@ public class CrazyManager {
      * @param enchantment The enchantment you want the max level effects from.
      * @return The list of all the max potion effects based on all the armor on the player.
      */
-    public Map<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) { //TODO Remove this method.
+    public Map<PotionEffectType, Integer> getUpdatedEffects(@NotNull final Player player, @NotNull final ItemStack includedItem, @NotNull final ItemStack excludedItem, @NotNull final CEnchantments enchantment) { //TODO Remove this method.
         Map<PotionEffectType, Integer> effects = new HashMap<>();
+
         List<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
 
-        if (includedItem == null) includedItem = new ItemStack(Material.AIR);
+        ItemStack safeItem = excludedItem;
 
-        if (excludedItem == null) excludedItem = new ItemStack(Material.AIR);
-
-        if (excludedItem.isSimilar(includedItem)) excludedItem = new ItemStack(Material.AIR);
+        if (safeItem.isSimilar(includedItem)) safeItem = ItemStack.empty();
 
         items.add(includedItem);
+
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
 
         for (ItemStack armor : items) {
-            if (armor == null || armor.isSimilar(excludedItem)) continue;
+            if (armor == null || armor.isEmpty() || armor.isSimilar(safeItem)) continue;
+
             Map<CEnchantment, Integer> ench = this.enchantmentBookSettings.getEnchantments(armor);
+
             for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
                 if (!ench.containsKey(enchantments.getKey().getEnchantment())) continue;
+
                 int level = ench.get(enchantments.getKey().getEnchantment());
+
                 if (!this.useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
 
                 for (PotionEffectType type : enchantments.getValue().keySet()) {
@@ -751,7 +758,7 @@ public class CrazyManager {
      * @param player The player you are checking.
      * @return The max amount of enchantments a player can have on an item.
      */
-    public int getPlayerMaxEnchantments(Player player) {
+    public int getPlayerMaxEnchantments(@NotNull final Player player) {
         int limit = defaultLimit;
 
         if (useConfigLimits) return limit;
@@ -774,7 +781,7 @@ public class CrazyManager {
      * @param player The {@link Player} to check.
      * @return The base amount of enchants the player can add to items.
      */
-    public int getPlayerBaseEnchantments(@NotNull Player player) {
+    public int getPlayerBaseEnchantments(@NotNull final Player player) {
         int limit = defaultBaseLimit;
 
         if (useConfigLimits) return limit;
@@ -798,7 +805,7 @@ public class CrazyManager {
      * @param item The {@link ItemStack} that they want to add the enchant to.
      * @return True if they are able to add more enchants.
      */
-    public boolean canAddEnchantment(@NotNull Player player, @NotNull ItemStack item) {
+    public boolean canAddEnchantment(@NotNull final Player player, @NotNull final ItemStack item) {
         //todo() update permissions
         if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
@@ -813,7 +820,7 @@ public class CrazyManager {
      * @param vanillaEnchantments The amount of vanilla enchantments on the item.
      * @return True if they are able to add more enchants.
      */
-    public boolean canAddEnchantment(@NotNull Player player, int cEnchantments, int vanillaEnchantments) {
+    public boolean canAddEnchantment(@NotNull final Player player, final int cEnchantments, final int vanillaEnchantments) {
         if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
         int enchantAmount = cEnchantments;
@@ -822,7 +829,7 @@ public class CrazyManager {
         return enchantAmount < getPlayerMaxEnchantments(player);
     }
 
-    public int randomLevel(CEnchantment enchantment, Category category) {
+    public int randomLevel(@NotNull final CEnchantment enchantment, @NotNull final Category category) {
         int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment.
         int randomLevel = 1 + new Random().nextInt(enchantmentMax);
 
@@ -868,14 +875,14 @@ public class CrazyManager {
     /**
      * @param dropBlocksBlast If the blast enchantment drops blocks.
      */
-    public void setDropBlocksBlast(boolean dropBlocksBlast) {
+    public void setDropBlocksBlast(final boolean dropBlocksBlast) {
         this.dropBlocksBlast = dropBlocksBlast;
     }
 
     /**
      * @param dropBlocksVeinMiner If the vein-miner enchantment drops blocks.
      */
-    public void setDropBlocksVeinMiner(boolean dropBlocksVeinMiner) {
+    public void setDropBlocksVeinMiner(final boolean dropBlocksVeinMiner) {
         this.dropBlocksVeinMiner = dropBlocksVeinMiner;
     }
 
@@ -905,15 +912,15 @@ public class CrazyManager {
         return this.rageIncrement;
     }
 
-    private void addCEPlayer(CEPlayer player) {
+    private void addCEPlayer(@NotNull final CEPlayer player) {
         this.players.add(player);
     }
 
-    private void removeCEPlayer(CEPlayer player) {
+    private void removeCEPlayer(@NotNull final CEPlayer player) {
         this.players.remove(player);
     }
 
-    private List<ItemStack> getInfoGKit(List<String> itemStrings) {
+    private List<ItemStack> getInfoGKit(@NotNull final List<String> itemStrings) {
         List<ItemStack> items = new ArrayList<>();
 
         for (String itemString : itemStrings) {
@@ -952,7 +959,7 @@ public class CrazyManager {
         return items;
     }
 
-    public String getNewItemString(String itemString) {
+    public String getNewItemString(@NotNull String itemString) {
         StringBuilder newItemString = new StringBuilder();
 
         for (String option : itemString.split(", ")) {
@@ -973,7 +980,7 @@ public class CrazyManager {
         return itemString;
     }
 
-    public int pickLevel(int min, int max) {
+    public int pickLevel(final int min, final int max) {
         return min + new Random().nextInt((max + 1) - min);
     }
 

@@ -25,7 +25,7 @@ public class CurrencyAPI {
      * @param currency The currency you wish to get from.
      * @return The amount that the player has of that currency.
      */
-    public int getCurrency(Player player, Currency currency) {
+    public int getCurrency(@NotNull final Player player, @NotNull final Currency currency) {
         try {
             return switch (currency) {
                 case VAULT -> (int) starter.getVaultSupport().getVault().getBalance(player);
@@ -41,7 +41,7 @@ public class CurrencyAPI {
      * @param player The player you wish to take from.
      * @param category The category you wish to use.
      */
-    public void takeCurrency(Player player, Category category) {
+    public void takeCurrency(@NotNull final Player player, @NotNull final Category category) {
         takeCurrency(player, category.getCurrency(), category.getCost());
     }
     
@@ -50,7 +50,7 @@ public class CurrencyAPI {
      * @param player The player you wish to take from.
      * @param lostBook The lostbook you wish to use.
      */
-    public void takeCurrency(Player player, LostBook lostBook) {
+    public void takeCurrency(@NotNull final Player player, @NotNull final LostBook lostBook) {
         takeCurrency(player, lostBook.getCurrency(), lostBook.getCost());
     }
     
@@ -59,7 +59,7 @@ public class CurrencyAPI {
      * @param player The player you wish to take from.
      * @param option The ShopOption you wish to use.
      */
-    public void takeCurrency(Player player, ShopOption option) {
+    public void takeCurrency(@NotNull final Player player, @NotNull final ShopOption option) {
         takeCurrency(player, option.getCurrency(), option.getCost());
     }
     
@@ -69,7 +69,7 @@ public class CurrencyAPI {
      * @param currency The currency you wish to use.
      * @param amount The amount you want to take.
      */
-    public void takeCurrency(Player player, Currency currency, int amount) {
+    public void takeCurrency(@NotNull final Player player, @NotNull final Currency currency, final int amount) {
         try {
             switch (currency) {
                 case VAULT -> starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
@@ -85,7 +85,7 @@ public class CurrencyAPI {
      * @param currency The currency you want to use.
      * @param amount The amount you are giving to the player.
      */
-    public void giveCurrency(Player player, Currency currency, int amount) {
+    public void giveCurrency(@NotNull final Player player, @NotNull final Currency currency, final int amount) {
         try {
             switch (currency) {
                 case VAULT -> starter.getVaultSupport().getVault().depositPlayer(player, amount);
@@ -101,7 +101,7 @@ public class CurrencyAPI {
      * @param category The category you wish to check.
      * @return True if they have enough to buy it or false if they don't.
      */
-    public boolean canBuy(Player player, Category category) {
+    public boolean canBuy(@NotNull final Player player, @NotNull final Category category) {
         return canBuy(player, category.getCurrency(), category.getCost());
     }
     
@@ -111,7 +111,7 @@ public class CurrencyAPI {
      * @param lostBook The lostBook you wish to check.
      * @return True if they have enough to buy it or false if they don't.
      */
-    public boolean canBuy(Player player, LostBook lostBook) {
+    public boolean canBuy(@NotNull final Player player, @NotNull final LostBook lostBook) {
         return canBuy(player, lostBook.getCurrency(), lostBook.getCost());
     }
     
@@ -121,7 +121,7 @@ public class CurrencyAPI {
      * @param option The ShopOption you wish to check.
      * @return True if they have enough to buy it or false if they don't.
      */
-    public boolean canBuy(Player player, ShopOption option) {
+    public boolean canBuy(@NotNull final Player player, @NotNull final ShopOption option) {
         return canBuy(player, option.getCurrency(), option.getCost());
     }
     
@@ -132,11 +132,11 @@ public class CurrencyAPI {
      * @param cost The cost of the item you are checking.
      * @return True if they have enough to buy it or false if they don't.
      */
-    public boolean canBuy(Player player, Currency currency, int cost) {
+    public boolean canBuy(@NotNull final Player player, @NotNull final Currency currency, final int cost) {
         return getCurrency(player, currency) >= cost;
     }
     
-    private void takeTotalExperience(Player player, int amount) {
+    private void takeTotalExperience(@NotNull final Player player, final int amount) {
         int total = getTotalExperience(player) - amount;
         player.setTotalExperience(0);
         player.setTotalExperience(total);
@@ -152,7 +152,7 @@ public class CurrencyAPI {
         player.setExp(xp);
     }
     
-    private int getTotalExperience(Player player) { // https://www.spigotmc.org/threads/72804
+    private int getTotalExperience(@NotNull final Player player) { // https://www.spigotmc.org/threads/72804
         int experience;
         int level = player.getLevel();
 
@@ -182,7 +182,6 @@ public class CurrencyAPI {
      */
     public void loadCurrency() {
         for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
-
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
                 if (supportedPlugin == SupportedPlugins.VAULT) {
                     starter.setVaultSupport(new VaultSupport());

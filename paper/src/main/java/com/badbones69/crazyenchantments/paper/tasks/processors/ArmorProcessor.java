@@ -17,9 +17,10 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
-public class ArmorProcessor extends PoolProcessor {
+public class ArmorProcessor extends PoolProcessor { //todo() what do I even fucking do with this lol
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
@@ -33,11 +34,11 @@ public class ArmorProcessor extends PoolProcessor {
 
     public ArmorProcessor() {}
 
-    public void add(UUID id){
+    public void add(@NotNull final UUID id){
         add(() -> process(id));
     }
 
-    public void process(UUID playerId) {
+    public void process(@NotNull final UUID playerId) {
         Player player = this.plugin.getServer().getPlayer(playerId);
 
         if (player == null) return;
@@ -74,7 +75,7 @@ public class ArmorProcessor extends PoolProcessor {
         useHellForge(player, inv.getItemInOffHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
     }
 
-    private void checkCommander(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
+    private void checkCommander(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.COMMANDER, player, enchantments)) return;
 
         int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
@@ -101,7 +102,7 @@ public class ArmorProcessor extends PoolProcessor {
 
     }
 
-    private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
+    private void checkAngel(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments, final int radius) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -138,7 +139,7 @@ public class ArmorProcessor extends PoolProcessor {
         }.runNextTick();
     }
 
-    private void checkImplants(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
+    private void checkImplants(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.IMPLANTS, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -151,7 +152,7 @@ public class ArmorProcessor extends PoolProcessor {
         }.runNextTick();
     }
 
-    private void checkNursery(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int heal, double maxHealth) {
+    private void checkNursery(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments, final int heal, final double maxHealth) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.NURSERY, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -165,7 +166,7 @@ public class ArmorProcessor extends PoolProcessor {
         }.runNextTick();
     }
 
-    private void useHellForge(Player player, ItemStack item, Map<CEnchantment, Integer> enchantments) {
+    private void useHellForge(@NotNull final Player player, @NotNull final ItemStack item, @NotNull final Map<CEnchantment, Integer> enchantments) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.HELLFORGED, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {

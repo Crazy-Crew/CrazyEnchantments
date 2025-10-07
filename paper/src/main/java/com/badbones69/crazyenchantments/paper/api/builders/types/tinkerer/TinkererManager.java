@@ -20,6 +20,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,7 @@ public class TinkererManager {
     @NotNull
     private static final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
-    public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand, FileConfiguration configuration) {
+    public static boolean useExperience(@NotNull final Player player, @NotNull final PlayerInteractEvent event, final boolean mainHand, @NotNull final FileConfiguration configuration) {
         PlayerInventory inventory = player.getInventory();
 
         ItemStack item = mainHand ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
@@ -73,7 +74,7 @@ public class TinkererManager {
      * @param xp Amount of XP to store.
      * @return XP Bottle with custom amount of xp stored in it.
      */
-    public static ItemStack getXPBottle(int xp, FileConfiguration config) {
+    public static ItemStack getXPBottle(final int xp, @NotNull final FileConfiguration config) {
         String id = config.getString("Settings.BottleOptions.Item");
         String name = config.getString("Settings.BottleOptions.Name");
         List<String> lore = new ArrayList<>();
@@ -88,13 +89,17 @@ public class TinkererManager {
         return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
-    public static int getTotalXP(ItemStack item, FileConfiguration config) {
+    public static int getTotalXP(@Nullable final ItemStack item, @NotNull final FileConfiguration config) {
         int total = 0;
 
-        Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
+        if (item == null || item.isEmpty()) {
+            return total;
+        }
+
+        final Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
 
         if (!ceEnchants.isEmpty()) { // CrazyEnchantments
-            for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {
+            for (final Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {
                 String[] values = config.getString("Tinker.Crazy-Enchantments." + enchantment.getKey().getName() + ".Items", "0").replaceAll(" ", "").split(",");
                 int baseAmount = Integer.parseInt(values[0]);
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
@@ -118,39 +123,8 @@ public class TinkererManager {
         return total;
     }
 
-    private static String convertLegacy(String from) { // Stolen from Enchantment class -TDL
-        if (from == null) {
-            return null;
-        }
-
-        return switch (from.toLowerCase()) {
-            case "protection_environmental" -> "protection";
-            case "protection_fire" -> "fire_protection";
-            case "protection_fall" -> "feather_falling";
-            case "protection_explosions" -> "blast_protection";
-            case "protection_projectile" -> "projectile_protection";
-            case "oxygen" -> "respiration";
-            case "water_worker" -> "aqua_affinity";
-            case "damage_all" -> "sharpness";
-            case "damage_undead" -> "smite";
-            case "damage_arthropods" -> "bane_of_arthropods";
-            case "loot_bonus_mobs" -> "looting";
-            case "sweeping_edge" -> "sweeping";
-            case "dig_speed" -> "efficiency";
-            case "durability" -> "unbreaking";
-            case "loot_bonus_blocks" -> "fortune";
-            case "arrow_damage" -> "power";
-            case "arrow_knockback" -> "punch";
-            case "arrow_fire" -> "flame";
-            case "arrow_infinite" -> "infinity";
-            case "luck" -> "luck_of_the_sea";
-            default -> from;
-        };
-
-    }
-
-    private static String convertToLegacy(String from) { // Stolen inverse of the above method. -TDL
-        if (from == null) {
+    private static String convertToLegacy(@NotNull final String from) { // Stolen inverse of the above method. -TDL
+        if (from.isEmpty()) {
             return null;
         }
 
@@ -177,14 +151,15 @@ public class TinkererManager {
             case  "luck_of_the_sea" -> "luck";
             default -> from;
         };
-
     }
 
-    public static int getMaxDustLevelFromBook(CEBook book, FileConfiguration config) {
+    public static int getMaxDustLevelFromBook(@NotNull final CEBook book, @NotNull final FileConfiguration config) {
         String path = "Tinker.Crazy-Enchantments." + book.getEnchantment().getName() + ".Book";
+
         if (!config.contains(path)) return 1;
 
         String[] values = config.getString(path, "0").replaceAll(" ", "").split(",");
+
         int baseAmount = Integer.parseInt(values[0]);
         int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
 

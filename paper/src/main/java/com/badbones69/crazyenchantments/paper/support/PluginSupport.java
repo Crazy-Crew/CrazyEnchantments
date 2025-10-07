@@ -18,10 +18,9 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
-public class PluginSupport {
+public class PluginSupport { //todo() nah redo this whole shit show
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -42,26 +41,26 @@ public class PluginSupport {
         }
     }
 
-    public boolean inTerritory(Player player) {
+    public boolean inTerritory(@NotNull final Player player) {
         if (this.claimPlugin != null) return this.claimPlugin.inTerritory(player);
 
         return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().inTerritory(player);
     }
 
-    public boolean isFriendly(Entity pEntity, Entity oEntity) {
+    public boolean isFriendly(@NotNull final Entity pEntity, @NotNull final Entity oEntity) {
         if (!(pEntity instanceof Player player) || !(oEntity instanceof Player otherPlayer)) return false;
 
         if (this.claimPlugin != null) return this.claimPlugin.isFriendly(player, otherPlayer);
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
-        if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyAPI.inSameParty((Player) pEntity, (Player) oEntity);
+        if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyAPI.inSameParty(player, otherPlayer);
 
         return false;
 
     }
 
-    public boolean isVanished(Player player) {
+    public boolean isVanished(@NotNull final Player player) {
         for (MetadataValue meta : player.getMetadata("vanished")) {
             if (meta.asBoolean()) return true;
         }
@@ -69,27 +68,27 @@ public class PluginSupport {
         return false;
     }
 
-    public boolean allowCombat(Location location) {
+    public boolean allowCombat(@NotNull final Location location) {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded()) return TownySupport.allowsCombat(location);
+
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsPVP(location);
     }
 
-    public boolean allowDestruction(Location location) {
+    public boolean allowDestruction(@NotNull final Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsBreak(location);
     }
 
-    public boolean allowExplosion(Location location) {
+    public boolean allowExplosion(@NotNull final Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsExplosions(location);
     }
 
     public void updateHooks() {
         this.cachedPlugins.clear();
 
-        for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
+        for (final SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
 
                 String website = supportedPlugin.getLoadedPlugin().getDescription().getWebsite();
-                String name = supportedPlugin.getLoadedPlugin().getDescription().getName();
 
                 switch (supportedPlugin) {
                     case FACTIONS_UUID -> {
@@ -116,7 +115,7 @@ public class PluginSupport {
         return this.worldGuardUtils;
     }
 
-    public void updateClaimHooks(SupportedPlugins supportedPlugin) {
+    public void updateClaimHooks(final SupportedPlugins supportedPlugin) {
         switch (supportedPlugin) {
             case GRIEF_PREVENTION -> this.claimPlugin = new GriefPreventionSupport();
             case TOWNYADVANCED -> this.claimPlugin = new TownySupport();
@@ -125,7 +124,7 @@ public class PluginSupport {
         }
     }
 
-    public void printHooks() {
+    public void printHooks() { //todo() nein
         if (this.cachedPlugins.isEmpty()) updateHooks();
 
         this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));

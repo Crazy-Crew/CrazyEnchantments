@@ -21,7 +21,6 @@ import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -82,17 +81,18 @@ public class ArmorEnchantments implements Listener {
     private final List<UUID> fallenPlayers = new ArrayList<>();
 
     public ArmorEnchantments() {
-        armorProcessor.start();
+        this.armorProcessor.start();
     }
 
     public void stop() {
-        armorProcessor.stop();
+        this.armorProcessor.stop();
     }
 
     @EventHandler
     public void onDeath(EntityResurrectEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        ItemStack air = new ItemStack(Material.AIR);
+
+        final ItemStack air = ItemStack.empty();
 
         new FoliaScheduler(this.plugin, null, player) {
             @Override
@@ -131,7 +131,7 @@ public class ArmorEnchantments implements Listener {
      * @param newItem The new item equipped.
      * @param oldItem The item that had previously been equipped.
      */
-    private void updateEffects(@NotNull Player player, @NotNull ItemStack newItem, @NotNull ItemStack oldItem) {
+    private void updateEffects(@NotNull final Player player, @NotNull final ItemStack newItem, @NotNull final ItemStack oldItem) {
         final Map<CEnchantment, Integer> topEnchants = getCurrentEnchants(player, newItem);
 
         // Remove all effects that they no longer should have from the armor.
@@ -165,8 +165,9 @@ public class ArmorEnchantments implements Listener {
      * @return Returns a list of top potion effects from the provided list of enchantments.
      */
     @NotNull
-    private Map<PotionEffectType, Integer> getTopPotionEffects(@NotNull Map<CEnchantment, Integer> topEnchants) {
+    private Map<PotionEffectType, Integer> getTopPotionEffects(@NotNull final Map<CEnchantment, Integer> topEnchants) {
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = this.crazyManager.getEnchantmentPotions();
+
         HashMap<PotionEffectType, Integer> topPotions = new HashMap<>();
 
         topEnchants.forEach((key, value) -> enchantmentPotions.entrySet()
@@ -185,7 +186,7 @@ public class ArmorEnchantments implements Listener {
      * @return Returns a map of all current active enchants on the specified player.
      */
     @NotNull
-    private Map<CEnchantment, Integer> getCurrentEnchants(@NotNull Player player, @NotNull ItemStack newItem) {
+    private Map<CEnchantment, Integer> getCurrentEnchants(@NotNull final Player player, @NotNull final ItemStack newItem) {
         Map<CEnchantment, Integer> toAdd = getUpperEnchants(player);
 
         if (!newItem.isEmpty()) {
@@ -204,8 +205,8 @@ public class ArmorEnchantments implements Listener {
      * @return A list of {@link CEnchantments}'s on the player.
      */
     @NotNull
-    private HashMap<CEnchantment, Integer> getUpperEnchants(@NotNull Player player) {
-        HashMap<CEnchantment, Integer> topEnchants = new HashMap<>();
+    private Map<CEnchantment, Integer> getUpperEnchants(@NotNull final Player player) {
+        Map<CEnchantment, Integer> topEnchants = new HashMap<>();
 
         Arrays.stream(player.getEquipment().getArmorContents())
                 .map(this.enchantmentBookSettings::getEnchantments)
@@ -219,12 +220,14 @@ public class ArmorEnchantments implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getDamager().getUniqueId())) return;
+
         if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof Player player)) return;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(armor);
+
             if (enchants.isEmpty()) continue;
 
             for (ArmorEnchantment armorEnchantment : this.armorEnchantmentManager.getArmorEnchantments()) {
@@ -296,7 +299,7 @@ public class ArmorEnchantments implements Listener {
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
                 double heal = enchants.get(CEnchantments.ENLIGHTENED.getEnchantment());
                 // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+                double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue(); //todo() npe
 
                 if (player.getHealth() + heal < maxHealth) player.setHealth(player.getHealth() + heal);
 

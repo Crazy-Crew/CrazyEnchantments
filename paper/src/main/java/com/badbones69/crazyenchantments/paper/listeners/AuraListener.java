@@ -46,9 +46,7 @@ public class AuraListener implements Listener {
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        if (from.getBlockX() == to.getBlockX()
-        && from.getBlockY() == to.getBlockY()
-        && from.getBlockZ() == to.getBlockZ()) return;
+        if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ()) return;
 
         List<Player> players = getNearbyPlayers(player);
 
@@ -57,6 +55,9 @@ public class AuraListener implements Listener {
         EntityEquipment playerEquipment = player.getEquipment();
 
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
+            if (item == null) continue;
+            if (item.isEmpty()) continue;
+
             Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
@@ -70,12 +71,14 @@ public class AuraListener implements Listener {
             EntityEquipment otherEquipment = other.getEquipment();
 
             for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
+                if (item == null) continue;
+                if (item.isEmpty()) continue;
+
                 Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
                     if (enchantmentEnum != null) this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantmentEnum, level));
-
                 });
             }
         }

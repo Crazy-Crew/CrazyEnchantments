@@ -30,7 +30,7 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
     private GKitz kit;
 
-    public InventoryBuilder(Player player, int size, String title) {
+    public InventoryBuilder(@NotNull final Player player, int size, @NotNull final String title) {
         this.title = title;
         this.size = size;
 
@@ -38,10 +38,10 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
         this.kit = null;
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
+        this.inventory = this.server.createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
     }
 
-    public InventoryBuilder(Player player, int size, String title, GKitz kit) {
+    public InventoryBuilder(@NotNull final Player player, final int size, @NotNull final String title, @NotNull final GKitz kit) {
         this.title = title;
         this.size = size;
 
@@ -49,12 +49,12 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
         this.kit = kit;
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
+        this.inventory = this.server.createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
     }
 
     public abstract InventoryBuilder build();
 
-    public InventoryBuilder setEnchantmentType(EnchantmentType enchantmentType) {
+    public InventoryBuilder setEnchantmentType(@NotNull final EnchantmentType enchantmentType) {
         this.enchantmentType = enchantmentType;
 
         return this;
@@ -84,11 +84,11 @@ public abstract class InventoryBuilder implements InventoryHolder {
         return this.page;
     }
 
-    public void title(String title) {
+    public void title(@NotNull final String title) {
         this.title = title;
     }
 
-    public boolean contains(String message) {
+    public boolean contains(@NotNull final String message) {
         return this.title.contains(message);
     }
 

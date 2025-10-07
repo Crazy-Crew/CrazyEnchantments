@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import org.jetbrains.annotations.NotNull;
 import java.util.Calendar;
 
 public class GkitCoolDown {
@@ -17,7 +18,7 @@ public class GkitCoolDown {
      * @param gkit The gkit this is tied to.
      * @param coolDownTime When the cool-down ends.
      */
-    public GkitCoolDown(GKitz gkit, Calendar coolDownTime) {
+    public GkitCoolDown(@NotNull final GKitz gkit, @NotNull final Calendar coolDownTime) {
         this.gkit = gkit;
         this.coolDownTime = coolDownTime;
     }
@@ -34,7 +35,7 @@ public class GkitCoolDown {
         return Calendar.getInstance().after(this.coolDownTime);
     }
     
-    public String getCoolDownLeft(String message) {
+    public String getCoolDownLeft(@NotNull final String message) {
         long days = 0, hours = 0, minutes = 0, seconds = 0, total;
 
         int second = 1000, minute = second*60, hour = minute*60, day = hour*24;

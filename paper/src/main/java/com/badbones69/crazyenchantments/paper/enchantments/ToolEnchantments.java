@@ -49,6 +49,8 @@ public class ToolEnchantments implements Listener {
         Player player = event.getPlayer();
         ItemStack tool = this.methods.getItemInHand(player);
 
+        if (tool.isEmpty()) return;
+
         if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, this.enchantmentBookSettings.getEnchantments(tool))) return;
 
         event.setCancelled(true);
@@ -56,8 +58,11 @@ public class ToolEnchantments implements Listener {
         this.methods.addItemToInventory(player, event.getItems());
     }
 
-    private void updateEffects(Player player) {
+    private void updateEffects(@NotNull final Player player) {
         ItemStack item = this.methods.getItemInHand(player);
+
+        if (item.isEmpty()) return;
+
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
         int potionTime = 5 * 20;

@@ -11,6 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class BlackSmithManager {
 
@@ -128,12 +129,12 @@ public class BlackSmithManager {
         return maxEnchantments;
     }
 
-    private static ConfigurationSection getSection(FileConfiguration config) {
+    private static ConfigurationSection getSection(@NotNull final FileConfiguration config) {
         return config.getConfigurationSection("Settings.BlackSmith");
     }
 
-    private static void get(FileConfiguration config) {
-        ConfigurationSection section = getSection(config);
+    private static void get(@NotNull final FileConfiguration config) {
+        final ConfigurationSection section = getSection(config);
 
         // If section is null, do nothing.
         if (section == null) {

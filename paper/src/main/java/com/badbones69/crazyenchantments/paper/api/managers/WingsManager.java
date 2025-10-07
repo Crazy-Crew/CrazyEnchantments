@@ -5,6 +5,8 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -62,15 +64,15 @@ public class WingsManager {
         return this.flyingPlayers;
     }
     
-    public boolean isFlyingPlayer(Player player) {
+    public boolean isFlyingPlayer(@NotNull final Player player) {
         return this.flyingPlayers.contains(player.getUniqueId());
     }
     
-    public void addFlyingPlayer(Player player) {
+    public void addFlyingPlayer(@NotNull final Player player) {
         if (!this.flyingPlayers.contains(player.getUniqueId())) this.flyingPlayers.add(player.getUniqueId());
     }
     
-    public void removeFlyingPlayer(Player player) {
+    public void removeFlyingPlayer(@NotNull final Player player) {
         this.flyingPlayers.remove(player.getUniqueId());
     }
     
@@ -85,7 +87,7 @@ public class WingsManager {
      * Check to see if a player is in a world with limitless flight.
      * @param player The player you wish to check.
      */
-    public boolean inLimitlessFlightWorld(Player player) {
+    public boolean inLimitlessFlightWorld(@Nullable final Player player) {
         return player != null && this.limitlessFlightWorlds.contains(player.getWorld().getName().toLowerCase());
     }
     
@@ -100,7 +102,7 @@ public class WingsManager {
      * Check to see if a player is in a whitelisted world for the wings enchantment.
      * @param player The player you wish to check.
      */
-    public boolean inWhitelistedWorld(Player player) {
+    public boolean inWhitelistedWorld(@Nullable final Player player) {
         return player != null && this.whitelistWorlds.contains(player.getWorld().getName().toLowerCase());
     }
     
@@ -115,7 +117,7 @@ public class WingsManager {
      * Check to see if a player is in a blacklisted world for the wings enchantment.
      * @param player The player you wish to check.
      */
-    public boolean inBlacklistedWorld(Player player) {
+    public boolean inBlacklistedWorld(@Nullable final Player player) {
         return player != null && this.blacklistWorlds.contains(player.getWorld().getName().toLowerCase());
     }
     
@@ -131,8 +133,9 @@ public class WingsManager {
         return this.membersCanFly;
     }
     
-    public void setWingsTask(ScheduledTask task) {
+    public void setWingsTask(@NotNull final ScheduledTask task) {
         endWingsTask();
+
         this.wingsTask = task;
     }
     

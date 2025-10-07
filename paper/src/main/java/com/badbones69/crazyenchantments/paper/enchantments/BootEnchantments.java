@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,10 +41,10 @@ public class BootEnchantments implements Listener {
         Player player = event.getPlayer();
 
         // Check the new armor piece.
-        WingsUtils.checkArmor(event.getNewItem(), true, null, player);
+        WingsUtils.checkArmor(event.getNewItem(), true, ItemStack.empty(), player);
 
         // Check the old armor piece.
-        WingsUtils.checkArmor(null, false, event.getOldItem(), player);
+        WingsUtils.checkArmor(ItemStack.empty(), false, event.getOldItem(), player);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

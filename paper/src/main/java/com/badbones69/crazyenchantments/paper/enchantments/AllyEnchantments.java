@@ -69,10 +69,13 @@ public class AllyEnchantments implements Listener {
             // If the player is trying to hurt their own ally stop the damage.
             if (this.allyManager.isAlly(player, enemy)) {
                 event.setCancelled(true);
+
                 return;
             }
+
             if (inCoolDown(player)) {
                 this.allyManager.setEnemy(player, enemy);
+
                 return;
             }
 
@@ -81,39 +84,44 @@ public class AllyEnchantments implements Listener {
         }
     }
 
-    private void checkAndSpawn(Player player, LivingEntity enemy) {
+    private void checkAndSpawn(@NotNull final Player player, @NotNull final LivingEntity enemy) {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             Map<CEnchantment, Integer> enchants = this.bookSettings.getEnchantments(armor);
+
             if (enchants.isEmpty()) continue;
 
             checkAllyType(enemy, player, enchants, armor);
         }
     }
 
-    private void checkAllyType(LivingEntity enemy, Player player, Map<CEnchantment, Integer> enchants, ItemStack item) {
-
+    private void checkAllyType(@NotNull final LivingEntity enemy, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchants, @NotNull final ItemStack item) {
         if (EnchantUtils.isEventActive(CEnchantments.TAMER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.TAMER.getEnchantment());
+
             spawnAllies(player, enemy, AllyType.WOLF, power);
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.GUARDS, player, item, enchants)) {
             int power = enchants.get(CEnchantments.GUARDS.getEnchantment());
+
             spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BEEKEEPER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.BEEKEEPER.getEnchantment());
+
             spawnAllies(player, enemy, AllyType.BEE, power);
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NECROMANCER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.NECROMANCER.getEnchantment());
+
             spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.INFESTATION, player, item, enchants)) {
             int power = enchants.get(CEnchantments.INFESTATION.getEnchantment());
+
             spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
             spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
         }
@@ -122,12 +130,14 @@ public class AllyEnchantments implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyTarget(EntityTargetEvent event) {
         if (event.getTarget() == null) return; // For when the entity forgets.
+
         AllyMob allyMob = this.allyManager.getAllyMob(event.getEntity());
         AllyMob target = this.allyManager.getAllyMob(event.getTarget());
 
         // Stop ally mob from attacking other mobs owned by the player.
         if (allyMob != null && target != null && allyMob.getOwner().getUniqueId() == target.getOwner().getUniqueId()) {
             event.setCancelled(true);
+
             return;
         }
 
@@ -166,7 +176,7 @@ public class AllyEnchantments implements Listener {
         this.allyManager.forceRemoveAllies(event.getPlayer());
     }
 
-    private void spawnAllies(Player player, LivingEntity enemy, AllyType allyType, int amount) {
+    private void spawnAllies(@NotNull final Player player, @NotNull final LivingEntity enemy, @NotNull final AllyType allyType, final int amount) {
         Calendar coolDown = Calendar.getInstance();
         coolDown.add(Calendar.MINUTE, 2);
 
@@ -179,7 +189,7 @@ public class AllyEnchantments implements Listener {
         }
     }
 
-    private boolean inCoolDown(Player player) {
+    private boolean inCoolDown(@NotNull final Player player) {
         if (this.allyCoolDown.containsKey(player.getUniqueId())) {
             // Right now is before the player's cool-down ends.
             if (Calendar.getInstance().before(this.allyCoolDown.get(player.getUniqueId()))) return true;

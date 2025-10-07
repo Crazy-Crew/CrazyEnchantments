@@ -43,7 +43,7 @@ public class CEBook {
     /**
      * @param enchantment Enchantment you want.
      */
-    public CEBook(CEnchantment enchantment) {
+    public CEBook(@NotNull final CEnchantment enchantment) {
         this(enchantment, 1, 1);
     }
     
@@ -51,7 +51,7 @@ public class CEBook {
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      */
-    public CEBook(CEnchantment enchantment, int level) {
+    public CEBook(@NotNull final CEnchantment enchantment, final int level) {
         this(enchantment, level, 1);
     }
     
@@ -60,7 +60,7 @@ public class CEBook {
      * @param level Tier of the enchantment.
      * @param amount Amount of books you want.
      */
-    public CEBook(CEnchantment enchantment, int level, int amount) {
+    public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount) {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
@@ -68,10 +68,12 @@ public class CEBook {
         FileConfiguration config = Files.CONFIG.getFile();
 
         this.glowing = config.getBoolean("Settings.Enchantment-Book-Glowing", true);
+
         int successMax = config.getInt("Settings.BlackScroll.SuccessChance.Max", 100);
         int successMin = config.getInt("Settings.BlackScroll.SuccessChance.Min", 15);
         int destroyMax = config.getInt("Settings.BlackScroll.DestroyChance.Max", 100);
         int destroyMin = config.getInt("Settings.BlackScroll.DestroyChance.Min", 15);
+
         this.destroyRate = this.methods.percentPick(destroyMax, destroyMin);
         this.successRate = this.methods.percentPick(successMax, successMin);
     }
@@ -81,7 +83,7 @@ public class CEBook {
      * @param level Tier of the enchantment.
      * @param category The category for the rates.
      */
-    public CEBook(CEnchantment enchantment, int level, Category category) {
+    public CEBook(@NotNull final CEnchantment enchantment, final int level, @NotNull final Category category) {
         this(enchantment, level, 1, category);
     }
     
@@ -91,7 +93,7 @@ public class CEBook {
      * @param amount Amount of books you want.
      * @param category The category for the rates.
      */
-    public CEBook(CEnchantment enchantment, int level, int amount, Category category) {
+    public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount, @NotNull final Category category) {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
@@ -107,7 +109,7 @@ public class CEBook {
      * @param destroyRate The rate of the destroy rate.
      * @param successRate The rate of the success rate.
      */
-    public CEBook(CEnchantment enchantment, int level, int amount, int destroyRate, int successRate) {
+    public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount, final int destroyRate, final int successRate) {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
@@ -127,7 +129,7 @@ public class CEBook {
     /**
      * @param enchantment Set the enchantment.
      */
-    public CEBook setEnchantment(CEnchantment enchantment) {
+    public CEBook setEnchantment(@NotNull final CEnchantment enchantment) {
         this.enchantment = enchantment;
 
         return this;
@@ -144,7 +146,7 @@ public class CEBook {
     /**
      * @param toggle Toggle on or off the glowing effect.
      */
-    public CEBook setGlowing(boolean toggle) {
+    public CEBook setGlowing(final boolean toggle) {
         this.glowing = toggle;
 
         return this;
@@ -161,7 +163,7 @@ public class CEBook {
     /**
      * @param amount Set the amount of books.
      */
-    public CEBook setAmount(int amount) {
+    public CEBook setAmount(final int amount) {
         this.amount = amount;
 
         return this;
@@ -178,7 +180,7 @@ public class CEBook {
     /**
      * @param level Set the tier of the enchantment.
      */
-    public CEBook setLevel(int level) {
+    public CEBook setLevel(final int level) {
         this.level = level;
 
         return this;
@@ -189,13 +191,13 @@ public class CEBook {
      * @return Destroy rate of the book or the override value if set in config.yml
      */
     public int getDestroyRate() {
-        return this.starter.getCrazyManager().getCEFailureOverride() == -1 ? this.destroyRate : this.starter.getCrazyManager().getCEFailureOverride();
+        return this.starter.getCrazyManager().getCEFailureOverride() == -1 ? this.destroyRate : this.starter.getCrazyManager().getCEFailureOverride(); //todo() use root variable
     }
     
     /**
      * @param destroyRate Set the destroy rate on the book.
      */
-    public CEBook setDestroyRate(int destroyRate) {
+    public CEBook setDestroyRate(final int destroyRate) {
         this.destroyRate = destroyRate;
 
         return this;
@@ -206,13 +208,13 @@ public class CEBook {
      * @return The success rate of the book or the override value if set in config.yml.
      */
     public int getSuccessRate() {
-        return this.starter.getCrazyManager().getCESuccessOverride() == -1 ? this.successRate : this.starter.getCrazyManager().getCESuccessOverride();
+        return this.starter.getCrazyManager().getCESuccessOverride() == -1 ? this.successRate : this.starter.getCrazyManager().getCESuccessOverride(); //todo() use root variable
     }
     
     /**
      * @param successRate Set the success rate on the book.
      */
-    public CEBook setSuccessRate(int successRate) {
+    public CEBook setSuccessRate(final int successRate) {
         this.successRate = successRate;
 
         return this;
@@ -223,6 +225,7 @@ public class CEBook {
      */
     public ItemBuilder getItemBuilder() {
         String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+
         List<String> lore = new ArrayList<>();
 
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
@@ -244,7 +247,8 @@ public class CEBook {
      * @return Return the book as an ItemStack.
      */
     public ItemStack buildBook() {
-        return getItemBuilder().addKey(DataKeys.stored_enchantments.getNamespacedKey(), Methods.getGson().toJson(new EnchantedBook(this.enchantment.getName(), this.successRate, this.destroyRate, this.level), EnchantedBook.class)).build();
+        return getItemBuilder().addKey(DataKeys.stored_enchantments.getNamespacedKey(), Methods.getGson()
+                .toJson(new EnchantedBook(this.enchantment.getName(), this.successRate, this.destroyRate, this.level), EnchantedBook.class)).build();
     }
 
     /**

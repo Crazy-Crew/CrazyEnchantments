@@ -72,11 +72,14 @@ public class BowEnchantments implements Listener {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getEntity().getUniqueId())) return;
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
 
-        ItemStack bow = event.getBow();
+        final ItemStack bow = event.getBow();
+
+        if (bow == null) return;
 
         if (!this.bowUtils.allowsCombat(player)) return;
 
         Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(bow);
+
         if (enchants.isEmpty()) return;
 
         // Add the arrow to the list.
@@ -88,7 +91,6 @@ public class BowEnchantments implements Listener {
 
             for (int i = 1; i <= power; i++) this.bowUtils.spawnArrows(player, arrow, bow);
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -160,7 +162,7 @@ public class BowEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.pluginSupport.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
             int heal = 1 + enchantedArrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
+            double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue(); //todo() npe
 
             if (entity.getHealth() < maxHealth) {
                 if (entity.getHealth() + heal < maxHealth) entity.setHealth(entity.getHealth() + heal);

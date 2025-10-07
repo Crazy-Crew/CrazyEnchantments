@@ -8,7 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class LandsSupport implements ClaimSupport {
@@ -16,13 +16,13 @@ public class LandsSupport implements ClaimSupport {
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private static final LandsIntegration api = LandsIntegration.of(plugin);
 
-    public boolean isFriendly(Player player, Player other) {
+    public boolean isFriendly(@NotNull final Player player, @NotNull final Player other) {
         Land land = api.getLandPlayer(other.getUniqueId()).getOwningLand();
 
         return (land != null && land.isTrusted(player.getUniqueId()));
     }
 
-    public boolean inTerritory(Player player) {
+    public boolean inTerritory(@NotNull final Player player) {
         UUID uuid = player.getUniqueId();
         Chunk chunk = player.getChunk();
         Land land = api.getLandByChunk(player.getWorld(), chunk.getX(), chunk.getZ());
@@ -33,7 +33,7 @@ public class LandsSupport implements ClaimSupport {
     }
 
     @Override
-    public boolean canBreakBlock(Player player, Block block) {
+    public boolean canBreakBlock(@NotNull final Player player, @NotNull final Block block) {
         return false;
     }
 

@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public enum ShopOption {
@@ -28,7 +29,7 @@ public enum ShopOption {
     TRANSMOG_SCROLL("TransmogScroll", "TransmogScroll", "GUIName", "Lore", true),
     SLOT_CRYSTAL("Slot_Crystal", "Slot_Crystal", "GUIName", "GUILore", true);
     
-    private static final HashMap<ShopOption, Option> shopOptions = new HashMap<>();
+    private static final Map<ShopOption, Option> shopOptions = new HashMap<>();
     private final String optionPath;
     private final String path;
     private final String namePath;
@@ -36,7 +37,7 @@ public enum ShopOption {
     private Option option;
     private final boolean buyable;
     
-    ShopOption(String optionPath, String path, String namePath, String lorePath, boolean buyable) {
+    ShopOption(@NotNull final String optionPath, @NotNull final String path, @NotNull final String namePath, @NotNull final String lorePath, final boolean buyable) {
         this.optionPath = optionPath;
         this.path = path;
         this.namePath = namePath;
@@ -51,7 +52,7 @@ public enum ShopOption {
         FileConfiguration config = Files.CONFIG.getFile();
         shopOptions.clear();
 
-        for (ShopOption shopOption : values()) {
+        for (final ShopOption shopOption : values()) {
             String itemPath = "Settings." + shopOption.getPath() + ".";
             String costPath = "Settings.Costs." + shopOption.getOptionPath() + ".";
 

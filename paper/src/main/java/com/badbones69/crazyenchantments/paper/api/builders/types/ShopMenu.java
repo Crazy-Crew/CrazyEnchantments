@@ -21,13 +21,13 @@ public class ShopMenu extends InventoryBuilder {
 
     private final ShopManager shopManager = this.starter.getShopManager();
 
-    public ShopMenu(Player player, int size, String title) {
+    public ShopMenu(@NotNull final Player player, final int size, @NotNull final String title) {
         super(player, size, title);
     }
 
     @Override
     public InventoryBuilder build() {
-        HashMap<String, String> placeholders = new HashMap<>();
+        Map<String, String> placeholders = new HashMap<>();
 
         for (Currency currency : Currency.values()) {
             placeholders.put("%" + currency.getName() + "%", String.valueOf(this.currencyAPI.getCurrency(getPlayer(), currency)));
@@ -35,6 +35,7 @@ public class ShopMenu extends InventoryBuilder {
 
         for (Map.Entry<ItemBuilder, Integer> itemBuilders : this.shopManager.getCustomizerItems().entrySet()) {
             itemBuilders.getKey().setNamePlaceholders(placeholders).setLorePlaceholders(placeholders);
+
             getInventory().setItem(itemBuilders.getValue(), itemBuilders.getKey().build());
         }
 

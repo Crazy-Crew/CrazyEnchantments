@@ -34,7 +34,7 @@ public enum DataKeys {
     private final String NamespacedKey;
     private final PersistentDataType type;
 
-    DataKeys(String NamespacedKey, PersistentDataType type) {
+    DataKeys(@NotNull final String NamespacedKey, @NotNull final PersistentDataType type) {
         this.NamespacedKey = NamespacedKey;
         this.type = type;
     }

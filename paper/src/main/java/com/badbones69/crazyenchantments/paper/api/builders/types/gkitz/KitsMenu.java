@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
 
-    public KitsMenu(Player player, int size, String title) {
+    public KitsMenu(@NotNull final Player player, final int size, @NotNull final String title) {
         super(player, size, title);
     }
 
@@ -146,7 +147,9 @@ public class KitsMenu extends InventoryBuilder {
                 return;
             }
 
-            final Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
+            final Map<String, String> placeholders = new HashMap<>(1) {{
+                put("%Kit%", kit.getName());
+            }};
 
             if (cePlayer.hasGkitPermission(kit)) {
                 if (cePlayer.canUseGKit(kit)) {

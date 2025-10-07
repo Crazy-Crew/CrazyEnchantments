@@ -27,7 +27,7 @@ import java.util.List;
 
 public class BlackSmithMenu extends InventoryBuilder {
 
-    public BlackSmithMenu(Player player, int size, String title) {
+    public BlackSmithMenu(@NotNull final Player player, final int size, @NotNull final String title) {
         super(player, size, title);
     }
 
@@ -191,7 +191,7 @@ public class BlackSmithMenu extends InventoryBuilder {
             holder.getInventory().clear();
         }
 
-        private void setBorder(BlackSmithResult item, Inventory inventory) {
+        private void setBorder(@NotNull final BlackSmithResult item, @NotNull final Inventory inventory) {
             if (item.getCost() > 0) {
                 ItemStack result = item.getResultItem();
 
@@ -212,7 +212,7 @@ public class BlackSmithMenu extends InventoryBuilder {
             }
         }
 
-        private void playSound(Player player, Sound sound) {
+        private void playSound(@NotNull final Player player, @NotNull final Sound sound) {
             player.playSound(player.getLocation(), sound, 1, 1);
         }
     }

@@ -35,7 +35,7 @@ public class SlotCrystalListener implements Listener {
 
         slot_crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
-                .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
+                .setName(config.getString("Settings.Slot_Crystal.Name", "&5&lSlot &b&lCrystal"))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
                 .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
     }
@@ -57,15 +57,20 @@ public class SlotCrystalListener implements Listener {
 
         if (enchAmount >= maxEnchants) {
             player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+
             return;
         }
+
         if ((baseEnchants - limiter) >= maxEnchants) {
             player.sendMessage(Messages.MAX_SLOTS_UNLOCKED.getMessage());
+
             return;
         }
 
         crystalItem.setAmount(crystalItem.getAmount() - 1);
+
         event.getCursor().setAmount(crystalItem.getAmount());
+
         event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
         player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(new HashMap<>(4) {{
@@ -76,8 +81,8 @@ public class SlotCrystalListener implements Listener {
         }}));
     }
 
-    private boolean isSlotCrystal(ItemStack crystalItem) {
-        if (crystalItem == null || crystalItem.isEmpty()) return false;
+    private boolean isSlotCrystal(@NotNull final ItemStack crystalItem) {
+        if (crystalItem.isEmpty()) return false;
 
         return crystalItem.getPersistentDataContainer().has(DataKeys.slot_crystal.getNamespacedKey());
     }

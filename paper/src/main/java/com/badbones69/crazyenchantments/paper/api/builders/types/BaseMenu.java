@@ -25,7 +25,7 @@ public class BaseMenu extends InventoryBuilder {
     @NotNull
     private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
-    public BaseMenu(Player player, int size, String title) {
+    public BaseMenu(@NotNull final Player player, final int size, @NotNull final String title) {
         super(player, size, title);
     }
 

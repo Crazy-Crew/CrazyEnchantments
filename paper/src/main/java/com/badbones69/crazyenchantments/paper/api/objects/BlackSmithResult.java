@@ -2,15 +2,15 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.exceptions.CrazyException;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -19,12 +19,14 @@ public class BlackSmithResult {
     private int cost = 0;
     private ItemStack resultItem;
     
-    public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
-        resultItem = mainItem.clone();
+    public BlackSmithResult(@NotNull final Player player, @Nullable ItemStack mainItem, @NotNull final ItemStack subItem) {
+        if (mainItem == null || mainItem.isEmpty()) {
+            throw new CrazyException("The ItemStack used with BlackSmith is either empty, or null.");
+        }
+
+        this.resultItem = mainItem.clone();
 
         CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-        CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
         Starter starter = plugin.getStarter();
 
@@ -47,6 +49,7 @@ public class BlackSmithResult {
             if (mainItem.getType() == subItem.getType()) {
                 CEItem mainCE = new CEItem(this.resultItem);
                 CEItem subCE = new CEItem(subItem);
+
                 BlackSmithCompare compare = new BlackSmithCompare(mainCE, subCE);
 
                 // Checking for duplicate enchantments.
@@ -115,8 +118,7 @@ public class BlackSmithResult {
      * @param enchantment The enchant to check the others against.
      * @return True if there is a conflict.
      */
-    private boolean hasConflictingEnchant(Set<Enchantment> vanillaEnchantments, Enchantment enchantment) {
-
+    private boolean hasConflictingEnchant(@NotNull final Set<Enchantment> vanillaEnchantments, @NotNull final Enchantment enchantment) {
         for (Enchantment enchant : vanillaEnchantments) {
             if (enchantment.conflictsWith(enchant)) return true;
         }
@@ -130,8 +132,7 @@ public class BlackSmithResult {
      * @param cEnchantment The ceEnchant to check the others against.
      * @return True if there is a conflict.
      */
-    private boolean hasConflictingCEEnchant(Set<CEnchantment> ceEnchantments, CEnchantment cEnchantment) {
-
+    private boolean hasConflictingCEEnchant(@NotNull final Set<CEnchantment> ceEnchantments, @NotNull final CEnchantment cEnchantment) {
         for (CEnchantment enchant : ceEnchantments) {
             if (cEnchantment.conflictsWith(enchant)) return true;
         }

@@ -23,7 +23,7 @@ public class EnchantUtils {
      * @param enchantment The enchantment you are checking.
      * @return The highest category based on the rarities.
      */
-    public static Category getHighestEnchantmentCategory(CEnchantment enchantment) {
+    public static Category getHighestEnchantmentCategory(@NotNull final CEnchantment enchantment) {
         Category topCategory = null;
         int rarity = 0;
 
@@ -37,20 +37,20 @@ public class EnchantUtils {
         return topCategory;
     }
 
-    public static boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants) {
+    public static boolean isEventActive(@NotNull final CEnchantments enchant, @NotNull final Entity damager, @NotNull final ItemStack item, @NotNull final Map<CEnchantment, Integer> enchants) {
         return isEventActive(enchant, damager, item, enchants, 1.0);
     }
 
-    public static boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants, double multiplier) {
+    public static boolean isEventActive(@NotNull final CEnchantments enchant, @NotNull final Entity damager, @NotNull final ItemStack item, @NotNull final Map<CEnchantment, Integer> enchants, final double multiplier) {
         return isActive((Player) damager, enchant, enchants, multiplier) && normalEnchantEvent(enchant, damager, item);
     }
 
-    public static boolean isMassBlockBreakActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+    public static boolean isMassBlockBreakActive(@NotNull final Player player, @NotNull final CEnchantments enchant, @NotNull final Map<CEnchantment, Integer> enchants) {
         return isActive(player, enchant, enchants, 1.0);
     }
 
 
-    private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+    private static boolean isActive(@NotNull final Player player, @NotNull final CEnchantments enchant, @NotNull final Map<CEnchantment, Integer> enchants) {
         return isActive(player, enchant, enchants, 1.0);
     }
 
@@ -64,7 +64,7 @@ public class EnchantUtils {
      * @param multiplier the multipler of the enchant.
      * @return True if the enchant is active and can be used if the event is passed.
      */
-    private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants, double multiplier) {
+    private static boolean isActive(@NotNull final Player player, @NotNull final CEnchantments enchant, @NotNull final Map<CEnchantment, Integer> enchants, final double multiplier) {
         //if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
         return enchants.containsKey(enchant.getEnchantment()) && (player.isOp() ||
                 ((!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment()), multiplier)) &&
@@ -72,7 +72,7 @@ public class EnchantUtils {
         // TODO Potentially add in entity support.
     }
 
-    public static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
+    public static boolean normalEnchantEvent(@NotNull final CEnchantments enchant, @NotNull final Entity damager, @NotNull final ItemStack item) {
         EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), item);
 
         plugin.getServer().getPluginManager().callEvent(useEvent);
@@ -80,13 +80,13 @@ public class EnchantUtils {
         return !useEvent.isCancelled();
     }
 
-    public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+    public static boolean isAuraActive(@NotNull final Player player, @NotNull final CEnchantments enchant, @NotNull final Map<CEnchantment, Integer> enchants) {
         if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
 
         return isActive(player, enchant, enchants);
     }
 
-    public static boolean isArmorEventActive(Player player, CEnchantments enchant, ItemStack item) {
+    public static boolean isArmorEventActive(@NotNull final Player player, @NotNull final CEnchantments enchant, @NotNull final ItemStack item) {
         if (player.isOp()) return true;
 
         if (player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))) return false;
@@ -94,7 +94,7 @@ public class EnchantUtils {
         return normalEnchantEvent(enchant, player, item);
     }
 
-    public static boolean isMoveEventActive(CEnchantments enchant, Player player, Map<CEnchantment, Integer> enchants) {
+    public static boolean isMoveEventActive(@NotNull final CEnchantments enchant, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchants) {
         if (!isActive(player, enchant, enchants)) return false;
 
         return !plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);

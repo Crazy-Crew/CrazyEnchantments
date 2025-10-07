@@ -68,23 +68,27 @@ public class WingsUtils {
         }.runAtFixedRate(50L, 50L));
     }
 
-    public static void checkArmor(ItemStack newArmorPiece, boolean newArmor, ItemStack oldArmorPiece, Player player) {
+    public static void checkArmor(@NotNull final ItemStack newArmorPiece, final boolean newArmor, @NotNull final ItemStack oldArmorPiece, @NotNull final Player player) {
         CEnchantments wings = CEnchantments.WINGS;
 
         if (newArmor) {
+            if (newArmorPiece.isEmpty()) return;
+
             if (starter.getEnchantmentBookSettings().getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
 
             return;
         }
 
+        if (oldArmorPiece.isEmpty()) return;
+
         if (starter.getEnchantmentBookSettings().getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
     }
 
-    public static boolean checkGameMode(Player player) {
+    public static boolean checkGameMode(@NotNull final Player player) {
         return player.getGameMode() == GameMode.SURVIVAL;
     }
 
-    private static boolean inWingsRegion(Player player) {
+    private static boolean inWingsRegion(@NotNull final Player player) {
         if (!SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
         WorldGuardVersion worldGuardVersion = starter.getPluginSupport().getWorldGuardUtils().getWorldGuardSupport();
@@ -102,13 +106,13 @@ public class WingsUtils {
         return false;
     }
 
-    public static boolean checkRegion(Player player) {
+    public static boolean checkRegion(@NotNull final Player player) {
         return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (pluginSupport.inTerritory(player) || inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
     }
 
-    public static boolean isEnemiesNearby(Player player) {
+    public static boolean isEnemiesNearby(@NotNull final Player player) {
         if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
-            for (Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
+            for (final Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
                 //todo() update this
                 if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer))) return true;
             }
@@ -117,7 +121,7 @@ public class WingsUtils {
         return false;
     }
 
-    private static List<Player> getNearbyPlayers(Player player, int radius) {
+    private static List<Player> getNearbyPlayers(@NotNull final Player player, final int radius) {
         List<Player> players = new ArrayList<>();
 
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {

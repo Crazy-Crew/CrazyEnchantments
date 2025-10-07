@@ -27,9 +27,6 @@ import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -119,14 +116,6 @@ public class CrazyEnchantments extends JavaPlugin {
         getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
     }
 
-    private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(commandExecutor);
-
-            if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
-        }
-    }
-
     public Starter getStarter() {
         return this.starter;
     }
@@ -144,7 +133,7 @@ public class CrazyEnchantments extends JavaPlugin {
         return bossBarController;
     }
 
-    public boolean isLogging() {
+    public final boolean isLogging() {
         return true;
     }
 

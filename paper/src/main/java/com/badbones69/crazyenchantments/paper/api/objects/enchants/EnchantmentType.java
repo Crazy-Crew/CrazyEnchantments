@@ -27,7 +27,7 @@ public class EnchantmentType {
     private final List<CEnchantment> enchantments = new ArrayList<>();
     private final List<Material> enchantableMaterials = new ArrayList<>();
 
-    public EnchantmentType(String name) {
+    public EnchantmentType(@NotNull final String name) {
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Types." + name;
         this.displayName = name;
@@ -44,7 +44,7 @@ public class EnchantmentType {
         }
     }
 
-    public EnchantmentType getFromName(String name) {
+    public EnchantmentType getFromName(@NotNull final String name) {
         return this.methods.getFromName(name);
     }
 
@@ -65,13 +65,12 @@ public class EnchantmentType {
     }
 
     /**
-     * Checks if this cEnchantment may be applied to the given {@link
-     * ItemStack}.
+     * Checks if this cEnchantment may be applied to the given {@link ItemStack}.
      *
      * @param item Item to test
      * @return True if the cEnchantment may be applied, otherwise False
      */
-    public boolean canEnchantItem(@NotNull ItemStack item) {
+    public boolean canEnchantItem(@NotNull final ItemStack item) {
         return this.enchantableMaterials.contains(item.getType());
     }
 
@@ -79,11 +78,11 @@ public class EnchantmentType {
         return this.enchantments;
     }
 
-    public void addEnchantment(CEnchantment enchantment) {
+    public void addEnchantment(@NotNull final CEnchantment enchantment) {
         this.enchantments.add(enchantment);
     }
 
-    public void removeEnchantment(CEnchantment enchantment) {
+    public void removeEnchantment(@NotNull final CEnchantment enchantment) {
         this.enchantments.remove(enchantment);
     }
 }

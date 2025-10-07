@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class TinkererMenu extends InventoryBuilder {
 
-    public TinkererMenu(Player player, int size, String title) {
+    public TinkererMenu(@NotNull final Player player, final int size, @NotNull final String title) {
         super(player, size, title);
     }
 

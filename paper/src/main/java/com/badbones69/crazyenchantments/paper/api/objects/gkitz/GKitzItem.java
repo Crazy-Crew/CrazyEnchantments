@@ -19,7 +19,7 @@ public class GKitzItem {
     private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
     
     private final ItemBuilder itemBuilder;
-    private final HashMap<CEnchantment, Integer> ceEnchantments;
+    private final Map<CEnchantment, Integer> ceEnchantments;
     
     /**
      * Make an empty gkit item.
@@ -32,7 +32,7 @@ public class GKitzItem {
     /**
      * Make an empty gkit item.
      */
-    public GKitzItem(ItemBuilder itemBuilder) {
+    public GKitzItem(@NotNull final ItemBuilder itemBuilder) {
         this.itemBuilder = itemBuilder;
         this.ceEnchantments = new HashMap<>();
     }
@@ -41,7 +41,7 @@ public class GKitzItem {
      * @param enchant Crazy Enchantment
      * @param level Level of the enchantment
      */
-    public void addCEEnchantment(CEnchantment enchant, int level) {
+    public void addCEEnchantment(@NotNull final CEnchantment enchant, final int level) {
         this.ceEnchantments.put(enchant, level);
     }
     
@@ -49,7 +49,7 @@ public class GKitzItem {
      * @return Returns a fully finished item.
      */
     public ItemStack build() {
-        ItemStack item = this.itemBuilder.build();
+        final ItemStack item = this.itemBuilder.build();
 
         for (Map.Entry<CEnchantment, Integer> enchantment : this.ceEnchantments.entrySet()) {
             this.crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());

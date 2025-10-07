@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -122,18 +123,18 @@ public enum Messages {
     private String defaultMessage;
     private List<String> defaultListMessage;
     
-    Messages(String path, String defaultMessage) {
+    Messages(@NotNull final String path, @NotNull final String defaultMessage) {
         this.path = path;
         this.defaultMessage = defaultMessage;
     }
     
-    Messages(String path, List<String> defaultListMessage) {
+    Messages(@NotNull final String path, @NotNull final List<String> defaultListMessage) {
         this.path = path;
         this.defaultListMessage = defaultListMessage;
     }
     
-    public static String convertList(List<String> list) {
-        StringBuilder message = new StringBuilder();
+    public static String convertList(@NotNull final List<String> list) {
+        final StringBuilder message = new StringBuilder();
 
         for (String line : list) {
             message.append(ColorUtils.color(line)).append("\n");
@@ -143,10 +144,11 @@ public enum Messages {
     }
     
     public static void addMissingMessages() {
-        FileConfiguration messages = Files.MESSAGES.getFile();
+        final FileConfiguration messages = Files.MESSAGES.getFile();
+
         boolean saveFile = false;
 
-        for (Messages message : values()) {
+        for (final Messages message : values()) {
             if (!messages.contains("Messages." + message.getPath())) {
                 saveFile = true;
 
@@ -161,36 +163,38 @@ public enum Messages {
         if (saveFile) Files.MESSAGES.saveFile();
     }
     
-    public static String replacePlaceholders(String placeholder, String replacement, String message) {
-        HashMap<String, String> placeholders = new HashMap<>();
+    public static String replacePlaceholders(@NotNull final String placeholder, @NotNull final String replacement, @NotNull final String message) {
+        final Map<String, String> placeholders = new HashMap<>();
+
         placeholders.put(placeholder, replacement);
 
         return replacePlaceholders(placeholders, message);
     }
     
-    public static String replacePlaceholders(HashMap<String, String> placeholders, String message) {
-        for (Entry<String, String> placeholder : placeholders.entrySet()) {
-            message = message.replaceAll(placeholder.getKey(), placeholder.getValue())
-            .replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue());
+    public static String replacePlaceholders(Map<String, String> placeholders, @NotNull final String message) {
+        String safeMessage = message;
+
+        for (final Entry<String, String> placeholder : placeholders.entrySet()) {
+            safeMessage = safeMessage.replaceAll(placeholder.getKey(), placeholder.getValue()).replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue());
         }
 
-        return message;
+        return safeMessage;
     }
     
-    public static List<String> replacePlaceholders(String placeholder, String replacement, List<String> messageList) {
-        HashMap<String, String> placeholders = new HashMap<>();
+    public static List<String> replacePlaceholders(@NotNull final String placeholder, @NotNull final String replacement, @NotNull final List<String> messageList) {
+        final Map<String, String> placeholders = new HashMap<>();
+
         placeholders.put(placeholder, replacement);
 
         return replacePlaceholders(placeholders, messageList);
     }
     
-    public static List<String> replacePlaceholders(HashMap<String, String> placeholders, List<String> messageList) {
-        List<String> newMessageList = new ArrayList<>();
+    public static List<String> replacePlaceholders(@NotNull final Map<String, String> placeholders, @NotNull final List<String> messageList) {
+        final List<String> newMessageList = new ArrayList<>();
 
-        for (String message : messageList) {
-            for (Entry<String, String> placeholder : placeholders.entrySet()) {
-                newMessageList.add(message.replaceAll(placeholder.getKey(), placeholder.getValue())
-                .replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue()));
+        for (final String message : messageList) {
+            for (final Entry<String, String> placeholder : placeholders.entrySet()) {
+                newMessageList.add(message.replaceAll(placeholder.getKey(), placeholder.getValue()).replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue()));
             }
         }
 
@@ -201,13 +205,15 @@ public enum Messages {
         return getMessage(true);
     }
     
-    public String getMessage(String placeholder, String replacement) {
-        HashMap<String, String> placeholders = new HashMap<>();
+    public String getMessage(@NotNull final String placeholder, @NotNull final String replacement) {
+        Map<String, String> placeholders = new HashMap<>();
+
         placeholders.put(placeholder, replacement);
+
         return getMessage(placeholders, true);
     }
     
-    public String getMessage(Map<String, String> placeholders) {
+    public String getMessage(@NotNull final Map<String, String> placeholders) {
         return getMessage(placeholders, true);
     }
     
@@ -215,22 +221,15 @@ public enum Messages {
         return getMessage(false);
     }
     
-    public String getMessageNoPrefix(String placeholder, String replacement) {
-        HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put(placeholder, replacement);
-
+    public String getMessageNoPrefix(@NotNull final Map<String, String> placeholders) {
         return getMessage(placeholders, false);
     }
     
-    public String getMessageNoPrefix(Map<String, String> placeholders) {
-        return getMessage(placeholders, false);
-    }
-    
-    private String getMessage(boolean prefix) {
+    private String getMessage(final boolean prefix) {
         return getMessage(new HashMap<>(), prefix);
     }
     
-    private String getMessage(Map<String, String> placeholders, boolean prefix) {
+    private String getMessage(@NotNull final Map<String, String> placeholders, final boolean prefix) {
         String message;
         boolean isList = isList();
         boolean exists = exists();
@@ -245,7 +244,7 @@ public enum Messages {
             }
         } else {
             if (exists) {
-                message = ColorUtils.color(config.getString("Messages." + path));
+                message = ColorUtils.color(config.getString("Messages." + path, ""));
             } else {
                 message = ColorUtils.color(getDefaultMessage());
             }
@@ -272,7 +271,7 @@ public enum Messages {
     }
     
     private boolean isList() {
-        FileConfiguration config = Files.MESSAGES.getFile();
+        final FileConfiguration config = Files.MESSAGES.getFile();
 
         if (config.contains("Messages." + this.path)) {
             return !config.getStringList("Messages." + this.path).isEmpty();

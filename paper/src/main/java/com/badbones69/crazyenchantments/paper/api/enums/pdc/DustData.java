@@ -1,5 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.enums.pdc;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DustData {
 
     private final String name;
@@ -7,7 +9,7 @@ public class DustData {
     private final int max;
     private final int chance;
 
-    public DustData(String dustConfigName, int min, int max, int chance) {
+    public DustData(@NotNull final String dustConfigName, final int min, final int max, final int chance) {
         this.name = dustConfigName;
         this.min = min;
         this.max = max;

@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class CrazyException extends IllegalStateException {
 
-    public CrazyException(@NotNull String message, @NotNull Exception exception) {
+    public CrazyException(@NotNull final String message, @NotNull final Exception exception) {
         super(message, exception);
     }
 
-    public CrazyException(@NotNull String message) {
+    public CrazyException(@NotNull final String message) {
         super(message);
     }
 }

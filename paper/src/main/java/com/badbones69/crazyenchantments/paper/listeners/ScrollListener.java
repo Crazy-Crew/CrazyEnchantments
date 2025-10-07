@@ -54,29 +54,32 @@ public class ScrollListener implements Listener {
     public void loadScrollControl() {
         FileConfiguration config = Files.CONFIG.getFile();
         this.suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
-        this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
-        this.useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
+        this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments", true);
+        this.useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle", true);
         this.blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
-        this.blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle");
+        this.blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle", false);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onScrollUse(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
         ItemStack scroll = event.getCursor();
 
-        if (item == null || item.getType().isAir() || scroll.getType().isAir()) return;
+        if (item == null || item.isEmpty() || scroll.isEmpty()) return;
 
         InventoryType.SlotType slotType = event.getSlotType();
 
         if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
 
         Scrolls type = Scrolls.getFromPDC(scroll);
+
         if (type == null) return;
+
+        Player player = (Player) event.getWhoClicked();
 
         if (scroll.getAmount() > 1) {
             player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+
             return;
         }
 
@@ -85,12 +88,15 @@ public class ScrollListener implements Listener {
                 if (this.methods.isInventoryFull(player)) return;
 
                 List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
+
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     event.setCancelled(true);
+
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
                     if (this.blackScrollChanceToggle && !this.methods.randomPicker(this.blackScrollChance, 100)) {
                         player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+
                         return;
                     }
 
@@ -98,16 +104,20 @@ public class ScrollListener implements Listener {
 
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
                     player.getInventory().addItem(new CEBook(enchantment, this.enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
+
                     event.setCurrentItem(this.enchantmentBookSettings.removeEnchantment(item, enchantment));
                 }
             }
 
             case "WhiteScroll" -> {
                 if (Scrolls.hasWhiteScrollProtection(item)) return;
+
                 for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                         event.setCancelled(true);
+
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
+
                         player.setItemOnCursor(this.methods.removeItem(scroll));
                         return;
                     }
@@ -116,6 +126,7 @@ public class ScrollListener implements Listener {
 
             case "TransmogScroll" -> {
                 if (this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
+
                 if (item.lore() == null) return;
 
                 ItemStack orderedItem = newOrderNewEnchantments(item.clone());
@@ -124,6 +135,7 @@ public class ScrollListener implements Listener {
 
                 event.setCancelled(true);
                 event.setCurrentItem(orderedItem);
+
                 player.setItemOnCursor(this.methods.removeItem(scroll));
             }
         }
@@ -136,10 +148,9 @@ public class ScrollListener implements Listener {
         if (checkScroll(player.getInventory().getItemInMainHand(), player, event)) return;
 
         checkScroll(player.getInventory().getItemInOffHand(), player, event);
-
     }
 
-    private boolean checkScroll(final ItemStack scroll, final Player player, final PlayerInteractEvent event) {
+    private boolean checkScroll(@NotNull final ItemStack scroll, @NotNull final Player player, @NotNull final PlayerInteractEvent event) {
         if (scroll.isEmpty()) return false;
 
         final PersistentDataContainerView container = scroll.getPersistentDataContainer();
@@ -165,7 +176,7 @@ public class ScrollListener implements Listener {
         return false;
     }
 
-    private ItemStack newOrderNewEnchantments(ItemStack item) {
+    private ItemStack newOrderNewEnchantments(@NotNull final ItemStack item) {
         final FileConfiguration configuration = Files.CONFIG.getFile();
 
         final List<Component> lore = item.lore();
@@ -239,17 +250,16 @@ public class ScrollListener implements Listener {
         return item;
     }
 
-    private List<Component> getAllProtectionLore(@NotNull PersistentDataContainerView container) {
-        List<Component> lore = new ArrayList<>();
+    private List<Component> getAllProtectionLore(@NotNull final PersistentDataContainerView container) {
+        final List<Component> lore = new ArrayList<>();
 
-        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
+        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
 
         return lore;
     }
 
-    private List<Component> stripNonNormalLore(List<Component> lore, List<CEnchantment> enchantments) {
-
+    private List<Component> stripNonNormalLore(@NotNull final List<Component> lore, @NotNull final List<CEnchantment> enchantments) {
         // Remove blank lines
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").isEmpty());
 
@@ -263,13 +273,13 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                ColorUtils.stripStringColour(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"))
+                ColorUtils.stripStringColour(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
         ));
 
         return lore;
     }
 
-    private void useSuffix(final ItemStack item, final List<CEnchantment> newEnchantmentOrder) {
+    private void useSuffix(@NotNull final ItemStack item, @NotNull final List<CEnchantment> newEnchantmentOrder) {
         if (this.useSuffix) {
             final boolean hasName = item.hasData(DataComponentTypes.ITEM_NAME);
 
@@ -294,7 +304,7 @@ public class ScrollListener implements Listener {
         }
     }
 
-    private void orderInts(List<CEnchantment> list, final Map<CEnchantment, Integer> map) {
+    private void orderInts(@NotNull final List<CEnchantment> list, @NotNull final Map<CEnchantment, Integer> map) {
         list.sort((a1, a2) -> {
             Integer string1 = map.get(a1);
             Integer string2 = map.get(a2);

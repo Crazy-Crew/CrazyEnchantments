@@ -74,7 +74,7 @@ public class ShopListener implements Listener {
 
         if (!(inventory.getHolder(false) instanceof ShopMenu holder)) return;
 
-        if (item == null) return;
+        if (item == null || item.isEmpty()) return;
 
         Player player = holder.getPlayer();
 
@@ -109,6 +109,7 @@ public class ShopListener implements Listener {
 
                 return;
             }
+
             LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {
@@ -119,12 +120,15 @@ public class ShopListener implements Listener {
                         this.currencyAPI.takeCurrency(player, lostBook);
                     } else {
                         String needed = String.valueOf(lostBook.getCost() - this.currencyAPI.getCurrency(player, lostBook.getCurrency()));
+
                         this.methods.switchCurrency(player, lostBook.getCurrency(), "%Money_Needed%", "%XP%", needed);
+
                         return;
                     }
                 }
 
                 player.getInventory().addItem(lostBook.getLostBook(category).build());
+
                 return;
             }
         }
@@ -141,7 +145,9 @@ public class ShopListener implements Listener {
                             this.currencyAPI.takeCurrency(player, option);
                         } else {
                             String needed = String.valueOf(option.getCost() - this.currencyAPI.getCurrency(player, option.getCurrency()));
+
                             this.methods.switchCurrency(player, option.getCurrency(), "%Money_Needed%", "%XP%", needed);
+
                             return;
                         }
                     }

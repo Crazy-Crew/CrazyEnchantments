@@ -36,7 +36,7 @@ public enum Dust {
     @NotNull
     private final Methods methods = this.plugin.getStarter().getMethods();
     
-    Dust(String name, String configName, List<String> knowNames) {
+    Dust(@NotNull final String name, @NotNull final String configName, @NotNull final List<String> knowNames) {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
@@ -44,11 +44,12 @@ public enum Dust {
         FileConfiguration config = Files.CONFIG.getFile();
         
         this.max = config.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
-        this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
+        this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", this.max);
     }
     
     public static void loadDust() {
         FileConfiguration config = Files.CONFIG.getFile();
+
         itemBuilderDust.clear();
 
         for (Dust dust : values()) {
@@ -60,10 +61,9 @@ public enum Dust {
         }
     }
     
-    public static Dust getFromName(String nameString) {
+    public static Dust getFromName(@NotNull final String nameString) {
         for (Dust dust : Dust.values()) {
-            if (dust.getKnownNames().contains(nameString.toLowerCase()) ||
-            dust.getConfigName().contains(nameString)) return dust;
+            if (dust.getKnownNames().contains(nameString.toLowerCase()) || dust.getConfigName().contains(nameString)) return dust;
         }
 
         return null;
@@ -85,7 +85,7 @@ public enum Dust {
         return getDust(1);
     }
     
-    public ItemStack getDust(int amount) {
+    public ItemStack getDust(final int amount) {
         return getDust(this.methods.percentPick(this.max, this.min), amount);
     }
 

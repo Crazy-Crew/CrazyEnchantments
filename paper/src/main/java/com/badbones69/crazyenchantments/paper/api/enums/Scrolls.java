@@ -13,10 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public enum Scrolls {
     
@@ -24,12 +21,12 @@ public enum Scrolls {
     WHITE_SCROLL("White-Scroll", "WhiteScroll", Arrays.asList("w", "white", "whitescroll")),
     TRANSMOG_SCROLL("Transmog-Scroll", "TransmogScroll", Arrays.asList("t", "transmog", "transmogscroll"));
     
-    private static final HashMap<Scrolls, ItemBuilder> itemBuilderScrolls = new HashMap<>();
+    private static final Map<Scrolls, ItemBuilder> itemBuilderScrolls = new HashMap<>();
     private final String name;
     private final String configName;
     private final List<String> knownNames;
     
-    Scrolls(String name, String configName, List<String> knowNames) {
+    Scrolls(@NotNull final String name, @NotNull final String configName, @NotNull final List<String> knowNames) {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
@@ -49,7 +46,7 @@ public enum Scrolls {
         }
     }
     
-    public static Scrolls getFromName(String nameString) {
+    public static Scrolls getFromName(@NotNull final String nameString) {
         for (Scrolls scroll : Scrolls.values()) {
             if (scroll.getKnownNames().contains(nameString.toLowerCase())) return scroll;
         }
@@ -75,20 +72,18 @@ public enum Scrolls {
 
     private static final NamespacedKey scroll = DataKeys.scroll.getNamespacedKey();
 
-    public static Scrolls getFromPDC(final ItemStack item) {
+    public static Scrolls getFromPDC(@NotNull final ItemStack item) {
         final PersistentDataContainerView data = item.getPersistentDataContainer();
 
         if (!data.has(scroll)) return null;
 
-        return getFromName(data.get(scroll, PersistentDataType.STRING));
+        return getFromName(data.get(scroll, PersistentDataType.STRING)); //todo() wtf
     }
 
     public ItemStack getScroll() {
         final ItemStack item = itemBuilderScrolls.get(this).build();
 
-        item.editPersistentDataContainer(container -> {
-            container.set(scroll, PersistentDataType.STRING, this.configName);
-        });
+        item.editPersistentDataContainer(container -> container.set(scroll, PersistentDataType.STRING, this.configName));
 
         return item;
     }

@@ -11,12 +11,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Level;
 
-public class FileUtils {
+public class FileUtils { //todo() fuck this whole class
 
     @NotNull
     private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    public static void copyFiles(Path directory, String folder, List<String> names) {
+    public static void copyFiles(@NotNull final Path directory, @NotNull final String folder, @NotNull final List<String> names) {
         names.forEach(name -> copyFile(directory, folder, name));
     }
 
@@ -50,7 +50,7 @@ public class FileUtils {
         ).forEach(name -> copyFile(file.toPath(), name));
     }
 
-    public static void copyFile(Path directory, String name) {
+    public static void copyFile(@NotNull final Path directory, @NotNull final String name) {
         File file = directory.resolve(name).toFile();
 
         if (file.exists()) return;
@@ -69,7 +69,7 @@ public class FileUtils {
         getResource(name, file, loader);
     }
 
-    private static void getResource(String name, File file, ClassLoader loader) {
+    private static void getResource(@NotNull final String name, File file, ClassLoader loader) {
         URL resource = loader.getResource(name);
 
         if (resource == null) {

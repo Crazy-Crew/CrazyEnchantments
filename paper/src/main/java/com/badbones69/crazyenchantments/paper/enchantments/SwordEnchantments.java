@@ -81,19 +81,24 @@ public class SwordEnchantments implements Listener {
         if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (this.crazyManager.isBreakRageOnDamageOn() && event.getEntity() instanceof Player player) {
-            CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
+            final ItemStack itemStack = this.methods.getItemInHand(player);
 
-            if (cePlayer != null) {
-                RageBreakEvent rageBreakEvent = new RageBreakEvent(player, event.getDamager(), this.methods.getItemInHand(player));
-                this.plugin.getServer().getPluginManager().callEvent(rageBreakEvent);
+            if (!itemStack.isEmpty()) {
+                CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
 
-                if (!rageBreakEvent.isCancelled() && cePlayer.hasRage()) {
-                    cePlayer.getRageTask().cancel();
-                    cePlayer.setRageMultiplier(0.0);
-                    cePlayer.setRageLevel(0);
-                    cePlayer.setRage(false);
+                if (cePlayer != null) {
+                    RageBreakEvent rageBreakEvent = new RageBreakEvent(player, event.getDamager(), itemStack);
 
-                    rageInformPlayer(player, Messages.RAGE_DAMAGED, 0f);
+                    this.plugin.getServer().getPluginManager().callEvent(rageBreakEvent);
+
+                    if (!rageBreakEvent.isCancelled() && cePlayer.hasRage()) {
+                        cePlayer.getRageTask().cancel();
+                        cePlayer.setRageMultiplier(0.0);
+                        cePlayer.setRageLevel(0);
+                        cePlayer.setRage(false);
+
+                        rageInformPlayer(player, Messages.RAGE_DAMAGED, 0f);
+                    }
                 }
             }
         }
@@ -103,6 +108,8 @@ public class SwordEnchantments implements Listener {
 
         CEPlayer cePlayer = this.crazyManager.getCEPlayer(damager);
         ItemStack item = this.methods.getItemInHand(damager);
+
+        if (item.isEmpty()) return;
 
         if (event.getEntity().isDead()) return;
 
@@ -135,7 +142,6 @@ public class SwordEnchantments implements Listener {
         }
 
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISORDER, damager, item, enchantments)) {
-
             Player player = (Player) event.getEntity();
             Inventory inventory = player.getInventory();
             List<ItemStack> items = new ArrayList<>();
@@ -174,7 +180,7 @@ public class SwordEnchantments implements Listener {
                 int rageUp = cePlayer.getRageLevel() + 1;
 
                 if (cePlayer.getRageMultiplier().intValue() >= rageUp) {
-                    rageInformPlayer(damager, Messages.RAGE_RAGE_UP, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
+                    rageInformPlayer(damager, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
                     cePlayer.setRageLevel(rageUp);
                 }
 
@@ -203,7 +209,6 @@ public class SwordEnchantments implements Listener {
             int amount = 4 + enchantments.get(CEnchantments.SKILLSWIPE.getEnchantment());
 
             if (player.getTotalExperience() > 0) {
-
                 if (this.currencyAPI.getCurrency(player, Currency.XP_TOTAL) >= amount) {
                     this.currencyAPI.takeCurrency(player, Currency.XP_TOTAL, amount);
                 } else {
@@ -217,7 +222,7 @@ public class SwordEnchantments implements Listener {
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.LIFESTEAL, damager, item, enchantments)) {
             int steal = enchantments.get(CEnchantments.LIFESTEAL.getEnchantment());
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue();
+            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue(); //todo() npe
 
             if (damager.getHealth() + steal < maxHealth) damager.setHealth(damager.getHealth() + steal);
 
@@ -232,7 +237,7 @@ public class SwordEnchantments implements Listener {
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VAMPIRE, damager, item, enchantments)) {
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue();
+            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue(); //todo() npe
 
             if (damager.getHealth() + event.getDamage() / 2 < maxHealth) damager.setHealth(damager.getHealth() + event.getDamage() / 2);
 
@@ -336,6 +341,9 @@ public class SwordEnchantments implements Listener {
         if (event.getEntity().getKiller() != null) {
             Player damager = event.getEntity().getKiller();
             ItemStack item = this.methods.getItemInHand(damager);
+
+            if (item.isEmpty()) return;
+
             Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.INQUISITIVE, damager, item, enchantments)) {
@@ -363,7 +371,7 @@ public class SwordEnchantments implements Listener {
         }
     }
 
-    private EquipmentSlot getSlot(int slot) {
+    private EquipmentSlot getSlot(final int slot) {
         return switch (slot) {
             case 1 -> EquipmentSlot.CHEST;
             case 2 -> EquipmentSlot.LEGS;
@@ -372,16 +380,16 @@ public class SwordEnchantments implements Listener {
         };
     }
 
-    private void rageInformPlayer(Player player, Messages message, Map<String, String> placeholders, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
+    private void rageInformPlayer(@NotNull final Player player, @NotNull final Map<String, String> placeholders, final float progress) {
+        if (Messages.RAGE_RAGE_UP.getMessageNoPrefix().isBlank()) return;
 
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
+            this.bossBarController.updateBossBar(player, Messages.RAGE_RAGE_UP.getMessageNoPrefix(placeholders), progress);
         } else {
-            player.sendMessage(message.getMessage(placeholders));
+            player.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
         }
     }
-    private void rageInformPlayer(Player player, Messages message, float progress) {
+    private void rageInformPlayer(@NotNull final Player player, @NotNull final Messages message, final float progress) {
         if (message.getMessageNoPrefix().isBlank()) return;
 
         if (this.crazyManager.useRageBossBar()) {

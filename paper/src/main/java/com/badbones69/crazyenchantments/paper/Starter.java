@@ -146,7 +146,7 @@ public class Starter {
         return this.vaultSupport;
     }
 
-    public void setVaultSupport(VaultSupport vaultSupport) {
+    public void setVaultSupport(@NotNull final VaultSupport vaultSupport) {
         this.vaultSupport = vaultSupport;
 
         vaultSupport.loadVault();

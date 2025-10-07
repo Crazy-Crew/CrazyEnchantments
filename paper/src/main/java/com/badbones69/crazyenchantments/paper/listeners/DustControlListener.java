@@ -50,7 +50,9 @@ public class DustControlListener implements Listener {
     @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private void setBookLore(ItemStack item, int percent, String rate, CEnchantment enchantment, EnchantedBook data) {
+    private void setBookLore(@NotNull final ItemStack item, final int percent, @NotNull final String rate, @NotNull final CEnchantment enchantment, @NotNull final EnchantedBook data) {
+        if (item.isEmpty()) return;
+
         final List<Component> lore = new ArrayList<>();
 
         if (rate.equalsIgnoreCase("Success")) {
@@ -78,16 +80,19 @@ public class DustControlListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) { // dust use
-        if (event.getCurrentItem() == null) return;
+        ItemStack book = event.getCurrentItem();
+
+        if (book == null || book.isEmpty()) return;
+
+        ItemStack dust = event.getCursor();
+
+        if (book.isEmpty()) return;
+
+        if (book.getAmount() > 1) return;
 
         Player player = (Player) event.getWhoClicked();
 
         FileConfiguration config = Files.CONFIG.getFile();
-
-        ItemStack book = event.getCurrentItem();
-        ItemStack dust = event.getCursor();
-
-        if (book.getAmount() > 1) return;
 
         final PersistentDataContainerView container = dust.getPersistentDataContainer();
 
@@ -103,7 +108,9 @@ public class DustControlListener implements Listener {
         for (CEnchantment en : this.crazyManager.getRegisteredEnchantments()) {
             if (en.getName().equalsIgnoreCase(bookData.getName())) {
                 enchantment = en;
+
                 toggle = true;
+
                 break;
             }
         }
@@ -175,7 +182,7 @@ public class DustControlListener implements Listener {
         openAnyHandDust(player, event, false);
     }
 
-    private boolean openAnyHandDust(final Player player, final PlayerInteractEvent event, final boolean mainHand) {
+    private boolean openAnyHandDust(@NotNull final Player player, @NotNull final PlayerInteractEvent event, final boolean mainHand) {
         final PlayerInventory inventory = player.getInventory();
 
         final ItemStack item = mainHand ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
@@ -213,7 +220,7 @@ public class DustControlListener implements Listener {
 
             FileConfiguration config = Files.CONFIG.getFile();
 
-            if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
+            if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle", true)) {
                 final List<Color> colors = new ArrayList<>();
 
                 ColorUtils.color(colors, config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime"));
@@ -230,11 +237,11 @@ public class DustControlListener implements Listener {
 
         FileConfiguration config = Files.CONFIG.getFile();
 
-        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success")) dusts.add(Dust.SUCCESS_DUST);
+        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success", true)) dusts.add(Dust.SUCCESS_DUST);
 
-        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Destroy")) dusts.add(Dust.DESTROY_DUST);
+        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Destroy", true)) dusts.add(Dust.DESTROY_DUST);
 
-        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Failed")) dusts.add(Dust.FAILED_DUST);
+        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Failed", true)) dusts.add(Dust.FAILED_DUST);
 
         return dusts.get(new Random().nextInt(dusts.size()));
     }
