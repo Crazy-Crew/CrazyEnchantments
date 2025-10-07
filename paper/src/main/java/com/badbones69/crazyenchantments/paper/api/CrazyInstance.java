@@ -79,6 +79,12 @@ public class CrazyInstance {
 
             final ConfigurationSection costNode = section.getConfigurationSection("Costs.%s".formatted(option.getPath()));
 
+            if (costNode == null) {
+                this.fusion.log("warn", "Failed to find {} in the config.yml", option.getPath());
+
+                return;
+            }
+
             addShopOption(option, itemNode, costNode, option.getNamePath(), option.getLorePath());
         }
     }
