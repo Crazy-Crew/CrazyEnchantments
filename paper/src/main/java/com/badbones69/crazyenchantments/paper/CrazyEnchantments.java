@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.paper;
 
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
@@ -33,6 +33,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
+import java.util.List;
 
 public class CrazyEnchantments extends JavaPlugin {
 
@@ -59,15 +60,17 @@ public class CrazyEnchantments extends JavaPlugin {
 
         final Path path = this.getDataPath();
 
-        this.fileManager.addPaperFile(path.resolve("config.yml"))
-                .addPaperFile(path.resolve("BlockList.yml"))
-                .addPaperFile(path.resolve("Data.yml"))
-                .addPaperFile(path.resolve("Enchantment-Types.yml"))
-                .addPaperFile(path.resolve("Enchantments.yml"))
-                .addPaperFile(path.resolve("GKitz.yml"))
-                .addPaperFile(path.resolve("HeadMap.yml"))
-                .addPaperFile(path.resolve("Messages.yml"))
-                .addPaperFile(path.resolve("Tinker.yml"));
+        List.of(
+                "config.yml",
+                "BlockList.yml",
+                "Data.yml",
+                "Enchantment-Types.yml",
+                "Enchantments.yml",
+                "GKitz.yml",
+                "HeadMap.yml",
+                "Messages.yml",
+                "Tinker.yml"
+        ).forEach(file -> this.fileManager.addPaperFile(path.resolve(file)));
 
         this.options = new ConfigOptions();
         this.options.init(FileKeys.config.getConfiguration());
