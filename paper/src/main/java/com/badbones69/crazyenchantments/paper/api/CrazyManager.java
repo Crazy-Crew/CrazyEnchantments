@@ -18,6 +18,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -30,6 +31,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
+import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -71,6 +73,8 @@ public class CrazyManager {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final KitsManager kitsManager = this.plugin.getKitsManager();
 
     private final ConfigOptions options = this.plugin.getOptions();
 
@@ -207,7 +211,13 @@ public class CrazyManager {
                 .setSound(enchants.getString(path + ".Sound")) //todo() default sound
                 .setConflicts(enchants.getStringList(path + ".Conflicts"));
 
-                if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(this.methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
+                final String enchantmentType = enchants.getString(path + ".Enchantment-Type", "");
+
+                if (!enchantmentType.isEmpty()) {
+                    final EnchantmentType type = this.methods.getFromName(enchantmentType);
+
+                    enchantment.setEnchantmentType(type == null ? cEnchantment.getType() : type);
+                }
 
                 if (cEnchantment.hasChanceSystem()) {
                     enchantment.setChance(enchants.getInt(path + ".Chance-System.Base", cEnchantment.getChance()));
@@ -271,7 +281,7 @@ public class CrazyManager {
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
 
-        for (GKitz kit : this.instance.getGKitz()) {
+        for (GKitz kit : this.kitsManager.getKits()) {
             if (data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
                 Calendar coolDown = Calendar.getInstance();
                 coolDown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
@@ -335,19 +345,6 @@ public class CrazyManager {
      */
     public CropManagerVersion getNMSSupport() {
         return this.cropManagerVersion;
-    }
-
-    /**
-     * Get a GKit from its name.
-     * @param kitName The kit you wish to get.
-     * @return The kit as a GKitz object.
-     */
-    public GKitz getGKitFromName(@NotNull final String kitName) {
-        for (GKitz kit : this.instance.getGKitz()) {
-            if (kit.getName().equalsIgnoreCase(kitName)) return kit;
-        }
-
-        return null;
     }
 
     /**

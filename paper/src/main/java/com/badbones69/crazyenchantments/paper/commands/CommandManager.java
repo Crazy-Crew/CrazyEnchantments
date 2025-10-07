@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -19,6 +18,7 @@ import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.
 import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.CommandTinker;
 import com.badbones69.crazyenchantments.paper.commands.relations.ArgumentRelations;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.ryderbelserion.fusion.paper.builders.PlayerBuilder;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -38,8 +38,8 @@ import java.util.List;
 public class CommandManager {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final KitsManager kitsManager = plugin.getKitsManager();
     private static final CrazyInstance instance = plugin.getInstance();
-    private static final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     private static final EnchantmentBookSettings settings = plugin.getStarter().getEnchantmentBookSettings();
     private static final Server server = plugin.getServer();
 
@@ -51,7 +51,7 @@ public class CommandManager {
     public static void load() {
         new ArgumentRelations().build();
 
-        commandManager.registerArgument(GKitz.class, (sender, argument) -> crazyManager.getGKitFromName(argument));
+        commandManager.registerArgument(GKitz.class, (sender, argument) -> kitsManager.getKitByName(argument));
         commandManager.registerArgument(Dust.class, (sender, argument) -> Dust.valueOf(argument));
         commandManager.registerArgument(Category.class, (sender, argument) -> settings.getCategory(argument));
         commandManager.registerArgument(Scrolls.class, (sender, argument) -> Scrolls.getFromName(argument));
@@ -100,7 +100,7 @@ public class CommandManager {
             return list;
         });
 
-        commandManager.registerSuggestion(GKitz.class, (context) -> new ArrayList<>(instance.getGKitz().stream().map(GKitz::getName).toList()));
+        commandManager.registerSuggestion(GKitz.class, (context) -> new ArrayList<>(kitsManager.getKits().stream().map(GKitz::getName).toList()));
 
         commandManager.registerSuggestion(Scrolls.class, (context) -> {
             final List<String> scrolls = new ArrayList<>();

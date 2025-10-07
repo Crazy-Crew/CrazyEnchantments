@@ -64,7 +64,7 @@ public class KitsMenu extends InventoryBuilder {
 
         final CEPlayer cePlayer = this.crazyManager.getCEPlayer(getPlayer().getUniqueId());
 
-        for (final GKitz kit : this.instance.getGKitz()) {
+        for (final GKitz kit : this.kitsManager.getKits()) {
             final ItemStack displayItem = kit.getDisplayItem().clone();
             final List<Component> lore = new ArrayList<>();
             final GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
@@ -90,6 +90,8 @@ public class KitsMenu extends InventoryBuilder {
     public static class KitsListener implements Listener {
 
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+        private final com.badbones69.crazyenchantments.paper.managers.KitsManager kitsManager = this.plugin.getKitsManager();
 
         private final Starter starter = this.plugin.getStarter();
 
@@ -136,7 +138,7 @@ public class KitsMenu extends InventoryBuilder {
 
             if (kitName == null) return;
 
-            final GKitz kit = this.crazyManager.getGKitFromName(kitName);
+            final GKitz kit = this.kitsManager.getKitByName(kitName);
 
             if (event.getAction() == InventoryAction.PICKUP_HALF) {
                 final int amountOfItems = kit.getPreviewItems().size() + 1; // Add 1 to account for the back button.

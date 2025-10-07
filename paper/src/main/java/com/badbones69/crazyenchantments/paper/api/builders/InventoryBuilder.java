@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -18,6 +19,8 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
     @NotNull
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    protected final KitsManager kitsManager = this.plugin.getKitsManager();
 
     protected final CrazyInstance instance = this.plugin.getInstance();
 

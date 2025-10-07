@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.api;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -13,12 +12,12 @@ import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.google.common.collect.Lists;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -26,13 +25,10 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,27 +42,23 @@ public class CrazyInstance {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Server server = this.plugin.getServer();
-
-    private final PluginManager pluginManager = this.server.getPluginManager();
-
     private final PaperFileManager fileManager = this.plugin.getFileManager();
+
+    private final KitsManager kitsManager = this.plugin.getKitsManager();
 
     private final ConfigOptions options = this.plugin.getOptions();
 
     private final FusionPaper fusion = this.plugin.getFusion();
-
-    private final Methods methods = this.plugin.getStarter().getMethods();
 
     private final Path path = this.plugin.getDataPath();
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
 
-    private final List<GKitz> gkitz = new ArrayList<>();
-
     public void init() {
         final YamlConfiguration config = FileKeys.config.getConfiguration();
+
+        this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
 
@@ -400,70 +392,6 @@ public class CrazyInstance {
 
     public @NotNull final List<CEnchantment> getRegisteredEnchantments() {
         return Collections.unmodifiableList(this.registeredEnchantments);
-    }
-
-    private List<ItemStack> getInfoGKit(@NotNull final List<String> itemStrings) {
-        List<ItemStack> items = new ArrayList<>();
-
-        for (String itemString : itemStrings) {
-            // This is used to convert old v1.7- gkit files to use newer way.
-            itemString = getNewItemString(itemString);
-
-            ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
-            List<String> customEnchantments = new ArrayList<>();
-            HashMap<Enchantment, Integer> enchantments = new HashMap<>();
-
-            for (String option : itemString.split(", ")) {
-                try {
-                    Enchantment enchantment = this.methods.getEnchantment(option.split(":")[0]);
-                    CEnchantment cEnchantment = getEnchantmentFromName(option.split(":")[0]);
-                    String level = option.split(":")[1];
-
-                    if (enchantment != null) {
-                        if (level.contains("-")) {
-                            customEnchantments.add("&7" + option.split(":")[0] + " " + level);
-                        } else {
-                            enchantments.put(enchantment, Integer.parseInt(level));
-                        }
-                    } else if (cEnchantment != null) {
-                        customEnchantments.add(cEnchantment.getCustomName() + " " + level);
-                    }
-                } catch (Exception ignore) {}
-            }
-
-            itemBuilder.getLore().addAll(0, customEnchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList());
-            itemBuilder.setEnchantments(enchantments);
-
-            items.add(itemBuilder.addKey(DataKeys.random_number.getNamespacedKey(), String.valueOf(methods.getRandomNumber(0, Integer.MAX_VALUE))).build());
-            // This is done so items do not stack if there are multiple of the same.
-        }
-
-        return items;
-    }
-
-    public String getNewItemString(@NotNull String itemString) {
-        StringBuilder newItemString = new StringBuilder();
-
-        for (String option : itemString.split(", ")) {
-            if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
-                StringBuilder newOption = new StringBuilder();
-
-                for (String enchantment : option.toLowerCase().replace("customenchantments:", "").replace("enchantments:", "").split(",")) {
-                    newOption.append(enchantment).append(", ");
-                }
-
-                option = newOption.substring(0, newOption.length() - 2);
-            }
-
-            newItemString.append(option).append(", ");
-        }
-
-        if (!newItemString.isEmpty()) itemString = newItemString.substring(0, newItemString.length() - 2);
-        return itemString;
-    }
-
-    public @NotNull final List<GKitz> getGKitz() {
-        return Collections.unmodifiableList(this.gkitz);
     }
 
     public @NotNull final ItemStack getEnchantmentBookItem() {
