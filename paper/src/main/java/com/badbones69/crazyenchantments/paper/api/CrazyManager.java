@@ -491,17 +491,21 @@ public class CrazyManager {
 
     /**
      * Get a CEnchantment enchantment from the name.
-     * @param enchantmentString The name of the enchantment.
+     * @param enchant The name of the enchantment.
      * @return The enchantment as a CEnchantment but if not found will be null.
      */
-    public CEnchantment getEnchantmentFromName(String enchantmentString) {
-        for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
-            if (enchantment.getName().equalsIgnoreCase(enchantmentString)) return enchantment;
-            enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or]| |_)", "");
-            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
+    public CEnchantment getEnchantmentFromName(@NotNull final String enchant) {
+        CEnchantment value = null;
+
+        for (final CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
+            if (enchantment.getName().equalsIgnoreCase(enchant)) {
+                value = enchantment;
+
+                break;
+            }
         }
 
-        return null;
+        return value;
     }
 
     /**

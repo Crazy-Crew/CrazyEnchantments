@@ -343,13 +343,9 @@ public class EnchantmentBookSettings {
         data.removeEnchantment(enchant.getName());
 
         if (data.isEmpty() && view.has(DataKeys.enchantments.getNamespacedKey())) {
-            itemStack.editPersistentDataContainer(container -> {
-                container.remove(DataKeys.enchantments.getNamespacedKey());
-            });
+            itemStack.editPersistentDataContainer(container -> container.remove(DataKeys.enchantments.getNamespacedKey()));
         } else {
-            itemStack.editPersistentDataContainer(container -> {
-                container.set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(data));
-            });
+            itemStack.editPersistentDataContainer(container -> container.set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(data)));
         }
 
         return itemStack;

@@ -82,7 +82,7 @@ public class CommandAdd extends BaseCommand {
 
                 player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(new HashMap<>() {{
                     put("%Enchantment%", ceEnchantment.getCustomName());
-                }}).replaceAll("&", ""));
+                }}));
 
                 return;
             }
