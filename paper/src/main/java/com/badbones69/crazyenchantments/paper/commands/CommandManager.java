@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
@@ -20,12 +19,13 @@ import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.
 import com.badbones69.crazyenchantments.paper.commands.relations.ArgumentRelations;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.paper.builders.PlayerBuilder;
+import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,7 +38,6 @@ public class CommandManager {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private static final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    private static final Methods methods = plugin.getStarter().getMethods();
     private static final EnchantmentBookSettings settings = plugin.getStarter().getEnchantmentBookSettings();
     private static final Server server = plugin.getServer();
 
