@@ -149,7 +149,7 @@ public class BlackSmithManager {
                 .setLore(section.getStringList("Results.Not-Found-Lore"))
                 .build();
 
-        inventoryName = ColorUtils.color(section.getString("GUIName"));
+        inventoryName = ColorUtils.color(section.getString("GUIName", "&8&lThe Black Smith"));
         itemCost = section.getString("Results.Found", "&c&lCost: &6&l%cost% XP");
         currency = Currency.getCurrency(section.getString("Transaction.Currency", "XP_LEVEL"));
 
