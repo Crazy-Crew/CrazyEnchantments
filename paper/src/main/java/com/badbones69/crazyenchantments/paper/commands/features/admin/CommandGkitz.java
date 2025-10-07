@@ -34,6 +34,7 @@ public class CommandGkitz {
     public void run(@NotNull final Player player) {
         if (!this.crazyManager.isGkitzEnabled()) {
             //todo() send message that kits are not enabled.
+            player.sendMessage(Messages.GKIT_NOT_ENABLED.getMessage());
 
             return;
         }
