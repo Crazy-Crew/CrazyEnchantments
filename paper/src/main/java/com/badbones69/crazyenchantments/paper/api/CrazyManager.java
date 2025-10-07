@@ -209,8 +209,8 @@ public class CrazyManager {
         this.useUnsafeEnchantments = configuration.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
         this.maxEnchantmentCheck = configuration.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
         this.useConfigLimits = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
-        this.defaultLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
-        this.defaultBaseLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
+        this.defaultLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 6);
+        this.defaultBaseLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 6);
         this.useEnchantmentLimiter = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
         this.checkVanillaLimit = configuration.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
         this.gkitzToggle = configuration.getBoolean("Settings.GKitz.Enabled", true);
