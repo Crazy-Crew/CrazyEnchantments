@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -24,6 +25,8 @@ public class CEBook {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private final ConfigOptions options = this.plugin.getOptions();
 
     @NotNull
@@ -38,7 +41,6 @@ public class CEBook {
     private CEnchantment enchantment;
     private int amount;
     private int level;
-    private boolean glowing;
     private int destroyRate;
     private int successRate;
     
@@ -69,8 +71,6 @@ public class CEBook {
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
 
-        this.glowing = config.getBoolean("Settings.Enchantment-Book-Glowing", true);
-
         int successMax = config.getInt("Settings.BlackScroll.SuccessChance.Max", 100);
         int successMin = config.getInt("Settings.BlackScroll.SuccessChance.Min", 15);
         int destroyMax = config.getInt("Settings.BlackScroll.DestroyChance.Max", 100);
@@ -96,12 +96,11 @@ public class CEBook {
      * @param category The category for the rates.
      */
     public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount, @NotNull final Category category) {
+        this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
+        this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = FileKeys.config.getConfiguration().getBoolean("Settings.Enchantment-Book-Glowing", true);
-        this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
-        this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
     
     /**
@@ -113,11 +112,10 @@ public class CEBook {
      */
     public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount, final int destroyRate, final int successRate) {
         this.enchantment = enchantment;
-        this.amount = amount;
-        this.level = level;
-        this.glowing = FileKeys.config.getConfiguration().getBoolean("Settings.Enchantment-Book-Glowing", true);
         this.destroyRate = destroyRate;
         this.successRate = successRate;
+        this.amount = amount;
+        this.level = level;
     }
     
     /**
@@ -133,23 +131,6 @@ public class CEBook {
      */
     public CEBook setEnchantment(@NotNull final CEnchantment enchantment) {
         this.enchantment = enchantment;
-
-        return this;
-    }
-    
-    /**
-     * If the item will be glowing or not.
-     * @return True if glowing and false if not.
-     */
-    public boolean getGlowing() {
-        return this.glowing;
-    }
-    
-    /**
-     * @param toggle Toggle on or off the glowing effect.
-     */
-    public CEBook setGlowing(final boolean toggle) {
-        this.glowing = toggle;
 
         return this;
     }
@@ -226,7 +207,7 @@ public class CEBook {
      * @return Return the book as an ItemBuilder.
      */
     public ItemBuilder getItemBuilder() {
-        String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+        String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(this.level);
 
         List<String> lore = new ArrayList<>();
 
@@ -246,7 +227,7 @@ public class CEBook {
             }
         }
 
-        return this.enchantmentBookSettings.getNormalBook().setAmount(this.amount).setName(name).setLore(lore).setGlow(this.glowing);
+        return this.instance.getEnchantmentBookBuilder().setAmount(this.amount).setName(name).setLore(lore);
     }
     
     /**

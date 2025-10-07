@@ -64,7 +64,7 @@ public class KitsMenu extends InventoryBuilder {
 
         final CEPlayer cePlayer = this.crazyManager.getCEPlayer(getPlayer().getUniqueId());
 
-        for (final GKitz kit : this.crazyManager.getGKitz()) {
+        for (final GKitz kit : this.instance.getGKitz()) {
             final ItemStack displayItem = kit.getDisplayItem().clone();
             final List<Component> lore = new ArrayList<>();
             final GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();

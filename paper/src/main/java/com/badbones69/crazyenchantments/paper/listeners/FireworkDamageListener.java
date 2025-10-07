@@ -12,18 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class FireworkDamageListener implements Listener {
 
-    /**
-     * @param firework The firework you want to add.
-     */
-    public void addFirework(@NotNull final Entity firework) {
-        PersistentDataContainer container = firework.getPersistentDataContainer();
-
-        container.set(DataKeys.no_firework_damage.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-    }
-
     @EventHandler(ignoreCancelled = true)
     public void onFireworkDamage(EntityDamageEvent event) {
-        Entity directEntity = event.getDamageSource().getDirectEntity();
+        final Entity directEntity = event.getDamageSource().getDirectEntity();
 
         if (directEntity instanceof Firework firework) {
             PersistentDataContainer container = firework.getPersistentDataContainer();

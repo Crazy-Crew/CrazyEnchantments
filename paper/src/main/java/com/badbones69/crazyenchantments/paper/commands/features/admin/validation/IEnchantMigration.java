@@ -2,6 +2,8 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin.validatio
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -13,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
 public abstract class IEnchantMigration {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    protected final CrazyInstance instance = this.plugin.getInstance();
+
+    protected final ConfigOptions options = this.plugin.getOptions();
 
     protected final Starter starter = this.plugin.getStarter();
 

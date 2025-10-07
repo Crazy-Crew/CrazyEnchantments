@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -30,6 +31,8 @@ public class TinkererManager {
 
     @NotNull
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private static final CrazyInstance instance = plugin.getInstance();
 
     @NotNull
     private static final Starter starter = plugin.getStarter();
@@ -61,8 +64,10 @@ public class TinkererManager {
             inventory.setItemInOffHand(methods.removeItem(item));
         }
 
-        if (Currency.isCurrency(configuration.getString("Settings.Currency"))) {
-            currencyAPI.giveCurrency(player, Currency.getCurrency(configuration.getString("Settings.Currency")), amount);
+        final String currency = configuration.getString("Settings.Currency", "XP_LEVEL");
+
+        if (Currency.isCurrency(currency)) {
+            currencyAPI.giveCurrency(player, Currency.getCurrency(currency), amount);
         }
 
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -96,7 +101,7 @@ public class TinkererManager {
             return total;
         }
 
-        final Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
+        final Map<CEnchantment, Integer> ceEnchants = instance.getEnchantments(item);
 
         if (!ceEnchants.isEmpty()) { // CrazyEnchantments
             for (final Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {

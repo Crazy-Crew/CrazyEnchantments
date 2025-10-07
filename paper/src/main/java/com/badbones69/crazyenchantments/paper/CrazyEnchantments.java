@@ -29,6 +29,7 @@ import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListen
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +43,6 @@ public class CrazyEnchantments extends JavaPlugin {
     // Plugin Listeners.
     public final PluginManager pluginManager = getServer().getPluginManager();
 
-    private FireworkDamageListener fireworkDamageListener;
     private ArmorEnchantments armorEnchantments;
 
     private final BossBarController bossBarController = new BossBarController(this);
@@ -87,7 +87,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.starter.getCurrencyAPI().loadCurrency();
 
-        this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
+        this.pluginManager.registerEvents(new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(new ShopListener(), this);
 
         // Load what we need to properly enable the plugin.
@@ -119,19 +119,15 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
-        if (this.starter.getCrazyManager().isGkitzEnabled()) {
-            getLogger().info("G-Kitz support is now enabled.");
-
-            this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
-        }
-
         CommandManager.load();
     }
 
     @Override
     public void onDisable() {
-        getServer().getGlobalRegionScheduler().cancelTasks(this);
-        getServer().getAsyncScheduler().cancelTasks(this);
+        final Server server = getServer();
+
+        server.getGlobalRegionScheduler().cancelTasks(this);
+        server.getAsyncScheduler().cancelTasks(this);
 
         this.bossBarController.removeAllBossBars();
 
@@ -139,23 +135,18 @@ public class CrazyEnchantments extends JavaPlugin {
 
         if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
 
-        getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
+        server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
     }
 
-    public Starter getStarter() {
+    public @NotNull final Starter getStarter() {
         return this.starter;
     }
 
-    // Plugin Listeners.
-    public FireworkDamageListener getFireworkDamageListener() {
-        return this.fireworkDamageListener;
-    }
-
-    public PluginManager getPluginManager() {
+    public @NotNull final PluginManager getPluginManager() {
         return this.pluginManager;
     }
 
-    public BossBarController getBossBarController() {
+    public @NotNull final BossBarController getBossBarController() {
         return bossBarController;
     }
 

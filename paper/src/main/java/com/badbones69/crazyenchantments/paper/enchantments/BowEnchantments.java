@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
@@ -12,7 +13,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
 import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Location;
@@ -47,14 +47,13 @@ public class BowEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Support.
     @NotNull
@@ -79,7 +78,7 @@ public class BowEnchantments implements Listener {
 
         if (!this.bowUtils.allowsCombat(player)) return;
 
-        Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(bow);
+        Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(bow);
 
         if (enchants.isEmpty()) return;
 

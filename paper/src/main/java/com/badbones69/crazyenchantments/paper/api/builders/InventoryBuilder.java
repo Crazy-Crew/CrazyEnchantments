@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -17,6 +18,8 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
     @NotNull
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    protected final CrazyInstance instance = this.plugin.getInstance();
 
     protected final Server server = this.plugin.getServer();
 

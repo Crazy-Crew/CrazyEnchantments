@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -38,6 +39,8 @@ import java.util.stream.Collectors;
 public class ScrollListener implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     private final Starter starter = this.plugin.getStarter();
 
@@ -88,7 +91,7 @@ public class ScrollListener implements Listener {
             case "BlackScroll" -> {
                 if (this.methods.isInventoryFull(player)) return;
 
-                List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
+                final List<CEnchantment> enchantments = this.instance.getEnchantmentsOnItem(item);
 
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     event.setCancelled(true);
@@ -106,7 +109,7 @@ public class ScrollListener implements Listener {
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
                     player.getInventory().addItem(new CEBook(enchantment, this.enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
 
-                    event.setCurrentItem(this.enchantmentBookSettings.removeEnchantment(item, enchantment));
+                    event.setCurrentItem(this.instance.removeEnchantment(item, enchantment));
                 }
             }
 
@@ -126,7 +129,7 @@ public class ScrollListener implements Listener {
             }
 
             case "TransmogScroll" -> {
-                if (this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
+                if (this.instance.getEnchantmentsOnItem(item).isEmpty()) return;
 
                 if (item.lore() == null) return;
 
@@ -198,7 +201,7 @@ public class ScrollListener implements Listener {
 
         if (data == null) return item; // Only order if it has CE_Enchants
 
-        for (final CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
+        for (final CEnchantment enchantment : this.instance.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
 
             enchantments.put(enchantment,ColorUtils.stripStringColour((enchantment.getCustomName() + " " + NumberUtils.toRoman(data.getLevel(enchantment.getName())))).length());

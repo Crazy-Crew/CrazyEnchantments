@@ -1,11 +1,10 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.AuraActiveEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +14,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +21,9 @@ import java.util.stream.Collectors;
 
 public class AuraListener implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     private final CEnchantments[] AURA_ENCHANTMENTS = {
             CEnchantments.BLIZZARD,
@@ -58,7 +51,7 @@ public class AuraListener implements Listener {
             if (item == null) continue;
             if (item.isEmpty()) continue;
 
-            Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
+            Map<CEnchantment, Integer> itemEnchantments = this.instance.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
@@ -74,7 +67,7 @@ public class AuraListener implements Listener {
                 if (item == null) continue;
                 if (item.isEmpty()) continue;
 
-                Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
+                Map<CEnchantment, Integer> itemEnchantments = this.instance.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
@@ -89,7 +82,6 @@ public class AuraListener implements Listener {
     }
 
     private List<Player> getNearbyPlayers(Player player) {
-        return player.getNearbyEntities(3, 3, 3).stream().filter((entity) ->
-                entity instanceof Player && !entity.getUniqueId().equals(player.getUniqueId())).map(entity -> (Player) entity).collect(Collectors.toList());
+        return player.getNearbyEntities(3, 3, 3).stream().filter((entity) -> entity instanceof Player && !entity.getUniqueId().equals(player.getUniqueId())).map(entity -> (Player) entity).collect(Collectors.toList());
     }
 }

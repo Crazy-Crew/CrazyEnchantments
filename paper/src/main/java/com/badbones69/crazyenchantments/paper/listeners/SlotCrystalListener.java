@@ -2,11 +2,12 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,11 +23,12 @@ public class SlotCrystalListener implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final ConfigOptions options = this.plugin.getOptions();
+
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final Starter starter = this.plugin.getStarter();
 
     private static ItemStack slot_crystal;
 
@@ -49,7 +51,7 @@ public class SlotCrystalListener implements Listener {
         if (item == null || item.isEmpty() || !isSlotCrystal(crystalItem) || isSlotCrystal(item)) return;
 
         int maxEnchants = this.starter.getCrazyManager().getPlayerMaxEnchantments(player);
-        int enchAmount = this.enchantmentBookSettings.getEnchantmentAmount(item, this.starter.getCrazyManager().checkVanillaLimit());
+        int enchAmount = this.instance.getEnchantmentAmount(item, this.options.isCheckVanillaLimit());
         int baseEnchants = this.starter.getCrazyManager().getPlayerBaseEnchantments(player);
         int limiter = this.starter.getCrazyManager().getEnchantmentLimiter(item);
 

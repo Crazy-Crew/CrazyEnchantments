@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
@@ -10,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,6 +40,10 @@ public class PickaxeEnchantments implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final ConfigOptions options = this.plugin.getOptions();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -81,7 +87,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (currentItem.isEmpty()) return;
 
-        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
 
@@ -102,7 +108,7 @@ public class PickaxeEnchantments implements Listener {
         for (Block block : blockList) {
             if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
 
-            if (this.methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksBlast())) continue;
+            if (this.methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksBlast())) continue;
 
             if (damage) this.methods.removeDurability(currentItem, player);
         }
@@ -123,7 +129,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (currentItem.isEmpty()) return;
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
 
@@ -142,7 +148,7 @@ public class PickaxeEnchantments implements Listener {
         for (Block block : blockList) {
             if (block.isEmpty()) continue;
 
-            if (this.methods.playerBreakBlock(player, block, currentItem, this.crazyManager.isDropBlocksVeinMiner())) continue;
+            if (this.methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksVeinMiner())) continue;
 
             if (damage) this.methods.removeDurability(currentItem, player);
         }
@@ -168,7 +174,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (item.isEmpty()) return;
 
-        Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(item);
 
         List<Item> oldDrops = event.getItems();
 
@@ -223,7 +229,7 @@ public class PickaxeEnchantments implements Listener {
         if (event.getExpToDrop() <= 0) return; // If block doesn't drop xp on break, return.
 
         ItemStack item = this.methods.getItemInHand(player);
-        Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(item);
 
         if (!EnchantUtils.isEventActive(CEnchantments.EXPERIENCE, player, item, enchants)) return;
 

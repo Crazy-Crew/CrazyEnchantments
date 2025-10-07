@@ -3,10 +3,10 @@ package com.badbones69.crazyenchantments.paper.tasks.processors;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.attribute.Attribute;
@@ -24,13 +24,13 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private final Starter starter = this.plugin.getStarter();
 
     private final Methods methods = this.starter.getMethods();
 
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     public ArmorProcessor() {}
 
@@ -44,7 +44,10 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
         if (player == null) return;
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
+            if (armor == null || armor.isEmpty()) continue;
+
+            Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(armor);
+
             if (enchantments.isEmpty()) continue;
 
             int heal = 1;
@@ -69,10 +72,19 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
             useHellForge(player, armor, enchantments);
         }
 
-        PlayerInventory inv = player.getInventory();
+        PlayerInventory inventory = player.getInventory();
 
-        useHellForge(player, inv.getItemInMainHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
-        useHellForge(player, inv.getItemInOffHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
+        final ItemStack mainHand = inventory.getItemInMainHand();
+
+        if (!mainHand.isEmpty()) {
+            useHellForge(player, mainHand, this.instance.getEnchantments(mainHand));
+        }
+
+        final ItemStack offHand = inventory.getItemInOffHand();
+
+        if (!offHand.isEmpty()) {
+            useHellForge(player, offHand, this.instance.getEnchantments(offHand));
+        }
     }
 
     private void checkCommander(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments) {
@@ -167,6 +179,8 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
     }
 
     private void useHellForge(@NotNull final Player player, @NotNull final ItemStack item, @NotNull final Map<CEnchantment, Integer> enchantments) {
+        if (item.isEmpty()) return;
+
         if (!EnchantUtils.isMoveEventActive(CEnchantments.HELLFORGED, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {

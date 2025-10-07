@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -13,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
@@ -52,6 +52,8 @@ public class ArmorEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
@@ -64,9 +66,6 @@ public class ArmorEnchantments implements Listener {
     // Settings.
     @NotNull
     private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Support.
     @NotNull
@@ -136,7 +135,7 @@ public class ArmorEnchantments implements Listener {
 
         // Remove all effects that they no longer should have from the armor.
         if (!oldItem.isEmpty()) {
-            getTopPotionEffects(this.enchantmentBookSettings.getEnchantments(oldItem)
+            getTopPotionEffects(this.instance.getEnchantments(oldItem)
                     .entrySet().stream()
                     .filter(enchant -> !topEnchants.containsKey(enchant.getKey()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b)))
@@ -190,7 +189,7 @@ public class ArmorEnchantments implements Listener {
         Map<CEnchantment, Integer> toAdd = getUpperEnchants(player);
 
         if (!newItem.isEmpty()) {
-            this.enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
+            this.instance.getEnchantments(newItem).entrySet().stream()
                     .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
                     .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase()), newItem))
                     .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
@@ -209,7 +208,7 @@ public class ArmorEnchantments implements Listener {
         Map<CEnchantment, Integer> topEnchants = new HashMap<>();
 
         Arrays.stream(player.getEquipment().getArmorContents())
-                .map(this.enchantmentBookSettings::getEnchantments)
+                .map(this.instance::getEnchantments)
                 .forEach(enchantments -> enchantments.entrySet().stream()
                         .filter(ench -> !topEnchants.containsKey(ench.getKey()) || topEnchants.get(ench.getKey()) <= ench.getValue())
                         .forEach(ench -> topEnchants.put(ench.getKey(), ench.getValue())));
@@ -226,7 +225,7 @@ public class ArmorEnchantments implements Listener {
         if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof Player player)) return;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(armor);
 
             if (enchants.isEmpty()) continue;
 
@@ -329,7 +328,7 @@ public class ArmorEnchantments implements Listener {
         if (!(damager instanceof Player)) return;
 
         for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
-            Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(armor);
             if (!enchants.containsKey(CEnchantments.LEADERSHIP.getEnchantment())) continue;
 
             int radius = 4 + enchants.get(CEnchantments.LEADERSHIP.getEnchantment());
@@ -400,7 +399,7 @@ public class ArmorEnchantments implements Listener {
         if (!this.pluginSupport.allowCombat(player.getLocation())) return;
 
         for (ItemStack item : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+            Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.SELFDESTRUCT, player, item, enchantments)) {
                 this.methods.explode(player);

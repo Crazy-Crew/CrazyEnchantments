@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -19,19 +19,14 @@ import java.util.List;
 
 public class CEnchantment {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private final Starter starter = this.plugin.getStarter();
 
-    @NotNull
     private final Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private String name;
@@ -44,12 +39,12 @@ public class CEnchantment {
     private List<String> infoDescription;
     private final List<Category> categories;
     private EnchantmentType enchantmentType;
-    private final CEnchantment instance;
+    private final CEnchantment enchantment;
     private Sound sound;
     private List<String> conflicts;
 
     public CEnchantment(@NotNull final String name) {
-        this.instance = this;
+        this.enchantment = this;
         this.name = name;
         this.customName = name;
         this.activated = true;
@@ -248,26 +243,26 @@ public class CEnchantment {
     }
 
     public void registerEnchantment() {
-        RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(this.instance);
+        final RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(this.enchantment);
 
         this.plugin.getServer().getPluginManager().callEvent(event);
 
-        this.crazyManager.registerEnchantment(this.instance);
+        this.instance.registerEnchantment(this.enchantment);
 
-        if (this.enchantmentType != null) this.enchantmentType.addEnchantment(this.instance);
+        if (this.enchantmentType != null) this.enchantmentType.addEnchantment(this.enchantment);
 
-        this.categories.forEach(category -> category.addEnchantment(this.instance));
+        this.categories.forEach(category -> category.addEnchantment(this.enchantment));
     }
 
     public void unregisterEnchantment() {
-        UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(this.instance);
+        final UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(this.enchantment);
 
         this.plugin.getServer().getPluginManager().callEvent(event);
 
-        this.crazyManager.unregisterEnchantment(this.instance);
+        this.instance.unregisterEnchantment(this.enchantment);
 
-        if (this.enchantmentType != null) this.enchantmentType.removeEnchantment(this.instance);
+        if (this.enchantmentType != null) this.enchantmentType.removeEnchantment(this.enchantment);
 
-        this.categories.forEach(category -> category.addEnchantment(this.instance));
+        this.categories.forEach(category -> category.addEnchantment(this.enchantment));
     }
 }

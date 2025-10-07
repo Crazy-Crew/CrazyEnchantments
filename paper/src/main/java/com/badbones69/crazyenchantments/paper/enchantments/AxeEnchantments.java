@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
@@ -12,7 +13,6 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Material;
@@ -48,14 +48,13 @@ public class AxeEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
@@ -71,7 +70,7 @@ public class AxeEnchantments implements Listener {
         Player player = event.getPlayer();
         ItemStack currentItem = methods.getItemInHand(player);
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
@@ -146,7 +145,7 @@ public class AxeEnchantments implements Listener {
 
         if (entity.isDead()) return;
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 1));
@@ -211,7 +210,7 @@ public class AxeEnchantments implements Listener {
         Player damager = player.getKiller();
         ItemStack item = this.methods.getItemInHand(damager);
 
-        if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.enchantmentBookSettings.getEnchantments(item))) {
+        if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.instance.getEnchantments(item))) {
             event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
         }
     }
@@ -223,7 +222,7 @@ public class AxeEnchantments implements Listener {
         if (killer == null) return;
 
         ItemStack item = this.methods.getItemInHand(killer);
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
         Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
 
         if (headMat != null && !EventUtils.containsDrop(event, headMat)) {

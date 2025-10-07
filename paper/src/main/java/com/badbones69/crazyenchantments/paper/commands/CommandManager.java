@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
@@ -37,6 +38,7 @@ import java.util.List;
 public class CommandManager {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyInstance instance = plugin.getInstance();
     private static final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     private static final EnchantmentBookSettings settings = plugin.getStarter().getEnchantmentBookSettings();
     private static final Server server = plugin.getServer();
@@ -53,7 +55,7 @@ public class CommandManager {
         commandManager.registerArgument(Dust.class, (sender, argument) -> Dust.valueOf(argument));
         commandManager.registerArgument(Category.class, (sender, argument) -> settings.getCategory(argument));
         commandManager.registerArgument(Scrolls.class, (sender, argument) -> Scrolls.getFromName(argument));
-        commandManager.registerArgument(CEnchantment.class, (sender, argument) -> crazyManager.getEnchantmentFromName(argument));
+        commandManager.registerArgument(CEnchantment.class, (sender, argument) -> instance.getEnchantmentFromName(argument));
         commandManager.registerArgument(World.class, (sender, argument) -> server.getWorld(argument));
         commandManager.registerArgument(EnchantmentType.class, (sender, argument) -> MenuManager.getEnchantmentTypes().stream().filter(filter -> !filter.getName().equalsIgnoreCase(argument)));
         commandManager.registerArgument(PlayerBuilder.class, (sender, argument) -> new PlayerBuilder(plugin, argument));
@@ -67,9 +69,9 @@ public class CommandManager {
         commandManager.registerSuggestion(CEnchantment.class, (context) -> {
             final List<String> list = new ArrayList<>();
 
-            for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+            for (CEnchantment enchantment : instance.getRegisteredEnchantments()) {
                 try {
-                    list.add(ColorUtils.stripStringColour(enchantment.getCustomName().replaceAll(" ", "_")));
+                    list.add(enchantment.getName());
                 } catch (NullPointerException ignore) {}
             }
 
@@ -98,7 +100,7 @@ public class CommandManager {
             return list;
         });
 
-        commandManager.registerSuggestion(GKitz.class, (context) -> new ArrayList<>(crazyManager.getGKitz().stream().map(GKitz::getName).toList()));
+        commandManager.registerSuggestion(GKitz.class, (context) -> new ArrayList<>(instance.getGKitz().stream().map(GKitz::getName).toList()));
 
         commandManager.registerSuggestion(Scrolls.class, (context) -> {
             final List<String> scrolls = new ArrayList<>();
@@ -147,7 +149,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("enchantments"), (context) -> {
             final List<String> list = new ArrayList<>();
 
-            for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+            for (CEnchantment enchantment : instance.getRegisteredEnchantments()) {
                 try {
                     list.add(ColorUtils.stripStringColour(enchantment.getCustomName().replaceAll(" ", "_")));
                 } catch (NullPointerException ignore) {}
@@ -166,12 +168,20 @@ public class CommandManager {
 
                 if (itemStack.isEmpty()) return list;
 
-                final List<CEnchantment> enchantments = settings.getEnchantmentsOnItem(itemStack);
+                final List<CEnchantment> enchantments = instance.getEnchantmentsOnItem(itemStack);
 
                 for (final CEnchantment enchantment : enchantments) {
                     list.add(enchantment.getName());
                 }
             }
+
+            return list;
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of("items"), (context) -> {
+            final List<String> list = new ArrayList<>();
+
+            list.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
 
             return list;
         });

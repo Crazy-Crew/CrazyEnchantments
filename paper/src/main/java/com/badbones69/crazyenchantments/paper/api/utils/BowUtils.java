@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
@@ -29,11 +30,10 @@ public class BowUtils {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final Starter starter = this.plugin.getStarter();
 
     // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
@@ -73,7 +73,7 @@ public class BowUtils {
     public void spawnArrows(@NotNull final LivingEntity shooter, @NotNull final Entity projectile, @NotNull final ItemStack bow) {
         Arrow spawnedArrow = shooter.getWorld().spawn(projectile.getLocation(), Arrow.class);
 
-        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, bow, enchantmentBookSettings.getEnchantments(bow));
+        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, bow, this.instance.getEnchantments(bow));
 
         this.enchantedArrows.add(enchantedMultiArrow);
 
@@ -107,7 +107,7 @@ public class BowUtils {
 
         Arrow arrow = enchantedArrow.getArrow();
 
-        if (!(EnchantUtils.isEventActive(CEnchantments.STICKY_SHOT, enchantedArrow.getShooter(), enchantedArrow.arrow().getWeapon(), enchantedArrow.getEnchantments()))) return;
+        if (!(EnchantUtils.isEventActive(CEnchantments.STICKY_SHOT, enchantedArrow.getShooter(), enchantedArrow.arrow().getWeapon(), enchantedArrow.getEnchantments()))) return; //todo() null check
 
         if (hitEntity == null) {
             Location entityLocation = arrow.getLocation();

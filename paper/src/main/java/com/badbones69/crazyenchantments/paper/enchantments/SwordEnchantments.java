@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
@@ -15,8 +16,8 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Material;
@@ -40,7 +41,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,14 +51,15 @@ public class SwordEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final ConfigOptions options = this.plugin.getOptions();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
     @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
@@ -80,7 +81,7 @@ public class SwordEnchantments implements Listener {
 
         if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
-        if (this.crazyManager.isBreakRageOnDamageOn() && event.getEntity() instanceof Player player) {
+        if (this.options.isBreakRageOnDamage() && event.getEntity() instanceof Player player) {
             final ItemStack itemStack = this.methods.getItemInHand(player);
 
             if (!itemStack.isEmpty()) {
@@ -113,7 +114,7 @@ public class SwordEnchantments implements Listener {
 
         if (event.getEntity().isDead()) return;
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
         boolean isEntityPlayer = event.getEntity() instanceof Player;
 
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISARMER, damager, item, enchantments)) {
@@ -174,13 +175,13 @@ public class SwordEnchantments implements Listener {
             if (cePlayer.hasRage()) {
                 cePlayer.getRageTask().cancel();
 
-                if (cePlayer.getRageMultiplier() <= this.crazyManager.getRageMaxLevel())
-                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * crazyManager.getRageIncrement()));
+                if (cePlayer.getRageMultiplier() <= this.options.getRageMaxLevel())
+                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * this.options.getRageIncrement()));
 
                 int rageUp = cePlayer.getRageLevel() + 1;
 
                 if (cePlayer.getRageMultiplier().intValue() >= rageUp) {
-                    rageInformPlayer(damager, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
+                    rageInformPlayer(damager, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.options.getRageMaxLevel() + 1)));
                     cePlayer.setRageLevel(rageUp);
                 }
 
@@ -190,7 +191,7 @@ public class SwordEnchantments implements Listener {
                 cePlayer.setRage(true);
                 cePlayer.setRageLevel(1);
 
-                rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.crazyManager.getRageMaxLevel()));
+                rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.options.getRageMaxLevel()));
             }
 
             cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, cePlayer.getPlayer()) {
@@ -317,7 +318,7 @@ public class SwordEnchantments implements Listener {
         Player damager = event.getEntity().getKiller();
         Player player = event.getEntity();
         ItemStack item = this.methods.getItemInHand(damager);
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.HEADLESS, damager, item, enchantments)) {
             ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD").setPlayerName(player.getName()).build();
@@ -344,7 +345,7 @@ public class SwordEnchantments implements Listener {
 
             if (item.isEmpty()) return;
 
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+            Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.INQUISITIVE, damager, item, enchantments)) {
                 event.setDroppedExp(event.getDroppedExp() * (enchantments.get(CEnchantments.INQUISITIVE.getEnchantment()) + 1));
@@ -383,7 +384,7 @@ public class SwordEnchantments implements Listener {
     private void rageInformPlayer(@NotNull final Player player, @NotNull final Map<String, String> placeholders, final float progress) {
         if (Messages.RAGE_RAGE_UP.getMessageNoPrefix().isBlank()) return;
 
-        if (this.crazyManager.useRageBossBar()) {
+        if (this.options.isUseRageBossBar()) {
             this.bossBarController.updateBossBar(player, Messages.RAGE_RAGE_UP.getMessageNoPrefix(placeholders), progress);
         } else {
             player.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
@@ -392,7 +393,7 @@ public class SwordEnchantments implements Listener {
     private void rageInformPlayer(@NotNull final Player player, @NotNull final Messages message, final float progress) {
         if (message.getMessageNoPrefix().isBlank()) return;
 
-        if (this.crazyManager.useRageBossBar()) {
+        if (this.options.isUseRageBossBar()) {
             this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
         } else {
             player.sendMessage(message.getMessage());

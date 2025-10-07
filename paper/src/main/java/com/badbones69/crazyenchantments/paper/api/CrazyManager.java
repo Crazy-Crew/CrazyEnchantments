@@ -44,7 +44,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -70,6 +69,8 @@ public class CrazyManager {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     private final ConfigOptions options = this.plugin.getOptions();
 
@@ -115,35 +116,15 @@ public class CrazyManager {
     private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
 
     // Arrays.
-    private final List<GKitz> gkitz = new ArrayList<>();
     private final List<CEPlayer> players = new ArrayList<>();
     private final List<Material> blockList = new ArrayList<>();
     private final Map<Material, Double> headMap = new HashMap<>();
-
-    private int rageMaxLevel;
-    private boolean gkitzToggle;
-    private boolean useUnsafeEnchantments;
-    private boolean breakRageOnDamage;
-    private boolean useRageBossBar;
-
-    private double rageIncrement;
-    private boolean maxEnchantmentCheck;
-    private boolean checkVanillaLimit;
-
-    private boolean dropBlocksBlast;
-    private boolean dropBlocksVeinMiner;
-    private int defaultLimit;
-    private int defaultBaseLimit;
-    private boolean useEnchantmentLimiter;
-    private boolean useConfigLimits;
 
     /**
      * Loads everything for the Crazy Enchantments plugin.
      * Do not use unless needed.
      */
     public void load() {
-        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
-        final YamlConfiguration gkit = FileKeys.gkitz.getConfiguration();
         final YamlConfiguration enchants = FileKeys.enchantments.getConfiguration();
 
         final YamlConfiguration blocks = FileKeys.blocklist.getConfiguration();
@@ -151,8 +132,9 @@ public class CrazyManager {
 
         this.blockList.clear();
         this.headMap.clear();
-        this.gkitz.clear();
-        this.enchantmentBookSettings.getRegisteredEnchantments().clear();
+
+        this.instance.purgeEnchantments();
+
         this.enchantmentBookSettings.getCategories().clear();
 
         this.starter.getPluginSupport().updateHooks();
@@ -205,22 +187,6 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.useUnsafeEnchantments = configuration.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
-        this.maxEnchantmentCheck = configuration.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
-        this.useConfigLimits = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
-        this.defaultLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 6);
-        this.defaultBaseLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 6);
-        this.useEnchantmentLimiter = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
-        this.checkVanillaLimit = configuration.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
-        this.gkitzToggle = configuration.getBoolean("Settings.GKitz.Enabled", true);
-        this.rageMaxLevel = configuration.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
-        this.breakRageOnDamage = configuration.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
-        this.useRageBossBar = configuration.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
-        this.rageIncrement = configuration.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
-
-        setDropBlocksBlast(configuration.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
-        setDropBlocksVeinMiner(configuration.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
-
         this.enchantmentBookSettings.populateMaps();
 
         for (CEnchantments cEnchantment : CEnchantments.values()) {
@@ -250,34 +216,6 @@ public class CrazyManager {
                 }
 
                 enchantment.registerEnchantment();
-            }
-        }
-
-        if (this.gkitzToggle) {
-            final ConfigurationSection section = gkit.getConfigurationSection("GKitz");
-
-            if (section == null) {
-                this.fusion.log("warn", "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
-            } else {
-                for (final String kit : section.getKeys(false)) {
-                    String path = "GKitz." + kit + ".";
-
-                    int slot = gkit.getInt(path + "Display.Slot");
-                    String time = gkit.getString(path + "Cooldown", "");
-                    boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
-
-                    ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
-                            .setName(gkit.getString(path + "Display.Name", "Error getting name."))
-                            .setLore(gkit.getStringList(path + "Display.Lore"))
-                            .setGlow(gkit.getBoolean(path + "Display.Glowing", false))
-                            .addKey(DataKeys.gkit_type.getNamespacedKey(), kit).build();
-
-                    List<String> commands = gkit.getStringList(path + "Commands");
-                    List<String> itemStrings = gkit.getStringList(path + "Items");
-                    List<ItemStack> previewItems = getInfoGKit(itemStrings);
-                    previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
-                    this.gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, itemStrings, autoEquip));
-                }
             }
         }
 
@@ -333,7 +271,7 @@ public class CrazyManager {
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
 
-        for (GKitz kit : getGKitz()) {
+        for (GKitz kit : this.instance.getGKitz()) {
             if (data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
                 Calendar coolDown = Calendar.getInstance();
                 coolDown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
@@ -399,37 +337,17 @@ public class CrazyManager {
         return this.cropManagerVersion;
     }
 
-    public boolean checkVanillaLimit() {
-        return this.checkVanillaLimit;
-    }
-
-    /**
-     * Check if the gkitz option is enabled.
-     * @return True if it is on and false if it is off.
-     */
-    public boolean isGkitzEnabled() {
-        return this.gkitzToggle;
-    }
-
     /**
      * Get a GKit from its name.
      * @param kitName The kit you wish to get.
      * @return The kit as a GKitz object.
      */
     public GKitz getGKitFromName(@NotNull final String kitName) {
-        for (GKitz kit : getGKitz()) {
+        for (GKitz kit : this.instance.getGKitz()) {
             if (kit.getName().equalsIgnoreCase(kitName)) return kit;
         }
 
         return null;
-    }
-
-    /**
-     * Get all loaded gkitz.
-     * @return All the loaded gkitz.
-     */
-    public List<GKitz> getGKitz() {
-        return this.gkitz;
     }
 
     /**
@@ -474,49 +392,6 @@ public class CrazyManager {
         }
     }
 
-    /**
-     * Get all the current registered enchantments.
-     * @return A list of all the registered enchantments in the plugin.
-     */
-    public List<CEnchantment> getRegisteredEnchantments() {
-        return new ArrayList<>(this.enchantmentBookSettings.getRegisteredEnchantments());
-    }
-
-    /**
-     * Get a CEnchantment enchantment from the name.
-     * @param enchant The name of the enchantment.
-     * @return The enchantment as a CEnchantment but if not found will be null.
-     */
-    public CEnchantment getEnchantmentFromName(@NotNull final String enchant) {
-        CEnchantment value = null;
-
-        for (final CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
-            if (enchantment.getName().equalsIgnoreCase(enchant)) {
-                value = enchantment;
-
-                break;
-            }
-        }
-
-        return value;
-    }
-
-    /**
-     * Register a new enchantment into the plugin.
-     * @param enchantment The enchantment you wish to register.
-     */
-    public void registerEnchantment(@NotNull final CEnchantment enchantment) {
-        this.enchantmentBookSettings.getRegisteredEnchantments().add(enchantment);
-    }
-
-    /**
-     * Unregister an enchantment that is registered into plugin.
-     * @param enchantment The enchantment you wish to unregister.
-     */
-    public void unregisterEnchantment(@NotNull final CEnchantment enchantment) {
-        this.enchantmentBookSettings.getRegisteredEnchantments().remove(enchantment);
-    }
-
     public void addEnchantment(@NotNull final ItemStack item, @NotNull final CEnchantment enchantment, final int level) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
@@ -530,9 +405,9 @@ public class CrazyManager {
      * @param enchantments The enchantments to be added.
      */
     public void addEnchantments(@NotNull final ItemStack itemStack, @NotNull final Map<CEnchantment, Integer> enchantments) {
-        final Map<CEnchantment, Integer> currentEnchantments = this.enchantmentBookSettings.getEnchantments(itemStack);
+        final Map<CEnchantment, Integer> currentEnchantments = this.instance.getEnchantments(itemStack);
 
-        this.enchantmentBookSettings.removeEnchantments(itemStack, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
+        this.instance.removeEnchantments(itemStack, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
 
         String data = itemStack.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
         final Enchant enchantData = data != null ? Methods.getGson().fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
@@ -592,7 +467,7 @@ public class CrazyManager {
      * @return The limit set on the item by slot crystals.
      */
     public int getEnchantmentLimiter(@NotNull final ItemStack item) {
-        if (!this.useEnchantmentLimiter) return 0;
+        if (!this.options.isUseEnchantmentLimiter()) return 0;
 
         return item.getPersistentDataContainer().getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
     }
@@ -609,7 +484,7 @@ public class CrazyManager {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             final ItemStack safeArmor = armor == null ? ItemStack.empty() : armor;
 
-            final Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(safeArmor);
+            final Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(safeArmor);
 
             for (final CEnchantments ench : allEnchantPotionEffects) {
                 if (!enchantments.containsKey(ench.getEnchantment())) continue;
@@ -659,14 +534,14 @@ public class CrazyManager {
         for (ItemStack armor : items) {
             if (armor == null || armor.isEmpty() || armor.isSimilar(safeItem)) continue;
 
-            Map<CEnchantment, Integer> ench = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> ench = this.instance.getEnchantments(armor);
 
             for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
                 if (!ench.containsKey(enchantments.getKey().getEnchantment())) continue;
 
                 int level = ench.get(enchantments.getKey().getEnchantment());
 
-                if (!this.useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
+                if (!this.options.isUseUnsafeEnchantments() && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
 
                 for (PotionEffectType type : enchantments.getValue().keySet()) {
                     if (effects.containsKey(type)) {
@@ -746,22 +621,14 @@ public class CrazyManager {
     }
 
     /**
-     *
-     * @return true if the plugin uses limits listed in config.yml.
-     */
-    public boolean useConfigLimit() {
-        return useConfigLimits;
-    }
-
-    /**
      * Get a players max amount of enchantments.
      * @param player The player you are checking.
      * @return The max amount of enchantments a player can have on an item.
      */
     public int getPlayerMaxEnchantments(@NotNull final Player player) {
-        int limit = defaultLimit;
+        int limit = this.options.getDefaultLimit();
 
-        if (useConfigLimits) return limit;
+        if (this.options.isUseConfigLimits()) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
@@ -782,9 +649,9 @@ public class CrazyManager {
      * @return The base amount of enchants the player can add to items.
      */
     public int getPlayerBaseEnchantments(@NotNull final Player player) {
-        int limit = defaultBaseLimit;
+        int limit = this.options.getDefaultLimit();
 
-        if (useConfigLimits) return limit;
+        if (this.options.isUseConfigLimits()) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
@@ -807,10 +674,9 @@ public class CrazyManager {
      */
     public boolean canAddEnchantment(@NotNull final Player player, @NotNull final ItemStack item) {
         //todo() update permissions
-        if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+        if (!this.options.isMaxEnchantmentCheck() || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
-        return this.enchantmentBookSettings.getEnchantmentAmount(item, this.checkVanillaLimit) <
-                Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
+        return this.instance.getEnchantmentAmount(item, this.options.isCheckVanillaLimit()) < Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
     /**
@@ -821,10 +687,10 @@ public class CrazyManager {
      * @return True if they are able to add more enchants.
      */
     public boolean canAddEnchantment(@NotNull final Player player, final int cEnchantments, final int vanillaEnchantments) {
-        if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+        if (!this.options.isMaxEnchantmentCheck() || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
         int enchantAmount = cEnchantments;
-        if (this.checkVanillaLimit) enchantAmount += vanillaEnchantments;
+        if (this.options.isCheckVanillaLimit()) enchantAmount += vanillaEnchantments;
 
         return enchantAmount < getPlayerMaxEnchantments(player);
     }
@@ -858,126 +724,12 @@ public class CrazyManager {
         return this.blockList;
     }
 
-    /**
-     * @return If the blast enchantment drops blocks.
-     */
-    public boolean isDropBlocksBlast() {
-        return this.dropBlocksBlast;
-    }
-
-    /**
-     * @return If the vein-miner enchantment drops blocks.
-     */
-    public boolean isDropBlocksVeinMiner() {
-        return this.dropBlocksVeinMiner;
-    }
-
-    /**
-     * @param dropBlocksBlast If the blast enchantment drops blocks.
-     */
-    public void setDropBlocksBlast(final boolean dropBlocksBlast) {
-        this.dropBlocksBlast = dropBlocksBlast;
-    }
-
-    /**
-     * @param dropBlocksVeinMiner If the vein-miner enchantment drops blocks.
-     */
-    public void setDropBlocksVeinMiner(final boolean dropBlocksVeinMiner) {
-        this.dropBlocksVeinMiner = dropBlocksVeinMiner;
-    }
-
-    /**
-     * @return The max rage stack level.
-     */
-    public int getRageMaxLevel() {
-        return this.rageMaxLevel;
-    }
-
-    /**
-     * Check if players lose their current rage stack on damage.
-     * @return True if they do and false if not.
-     */
-    public boolean isBreakRageOnDamageOn() {
-        return this.breakRageOnDamage;
-    }
-
-    /**
-     * @return True if a boss bar will be used to display rage notifications.
-     */
-    public boolean useRageBossBar() {
-        return this.useRageBossBar;
-    }
-
-    public double getRageIncrement() {
-        return this.rageIncrement;
-    }
-
     private void addCEPlayer(@NotNull final CEPlayer player) {
         this.players.add(player);
     }
 
     private void removeCEPlayer(@NotNull final CEPlayer player) {
         this.players.remove(player);
-    }
-
-    private List<ItemStack> getInfoGKit(@NotNull final List<String> itemStrings) {
-        List<ItemStack> items = new ArrayList<>();
-
-        for (String itemString : itemStrings) {
-            // This is used to convert old v1.7- gkit files to use newer way.
-            itemString = getNewItemString(itemString);
-
-            ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
-            List<String> customEnchantments = new ArrayList<>();
-            HashMap<Enchantment, Integer> enchantments = new HashMap<>();
-
-            for (String option : itemString.split(", ")) {
-                try {
-                    Enchantment enchantment = this.methods.getEnchantment(option.split(":")[0]);
-                    CEnchantment cEnchantment = getEnchantmentFromName(option.split(":")[0]);
-                    String level = option.split(":")[1];
-
-                    if (enchantment != null) {
-                        if (level.contains("-")) {
-                            customEnchantments.add("&7" + option.split(":")[0] + " " + level);
-                        } else {
-                            enchantments.put(enchantment, Integer.parseInt(level));
-                        }
-                    } else if (cEnchantment != null) {
-                        customEnchantments.add(cEnchantment.getCustomName() + " " + level);
-                    }
-                } catch (Exception ignore) {}
-            }
-
-            itemBuilder.getLore().addAll(0, customEnchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList());
-            itemBuilder.setEnchantments(enchantments);
-
-            items.add(itemBuilder.addKey(DataKeys.random_number.getNamespacedKey(), String.valueOf(methods.getRandomNumber(0, Integer.MAX_VALUE))).build());
-            // This is done so items do not stack if there are multiple of the same.
-        }
-
-        return items;
-    }
-
-    public String getNewItemString(@NotNull String itemString) {
-        StringBuilder newItemString = new StringBuilder();
-
-        for (String option : itemString.split(", ")) {
-            if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
-                StringBuilder newOption = new StringBuilder();
-
-                for (String enchantment : option.toLowerCase().replace("customenchantments:", "").replace("enchantments:", "").split(",")) {
-                    newOption.append(enchantment).append(", ");
-                }
-
-                option = newOption.substring(0, newOption.length() - 2);
-            }
-
-            newItemString.append(option).append(", ");
-        }
-
-        if (!newItemString.isEmpty()) itemString = newItemString.substring(0, newItemString.length() - 2);
-        return itemString;
     }
 
     public int pickLevel(final int min, final int max) {

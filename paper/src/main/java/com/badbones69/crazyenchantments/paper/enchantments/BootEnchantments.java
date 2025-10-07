@@ -2,10 +2,10 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,15 +24,14 @@ public class BootEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
     // Plugin Managers.
     @NotNull
     private final WingsManager wingsManager = this.starter.getWingsManager();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
@@ -53,8 +52,8 @@ public class BootEnchantments implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.getEquipment().getBoots() == null) return;
-        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (player.getEquipment().getBoots() == null) return; //todo() variables
+        if (!this.instance.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
@@ -76,7 +75,7 @@ public class BootEnchantments implements Listener {
         Player player = event.getPlayer();
         boolean isFlying = player.isFlying(); // TODO implement single method for all enchantment checks. #EnchantUtils
 
-        if (this.wingsManager.isWingsEnabled() && this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
+        if (this.wingsManager.isWingsEnabled() && this.instance.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
             if (WingsUtils.checkRegion(player)) {
                 if (!WingsUtils.isEnemiesNearby(player)) {
                     player.setAllowFlight(true);
@@ -105,11 +104,12 @@ public class BootEnchantments implements Listener {
 
         if (!this.wingsManager.isWingsEnabled()) return;
 
-        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.instance.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
         player.setAllowFlight(true);
+
         this.wingsManager.addFlyingPlayer(player);
     }
 
@@ -121,6 +121,7 @@ public class BootEnchantments implements Listener {
 
         player.setFlying(false);
         player.setAllowFlight(false);
+
         this.wingsManager.removeFlyingPlayer(player);
     }
 }

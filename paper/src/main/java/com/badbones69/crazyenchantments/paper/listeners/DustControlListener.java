@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -38,17 +38,13 @@ import java.util.Random;
 
 public class DustControlListener implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private final Starter starter = this.plugin.getStarter();
 
-    @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     private void setBookLore(@NotNull final ItemStack item, final int percent, @NotNull final String rate, @NotNull final CEnchantment enchantment, @NotNull final EnchantedBook data) {
         if (item.isEmpty()) return;
@@ -107,7 +103,7 @@ public class DustControlListener implements Listener {
 
         CEnchantment enchantment = null;
 
-        for (CEnchantment en : this.crazyManager.getRegisteredEnchantments()) {
+        for (CEnchantment en : this.instance.getRegisteredEnchantments()) {
             if (en.getName().equalsIgnoreCase(bookData.getName())) {
                 enchantment = en;
 

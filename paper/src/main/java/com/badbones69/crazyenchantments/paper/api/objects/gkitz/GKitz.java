@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -12,10 +13,10 @@ import java.util.List;
 
 public class GKitz {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
     
     private final int slot;
@@ -91,13 +92,13 @@ public class GKitz {
 
         for (String itemString : this.itemStrings) {
             //This is used to convert old v1.7- gkit files to use newer way.
-            itemString = this.crazyManager.getNewItemString(itemString);
+            itemString = this.instance.getNewItemString(itemString);
 
             GKitzItem item = new GKitzItem(ItemBuilder.convertString(itemString));
 
             for (String option : itemString.split(", ")) {
                 try {
-                    CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(option.split(":")[0]);
+                    CEnchantment enchantment = this.instance.getEnchantmentFromName(option.split(":")[0]);
                     String level = option.split(":")[1];
 
                     if (enchantment != null) {

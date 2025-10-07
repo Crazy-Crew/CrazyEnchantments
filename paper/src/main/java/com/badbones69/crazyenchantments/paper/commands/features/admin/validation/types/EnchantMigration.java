@@ -32,7 +32,7 @@ public class EnchantMigration extends IEnchantMigration {
         for (final ItemStack item : items) {
             StringBuilder builder = new StringBuilder();
 
-            final Map<CEnchantment, Integer> enchantments = this.settings.getEnchantments(item);
+            final Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
             if (enchantments.isEmpty()) {
                 this.fusion.log("warn", "The item with the display name {} does not have any enchantments", PlainTextComponentSerializer.plainText().serialize(item.displayName()));

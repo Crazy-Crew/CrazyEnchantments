@@ -2,9 +2,9 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.interfaces.claims.WorldGuardVersion;
@@ -29,12 +29,12 @@ public class WingsUtils {
     @NotNull
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private static final CrazyInstance instance = plugin.getInstance();
+
     private static final Server server = plugin.getServer();
 
     @NotNull
     private static final Starter starter = plugin.getStarter();
-
-    private static final EnchantmentBookSettings settings = starter.getEnchantmentBookSettings();
 
     @NotNull
     private static final PluginSupport pluginSupport = starter.getPluginSupport();
@@ -56,7 +56,7 @@ public class WingsUtils {
                     new FoliaScheduler(plugin, null, player) {
                         @Override
                         public void run() {
-                            if (player.isFlying() && player.getEquipment().getBoots() != null && settings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
+                            if (player.isFlying() && player.getEquipment().getBoots() != null && instance.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
                                 final Location location = player.getLocation().subtract(0, .25, 0);
 
                                 if (wingsManager.isCloudsEnabled()) player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
@@ -74,14 +74,14 @@ public class WingsUtils {
         if (newArmor) {
             if (newArmorPiece.isEmpty()) return;
 
-            if (starter.getEnchantmentBookSettings().getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
+            if (instance.getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
 
             return;
         }
 
         if (oldArmorPiece.isEmpty()) return;
 
-        if (starter.getEnchantmentBookSettings().getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
+        if (instance.getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
     }
 
     public static boolean checkGameMode(@NotNull final Player player) {

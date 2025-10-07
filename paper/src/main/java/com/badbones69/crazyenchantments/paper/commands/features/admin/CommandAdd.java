@@ -21,7 +21,7 @@ public class CommandAdd extends BaseCommand {
     @Syntax("/crazyenchantments add <enchantment> <level>")
     public void add(final Player player, @Suggestion("enchantments") final String enchantment, final int level) {
         Enchantment vanillaEnchantment = this.methods.getEnchantment(enchantment);
-        CEnchantment ceEnchantment = this.crazyManager.getEnchantmentFromName(enchantment);
+        CEnchantment ceEnchantment = this.instance.getEnchantmentFromName(enchantment);
 
         boolean isVanilla = vanillaEnchantment != null;
 
@@ -55,7 +55,7 @@ public class CommandAdd extends BaseCommand {
     @Syntax("/crazyenchantments remove <enchantment>")
     public void remove(Player player, @Suggestion("current_enchantments") String enchantment) {
         Enchantment vanillaEnchantment = this.methods.getEnchantment(enchantment);
-        CEnchantment ceEnchantment = this.crazyManager.getEnchantmentFromName(enchantment);
+        CEnchantment ceEnchantment = this.instance.getEnchantmentFromName(enchantment);
         boolean isVanilla = vanillaEnchantment != null;
 
         if (vanillaEnchantment == null && ceEnchantment == null) {
@@ -77,8 +77,8 @@ public class CommandAdd extends BaseCommand {
 
             this.methods.setItemInHand(player, itemStack);
         } else {
-            if (this.enchantmentBookSettings.getEnchantments(itemStack).containsKey(ceEnchantment)) {
-                this.methods.setItemInHand(player, this.enchantmentBookSettings.removeEnchantment(itemStack, ceEnchantment));
+            if (this.instance.getEnchantments(itemStack).containsKey(ceEnchantment)) {
+                this.methods.setItemInHand(player, this.instance.removeEnchantment(itemStack, ceEnchantment));
 
                 player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(new HashMap<>() {{
                     put("%Enchantment%", ceEnchantment.getCustomName());

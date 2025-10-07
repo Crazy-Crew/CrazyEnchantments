@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
@@ -61,6 +62,8 @@ public class TinkererMenu extends InventoryBuilder {
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+        private final CrazyInstance instance = this.plugin.getInstance();
+
         private final CurrencyAPI api = this.plugin.getStarter().getCurrencyAPI();
 
         private final Map<Integer, Integer> slots = TinkererManager.getSlots();
@@ -78,9 +81,6 @@ public class TinkererMenu extends InventoryBuilder {
 
             TinkererManager.useExperience(player, event, false, configuration);
         }
-
-        @NotNull
-        private final EnchantmentBookSettings enchantmentBookSettings = this.plugin.getStarter().getEnchantmentBookSettings();
 
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {
@@ -142,8 +142,8 @@ public class TinkererMenu extends InventoryBuilder {
             final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
 
             // Adding/taking items.
-            if (this.enchantmentBookSettings.isEnchantmentBook(current)) { // Adding a book.
-                CEBook book = this.enchantmentBookSettings.getCEBook(current);
+            if (this.instance.isEnchantmentBook(current)) { // Adding a book.
+                final CEBook book = this.instance.getBook(current);
 
                 if (book == null) return;
 

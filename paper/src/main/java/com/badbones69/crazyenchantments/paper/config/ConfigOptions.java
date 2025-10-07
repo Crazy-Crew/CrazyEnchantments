@@ -2,9 +2,12 @@ package com.badbones69.crazyenchantments.paper.config;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.exceptions.CrazyException;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class ConfigOptions {
 
@@ -22,6 +25,23 @@ public class ConfigOptions {
     private int failureOverride;
 
     private boolean updateExamplesFolder;
+
+    private int rageMaxLevel;
+    private boolean gkitzToggle;
+    private boolean useUnsafeEnchantments;
+    private boolean breakRageOnDamage;
+    private boolean useRageBossBar;
+
+    private double rageIncrement;
+    private boolean maxEnchantmentCheck;
+    private boolean checkVanillaLimit;
+
+    private boolean dropBlocksBlast;
+    private boolean dropBlocksVeinMiner;
+    private int defaultLimit;
+    private int defaultBaseLimit;
+    private boolean useEnchantmentLimiter;
+    private boolean useConfigLimits;
 
     public void init(@NotNull final YamlConfiguration configuration) {
         if (configuration.contains("settings")) {
@@ -51,6 +71,87 @@ public class ConfigOptions {
         this.failureOverride = section.getInt("CEFailureOverride", -1);
 
         this.updateExamplesFolder = section.getBoolean("Update-Examples-Folder", true);
+
+        this.useUnsafeEnchantments = section.getBoolean("EnchantmentOptions.UnSafe-Enchantments", true);
+        this.maxEnchantmentCheck = section.getBoolean("EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
+        this.useConfigLimits = section.getBoolean("EnchantmentOptions.Limit.Check-Perms", false);
+        this.defaultLimit = section.getInt("EnchantmentOptions.Limit.Default-Limit", 6);
+        this.defaultBaseLimit = section.getInt("EnchantmentOptions.Limit.Default-Base-Limit", 6);
+        this.useEnchantmentLimiter = section.getBoolean("EnchantmentOptions.Limit.Enable-SlotCrystal", true);
+        this.checkVanillaLimit = section.getBoolean("EnchantmentOptions.IncludeVanillaEnchantments", false);
+        this.gkitzToggle = section.getBoolean("GKitz.Enabled", true);
+        this.rageMaxLevel = section.getInt("EnchantmentOptions.MaxRageLevel", 4);
+        this.breakRageOnDamage = section.getBoolean("EnchantmentOptions.Break-Rage-On-Damage", true);
+        this.useRageBossBar = section.getBoolean("EnchantmentOptions.Rage-Boss-Bar", false);
+        this.rageIncrement = section.getDouble("EnchantmentOptions.Rage-Increase", 0.1);
+
+        this.dropBlocksBlast = section.getBoolean("EnchantmentOptions.Drop-Blocks-For-Blast", true);
+        this.dropBlocksVeinMiner = section.getBoolean("EnchantmentOptions.Drop-Blocks-For-VeinMiner", true);
+    }
+
+    /**
+     * @return If the blast enchantment drops blocks.
+     */
+    public boolean isDropBlocksBlast() {
+        return this.dropBlocksBlast;
+    }
+
+    /**
+     * @return If the vein-miner enchantment drops blocks.
+     */
+    public boolean isDropBlocksVeinMiner() {
+        return this.dropBlocksVeinMiner;
+    }
+
+    /**
+     * @return The max rage stack level.
+     */
+    public int getRageMaxLevel() {
+        return this.rageMaxLevel;
+    }
+
+    public int getDefaultBaseLimit() {
+        return this.defaultBaseLimit;
+    }
+
+    public int getDefaultLimit() {
+        return this.defaultLimit;
+    }
+
+    public boolean isUseEnchantmentLimiter() {
+        return this.useEnchantmentLimiter;
+    }
+
+    public boolean isUseConfigLimits() {
+        return this.useConfigLimits;
+    }
+
+    public boolean isBreakRageOnDamage() {
+        return this.breakRageOnDamage;
+    }
+
+    public boolean isUseRageBossBar() {
+        return this.useRageBossBar;
+    }
+
+    public boolean isUseUnsafeEnchantments() {
+        return this.useUnsafeEnchantments;
+    }
+
+    public boolean isMaxEnchantmentCheck() {
+        return this.maxEnchantmentCheck;
+    }
+
+    public boolean isCheckVanillaLimit() {
+        return this.checkVanillaLimit;
+    }
+
+    public double getRageIncrement() {
+        return this.rageIncrement;
+    }
+
+    public boolean isGkitzToggle() {
+        return this.gkitzToggle;
     }
 
     public boolean isRefreshPotionEffectsOnWorldChange() {

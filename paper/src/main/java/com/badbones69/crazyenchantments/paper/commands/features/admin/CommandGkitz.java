@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.*;
 import dev.triumphteam.cmd.core.argument.keyed.Flags;
@@ -26,13 +27,15 @@ public class CommandGkitz {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final ConfigOptions options = this.plugin.getOptions();
+
     private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
 
     @Command
     @Permission(value = "crazyenchantments.gkitz", def = PermissionDefault.TRUE)
     @Syntax("/gkitz")
     public void run(@NotNull final Player player) {
-        if (!this.crazyManager.isGkitzEnabled()) {
+        if (!this.options.isGkitzToggle()) {
             //todo() send message that kits are not enabled.
             player.sendMessage(Messages.GKIT_NOT_ENABLED.getMessage());
 

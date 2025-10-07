@@ -1,10 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.exceptions.CrazyException;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +15,10 @@ import java.util.Set;
 
 public class BlackSmithResult {
 
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private int cost = 0;
     private ItemStack resultItem;
     
@@ -26,14 +29,8 @@ public class BlackSmithResult {
 
         this.resultItem = mainItem.clone();
 
-        CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-        Starter starter = plugin.getStarter();
-
-        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-
-        CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
-        CEBook subBook = enchantmentBookSettings.getCEBook(subItem);
+        final CEBook mainBook = this.instance.getBook(mainItem);
+        final CEBook subBook = this.instance.getBook(subItem);
 
         if (mainBook != null && subBook != null) {
             // Books are the same enchantment.

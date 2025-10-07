@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
@@ -63,6 +64,8 @@ public class BlackSmithMenu extends InventoryBuilder {
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+        private final CrazyInstance instance = this.plugin.getInstance();
+
         @NotNull
         private final Starter starter = this.plugin.getStarter();
 
@@ -94,7 +97,7 @@ public class BlackSmithMenu extends InventoryBuilder {
                 // If item is not 1, return.
                 if (item.getAmount() != 1) return;
 
-                if (!this.settings.getEnchantments(item).isEmpty() || this.settings.isEnchantmentBook(item)) {
+                if (!this.instance.getEnchantments(item).isEmpty() || this.instance.isEnchantmentBook(item)) {
                     if (inventory.getItem(this.mainSlot) == null) {
                         event.setCurrentItem(null);
                         inventory.setItem(this.mainSlot, item); // Moves clicked item to main slot.

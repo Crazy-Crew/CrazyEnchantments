@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import org.bukkit.GameMode;
@@ -36,6 +37,8 @@ public class ShopListener implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ConfigOptions options = this.plugin.getOptions();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -157,7 +160,7 @@ public class ShopListener implements Listener {
                     case GKITZ -> {
                         if (!this.methods.hasPermission(player, "gkitz", true)) return;
 
-                        if (!this.crazyManager.isGkitzEnabled()) return;
+                        if (!this.options.isGkitzToggle()) return;
 
                         MenuManager.openKitsMenu(player);
                     }

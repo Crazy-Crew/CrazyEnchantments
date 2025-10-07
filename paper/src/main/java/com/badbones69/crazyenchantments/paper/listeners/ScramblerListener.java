@@ -3,12 +3,12 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -35,6 +35,8 @@ public class ScramblerListener implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private final ComponentLogger logger = this.plugin.getComponentLogger();
 
     @NotNull
@@ -42,9 +44,6 @@ public class ScramblerListener implements Listener {
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final HashMap<Player, ScheduledTask> roll = new HashMap<>();
 
@@ -116,7 +115,7 @@ public class ScramblerListener implements Listener {
         setGlass(inventory);
 
         for (int slot = 9; slot > 8 && slot < 18; slot++) {
-            final ItemStack itemStack = this.enchantmentBookSettings.getNewScrambledBook(book);
+            final ItemStack itemStack = this.instance.getScrambledBook(book);
 
             if (itemStack == null) break; //todo() debug
 
@@ -177,9 +176,9 @@ public class ScramblerListener implements Listener {
                         if (item != null) {
                             ItemStack clone;
 
-                            clone = item.withType(enchantmentBookSettings.getEnchantmentBookItem().getType());
+                            clone = item.withType(instance.getEnchantmentBookItem().getType());
 
-                            methods.setDurability(item, methods.getDurability(enchantmentBookSettings.getEnchantmentBookItem()));
+                            methods.setDurability(item, methods.getDurability(instance.getEnchantmentBookItem()));
 
                             methods.addItemToInventory(player, clone);
                         } else {
@@ -217,7 +216,7 @@ public class ScramblerListener implements Listener {
             items.add(inv.getItem(slot));
         }
 
-        ItemStack newBook = this.enchantmentBookSettings.getNewScrambledBook(book);
+        ItemStack newBook = this.instance.getScrambledBook(book);
 
         if (newBook == null) return;
 
@@ -236,17 +235,17 @@ public class ScramblerListener implements Listener {
 
         if (event.getClickedInventory() == null) return;
 
-        ItemStack book = event.getCurrentItem();
+        final ItemStack book = event.getCurrentItem();
 
         if (book == null || book.isEmpty()) return;
 
-        ItemStack scrambler = event.getCursor();
+        final ItemStack scrambler = event.getCursor();
 
         if (scrambler.isEmpty()) return;
 
         if (book.getAmount() > 1 || scrambler.getAmount() > 1) return;
 
-        if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
+        if (!isScrambler(scrambler) || !this.instance.isEnchantmentBook(book)) return;
 
         if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
             player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
@@ -261,7 +260,7 @@ public class ScramblerListener implements Listener {
             event.setCurrentItem(ItemStack.empty());
             openScrambler(player, book);
         } else {
-            event.setCurrentItem(this.enchantmentBookSettings.getNewScrambledBook(book));
+            event.setCurrentItem(this.instance.getScrambledBook(book));
         }
     }
 

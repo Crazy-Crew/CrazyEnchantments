@@ -3,12 +3,12 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,6 +39,8 @@ public class HoeEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
@@ -47,10 +49,6 @@ public class HoeEnchantments implements Listener {
 
     @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    // Settings.
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
 
@@ -72,7 +70,7 @@ public class HoeEnchantments implements Listener {
 
             if (block == null) return;
 
-            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(hoe);
+            Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(hoe);
 
             // Crop is not fully grown.
             if (this.seedlings.contains(block.getType()) && !this.crazyManager.getNMSSupport().isFullyGrown(block) && EnchantUtils.isEventActive(CEnchantments.GREENTHUMB, player, hoe, enchantments)) {
@@ -112,7 +110,7 @@ public class HoeEnchantments implements Listener {
                         && plantSeedSuccess(block, player, hasGreenThumb)) this.methods.removeDurability(hoe, player);
             }
         } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated()
-                && this.enchantmentBookSettings.getEnchantments(this.methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
+                && this.instance.getEnchantments(this.methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
             Map<Block, BlockFace> blockFace = new HashMap<>();
 
             blockFace.put(event.getClickedBlock(), event.getBlockFace());
@@ -133,7 +131,7 @@ public class HoeEnchantments implements Listener {
 
             ItemStack hoe = this.methods.getItemInHand(player);
 
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(hoe);
+            Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(hoe);
 
             if (!this.blocks.containsKey(player.getUniqueId())) return;
 
