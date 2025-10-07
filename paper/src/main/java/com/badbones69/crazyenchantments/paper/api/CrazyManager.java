@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
@@ -302,9 +301,6 @@ public class CrazyManager {
         Scrolls.loadScrolls();
         // Loads the dust.
         Dust.loadDust();
-
-        // Loads the ShopOptions.
-        ShopOption.loadShopOptions();
 
         // Loads the shop manager.
         this.shopManager.load();
