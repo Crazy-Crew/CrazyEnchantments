@@ -2,9 +2,11 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
+import dev.triumphteam.cmd.core.annotations.Optional;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,7 +18,15 @@ public class CommandBottle extends BaseCommand {
     @Command("bottle")
     @Permission(value = "crazyenchantments.bottle", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments bottle <player> <xp> <amount>")
-    public void bottle(final CommandSender sender, final Player player, final int xp, final int amount) {
+    public void bottle(final CommandSender sender, final int xp, final int amount, @Optional final Player target) {
+        Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
+
+        if (safePlayer == null) {
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+
+            return;
+        }
+
         final ItemStack itemStack = TinkererManager.getXPBottle(xp, FileManager.Files.TINKER.getFile());
 
         if (itemStack == null) {
@@ -25,6 +35,6 @@ public class CommandBottle extends BaseCommand {
 
         itemStack.setAmount(amount <= 0 ? 1 : amount);
 
-        this.methods.addItemToInventory(player, itemStack);
+        this.methods.addItemToInventory(safePlayer, itemStack);
     }
 }
