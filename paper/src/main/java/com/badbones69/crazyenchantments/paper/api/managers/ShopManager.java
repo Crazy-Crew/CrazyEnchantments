@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +22,8 @@ public class ShopManager {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ConfigOptions options = this.plugin.getOptions();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -40,8 +43,8 @@ public class ShopManager {
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
 
-        this.inventoryName = ColorUtils.color(config.getString("Settings.InvName", ""));
-        this.inventorySize = config.getInt("Settings.GUISize", 54);
+        this.inventoryName = ColorUtils.color(this.options.getInventoryName());
+        this.inventorySize = this.options.getInventorySize();
         this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table", false);
 
         for (String customItemString : config.getStringList("Settings.GUICustomization")) {

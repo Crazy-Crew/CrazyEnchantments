@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.google.common.collect.Lists;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -37,6 +38,8 @@ import java.util.Map;
 public class EnchantmentBookSettings {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ConfigOptions options = this.plugin.getOptions();
 
     private final FusionPaper fusion = this.plugin.getFusion();
 
@@ -152,17 +155,8 @@ public class EnchantmentBookSettings {
     /**
      * @return the itemstack of the enchantment book.
      */
-    @NotNull
-    public ItemStack getEnchantmentBookItem() {
-        return new ItemBuilder(this.enchantmentBook).build();
-    }
-
-    /**
-     *
-     * @param enchantmentBook The book data to use for the itemBuilder.
-     */
-    public void setEnchantmentBook(@NotNull final ItemBuilder enchantmentBook) {
-        this.enchantmentBook = enchantmentBook;
+    public @NotNull final ItemStack getEnchantmentBookItem() {
+        return this.options.getEnchantBook().build();
     }
 
     /**

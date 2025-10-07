@@ -8,13 +8,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfigOptions {
 
-    private ConfigurationSection section;
-
-    private String prefix;
-    private boolean toggleMetrics;
-    private boolean playerBackupMessage;
-    private boolean resetMaxHealth;
     private boolean refreshPotionEffectsOnWorldChange;
+    private boolean resetMaxHealth;
+    private boolean toggleMetrics;
+    private String prefix;
 
     private String inventoryName;
     private int inventorySize;
@@ -35,12 +32,9 @@ public class ConfigOptions {
             throw new CrazyException("config.yml does not have the configuration section needed");
         }
 
-        this.section = section;
-
         this.prefix = section.getString("Prefix", "&8[&aCrazyEnchantments&8]: ");
 
         this.toggleMetrics = section.getBoolean("Toggle-Metrics", false);
-        this.playerBackupMessage = section.getBoolean("Player-Info-Backup-Message", true);
         this.resetMaxHealth = section.getBoolean("Reset-Players-Max-Health", true);
         this.refreshPotionEffectsOnWorldChange = section.getBoolean("Refresh-Potion-Effects-On-World-Change", false);
 
@@ -57,10 +51,6 @@ public class ConfigOptions {
 
     public boolean isRefreshPotionEffectsOnWorldChange() {
         return this.refreshPotionEffectsOnWorldChange;
-    }
-
-    public boolean isPlayerBackupMessage() {
-        return this.playerBackupMessage;
     }
 
     public boolean isResetMaxHealth() {
@@ -87,11 +77,11 @@ public class ConfigOptions {
         return this.inventorySize;
     }
 
-    public String getPrefix() {
-        return this.prefix;
-    }
-
     public ItemBuilder getEnchantBook() {
         return this.enchantBook;
+    }
+
+    public String getPrefix() {
+        return this.prefix;
     }
 }

@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
@@ -16,6 +17,8 @@ import java.nio.file.Path;
 public class BaseCommand {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    protected final ConfigOptions options = this.plugin.getOptions();
 
     protected final Path path = this.plugin.getDataPath();
 

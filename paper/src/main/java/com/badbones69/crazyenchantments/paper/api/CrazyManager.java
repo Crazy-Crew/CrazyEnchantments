@@ -25,6 +25,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
@@ -41,8 +42,8 @@ import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -70,6 +71,8 @@ public class CrazyManager {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ConfigOptions options = this.plugin.getOptions();
 
     private final FusionPaper fusion = this.plugin.getFusion();
     
@@ -135,9 +138,6 @@ public class CrazyManager {
     private boolean useEnchantmentLimiter;
     private boolean useConfigLimits;
 
-    private int CESuccessOverride;
-    private int CEFailureOverride;
-
     /**
      * Loads everything for the Crazy Enchantments plugin.
      * Do not use unless needed.
@@ -159,18 +159,19 @@ public class CrazyManager {
         this.starter.getPluginSupport().updateHooks();
 
         // Check if we should patch player health.
-        boolean playerHealthPatch = configuration.getBoolean("Settings.Reset-Players-Max-Health", true);
+        boolean resetMaxHealth = this.options.isResetMaxHealth();
 
         this.plugin.getServer().getOnlinePlayers().forEach(player -> {
             // Load our players.
             loadCEPlayer(player);
 
-            // Check if we need to patch playerHealth.
-            Attribute genericAttribute = Attribute.MAX_HEALTH;
+            if (resetMaxHealth) {
+                @Nullable final AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
 
-            double baseValue = player.getAttribute(genericAttribute).getBaseValue(); //todo() npe
-
-            if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
+                if (attribute != null) {
+                    attribute.setBaseValue(attribute.getBaseValue());
+                }
+            }
 
             new FoliaScheduler(this.plugin, Scheduler.global_scheduler, TimeUnit.MINUTES) {
                 @Override
@@ -205,7 +206,6 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(configuration.getString("Settings.Enchantment-Book-Item", "BOOK")));
         this.useUnsafeEnchantments = configuration.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
         this.maxEnchantmentCheck = configuration.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
         this.useConfigLimits = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
@@ -218,11 +218,9 @@ public class CrazyManager {
         this.breakRageOnDamage = configuration.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
         this.useRageBossBar = configuration.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
         this.rageIncrement = configuration.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
+
         setDropBlocksBlast(configuration.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
         setDropBlocksVeinMiner(configuration.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
-
-        this.CEFailureOverride = configuration.getInt("Settings.CEFailureOverride", -1);
-        this.CESuccessOverride = configuration.getInt("Settings.CESuccessOverride", -1);
 
         this.enchantmentBookSettings.populateMaps();
 
@@ -989,11 +987,4 @@ public class CrazyManager {
     public int pickLevel(final int min, final int max) {
         return min + new Random().nextInt((max + 1) - min);
     }
-
-    /** Gets the success override from the config. Default -1 means no override should be used */
-    public int getCESuccessOverride() { return CESuccessOverride; }
-
-    /** Gets the failure override from the config. Default -1 means no override should be used */
-    public int getCEFailureOverride() { return CEFailureOverride; }
-
 }

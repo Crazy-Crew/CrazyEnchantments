@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -21,6 +22,8 @@ public class CommandReload extends BaseCommand {
         this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
 
         this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); //todo() test this
+
+        this.options.init(FileKeys.config.getConfiguration()); // refresh values
 
         MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
 

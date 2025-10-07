@@ -9,13 +9,13 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +23,8 @@ public class CEBook {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ConfigOptions options = this.plugin.getOptions();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -191,7 +193,7 @@ public class CEBook {
      * @return Destroy rate of the book or the override value if set in config.yml
      */
     public int getDestroyRate() {
-        return this.starter.getCrazyManager().getCEFailureOverride() == -1 ? this.destroyRate : this.starter.getCrazyManager().getCEFailureOverride(); //todo() use root variable
+        return this.options.getFailureOverride() == -1 ? this.destroyRate : this.options.getFailureOverride();
     }
     
     /**
@@ -208,7 +210,7 @@ public class CEBook {
      * @return The success rate of the book or the override value if set in config.yml.
      */
     public int getSuccessRate() {
-        return this.starter.getCrazyManager().getCESuccessOverride() == -1 ? this.successRate : this.starter.getCrazyManager().getCESuccessOverride(); //todo() use root variable
+        return this.options.getSuccessOverride() == -1 ? this.successRate : this.options.getSuccessOverride();
     }
     
     /**
