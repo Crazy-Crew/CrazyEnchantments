@@ -23,7 +23,7 @@ public class CommandDust extends BaseCommand {
         Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            //todo() tell player is null
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 
             return;
         }

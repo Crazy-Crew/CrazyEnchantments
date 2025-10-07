@@ -33,6 +33,8 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+
             return;
         }
 
