@@ -154,7 +154,7 @@ public class CommandManager {
                 } catch (NullPointerException ignore) {}
             }
 
-            Arrays.asList(Enchantment.values()).forEach(enchantment -> list.add(enchantment.getKey().getKey()));
+            ItemUtils.getRegistryAccess().getRegistry(RegistryKey.ENCHANTMENT).iterator().forEachRemaining(enchantment -> list.add(enchantment.getKey().getKey()));
 
             return list;
         });
