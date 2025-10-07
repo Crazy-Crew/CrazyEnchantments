@@ -33,7 +33,7 @@ public class CommandAdd extends BaseCommand {
 
         final ItemStack itemStack = this.methods.getItemInHand(player);
 
-        if (itemStack.getType() == Material.AIR) {
+        if (itemStack.isEmpty()) {
             player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
 
             return;
