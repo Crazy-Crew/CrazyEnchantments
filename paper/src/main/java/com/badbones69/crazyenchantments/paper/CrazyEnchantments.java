@@ -49,6 +49,7 @@ public class CrazyEnchantments extends JavaPlugin {
     private PaperFileManager fileManager;
     private ConfigOptions options;
     private FusionPaper fusion;
+    private CrazyInstance instance;
 
     @Override
     public void onEnable() {
@@ -74,6 +75,9 @@ public class CrazyEnchantments extends JavaPlugin {
         if (this.options.isToggleMetrics()) { // Enable bStats
             new Metrics(this, 4494);
         }
+
+        this.instance = new CrazyInstance();
+        this.instance.init();
 
         this.starter = new Starter();
         this.starter.run();
@@ -119,8 +123,6 @@ public class CrazyEnchantments extends JavaPlugin {
         }
 
         CommandManager.load();
-
-        FileUtils.loadFiles();
     }
 
     @Override
@@ -156,6 +158,10 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final PaperFileManager getFileManager() {
         return this.fileManager;
+    }
+
+    public @NotNull final CrazyInstance getInstance() {
+        return this.instance;
     }
 
     public @NotNull final ConfigOptions getOptions() {

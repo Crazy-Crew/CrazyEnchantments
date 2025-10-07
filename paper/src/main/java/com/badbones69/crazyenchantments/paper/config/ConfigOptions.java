@@ -21,6 +21,8 @@ public class ConfigOptions {
     private int successOverride;
     private int failureOverride;
 
+    private boolean updateExamplesFolder;
+
     public void init(@NotNull final YamlConfiguration configuration) {
         if (configuration.contains("settings")) {
             throw new CrazyException("config.yml is not formatted properly!");
@@ -47,10 +49,16 @@ public class ConfigOptions {
 
         this.successOverride = section.getInt("CESuccessOverride", -1);
         this.failureOverride = section.getInt("CEFailureOverride", -1);
+
+        this.updateExamplesFolder = section.getBoolean("Update-Examples-Folder", true);
     }
 
     public boolean isRefreshPotionEffectsOnWorldChange() {
         return this.refreshPotionEffectsOnWorldChange;
+    }
+
+    public boolean isUpdateExamplesFolder() {
+        return this.updateExamplesFolder;
     }
 
     public boolean isResetMaxHealth() {
