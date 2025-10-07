@@ -25,6 +25,8 @@ dependencies {
 
     implementation(libs.fusion.paper)
 
+    implementation(project(":core"))
+
     implementation(libs.metrics)
 
     compileOnly(libs.bundles.shared) {
