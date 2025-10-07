@@ -28,7 +28,6 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -278,20 +277,6 @@ public class Methods {
 
     public void addFirework(@NotNull final Entity firework) {
         firework.getPersistentDataContainer().set(DataKeys.no_firework_damage.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-    }
-
-    public Enchantment getEnchantment(@NotNull String enchantmentName) {
-        try {
-            // HashMap<String, String> enchantments = getEnchantments();
-            enchantmentName = enchantmentName.replaceAll("-|_| ", "");
-
-            for (Enchantment enchantment : Enchantment.values()) {
-                // MC 1.13+ has the correct names.
-                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName)) return enchantment;
-            }
-        } catch (Exception ignore) {}
-
-        return null;
     }
 
     public int getMaxDurability(@NotNull final ItemStack item) {

@@ -71,44 +71,18 @@ public class CrazyInstance {
         loadShopOptions(config); // load shop options
 
         loadExamples(); // load examples
-
-        this.gkitz.clear();
-
-        if (this.options.isGkitzToggle()) {
-            final YamlConfiguration gkit = FileKeys.gkitz.getConfiguration();
-
-            final ConfigurationSection section = gkit.getConfigurationSection("GKitz");
-
-            if (section == null) {
-                this.fusion.log("warn", "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
-            } else {
-                for (final String kit : section.getKeys(false)) {
-                    String path = "GKitz." + kit + ".";
-
-                    int slot = gkit.getInt(path + "Display.Slot");
-                    String time = gkit.getString(path + "Cooldown", "");
-                    boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
-
-                    ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
-                            .setName(gkit.getString(path + "Display.Name", "Error getting name."))
-                            .setLore(gkit.getStringList(path + "Display.Lore"))
-                            .setGlow(gkit.getBoolean(path + "Display.Glowing", false))
-                            .addKey(DataKeys.gkit_type.getNamespacedKey(), kit).build();
-
-                    List<String> commands = gkit.getStringList(path + "Commands");
-                    List<String> itemStrings = gkit.getStringList(path + "Items");
-                    List<ItemStack> previewItems = getInfoGKit(itemStrings);
-                    previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
-                    this.gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, itemStrings, autoEquip));
-                }
-            }
-
-            this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this.plugin);
-        }
     }
 
     public void reload() {
+        this.fusion.reload(); // reload fusion api
+
+        this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); // refresh files
+
         final YamlConfiguration config = FileKeys.config.getConfiguration();
+
+        this.options.init(config); // re-map to objects
+
+        this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
 

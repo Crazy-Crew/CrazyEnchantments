@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -18,12 +17,6 @@ public class CommandReload extends BaseCommand {
     @Permission(value = "crazyenchantments.reload", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments reload")
     public void reload(final CommandSender sender) {
-        this.fusion.reload(); // reload fusion api
-
-        this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); // save/reload files
-
-        this.options.init(FileKeys.config.getConfiguration()); // refresh values./
-
         this.instance.reload(); // reload the plugin.
 
         this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));

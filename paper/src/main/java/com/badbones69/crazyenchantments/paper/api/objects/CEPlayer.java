@@ -8,9 +8,11 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -67,31 +69,46 @@ public class CEPlayer {
      * @param kit The gkit you wish to give them.
      */
     public void giveGKit(@NotNull final GKitz kit) {
-        for (ItemStack item : kit.getKitItems()) {
+        for (final ItemStack item : kit.getKitItems()) {
+            if (item == null || item.isEmpty()) continue;
+
             if (kit.canAutoEquip()) {
-                switch (item.getType().toString().contains("_") ? item.getType().toString().toLowerCase().split("_")[1] : "No") {
+                final Material material = item.getType();
+                final String asString = material.toString();
+
+                final EntityEquipment equipment = this.player.getEquipment();
+
+                switch (asString.contains("_") ? asString.toLowerCase().split("_")[1] : "No") {
                     case "helmet" -> {
-                        if (this.player.getEquipment().getHelmet() != null) break;
-                        this.player.getEquipment().setHelmet(item);
+                        if (equipment.getHelmet() != null) break;
+
+                        equipment.setHelmet(item);
+
                         continue;
                     }
+
                     case "chestplate" -> {
-                        if (this.player.getEquipment().getChestplate() != null) break;
-                        this.player.getEquipment().setChestplate(item);
+                        if (equipment.getChestplate() != null) break;
+
+                        equipment.setChestplate(item);
+
                         continue;
                     }
                     case "leggings" -> {
-                        if (this.player.getEquipment().getLeggings() != null) break;
-                        this.player.getEquipment().setLeggings(item);
+                        if (equipment.getLeggings() != null) break;
+
+                        equipment.setLeggings(item);
+
                         continue;
                     }
                     case "boots" -> {
-                        if (this.player.getEquipment().getBoots() != null) break;
-                        this.player.getEquipment().setBoots(item);
+                        if (equipment.getBoots() != null) break;
+
+                        equipment.setBoots(item);
+
                         continue;
                     }
                 }
-
             }
 
             this.methods.addItemToInventory(this.player, item);
