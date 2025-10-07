@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -27,7 +27,7 @@ public class CommandBottle extends BaseCommand {
             return;
         }
 
-        final ItemStack itemStack = TinkererManager.getXPBottle(xp, FileManager.Files.TINKER.getFile());
+        final ItemStack itemStack = TinkererManager.getXPBottle(xp, FileKeys.tinker.getConfiguration());
 
         if (itemStack == null) {
             return;

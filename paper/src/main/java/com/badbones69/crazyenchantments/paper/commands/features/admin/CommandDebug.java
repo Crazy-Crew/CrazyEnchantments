@@ -1,14 +1,15 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.PermissionDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,10 @@ public class CommandDebug extends BaseCommand {
         List<String> brokenEnchantments = new ArrayList<>();
         List<String> brokenEnchantmentTypes = new ArrayList<>();
 
+        final YamlConfiguration configuration = FileKeys.enchantments.getConfiguration();
+
         for (CEnchantments enchantment : CEnchantments.values()) {
-            if (!FileManager.Files.ENCHANTMENTS.getFile().contains("Enchantments." + enchantment.getName()))
-                brokenEnchantments.add(enchantment.getName());
+            if (!configuration.contains("Enchantments." + enchantment.getName())) brokenEnchantments.add(enchantment.getName());
 
             if (enchantment.getType() == null) brokenEnchantmentTypes.add(enchantment.getName());
         }
@@ -32,7 +34,6 @@ public class CommandDebug extends BaseCommand {
         if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
             sender.sendMessage(ColorUtils.getPrefix("&aAll enchantments are loaded."));
         } else {
-
             if (!brokenEnchantments.isEmpty()) {
                 int amount = 1;
                 sender.sendMessage(ColorUtils.getPrefix("&cMissing Enchantments:"));

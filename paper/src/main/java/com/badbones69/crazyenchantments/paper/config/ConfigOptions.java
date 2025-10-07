@@ -8,21 +8,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfigOptions {
 
-    private final String prefix;
-    private final boolean toggleMetrics;
-    private final boolean playerBackupMessage;
-    private final boolean resetMaxHealth;
-    private final boolean refreshPotionEffectsOnWorldChange;
+    private ConfigurationSection section;
 
-    private final String inventoryName;
-    private final int inventorySize;
+    private String prefix;
+    private boolean toggleMetrics;
+    private boolean playerBackupMessage;
+    private boolean resetMaxHealth;
+    private boolean refreshPotionEffectsOnWorldChange;
 
-    private final ItemBuilder enchantBook;
+    private String inventoryName;
+    private int inventorySize;
 
-    private final int successOverride;
-    private final int failureOverride;
+    private ItemBuilder enchantBook;
 
-    public ConfigOptions(@NotNull final YamlConfiguration configuration) {
+    private int successOverride;
+    private int failureOverride;
+
+    public void init(@NotNull final YamlConfiguration configuration) {
         if (configuration.contains("settings")) {
             throw new CrazyException("config.yml is not formatted properly!");
         }
@@ -32,6 +34,8 @@ public class ConfigOptions {
         if (section == null) {
             throw new CrazyException("config.yml does not have the configuration section needed");
         }
+
+        this.section = section;
 
         this.prefix = section.getString("Prefix", "&8[&aCrazyEnchantments&8]: ");
 

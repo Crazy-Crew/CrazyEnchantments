@@ -4,21 +4,24 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.nio.file.Path;
 
 @Command(value = "crazyenchantments", alias = {"ce"})
 public class BaseCommand {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    protected final Path path = this.plugin.getDataPath();
+
     protected final Starter starter = this.plugin.getStarter();
 
-    protected final FileManager fileManager = this.starter.getFileManager();
+    protected final PaperFileManager fileManager = this.plugin.getFileManager();
 
     protected final Methods methods = this.starter.getMethods();
 

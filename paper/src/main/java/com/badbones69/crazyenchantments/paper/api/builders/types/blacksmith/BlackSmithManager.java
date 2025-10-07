@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Material;
@@ -38,14 +38,14 @@ public class BlackSmithManager {
         grayGlass = new ItemBuilder().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build();
         blueGlass = new ItemBuilder().setMaterial(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setName(" ").build();
 
-        get(Files.CONFIG.getFile());
+        get(FileKeys.config.getConfiguration());
     }
 
     /**
      * Refreshes the values that require config options.
      */
     public static void refresh() {
-        get(Files.CONFIG.getFile());
+        get(FileKeys.config.getConfiguration());
     }
 
     /**

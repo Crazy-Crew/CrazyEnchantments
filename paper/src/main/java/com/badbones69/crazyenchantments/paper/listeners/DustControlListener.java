@@ -4,12 +4,12 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -20,7 +20,7 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -61,7 +61,9 @@ public class DustControlListener implements Listener {
             data.setDestroyChance(percent);
         }
 
-        for (final String line : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+        final YamlConfiguration config = FileKeys.config.getConfiguration();
+
+        for (final String line : config.getStringList("Settings.EnchantmentBookLore")) {
             if (line.toLowerCase().contains("%description%")) {
                 enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
 
@@ -92,7 +94,7 @@ public class DustControlListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        final YamlConfiguration config = FileKeys.config.getConfiguration();
 
         final PersistentDataContainerView container = dust.getPersistentDataContainer();
 
@@ -218,7 +220,7 @@ public class DustControlListener implements Listener {
 
             player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
 
-            FileConfiguration config = Files.CONFIG.getFile();
+            final YamlConfiguration config = FileKeys.config.getConfiguration();
 
             if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle", true)) {
                 final List<Color> colors = new ArrayList<>();
@@ -235,7 +237,7 @@ public class DustControlListener implements Listener {
     private Dust pickDust() {
         List<Dust> dusts = new ArrayList<>();
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        final YamlConfiguration config = FileKeys.config.getConfiguration();
 
         if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success", true)) dusts.add(Dust.SUCCESS_DUST);
 

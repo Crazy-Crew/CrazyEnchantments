@@ -36,7 +36,7 @@ shadow = "9.2.2" # https://github.com/GradleUp/shadow
 
 ## Other
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-fusion = "2.4.3" # https://github.com/ryderbelserion/Fusion
+fusion = "2.9.9" # https://github.com/ryderbelserion/Fusion
 bStats = "3.1.0" # https://github.com/Bastian/bStats
 
 [plugins]

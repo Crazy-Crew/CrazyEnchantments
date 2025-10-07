@@ -1,13 +1,13 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsPreviewMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class MenuManager {
     public static void load() {
         enchantmentTypes.clear();
 
-        FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
+        YamlConfiguration file = FileKeys.enchantment_types.getConfiguration();
 
         final ConfigurationSection section = file.getConfigurationSection("Types");
 
@@ -52,9 +53,9 @@ public class MenuManager {
     }
 
     public static void openKitsMenu(@NotNull final Player player) {
-        FileConfiguration gkitz = Files.GKITZ.getFile();
+        YamlConfiguration gkitz = FileKeys.gkitz.getConfiguration();
 
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size"), gkitz.getString("Settings.Inventory-Name")).build().getInventory());
+        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
     }
 
     public static void openKitsPreviewMenu(@NotNull final Player player, final int slots, @NotNull final GKitz kit) {
@@ -80,6 +81,6 @@ public class MenuManager {
     }
 
     public static void openTinkererMenu(@NotNull final Player player) {
-        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
+        player.openInventory(new TinkererMenu(player, 54, FileKeys.tinker.getConfiguration().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
     }
 }

@@ -3,13 +3,13 @@ package com.badbones69.crazyenchantments.paper.api;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
@@ -43,6 +43,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -142,12 +143,12 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
-        FileConfiguration gkit = Files.GKITZ.getFile();
-        FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
+        final YamlConfiguration gkit = FileKeys.gkitz.getConfiguration();
+        final YamlConfiguration enchants = FileKeys.enchantments.getConfiguration();
 
-        FileConfiguration blocks = Files.BLOCKLIST.getFile();
-        FileConfiguration heads = Files.HEADMAP.getFile();
+        final YamlConfiguration blocks = FileKeys.blocklist.getConfiguration();
+        final YamlConfiguration heads = FileKeys.head_map.getConfiguration();
 
         this.blockList.clear();
         this.headMap.clear();
@@ -158,7 +159,7 @@ public class CrazyManager {
         this.starter.getPluginSupport().updateHooks();
 
         // Check if we should patch player health.
-        boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health", true);
+        boolean playerHealthPatch = configuration.getBoolean("Settings.Reset-Players-Max-Health", true);
 
         this.plugin.getServer().getOnlinePlayers().forEach(player -> {
             // Load our players.
@@ -167,7 +168,7 @@ public class CrazyManager {
             // Check if we need to patch playerHealth.
             Attribute genericAttribute = Attribute.MAX_HEALTH;
 
-            double baseValue = player.getAttribute(genericAttribute).getBaseValue();
+            double baseValue = player.getAttribute(genericAttribute).getBaseValue(); //todo() npe
 
             if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
 
@@ -204,24 +205,24 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item", "BOOK")));
-        this.useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
-        this.maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
-        this.useConfigLimits = config.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
-        this.defaultLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
-        this.defaultBaseLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
-        this.useEnchantmentLimiter = config.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
-        this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
-        this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
-        this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
-        this.breakRageOnDamage = config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
-        this.useRageBossBar = config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
-        this.rageIncrement = config.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
-        setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
-        setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
+        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(configuration.getString("Settings.Enchantment-Book-Item", "BOOK")));
+        this.useUnsafeEnchantments = configuration.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
+        this.maxEnchantmentCheck = configuration.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
+        this.useConfigLimits = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
+        this.defaultLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
+        this.defaultBaseLimit = configuration.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
+        this.useEnchantmentLimiter = configuration.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
+        this.checkVanillaLimit = configuration.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
+        this.gkitzToggle = configuration.getBoolean("Settings.GKitz.Enabled", true);
+        this.rageMaxLevel = configuration.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
+        this.breakRageOnDamage = configuration.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
+        this.useRageBossBar = configuration.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
+        this.rageIncrement = configuration.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
+        setDropBlocksBlast(configuration.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
+        setDropBlocksVeinMiner(configuration.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
 
-        this.CEFailureOverride = config.getInt("Settings.CEFailureOverride", -1);
-        this.CESuccessOverride = config.getInt("Settings.CESuccessOverride", -1);
+        this.CEFailureOverride = configuration.getInt("Settings.CEFailureOverride", -1);
+        this.CESuccessOverride = configuration.getInt("Settings.CESuccessOverride", -1);
 
         this.enchantmentBookSettings.populateMaps();
 
@@ -332,7 +333,8 @@ public class CrazyManager {
      * @param player The player you wish to load.
      */
     public void loadCEPlayer(@NotNull final Player player) {
-        FileConfiguration data = Files.DATA.getFile();
+        final YamlConfiguration data = FileKeys.data.getConfiguration();
+
         String uuid = player.getUniqueId().toString();
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
@@ -354,7 +356,8 @@ public class CrazyManager {
      * @param player Player you wish to remove.
      */
     public void unloadCEPlayer(@NotNull final Player player) {
-        FileConfiguration data = Files.DATA.getFile();
+        final YamlConfiguration data = FileKeys.data.getConfiguration();
+
         String uuid = player.getUniqueId().toString();
         CEPlayer cePlayer = getCEPlayer(player);
 
@@ -363,10 +366,12 @@ public class CrazyManager {
                 data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
             }
 
-            Files.DATA.saveFile();
+            FileKeys.data.save();
         }
 
-        removeCEPlayer(cePlayer);
+        if (cePlayer != null) {
+            removeCEPlayer(cePlayer);
+        }
     }
 
     /**
@@ -382,14 +387,15 @@ public class CrazyManager {
      * @param cePlayer The player you wish to back up.
      */
     private void backupCEPlayer(@NotNull final CEPlayer cePlayer) {
-        FileConfiguration data = Files.DATA.getFile();
+        final YamlConfiguration data = FileKeys.data.getConfiguration();
+
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
 
         for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
             data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
         }
 
-        Files.DATA.saveFile();
+        FileKeys.data.save();
     }
 
     /**

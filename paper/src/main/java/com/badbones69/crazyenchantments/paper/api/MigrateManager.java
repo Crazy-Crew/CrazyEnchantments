@@ -1,10 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ public class MigrateManager {
 
         File secondFile = new File(plugin.getDataFolder() + "/Tinker-v1.yml");
 
-        FileConfiguration TINKER = Files.TINKER.getFile();
+        YamlConfiguration TINKER = FileKeys.tinker.getConfiguration();
 
         if (TINKER.getDouble("Settings.Tinker-Version", 1.1) >= tinkerVersion) {
             plugin.getLogger().info("Tinker.yml is up to date.");
@@ -33,13 +32,14 @@ public class MigrateManager {
             plugin.getLogger().warning("Updating Tinker.yml version.");
 
             TINKER.set("Settings.Tinker-Version", tinkerVersion);
-            Files.TINKER.saveFile();
+
+            FileKeys.tinker.save();
         }
 
         if (firstFile.renameTo(secondFile)) {
             plugin.getLogger().warning("Renamed " + firstFile.getName() + " to Tinker-v1.yml");
 
-            Files.TINKER.saveFile();
+            FileKeys.tinker.save();
         }
 
         YamlConfiguration secondConfiguration = YamlConfiguration.loadConfiguration(secondFile);
@@ -90,7 +90,7 @@ public class MigrateManager {
             }
         }
 
-        Files.TINKER.saveFile();
+        FileKeys.tinker.save();
 
         plugin.getLogger().warning("Tinker.yml file has been updated.");
     }

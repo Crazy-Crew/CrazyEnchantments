@@ -1,8 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,23 +145,23 @@ public enum Messages {
     }
     
     public static void addMissingMessages() {
-        final FileConfiguration messages = Files.MESSAGES.getFile();
+        final YamlConfiguration config = FileKeys.messages.getConfiguration();
 
         boolean saveFile = false;
 
         for (final Messages message : values()) {
-            if (!messages.contains("Messages." + message.getPath())) {
+            if (!config.contains("Messages." + message.getPath())) {
                 saveFile = true;
 
                 if (message.getDefaultMessage() != null) {
-                    messages.set("Messages." + message.getPath(), message.getDefaultMessage());
+                    config.set("Messages." + message.getPath(), message.getDefaultMessage());
                 } else {
-                    messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
+                    config.set("Messages." + message.getPath(), message.getDefaultListMessage());
                 }
             }
         }
 
-        if (saveFile) Files.MESSAGES.saveFile();
+        if (saveFile) FileKeys.messages.save();
     }
     
     public static String replacePlaceholders(@NotNull final String placeholder, @NotNull final String replacement, @NotNull final String message) {
@@ -234,7 +235,7 @@ public enum Messages {
         boolean isList = isList();
         boolean exists = exists();
 
-        FileConfiguration config = Files.MESSAGES.getFile();
+        final YamlConfiguration config = FileKeys.messages.getConfiguration();
 
         if (isList) {
             if (exists) {
@@ -267,11 +268,11 @@ public enum Messages {
     }
     
     private boolean exists() {
-        return Files.MESSAGES.getFile().contains("Messages." + path);
+        return FileKeys.messages.getConfiguration().contains("Messages." + path);
     }
     
     private boolean isList() {
-        final FileConfiguration config = Files.MESSAGES.getFile();
+        final YamlConfiguration config = FileKeys.messages.getConfiguration();
 
         if (config.contains("Messages." + this.path)) {
             return !config.getStringList("Messages." + this.path).isEmpty();

@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class KitsManager {
@@ -16,7 +16,7 @@ public class KitsManager {
     private static ItemStack backRight, backLeft;
 
     public static void load() {
-        FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
+        YamlConfiguration file = FileKeys.enchantment_types.getConfiguration();
 
         String path = "Info-GUI-Settings";
 

@@ -20,7 +20,7 @@ public class CommandReload extends BaseCommand {
     public void reload(final CommandSender sender) {
         this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
 
-        this.fileManager.setup();
+        this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); //todo() test this
 
         MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
 

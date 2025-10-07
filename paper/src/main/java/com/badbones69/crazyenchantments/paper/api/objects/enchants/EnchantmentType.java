@@ -2,11 +2,12 @@ package com.badbones69.crazyenchantments.paper.api.objects.enchants;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -28,16 +29,19 @@ public class EnchantmentType {
     private final List<Material> enchantableMaterials = new ArrayList<>();
 
     public EnchantmentType(@NotNull final String name) {
-        FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
-        String path = "Types." + name;
-        this.displayName = name;
-        this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
-        this.displayItem = new ItemBuilder()
-        .setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
-        .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
-        .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
+        final YamlConfiguration file = FileKeys.enchantment_types.getConfiguration();
 
-        for (String type : file.getStringList(path + ".Enchantable-Items")) {
+        final String path = "Types." + name;
+
+        this.displayName = name;
+
+        this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
+
+        this.displayItem = new ItemBuilder().setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
+                .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
+                .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
+
+        for (final String type : file.getStringList(path + ".Enchantable-Items")) {
             Material material = new ItemBuilder().setMaterial(type).getMaterial();
 
             if (material != null) this.enchantableMaterials.add(material);

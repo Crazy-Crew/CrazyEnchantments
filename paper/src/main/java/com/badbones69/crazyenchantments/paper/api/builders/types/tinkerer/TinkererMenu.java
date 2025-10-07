@@ -1,13 +1,13 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
@@ -15,6 +15,7 @@ import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,13 +37,13 @@ public class TinkererMenu extends InventoryBuilder {
         super(player, size, title);
     }
 
-    private final FileConfiguration configuration = Files.TINKER.getFile();
-
     @Override
     public InventoryBuilder build() {
+        final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+
         final ItemStack button = new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE)
-                .setName(this.configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
-                .setLore(this.configuration.getStringList("Settings.TradeButton-Lore"))
+                .setName(configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
+                .setLore(configuration.getStringList("Settings.TradeButton-Lore"))
                 .addKey(DataKeys.trade_button.getNamespacedKey(), "").build();
 
         getInventory().setItem(0, button);
@@ -57,8 +58,6 @@ public class TinkererMenu extends InventoryBuilder {
 
     public static class TinkererListener implements Listener {
 
-        private final FileConfiguration configuration = Files.TINKER.getFile();
-
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
@@ -68,13 +67,16 @@ public class TinkererMenu extends InventoryBuilder {
 
         @EventHandler
         public void onExperienceUse(PlayerInteractEvent event) {
+
             if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
 
             Player player = event.getPlayer();
 
-            if (TinkererManager.useExperience(player, event, true, this.configuration)) return;
+            final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
 
-            TinkererManager.useExperience(player, event, false, this.configuration);
+            if (TinkererManager.useExperience(player, event, true, configuration)) return;
+
+            TinkererManager.useExperience(player, event, false, configuration);
         }
 
         @NotNull
@@ -101,14 +103,16 @@ public class TinkererMenu extends InventoryBuilder {
                 int total = 0;
                 boolean toggle = false;
 
-                final Currency currency = Currency.getCurrency(this.configuration.getString("Settings.Currency", "Vault"));
+                final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+
+                final Currency currency = Currency.getCurrency(configuration.getString("Settings.Currency", "XP_LEVEL"));
 
                 for (Map.Entry<Integer, Integer> slot : this.slots.entrySet()) {
                     ItemStack reward = inventory.getItem(slot.getValue());
 
                     if (reward != null) {
                         if (currency == Currency.VAULT) {
-                            total = TinkererManager.getTotalXP(inventory.getItem(slot.getKey()), this.configuration);
+                            total = TinkererManager.getTotalXP(inventory.getItem(slot.getKey()), configuration);
                         } else {
                             bottomInventory.addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                         }
@@ -135,6 +139,8 @@ public class TinkererMenu extends InventoryBuilder {
 
             if (current.getType().toString().endsWith("STAINED_GLASS_PANE")) return;
 
+            final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+
             // Adding/taking items.
             if (this.enchantmentBookSettings.isEnchantmentBook(current)) { // Adding a book.
                 CEBook book = this.enchantmentBookSettings.getCEBook(current);
@@ -148,7 +154,7 @@ public class TinkererMenu extends InventoryBuilder {
                 } else { // Clicking in their inventory.
                     if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    inventory.setItem(this.slots.get(inventory.firstEmpty()), Dust.MYSTERY_DUST.getDust(TinkererManager.getMaxDustLevelFromBook(book, this.configuration), 1));
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), Dust.MYSTERY_DUST.getDust(TinkererManager.getMaxDustLevelFromBook(book, configuration), 1));
                     inventory.setItem(inventory.firstEmpty(), current);
                 }
 
@@ -157,7 +163,7 @@ public class TinkererMenu extends InventoryBuilder {
                 return;
             }
 
-            int totalXP = TinkererManager.getTotalXP(current, this.configuration);
+            int totalXP = TinkererManager.getTotalXP(current, configuration);
 
             if (totalXP > 0) {
                 // Adding an item.
@@ -171,7 +177,7 @@ public class TinkererMenu extends InventoryBuilder {
                     // Clicking in their inventory.
                     if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(totalXP, this.configuration));
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(totalXP, configuration));
                     inventory.setItem(inventory.firstEmpty(), current);
                 }
 

@@ -3,19 +3,19 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.google.gson.Gson;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,12 +60,12 @@ public class CEBook {
      * @param level Tier of the enchantment.
      * @param amount Amount of books you want.
      */
-    public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount) {
+    public CEBook(@Nullable final CEnchantment enchantment, final int level, final int amount) {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        final YamlConfiguration config = FileKeys.config.getConfiguration();
 
         this.glowing = config.getBoolean("Settings.Enchantment-Book-Glowing", true);
 
@@ -97,7 +97,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing", true);
+        this.glowing = FileKeys.config.getConfiguration().getBoolean("Settings.Enchantment-Book-Glowing", true);
         this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
         this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
@@ -113,7 +113,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing", true);
+        this.glowing = FileKeys.config.getConfiguration().getBoolean("Settings.Enchantment-Book-Glowing", true);
         this.destroyRate = destroyRate;
         this.successRate = successRate;
     }
@@ -228,7 +228,11 @@ public class CEBook {
 
         List<String> lore = new ArrayList<>();
 
-        for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
+
+        for (String bookLine : configuration.getStringList("Settings.EnchantmentBookLore")) {
+            if (bookLine.isEmpty()) continue;
+
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : this.enchantment.getInfoDescription()) {
                     lore.add(ColorUtils.color(enchantmentLine));

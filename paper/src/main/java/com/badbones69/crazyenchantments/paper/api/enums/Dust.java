@@ -2,11 +2,12 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,24 +41,24 @@ public enum Dust {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
+
+        YamlConfiguration configuration = FileKeys.config.getConfiguration();
         
-        FileConfiguration config = Files.CONFIG.getFile();
-        
-        this.max = config.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
-        this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", this.max);
+        this.max = configuration.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
+        this.min = configuration.getInt("Settings.Dust." + configName + ".PercentRange.Min", this.max);
     }
     
     public static void loadDust() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
         itemBuilderDust.clear();
 
         for (Dust dust : values()) {
             String path = "Settings.Dust." + dust.getConfigName() + ".";
             Dust.itemBuilderDust.put(dust, new ItemBuilder()
-            .setName(config.getString(path + "Name", "Error getting name."))
-            .setLore(config.getStringList(path + "Lore"))
-            .setMaterial(config.getString(path + "Item", "GLOWSTONE_DUST")));
+            .setName(configuration.getString(path + "Name", "Error getting name.")) //todo() add re-work dust enum a little bit, maybe a static cache instead with namespaced keys
+            .setLore(configuration.getStringList(path + "Lore"))
+            .setMaterial(configuration.getString(path + "Item", "GLOWSTONE_DUST")));
         }
     }
     

@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +49,8 @@ public enum ShopOption {
     private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     
     public static void loadShopOptions() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final YamlConfiguration config = FileKeys.config.getConfiguration();
+
         shopOptions.clear();
 
         for (final ShopOption shopOption : values()) {
