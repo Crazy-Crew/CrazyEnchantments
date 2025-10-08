@@ -12,6 +12,8 @@ import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -21,18 +23,26 @@ import static java.util.regex.Matcher.quoteReplacement;
 
 public class ColorUtils {
 
-    public static void color(@NotNull final List<Color> colors, @NotNull final String colorString) {
-        if (colorString.contains(", ")) {
-            for (String key : colorString.split(", ")) {
-                Color color = getColor(key);
+    public static List<Color> getColors(@NotNull final String line) {
+        final List<Color> colors = new ArrayList<>();
 
-                if (color != null) colors.add(color);
+        if (line.contains(", ")) {
+            for (String key : line.split(", ")) {
+                final Color color = getColor(key);
+
+                if (color != null) {
+                    colors.add(color);
+                }
             }
         } else {
-            Color color = getColor(colorString);
+            final Color color = getColor(line);
 
-            if (color != null) colors.add(color);
+            if (color != null) {
+                colors.add(color);
+            }
         }
+
+        return colors;
     }
 
     public static Color getColor(@NotNull final String color) {

@@ -26,6 +26,7 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.ryderbelserion.fusion.core.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -53,6 +54,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private final BossBarController bossBarController = new BossBarController(this);
 
+    private CategoryManager categoryManager;
     private PaperFileManager fileManager;
     private KitsManager kitsManager;
     private CrazyInstance instance;
@@ -90,8 +92,8 @@ public class CrazyEnchantments extends JavaPlugin {
         this.instance = new CrazyInstance();
         this.instance.init();
 
-        this.kitsManager = new KitsManager();
-        this.kitsManager.init();
+        this.categoryManager = this.instance.getCategoryManager();
+        this.kitsManager = this.instance.getKitsManager();
 
         this.starter = new Starter();
         this.starter.run();
@@ -159,6 +161,10 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final BossBarController getBossBarController() {
         return bossBarController;
+    }
+
+    public @NotNull final CategoryManager getCategoryManager() {
+        return this.categoryManager;
     }
 
     public @NotNull final PaperFileManager getFileManager() {

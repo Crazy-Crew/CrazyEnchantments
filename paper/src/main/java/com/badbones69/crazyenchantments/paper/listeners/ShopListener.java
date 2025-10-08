@@ -19,6 +19,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,10 +34,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+
 public class ShopListener implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CategoryManager categoryManager = this.plugin.getCategoryManager();
 
     private final ConfigOptions options = this.plugin.getOptions();
 
@@ -85,9 +90,10 @@ public class ShopListener implements Listener {
 
         if (event.getClickedInventory() != player.getOpenInventory().getTopInventory()) return;
 
-        for (Category category : this.enchantmentBookSettings.getCategories()) {
-            if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
+        final Collection<Category> categories = this.categoryManager.getCategories().values();
 
+        for (Category category : categories) {
+            if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
                 if (this.methods.isInventoryFull(player)) return;
 
                 if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {

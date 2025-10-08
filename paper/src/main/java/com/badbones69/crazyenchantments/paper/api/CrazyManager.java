@@ -136,7 +136,7 @@ public class CrazyManager {
 
         this.instance.purgeEnchantments();
 
-        this.enchantmentBookSettings.getCategories().clear();
+        //this.enchantmentBookSettings.getCategories().clear();
 
         this.starter.getPluginSupport().updateHooks();
 
@@ -181,7 +181,7 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.populateMaps();
+        //this.enchantmentBookSettings.populateMaps();
 
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             String name = cEnchantment.getName();

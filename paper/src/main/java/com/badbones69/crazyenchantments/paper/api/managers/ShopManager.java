@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -9,13 +8,12 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 //todo() redo this
 public class ShopManager {
@@ -23,13 +21,9 @@ public class ShopManager {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CategoryManager categoryManager = this.plugin.getCategoryManager();
+
     private final ConfigOptions options = this.plugin.getOptions();
-
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private String inventoryName;
     private int inventorySize;
@@ -47,13 +41,15 @@ public class ShopManager {
         this.inventorySize = this.options.getInventorySize();
         this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table", false);
 
-        for (String customItemString : config.getStringList("Settings.GUICustomization")) {
+        for (final String customItemString : config.getStringList("Settings.GUICustomization")) {
             int slot = 0;
 
             for (String option : customItemString.split(", ")) {
                 if (option.contains("Slot:")) {
                     option = option.replace("Slot:", "");
+
                     slot = Integer.parseInt(option);
+
                     break;
                 }
             }
@@ -61,31 +57,42 @@ public class ShopManager {
             if (slot > this.inventorySize || slot <= 0) continue;
 
             slot--;
+
             this.customizerItems.put(ItemBuilder.convertString(customItemString), slot);
         }
 
-        for (Category category : this.enchantmentBookSettings.getCategories()) {
-            if (category.isInGUI()) {
-                if (category.getSlot() > this.inventorySize) continue;
+        final Collection<Category> categories = this.categoryManager.getCategories().values();
 
-                this.shopItems.put(category.getDisplayItem(), category.getSlot());
+        for (final Category category : categories) {
+            if (category.isInGUI()) {
+                final int slot = category.getSlot();
+
+                if (slot > this.inventorySize) continue;
+
+                this.shopItems.put(category.getDisplayItem(), slot);
             }
 
-            LostBook lostBook = category.getLostBook();
+            final LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI()) {
-                if (lostBook.getSlot() > this.inventorySize) continue;
+                final int slot = lostBook.getSlot();
 
-                this.shopItems.put(lostBook.getDisplayItem(), lostBook.getSlot());
+                if (slot > this.inventorySize) continue;
+
+                this.shopItems.put(lostBook.getDisplayItem(), slot);
             }
         }
 
-        for (ShopOption option : ShopOption.values()) {
-            if (option.isInGUI()) {
-                if (option.getSlot() > this.inventorySize) continue;
+        final ShopOption[] options = ShopOption.values();
 
-                this.shopItems.put(option.getItemBuilder(), option.getSlot());
-            }
+        for (final ShopOption option : options) {
+            if (!option.isInGUI()) continue;
+
+            final int slot = option.getSlot();
+
+            if (slot > this.inventorySize) continue;
+
+            this.shopItems.put(option.getItemBuilder(), slot);
         }
     }
 

@@ -1,33 +1,28 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.utils.RandomUtils;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CEnchantment {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CategoryManager categoryManager = this.plugin.getCategoryManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
-
-    private final Starter starter = this.plugin.getStarter();
-
-    private final Methods methods = this.starter.getMethods();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private String name;
     private String customName;
@@ -180,7 +175,7 @@ public class CEnchantment {
 
     public boolean chanceSuccessful(final int enchantmentLevel, final double multiplier) {
         int newChance = this.chance + (this.chanceIncrease * (enchantmentLevel - 1));
-        int pickedChance = this.methods.getRandomNumber (0, 100);
+        int pickedChance = RandomUtils.getRandomNumber(0, 100);
 
         newChance = (int) (newChance * multiplier);
 
@@ -212,10 +207,16 @@ public class CEnchantment {
     }
 
     public CEnchantment setCategories(@NotNull final List<String> categories) {
-        for (String categoryString : categories) {
-            Category category = this.enchantmentBookSettings.getCategory(categoryString);
+        for (String name : categories) {
+            final Optional<Category> category = this.categoryManager.getCategory(name);
 
-            if (category != null) this.categories.add(category);
+            if (category.isEmpty()) {
+                //todo() debug
+
+                continue;
+            }
+
+            this.categories.add(category.get());
         }
 
         return this;

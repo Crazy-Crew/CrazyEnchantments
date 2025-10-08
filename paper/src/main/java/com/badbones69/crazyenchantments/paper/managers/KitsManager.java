@@ -31,7 +31,11 @@ public class KitsManager {
     private boolean isRegistered = false;
 
     public void init() {
-        if (!this.options.isGkitzToggle()) return;
+        if (!this.options.isGkitzToggle()) {
+            this.kits.clear();
+
+            return;
+        }
 
         final YamlConfiguration kits = FileKeys.gkitz.getYamlConfiguration();
 
@@ -42,6 +46,8 @@ public class KitsManager {
 
             return;
         }
+
+        this.kits.clear();
 
         for (final String kitName : section.getKeys(false)) {
             final ConfigurationSection kitSection = section.getConfigurationSection(kitName);

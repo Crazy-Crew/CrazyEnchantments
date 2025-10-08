@@ -221,7 +221,7 @@ public class DustControlListener implements Listener {
             if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle", true)) {
                 final List<Color> colors = new ArrayList<>();
 
-                ColorUtils.color(colors, config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime"));
+                ColorUtils.color(config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime"));
 
                 this.methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }

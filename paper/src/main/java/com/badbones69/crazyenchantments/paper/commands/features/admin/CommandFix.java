@@ -15,6 +15,8 @@ import java.util.List;
 
 public class CommandFix extends BaseCommand {
 
+
+
     @Command("fix")
     @Permission(value = "crazyenchantments.fix", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments fix")
@@ -42,9 +44,9 @@ public class CommandFix extends BaseCommand {
             configuration.set(path + ".Info.Name", "&e&l" + enchantment.getName() + " &7(&bI&7)");
             configuration.set(path + ".Info.Description", enchantment.getDescription());
 
-            List<String> categories = new ArrayList<>();
+            final List<String> categories = new ArrayList<>();
 
-            this.enchantmentBookSettings.getCategories().forEach(category -> categories.add(category.getName()));
+            this.categoryManager.getCategories().values().forEach(category -> categories.add(category.getName()));
 
             configuration.set(path + ".Categories", categories);
 

@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -42,20 +43,17 @@ import java.util.stream.Stream;
 public class CrazyInstance {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
     private final PaperFileManager fileManager = this.plugin.getFileManager();
-
-    private final KitsManager kitsManager = this.plugin.getKitsManager();
-
     private final ConfigOptions options = this.plugin.getOptions();
-
     private final FusionPaper fusion = this.plugin.getFusion();
-
     private final Path path = this.plugin.getDataPath();
 
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
+
+    private CategoryManager categoryManager;
+    private KitsManager kitsManager;
 
     public void init() {
         final List<String> blocks = ConfigUtils.getStringList(FileKeys.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
@@ -74,6 +72,10 @@ public class CrazyInstance {
 
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
+        this.categoryManager = new CategoryManager();
+        this.kitsManager = new KitsManager();
+
+        this.categoryManager.init(); // update categories
         this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
@@ -107,6 +109,7 @@ public class CrazyInstance {
 
         this.options.init(config); // re-map to objects
 
+        this.categoryManager.init(); // update categories
         this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
@@ -442,5 +445,13 @@ public class CrazyInstance {
 
     public @NotNull final ItemBuilder getEnchantmentBookBuilder() {
         return new ItemBuilder(this.options.getEnchantBook());
+    }
+
+    public @NotNull final CategoryManager getCategoryManager() {
+        return categoryManager;
+    }
+
+    public @NotNull final KitsManager getKitsManager() {
+        return kitsManager;
     }
 }

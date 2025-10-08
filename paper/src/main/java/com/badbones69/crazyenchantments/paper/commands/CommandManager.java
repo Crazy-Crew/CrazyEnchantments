@@ -17,7 +17,7 @@ import com.badbones69.crazyenchantments.paper.commands.features.base.CommandLimi
 import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.CommandBlackSmith;
 import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.CommandTinker;
 import com.badbones69.crazyenchantments.paper.commands.relations.ArgumentRelations;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.ryderbelserion.fusion.paper.builders.PlayerBuilder;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
@@ -31,16 +31,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class CommandManager {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CategoryManager categoryManager = plugin.getCategoryManager();
     private static final KitsManager kitsManager = plugin.getKitsManager();
     private static final CrazyInstance instance = plugin.getInstance();
-    private static final EnchantmentBookSettings settings = plugin.getStarter().getEnchantmentBookSettings();
     private static final Server server = plugin.getServer();
 
     private static final BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(plugin);
@@ -53,7 +51,7 @@ public class CommandManager {
 
         commandManager.registerArgument(GKitz.class, (sender, argument) -> kitsManager.getKitByName(argument));
         commandManager.registerArgument(Dust.class, (sender, argument) -> Dust.valueOf(argument));
-        commandManager.registerArgument(Category.class, (sender, argument) -> settings.getCategory(argument));
+        commandManager.registerArgument(Category.class, (sender, argument) -> categoryManager.getCategory(argument));
         commandManager.registerArgument(Scrolls.class, (sender, argument) -> Scrolls.getFromName(argument));
         commandManager.registerArgument(CEnchantment.class, (sender, argument) -> instance.getEnchantmentFromName(argument));
         commandManager.registerArgument(World.class, (sender, argument) -> server.getWorld(argument));
@@ -79,15 +77,9 @@ public class CommandManager {
         });
 
         commandManager.registerSuggestion(Category.class, (context) -> {
-            final List<String> list = new ArrayList<>();
+            final Set<String> categories = categoryManager.getCategories().keySet();
 
-            for (Category category : settings.getCategories()) {
-                try {
-                    list.add(category.getName());
-                } catch (NullPointerException ignore) {}
-            }
-
-            return list;
+            return new ArrayList<>(categories);
         });
 
         commandManager.registerSuggestion(Dust.class, (context) -> {
