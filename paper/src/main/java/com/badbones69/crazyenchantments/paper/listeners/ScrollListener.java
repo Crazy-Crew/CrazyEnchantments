@@ -15,7 +15,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -45,8 +44,6 @@ public class ScrollListener implements Listener {
     private final Starter starter = this.plugin.getStarter();
 
     private final Methods methods = this.starter.getMethods();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private String suffix;
     private boolean countVanillaEnchantments;
@@ -107,7 +104,7 @@ public class ScrollListener implements Listener {
                     Random random = new Random();
 
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
-                    player.getInventory().addItem(new CEBook(enchantment, this.enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
+                    player.getInventory().addItem(new CEBook(enchantment, this.instance.getLevel(item, enchantment), 1).buildBook());
 
                     event.setCurrentItem(this.instance.removeEnchantment(item, enchantment));
                 }

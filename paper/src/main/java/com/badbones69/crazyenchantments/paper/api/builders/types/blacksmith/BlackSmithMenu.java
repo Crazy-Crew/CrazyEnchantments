@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -71,9 +70,6 @@ public class BlackSmithMenu extends InventoryBuilder {
 
         @NotNull
         private final Methods methods = this.starter.getMethods();
-
-        @NotNull
-        private final EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
 
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {

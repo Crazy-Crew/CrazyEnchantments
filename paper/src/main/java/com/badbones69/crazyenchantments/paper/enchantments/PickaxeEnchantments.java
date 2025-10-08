@@ -11,7 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -49,9 +48,6 @@ public class PickaxeEnchantments implements Listener {
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final Map<Player, Map<Block, BlockFace>> blocks = new HashMap<>();
 
@@ -97,7 +93,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return;
 
-        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (enchantmentBookSettings.getLevel(currentItem, CEnchantments.BLAST.getEnchantment()) - 1));
+        Set<Block> blockList = getBlocks(initialBlock.getLocation(), this.blocks.get(player).get(initialBlock), (this.instance.getLevel(currentItem, CEnchantments.BLAST.getEnchantment()) - 1));
 
         this.blocks.remove(player);
 

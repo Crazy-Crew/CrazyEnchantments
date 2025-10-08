@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
@@ -36,7 +35,6 @@ public class Starter {
 
     // Settings.
     private ProtectionCrystalSettings protectionCrystalSettings;
-    private EnchantmentBookSettings enchantmentBookSettings;
 
     // Plugin Utils.
     private BowUtils bowUtils;
@@ -74,7 +72,6 @@ public class Starter {
 
         // Settings.
         this.protectionCrystalSettings = new ProtectionCrystalSettings();
-        this.enchantmentBookSettings = new EnchantmentBookSettings();
 
         BlackSmithManager.load();
         KitsManager.load();
@@ -122,10 +119,6 @@ public class Starter {
     // Settings.
     public ProtectionCrystalSettings getProtectionCrystalSettings() {
         return this.protectionCrystalSettings;
-    }
-
-    public EnchantmentBookSettings getEnchantmentBookSettings() {
-        return this.enchantmentBookSettings;
     }
 
     // Plugin Support.

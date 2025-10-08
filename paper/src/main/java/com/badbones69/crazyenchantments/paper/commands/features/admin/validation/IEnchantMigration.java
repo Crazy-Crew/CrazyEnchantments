@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.command.CommandSender;
@@ -25,8 +24,6 @@ public abstract class IEnchantMigration {
     protected final FusionPaper fusion = this.plugin.getFusion();
 
     protected final StringUtils utils = this.fusion.getStringUtils();
-
-    protected final EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
 
     protected final CommandSender sender;
     protected Player player = null;

@@ -239,6 +239,16 @@ public class CrazyInstance {
         return new CEBook(enchantment, data.getLevel(), book.getAmount()).setSuccessRate(data.getSuccessChance()).setDestroyRate(data.getDestroyChance());
     }
 
+    public int getLevel(@NotNull final ItemStack item, @NotNull final CEnchantment enchant) {
+        final String data = item.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
+
+        int level = data == null ? 0 : Methods.getGson().fromJson(data, Enchant.class).getLevel(enchant.getName());
+
+        if (!this.options.isUseUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
+
+        return level;
+    }
+
     public @Nullable final ItemStack getScrambledBook(@NotNull final ItemStack book) {
         final PersistentDataContainerView view = book.getPersistentDataContainer();
 
