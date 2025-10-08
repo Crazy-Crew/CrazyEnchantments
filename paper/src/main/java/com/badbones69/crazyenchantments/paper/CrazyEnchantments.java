@@ -27,6 +27,7 @@ import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListene
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
+import com.ryderbelserion.fusion.core.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bstats.bukkit.Metrics;
@@ -68,7 +69,6 @@ public class CrazyEnchantments extends JavaPlugin {
 
         List.of(
                 "config.yml",
-                "BlockList.yml",
                 "Data.yml",
                 "Enchantment-Types.yml",
                 "Enchantments.yml",
@@ -77,6 +77,8 @@ public class CrazyEnchantments extends JavaPlugin {
                 "Messages.yml",
                 "Tinker.yml"
         ).forEach(file -> this.fileManager.addPaperFile(path.resolve(file)));
+
+        this.fileManager.addFile(path.resolve("blocks.json"), FileType.JSON);
 
         this.options = new ConfigOptions();
         this.options.init(FileKeys.config.getYamlConfiguration());

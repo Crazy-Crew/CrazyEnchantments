@@ -203,14 +203,15 @@ public class CrazyInstance {
 
             List.of(
                     "config.yml",
-                    "BlockList.yml",
                     "Data.yml",
                     "Enchantment-Types.yml",
                     "Enchantments.yml",
                     "GKitz.yml",
                     "HeadMap.yml",
                     "Messages.yml",
-                    "Tinker.yml"
+                    "Tinker.yml",
+
+                    "blocks.json"
             ).forEach(file -> this.fileManager.extractFile(this.path.resolve("examples").resolve(file)));
         }
     }
