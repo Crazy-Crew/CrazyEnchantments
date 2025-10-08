@@ -53,7 +53,7 @@ public class CrazyInstance {
 
     private final Path path = this.plugin.getDataPath();
 
-    private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
+    private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
 
