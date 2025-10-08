@@ -23,7 +23,7 @@ public class MigrateManager {
 
         File secondFile = new File(plugin.getDataFolder() + "/Tinker-v1.yml");
 
-        YamlConfiguration TINKER = FileKeys.tinker.getConfiguration();
+        YamlConfiguration TINKER = FileKeys.tinker.getYamlConfiguration();
 
         if (TINKER.getDouble("Settings.Tinker-Version", 1.1) >= tinkerVersion) {
             plugin.getLogger().info("Tinker.yml is up to date.");

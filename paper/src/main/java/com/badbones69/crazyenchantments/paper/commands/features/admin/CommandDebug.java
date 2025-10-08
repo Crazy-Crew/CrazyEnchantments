@@ -23,7 +23,7 @@ public class CommandDebug extends BaseCommand {
         List<String> brokenEnchantments = new ArrayList<>();
         List<String> brokenEnchantmentTypes = new ArrayList<>();
 
-        final YamlConfiguration configuration = FileKeys.enchantments.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.enchantments.getYamlConfiguration();
 
         for (CEnchantments enchantment : CEnchantments.values()) {
             if (!configuration.contains("Enchantments." + enchantment.getName())) brokenEnchantments.add(enchantment.getName());

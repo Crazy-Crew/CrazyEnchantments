@@ -55,7 +55,7 @@ public class ScrollListener implements Listener {
     private int blackScrollChance;
 
     public void loadScrollControl() {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
         this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments", true);
@@ -181,7 +181,7 @@ public class ScrollListener implements Listener {
     }
 
     private ItemStack newOrderNewEnchantments(@NotNull final ItemStack item) {
-        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
 
         final List<Component> lore = item.lore();
 
@@ -257,8 +257,8 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull final PersistentDataContainerView container) {
         final List<Component> lore = new ArrayList<>();
 
-        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
-        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
+        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
+        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
 
         return lore;
     }
@@ -277,7 +277,7 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                ColorUtils.stripStringColour(FileKeys.config.getConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
+                ColorUtils.stripStringColour(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
         ));
 
         return lore;

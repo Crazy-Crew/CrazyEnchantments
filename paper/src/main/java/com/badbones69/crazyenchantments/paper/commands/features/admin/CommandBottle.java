@@ -27,7 +27,7 @@ public class CommandBottle extends BaseCommand {
             return;
         }
 
-        final ItemStack itemStack = TinkererManager.getXPBottle(xp, FileKeys.tinker.getConfiguration());
+        final ItemStack itemStack = TinkererManager.getXPBottle(xp, FileKeys.tinker.getYamlConfiguration());
 
         if (itemStack == null) {
             return;

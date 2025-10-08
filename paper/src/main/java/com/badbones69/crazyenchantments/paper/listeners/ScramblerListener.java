@@ -53,7 +53,7 @@ public class ScramblerListener implements Listener {
     private String guiName;
 
     public void loadScrambler() {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.scramblerItem = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))

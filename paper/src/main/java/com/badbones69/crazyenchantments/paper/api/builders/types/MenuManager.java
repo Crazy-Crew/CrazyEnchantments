@@ -14,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,7 +32,7 @@ public class MenuManager {
     public static void load() {
         enchantmentTypes.clear();
 
-        YamlConfiguration file = FileKeys.enchantment_types.getConfiguration();
+        YamlConfiguration file = FileKeys.enchantment_types.getYamlConfiguration();
 
         final ConfigurationSection section = file.getConfigurationSection("Types");
 
@@ -53,7 +52,7 @@ public class MenuManager {
     }
 
     public static void openKitsMenu(@NotNull final Player player) {
-        YamlConfiguration gkitz = FileKeys.gkitz.getConfiguration();
+        YamlConfiguration gkitz = FileKeys.gkitz.getYamlConfiguration();
 
         player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
     }
@@ -81,6 +80,6 @@ public class MenuManager {
     }
 
     public static void openTinkererMenu(@NotNull final Player player) {
-        player.openInventory(new TinkererMenu(player, 54, FileKeys.tinker.getConfiguration().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
+        player.openInventory(new TinkererMenu(player, 54, FileKeys.tinker.getYamlConfiguration().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
     }
 }

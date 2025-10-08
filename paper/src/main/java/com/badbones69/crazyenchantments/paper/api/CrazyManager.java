@@ -129,10 +129,9 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-        final YamlConfiguration enchants = FileKeys.enchantments.getConfiguration();
+        final YamlConfiguration enchants = FileKeys.enchantments.getYamlConfiguration();
 
-        final YamlConfiguration blocks = FileKeys.blocklist.getConfiguration();
-        final YamlConfiguration heads = FileKeys.head_map.getConfiguration();
+        final YamlConfiguration heads = FileKeys.head_map.getYamlConfiguration();
 
         this.blockList.clear();
         this.headMap.clear();
@@ -275,7 +274,7 @@ public class CrazyManager {
      * @param player The player you wish to load.
      */
     public void loadCEPlayer(@NotNull final Player player) {
-        final YamlConfiguration data = FileKeys.data.getConfiguration();
+        final YamlConfiguration data = FileKeys.data.getYamlConfiguration();
 
         String uuid = player.getUniqueId().toString();
 
@@ -298,7 +297,7 @@ public class CrazyManager {
      * @param player Player you wish to remove.
      */
     public void unloadCEPlayer(@NotNull final Player player) {
-        final YamlConfiguration data = FileKeys.data.getConfiguration();
+        final YamlConfiguration data = FileKeys.data.getYamlConfiguration();
 
         String uuid = player.getUniqueId().toString();
         CEPlayer cePlayer = getCEPlayer(player);
@@ -329,7 +328,7 @@ public class CrazyManager {
      * @param cePlayer The player you wish to back up.
      */
     private void backupCEPlayer(@NotNull final CEPlayer cePlayer) {
-        final YamlConfiguration data = FileKeys.data.getConfiguration();
+        final YamlConfiguration data = FileKeys.data.getYamlConfiguration();
 
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
 

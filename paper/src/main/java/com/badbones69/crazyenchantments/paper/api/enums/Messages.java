@@ -145,7 +145,7 @@ public enum Messages {
     }
     
     public static void addMissingMessages() {
-        final YamlConfiguration config = FileKeys.messages.getConfiguration();
+        final YamlConfiguration config = FileKeys.messages.getYamlConfiguration();
 
         boolean saveFile = false;
 
@@ -235,7 +235,7 @@ public enum Messages {
         boolean isList = isList();
         boolean exists = exists();
 
-        final YamlConfiguration config = FileKeys.messages.getConfiguration();
+        final YamlConfiguration config = FileKeys.messages.getYamlConfiguration();
 
         if (isList) {
             if (exists) {
@@ -268,11 +268,11 @@ public enum Messages {
     }
     
     private boolean exists() {
-        return FileKeys.messages.getConfiguration().contains("Messages." + path);
+        return FileKeys.messages.getYamlConfiguration().contains("Messages." + path);
     }
     
     private boolean isList() {
-        final YamlConfiguration config = FileKeys.messages.getConfiguration();
+        final YamlConfiguration config = FileKeys.messages.getYamlConfiguration();
 
         if (config.contains("Messages." + this.path)) {
             return !config.getStringList("Messages." + this.path).isEmpty();

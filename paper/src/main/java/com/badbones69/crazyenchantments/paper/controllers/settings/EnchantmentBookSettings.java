@@ -37,7 +37,7 @@ public class EnchantmentBookSettings {
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
     }
@@ -55,7 +55,7 @@ public class EnchantmentBookSettings {
      * Loads in all config options.
      */
     public void populateMaps() {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         final ConfigurationSection section = config.getConfigurationSection("Categories");
 

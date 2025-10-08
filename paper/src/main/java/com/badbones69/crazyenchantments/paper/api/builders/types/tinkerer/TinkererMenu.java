@@ -40,7 +40,7 @@ public class TinkererMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
 
         final ItemStack button = new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE)
                 .setName(configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
@@ -70,12 +70,11 @@ public class TinkererMenu extends InventoryBuilder {
 
         @EventHandler
         public void onExperienceUse(PlayerInteractEvent event) {
-
             if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
 
             Player player = event.getPlayer();
 
-            final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+            final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
 
             if (TinkererManager.useExperience(player, event, true, configuration)) return;
 
@@ -103,7 +102,7 @@ public class TinkererMenu extends InventoryBuilder {
                 int total = 0;
                 boolean toggle = false;
 
-                final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+                final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
 
                 final Currency currency = Currency.getCurrency(configuration.getString("Settings.Currency", "XP_LEVEL"));
 
@@ -139,7 +138,7 @@ public class TinkererMenu extends InventoryBuilder {
 
             if (current.getType().toString().endsWith("STAINED_GLASS_PANE")) return;
 
-            final YamlConfiguration configuration = FileKeys.tinker.getConfiguration();
+            final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
 
             // Adding/taking items.
             if (this.instance.isEnchantmentBook(current)) { // Adding a book.

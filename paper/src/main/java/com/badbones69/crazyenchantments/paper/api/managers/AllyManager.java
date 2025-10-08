@@ -28,7 +28,7 @@ public class AllyManager {
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
     
     public void load() {
-        YamlConfiguration configuration = FileKeys.config.getConfiguration();
+        YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
 
         String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
 

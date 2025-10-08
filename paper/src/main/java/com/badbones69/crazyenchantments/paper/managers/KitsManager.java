@@ -33,7 +33,7 @@ public class KitsManager {
     public void init() {
         if (!this.options.isGkitzToggle()) return;
 
-        final YamlConfiguration kits = FileKeys.gkitz.getConfiguration();
+        final YamlConfiguration kits = FileKeys.gkitz.getYamlConfiguration();
 
         final ConfigurationSection section = kits.getConfigurationSection("GKitz");
 

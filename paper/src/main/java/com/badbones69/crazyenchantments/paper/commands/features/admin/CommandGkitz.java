@@ -44,7 +44,7 @@ public class CommandGkitz {
 
         if (this.crazyManager.getCEPlayer(player) == null) this.crazyManager.loadCEPlayer(player);
 
-        final YamlConfiguration gkitz = FileKeys.gkitz.getConfiguration();
+        final YamlConfiguration gkitz = FileKeys.gkitz.getYamlConfiguration();
 
         player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 54), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
     }

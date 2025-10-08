@@ -44,7 +44,7 @@ public class KitsMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        final YamlConfiguration configuration = FileKeys.gkitz.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.gkitz.getYamlConfiguration();
 
         for (String value : configuration.getStringList("Settings.GUI-Customization")) {
             int slot = 0;

@@ -41,7 +41,7 @@ public class ShopManager {
         this.customizerItems.clear();
         this.shopItems.clear();
 
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.inventoryName = ColorUtils.color(this.options.getInventoryName());
         this.inventorySize = this.options.getInventorySize();

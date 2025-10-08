@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +28,8 @@ public class WingsManager {
     
     public void load() {
         this.isWingsEnabled = CEnchantments.WINGS.isActivated();
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         String path = "Settings.EnchantmentOptions.Wings.";
         this.isCloudsEnabled = config.getBoolean(path + "Clouds", true);

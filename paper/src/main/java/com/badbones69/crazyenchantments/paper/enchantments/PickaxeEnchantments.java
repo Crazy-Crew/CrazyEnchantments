@@ -89,7 +89,7 @@ public class PickaxeEnchantments implements Listener {
 
         Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
 
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         boolean damage = config.getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability", true);
 
@@ -131,7 +131,7 @@ public class PickaxeEnchantments implements Listener {
 
         Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
 
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         boolean damage = config.getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
 

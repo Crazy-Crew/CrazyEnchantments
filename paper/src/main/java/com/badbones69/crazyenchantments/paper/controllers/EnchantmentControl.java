@@ -50,7 +50,7 @@ public class EnchantmentControl implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void useEnchantedBook(InventoryClickEvent event) {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         Player player = (Player) event.getWhoClicked();
 
@@ -211,7 +211,7 @@ public class EnchantmentControl implements Listener {
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.useInteractedBlock().equals(Event.Result.ALLOW)) return;
 
-        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && FileKeys.config.getConfiguration().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description", true)) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && FileKeys.config.getYamlConfiguration().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description", true)) {
             ItemStack item = this.methods.getItemInHand(event.getPlayer());
 
             final CEBook book = this.instance.getBook(item);

@@ -16,7 +16,7 @@ public class KitsManager {
     private static ItemStack backRight, backLeft;
 
     public static void load() {
-        YamlConfiguration file = FileKeys.enchantment_types.getConfiguration();
+        YamlConfiguration file = FileKeys.enchantment_types.getYamlConfiguration();
 
         String path = "Info-GUI-Settings";
 

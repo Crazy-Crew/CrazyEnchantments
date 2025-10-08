@@ -85,7 +85,7 @@ public class LostBook {
     }
 
     public ItemBuilder getLostBook(@NotNull final Category category, final int amount) {
-        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
 
         final Map<String, String> placeholders = new HashMap<>();
 

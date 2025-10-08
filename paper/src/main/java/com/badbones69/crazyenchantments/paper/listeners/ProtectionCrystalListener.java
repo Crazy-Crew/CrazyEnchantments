@@ -92,7 +92,7 @@ public class ProtectionCrystalListener implements Listener {
         if (this.protectionCrystalSettings.containsPlayer(player)) {
             final PlayerInventory inventory = player.getInventory();
 
-            final YamlConfiguration config = FileKeys.config.getConfiguration();
+            final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
             // If the config does not have the option then it will lose the protection by default.
             if (config.getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death", true)) {

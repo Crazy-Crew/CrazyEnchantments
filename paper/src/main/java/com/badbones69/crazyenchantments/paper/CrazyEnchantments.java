@@ -79,7 +79,7 @@ public class CrazyEnchantments extends JavaPlugin {
         ).forEach(file -> this.fileManager.addPaperFile(path.resolve(file)));
 
         this.options = new ConfigOptions();
-        this.options.init(FileKeys.config.getConfiguration());
+        this.options.init(FileKeys.config.getYamlConfiguration());
 
         if (this.options.isToggleMetrics()) { // Enable bStats
             new Metrics(this, 4494);

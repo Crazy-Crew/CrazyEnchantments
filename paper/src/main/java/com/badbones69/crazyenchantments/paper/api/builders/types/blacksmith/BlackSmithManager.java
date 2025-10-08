@@ -38,14 +38,14 @@ public class BlackSmithManager {
         grayGlass = new ItemBuilder().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build();
         blueGlass = new ItemBuilder().setMaterial(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setName(" ").build();
 
-        get(FileKeys.config.getConfiguration());
+        get(FileKeys.config.getYamlConfiguration());
     }
 
     /**
      * Refreshes the values that require config options.
      */
     public static void refresh() {
-        get(FileKeys.config.getConfiguration());
+        get(FileKeys.config.getYamlConfiguration());
     }
 
     /**

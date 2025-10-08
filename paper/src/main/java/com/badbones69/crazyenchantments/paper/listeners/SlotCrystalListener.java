@@ -33,7 +33,7 @@ public class SlotCrystalListener implements Listener {
     private static ItemStack slot_crystal;
 
     public void load() {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         slot_crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
