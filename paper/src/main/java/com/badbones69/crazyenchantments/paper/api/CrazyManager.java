@@ -121,7 +121,6 @@ public class CrazyManager {
 
     // Arrays.
     private final List<CEPlayer> players = new ArrayList<>();
-    private final List<Material> blockList = new ArrayList<>();
     private final Map<Material, Double> headMap = new HashMap<>();
 
     /**
@@ -133,7 +132,6 @@ public class CrazyManager {
 
         final YamlConfiguration heads = FileKeys.head_map.getYamlConfiguration();
 
-        this.blockList.clear();
         this.headMap.clear();
 
         this.instance.purgeEnchantments();
@@ -167,13 +165,6 @@ public class CrazyManager {
 
         // Invalidate cached enchants.
         CEnchantments.invalidateCachedEnchants();
-
-        // Loop through block list.
-        blocks.getStringList("Block-List").forEach(id -> {
-            try {
-                this.blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
-            } catch (Exception ignored) {}
-        });
 
         ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
 
@@ -711,13 +702,6 @@ public class CrazyManager {
      */
     public Map<Material, Double> getDecapitationHeadMap() {
         return this.headMap;
-    }
-
-    /**
-     * @return The block list for blast.
-     */
-    public List<Material> getBlastBlockList() {
-        return this.blockList;
     }
 
     private void addCEPlayer(@NotNull final CEPlayer player) {

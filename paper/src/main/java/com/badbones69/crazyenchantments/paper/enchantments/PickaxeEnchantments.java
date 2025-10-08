@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
@@ -52,9 +51,6 @@ public class PickaxeEnchantments implements Listener {
     private final Methods methods = this.starter.getMethods();
 
     @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final Map<Player, Map<Block, BlockFace>> blocks = new HashMap<>();
@@ -65,11 +61,15 @@ public class PickaxeEnchantments implements Listener {
 
         if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
 
-        Block block = event.getClickedBlock();
+        final Block block = event.getClickedBlock();
 
-        if (block == null || block.isEmpty() || !this.crazyManager.getBlastBlockList().contains(block.getType())) return;
+        if (block == null || block.isEmpty()) return;
 
-        Map<Block, BlockFace> blockFace = new HashMap<>();
+        final Material type = block.getType();
+
+        if (!this.instance.hasBlock(type.getKey().asMinimalString())) return;
+
+        final Map<Block, BlockFace> blockFace = new HashMap<>();
 
         blockFace.put(block, event.getBlockFace());
 
@@ -105,8 +105,9 @@ public class PickaxeEnchantments implements Listener {
 
         event.setCancelled(true);
 
-        for (Block block : blockList) {
-            if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
+        for (final Block block : blockList) {
+            if (block.isEmpty()) continue;
+            if (!this.instance.hasBlock(block.getType().key().asMinimalString())) continue;
 
             if (this.methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksBlast())) continue;
 

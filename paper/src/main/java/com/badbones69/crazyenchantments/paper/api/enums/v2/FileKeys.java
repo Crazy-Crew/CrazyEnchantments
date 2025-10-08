@@ -3,18 +3,22 @@ package com.badbones69.crazyenchantments.paper.api.enums.v2;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
 import com.ryderbelserion.fusion.core.files.enums.FileType;
+import com.ryderbelserion.fusion.core.files.types.JsonCustomFile;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.BasicConfigurationNode;
 import java.nio.file.Path;
 import java.util.Optional;
 
 public enum FileKeys {
 
     config(FileType.PAPER, "config.yml"),
-    blocklist(FileType.PAPER, "BlockList.yml"),
+
+    blocks(FileType.JSON, "blocks.json"),
+
     data(FileType.PAPER, "Data.yml"),
     enchantment_types(FileType.PAPER, "Enchantment-Types.yml"),
     enchantments(FileType.PAPER, "Enchantments.yml"),
@@ -43,7 +47,21 @@ public enum FileKeys {
         this.fileType = fileType;
     }
 
-    public @NotNull final YamlConfiguration getConfiguration() {
+    public @NotNull final BasicConfigurationNode getJsonConfiguration() {
+        return getJsonCustomFile().getConfiguration();
+    }
+
+    public @NotNull final JsonCustomFile getJsonCustomFile() {
+        @NotNull final Optional<JsonCustomFile> customFile = this.fileManager.getJsonFile(this.location);
+
+        if (customFile.isEmpty()) {
+            throw new FusionException("Could not find custom file for " + this.location);
+        }
+
+        return customFile.get();
+    }
+
+    public @NotNull final YamlConfiguration getYamlConfiguration() {
         return getPaperCustomFile().getConfiguration();
     }
 

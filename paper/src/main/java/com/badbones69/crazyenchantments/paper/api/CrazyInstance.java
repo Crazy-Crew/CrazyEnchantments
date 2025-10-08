@@ -18,9 +18,9 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
-import com.google.common.collect.Lists;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
+import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -28,6 +28,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -54,9 +55,24 @@ public class CrazyInstance {
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
+    private final List<String> blocks = new ArrayList<>();
 
     public void init() {
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        final List<String> blocks = ConfigUtils.getStringList(FileKeys.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
+
+        for (final String block : blocks) {
+            final ItemType itemType = ItemUtils.getItemType(block);
+
+            if (itemType == null) {
+                this.fusion.log("warn", "Failed to fetch ItemType from {}", block);
+
+                continue;
+            }
+
+            this.blocks.add(block);
+        }
+
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.kitsManager.init(); // update kits
 
@@ -70,7 +86,24 @@ public class CrazyInstance {
 
         this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); // refresh files
 
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
+        // clear, and re-fill list with new blocks.
+        this.blocks.clear();
+
+        final List<String> blocks = ConfigUtils.getStringList(FileKeys.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
+
+        for (final String block : blocks) {
+            final ItemType itemType = ItemUtils.getItemType(block);
+
+            if (itemType == null) {
+                this.fusion.log("warn", "Failed to fetch ItemType from {}", block);
+
+                continue;
+            }
+
+            this.blocks.add(block);
+        }
+
+        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.options.init(config); // re-map to objects
 
@@ -140,8 +173,16 @@ public class CrazyInstance {
         }
     }
 
-    public final Map<ShopOption, CEOption> getShopOptions() {
+    public @NotNull final Map<ShopOption, CEOption> getShopOptions() {
         return Collections.unmodifiableMap(this.shopOptions);
+    }
+
+    public final boolean hasBlock(@NotNull final String itemType) {
+        return this.blocks.contains(itemType);
+    }
+
+    public @NotNull final List<String> getBlocks() {
+        return Collections.unmodifiableList(this.blocks);
     }
 
     public void loadExamples() {
