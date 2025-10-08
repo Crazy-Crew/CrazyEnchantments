@@ -16,7 +16,11 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.paper.support.mods.Dependencies;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
+import com.ryderbelserion.fusion.core.api.interfaces.mods.IMod;
+import com.ryderbelserion.fusion.core.api.support.ModManager;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -51,6 +55,10 @@ public class ArmorEnchantments implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
+
+    private final ModManager modManager = this.fusion.getModManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
@@ -346,7 +354,13 @@ public class ArmorEnchantments implements Listener {
         Player other = event.getOther();
 
         if (!player.canSee(other) || !other.canSee(player)) return;
-        if (this.pluginSupport.isVanished(player) || this.pluginSupport.isVanished(other)) return;
+
+        final IMod genericVanish = this.modManager.getMod(Dependencies.generic_vanish);
+
+        final UUID uuid = player.getUniqueId();
+        final UUID otherUUID = other.getUniqueId();
+
+        if (genericVanish.isVanished(uuid) || genericVanish.isVanished(otherUUID)) return;
 
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();

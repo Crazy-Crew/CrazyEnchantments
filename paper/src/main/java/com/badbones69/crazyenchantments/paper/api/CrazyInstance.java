@@ -19,6 +19,9 @@ import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
+import com.badbones69.crazyenchantments.paper.support.mods.Dependencies;
+import com.badbones69.crazyenchantments.paper.support.mods.vanish.GenericVanishMod;
+import com.ryderbelserion.fusion.core.api.support.ModManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
@@ -46,6 +49,7 @@ public class CrazyInstance {
     private final PaperFileManager fileManager = this.plugin.getFileManager();
     private final ConfigOptions options = this.plugin.getOptions();
     private final FusionPaper fusion = this.plugin.getFusion();
+    private final ModManager modManager = this.fusion.getModManager();
     private final Path path = this.plugin.getDataPath();
 
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
@@ -56,6 +60,8 @@ public class CrazyInstance {
     private KitsManager kitsManager;
 
     public void init() {
+        this.modManager.addMod(Dependencies.generic_vanish, new GenericVanishMod());
+
         final List<String> blocks = ConfigUtils.getStringList(FileKeys.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
 
         for (final String block : blocks) {

@@ -14,7 +14,6 @@ import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -58,14 +57,6 @@ public class PluginSupport { //todo() nah redo this whole shit show
 
         return false;
 
-    }
-
-    public boolean isVanished(@NotNull final Player player) {
-        for (MetadataValue meta : player.getMetadata("vanished")) {
-            if (meta.asBoolean()) return true;
-        }
-
-        return false;
     }
 
     public boolean allowCombat(@NotNull final Location location) {
