@@ -39,6 +39,8 @@ triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 fusion = "2.9.10" # https://github.com/ryderbelserion/Fusion
 bStats = "3.1.0" # https://github.com/Bastian/bStats
 
+hikari = "4.0.3"
+
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
@@ -103,6 +105,8 @@ paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1
 
 # https://github.com/Bastian/bStats
 metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
+
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 
 [bundles]
 shared = [

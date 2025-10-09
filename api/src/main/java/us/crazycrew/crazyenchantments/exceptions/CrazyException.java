@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.exceptions;
+package us.crazycrew.crazyenchantments.exceptions;
 
 import org.jetbrains.annotations.NotNull;
 
