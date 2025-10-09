@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
+import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -41,25 +42,11 @@ public class ScrollListener implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
+    private final ConfigOptions options = this.plugin.getOptions();
+
     private final Starter starter = this.plugin.getStarter();
 
     private final Methods methods = this.starter.getMethods();
-
-    private String suffix;
-    private boolean countVanillaEnchantments;
-    private boolean useSuffix;
-    private boolean blackScrollChanceToggle;
-    private int blackScrollChance;
-
-    public void loadScrollControl() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
-
-        this.suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
-        this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments", true);
-        this.useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle", true);
-        this.blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
-        this.blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle", false);
-    }
 
     @EventHandler(ignoreCancelled = true)
     public void onScrollUse(InventoryClickEvent event) {
@@ -95,7 +82,7 @@ public class ScrollListener implements Listener {
 
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
-                    if (this.blackScrollChanceToggle && !this.methods.randomPicker(this.blackScrollChance, 100)) {
+                    if (this.options.isBlackScrollChanceToggle() && !this.methods.randomPicker(this.options.getBlackScrollChance(), 100)) {
                         player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
 
                         return;
@@ -281,7 +268,7 @@ public class ScrollListener implements Listener {
     }
 
     private void useSuffix(@NotNull final ItemStack item, @NotNull final List<CEnchantment> newEnchantmentOrder) {
-        if (this.useSuffix) {
+        if (this.options.isUseSuffix()) {
             final boolean hasName = item.hasData(DataComponentTypes.ITEM_NAME);
 
             String newName = hasName ? ColorUtils.toLegacy(item.getData(DataComponentTypes.ITEM_NAME)) :
@@ -289,7 +276,7 @@ public class ScrollListener implements Listener {
 
             if (hasName) {
                 for (int i = 0; i <= 100; i++) {
-                    String suffixWithAmount = this.suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
+                    String suffixWithAmount = this.options.getSuffix().replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
 
                     if (!newName.endsWith(suffixWithAmount)) continue;
 
@@ -299,9 +286,9 @@ public class ScrollListener implements Listener {
                 }
             }
 
-            String amount = String.valueOf(this.countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
+            String amount = String.valueOf(this.options.isCountVanillaEnchantments() ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
 
-            item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.suffix.replace("%Amount%", amount).replace("%amount%", amount)));
+            item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.options.getSuffix().replace("%Amount%", amount).replace("%amount%", amount)));
         }
     }
 

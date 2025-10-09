@@ -26,10 +26,6 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
-import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
-import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
-import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
@@ -84,17 +80,6 @@ public class CrazyManager {
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    // Settings.
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
-
-    // Listeners.
-    @NotNull
-    private final ScrollListener scrollListener = this.starter.getScrollListener();
-
-    @NotNull
-    private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
 
     private CropManagerVersion cropManagerVersion;
 
@@ -218,13 +203,6 @@ public class CrazyManager {
         Scrolls.loadScrolls();
         // Load all dust types.
         Dust.loadDust();
-
-        // Loads the protection crystals.
-        this.protectionCrystalSettings.loadProtectionCrystal();
-        // Loads Slot Crystal.
-        this.slotCrystalListener.load();
-        // Loads the Scroll Control settings.
-        this.scrollListener.loadScrollControl();
 
         this.cropManagerVersion = new CropManager();
 

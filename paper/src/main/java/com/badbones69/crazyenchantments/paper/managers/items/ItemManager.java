@@ -4,7 +4,9 @@ import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.PointerItem;
+import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.ProtectionCrystalItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.ScramblerItem;
+import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.SlotCrystalItem;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
@@ -22,6 +24,8 @@ public class ItemManager {
     public void init() {
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
+        addItem("protection_crystal_item", new ProtectionCrystalItem());
+        addItem("slot_crystal_item", new SlotCrystalItem());
         addItem("scrambler_item", new ScramblerItem());
         addItem("pointer_item", new PointerItem());
 

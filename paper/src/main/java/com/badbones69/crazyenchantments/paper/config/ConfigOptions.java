@@ -2,12 +2,9 @@ package com.badbones69.crazyenchantments.paper.config;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.exceptions.CrazyException;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class ConfigOptions {
 
@@ -42,6 +39,12 @@ public class ConfigOptions {
     private int defaultBaseLimit;
     private boolean useEnchantmentLimiter;
     private boolean useConfigLimits;
+
+    private String suffix;
+    private boolean countVanillaEnchantments;
+    private boolean useSuffix;
+    private boolean blackScrollChanceToggle;
+    private int blackScrollChance;
 
     public void init(@NotNull final YamlConfiguration configuration) {
         if (configuration.contains("settings")) {
@@ -87,6 +90,32 @@ public class ConfigOptions {
 
         this.dropBlocksBlast = section.getBoolean("EnchantmentOptions.Drop-Blocks-For-Blast", true);
         this.dropBlocksVeinMiner = section.getBoolean("EnchantmentOptions.Drop-Blocks-For-VeinMiner", true);
+
+        this.suffix = section.getString("TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
+        this.countVanillaEnchantments = section.getBoolean("TransmogScroll.Count-Vanilla-Enchantments", true);
+        this.useSuffix = section.getBoolean("TransmogScroll.Amount-Toggle", true);
+        this.blackScrollChance = section.getInt("BlackScroll.Chance", 75);
+        this.blackScrollChanceToggle = section.getBoolean("BlackScroll.Chance-Toggle", false);
+    }
+
+    public final boolean isCountVanillaEnchantments() {
+        return this.countVanillaEnchantments;
+    }
+
+    public final boolean isBlackScrollChanceToggle() {
+        return this.blackScrollChanceToggle;
+    }
+
+    public final int getBlackScrollChance() {
+        return this.blackScrollChance;
+    }
+
+    public @NotNull final String getSuffix() {
+        return this.suffix;
+    }
+
+    public final boolean isUseSuffix() {
+        return this.useSuffix;
     }
 
     /**

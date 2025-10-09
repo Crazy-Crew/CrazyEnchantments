@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -37,32 +36,6 @@ public class ProtectionCrystalSettings {
     private final String protectionString = ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
-
-    private ItemBuilder crystal;
-
-    public void loadProtectionCrystal() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
-
-        this.crystal = new ItemBuilder()
-                .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
-                .setName(config.getString("Settings.ProtectionCrystal.Name", "&5&lProtection &b&lCrystal"))
-                .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false));
-    }
-
-    public final ItemStack getCrystal() {
-        return getCrystal(1);
-    }
-
-    public final ItemStack getCrystal(final int amount) {
-        final ItemStack item = this.crystal.setAmount(amount).build();
-
-        item.editPersistentDataContainer(container -> {
-            container.set(DataKeys.protection_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-        });
-
-        return item;
-    }
 
     /**
      * Add a player to the map to protect items.
@@ -124,15 +97,6 @@ public class ProtectionCrystalSettings {
     }
 
     /**
-     * Check if the item is a protection crystal.
-     * @param item - The item to check.
-     * @return True if the item is a protection crystal.
-     */
-    public boolean isProtectionCrystal(@NotNull final ItemStack item) {
-        return item.getPersistentDataContainer().has(DataKeys.protection_crystal.getNamespacedKey());
-    }
-
-    /**
      * Remove protection from the item.
      * @param item - The item to remove protection from.
      * @return The new item.
@@ -153,27 +117,6 @@ public class ProtectionCrystalSettings {
 
             item.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
         }
-
-        return item;
-    }
-
-    /**
-     * Add protection to an item.
-     * @param item - The item to add protection to.
-     * @return The new item.
-     */
-    public final ItemStack addProtection(@NotNull final ItemStack item) {
-        final List<Component> itemLore = item.lore();
-
-        List<Component> lore = itemLore != null ? itemLore : new ArrayList<>();
-
-        item.editPersistentDataContainer(container -> {
-            container.set(DataKeys.protected_item.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-        });
-
-        lore.add(ColorUtils.legacyTranslateColourCodes(this.protectionString));
-
-        item.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
 
         return item;
     }

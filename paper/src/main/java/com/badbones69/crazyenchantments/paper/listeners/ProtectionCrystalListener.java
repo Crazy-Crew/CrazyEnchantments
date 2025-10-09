@@ -4,8 +4,11 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
+import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,11 +24,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProtectionCrystalListener implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ItemManager itemManager = this.plugin.getItemManager();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -48,11 +54,15 @@ public class ProtectionCrystalListener implements Listener {
 
         if (itemStack == null || itemStack.isEmpty()) return;
 
-        if (!this.protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
+        final Optional<CustomItem> customItem = this.itemManager.getItem("protection_crystal_item");
 
-        if (this.protectionCrystalSettings.isProtectionCrystal(itemStack)) return;
+        if (customItem.isEmpty()) return;
 
-        if (ProtectionCrystalSettings.isProtected(itemStack.getPersistentDataContainer())) return;
+        final CustomItem item = customItem.get();
+
+        if (!item.isItem(crystalItem) | item.isItem(itemStack)) return;
+
+        if (item.hasKey(itemStack, DataKeys.protected_item.getNamespacedKey())) return;
 
         if (itemStack.getAmount() > 1 || crystalItem.getAmount() > 1) {
             player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
@@ -64,7 +74,9 @@ public class ProtectionCrystalListener implements Listener {
 
         player.setItemOnCursor(this.methods.removeItem(crystalItem));
 
-        event.setCurrentItem(this.protectionCrystalSettings.addProtection(itemStack));
+        item.addKey(itemStack, DataKeys.protected_item.getNamespacedKey(), "true");
+
+        event.setCurrentItem(itemStack);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -115,6 +127,15 @@ public class ProtectionCrystalListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCrystalClick(PlayerInteractEvent event) {
-        if (this.protectionCrystalSettings.isProtectionCrystal(this.methods.getItemInHand(event.getPlayer()))) event.setCancelled(true);
+        final Player player = event.getPlayer();
+        final PlayerInventory inventory = player.getInventory();
+
+        final ItemStack itemStack = inventory.getItemInMainHand();
+
+        if (itemStack.isEmpty()) return;
+
+        this.itemManager.getItem("protection_crystal_item").ifPresent(action -> {
+            if (action.hasKey(itemStack, DataKeys.protection_crystal.getNamespacedKey())) event.setCancelled(true);
+        });
     }
 }

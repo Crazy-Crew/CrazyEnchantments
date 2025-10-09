@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.managers.items.objects;
+package com.badbones69.crazyenchantments.paper.managers.items.objects.crystals;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -10,11 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class ScramblerItem implements CustomItem {
+public class SlotCrystalItem implements CustomItem {
 
     private ItemBuilder itemBuilder;
 
-    public ScramblerItem() {
+    public SlotCrystalItem() {
         init();
     }
 
@@ -23,11 +23,11 @@ public class ScramblerItem implements CustomItem {
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.itemBuilder = new ItemBuilder()
-                .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
-                .setName(config.getString("Settings.Scrambler.Name", "'&e&lThe Grand Scrambler"))
-                .setLore(config.getStringList("Settings.Scrambler.Lore"))
-                .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false))
-                .addKey(DataKeys.scrambler.getNamespacedKey(), "true");
+                .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
+                .setName(config.getString("Settings.Slot_Crystal.Name", "&5&lSlot &b&lCrystal"))
+                .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
+                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false))
+                .addKey(DataKeys.slot_crystal.getNamespacedKey(), "true");
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ScramblerItem implements CustomItem {
 
     @Override
     public boolean isItem(@NotNull final ItemStack itemStack) {
-        return hasKey(itemStack, DataKeys.scrambler.getNamespacedKey());
+        return hasKey(itemStack, DataKeys.slot_crystal.getNamespacedKey());
     }
 
     @Override

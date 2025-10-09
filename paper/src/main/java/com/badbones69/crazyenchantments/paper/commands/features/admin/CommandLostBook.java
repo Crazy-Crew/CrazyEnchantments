@@ -110,18 +110,22 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        this.methods.addItemToInventory(safePlayer, this.protectionCrystalSettings.getCrystal(amount));
+        this.itemManager.getItem("protection_crystal_item").ifPresent(action -> {
+            final ItemStack itemStack = action.getItemStack(amount);
 
-        Map<String, String> placeholders = new HashMap<>() {{
-            put("%Amount%", String.valueOf(amount));
-            put("%Player%", safePlayer.getName());
-        }};
+            this.methods.addItemToInventory(safePlayer, itemStack);
 
-        if (target != null) {
-            sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
-        }
+            Map<String, String> placeholders = new HashMap<>() {{
+                put("%Amount%", String.valueOf(amount));
+                put("%Player%", safePlayer.getName());
+            }};
 
-        safePlayer.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+            if (target != null) {
+                sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
+            }
+
+            safePlayer.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+        });
     }
 
     @Command("slotcrystal")
@@ -142,21 +146,21 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        final ItemStack itemStack = this.starter.getSlotCrystalListener().getSlotCrystal();
+        this.itemManager.getItem("slot_crystal_item").ifPresent(action -> {
+            final ItemStack itemStack = action.getItemStack(amount);
 
-        itemStack.setAmount(amount);
+            this.methods.addItemToInventory(safePlayer, itemStack);
 
-        this.methods.addItemToInventory(safePlayer, itemStack);
+            Map<String, String> placeholders = new HashMap<>() {{
+                put("%Amount%", String.valueOf(amount));
+                put("%Player%", safePlayer.getName());
+            }};
 
-        Map<String, String> placeholders = new HashMap<>() {{
-            put("%Amount%", String.valueOf(amount));
-            put("%Player%", safePlayer.getName());
-        }};
+            if (target != null) {
+                sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
+            }
 
-        if (target != null) {
-            sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
-        }
-
-        safePlayer.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
+            safePlayer.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
+        });
     }
 }

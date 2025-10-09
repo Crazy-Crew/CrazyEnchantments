@@ -14,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
@@ -53,11 +52,6 @@ public class Starter {
     // Economy Management.
     private CurrencyAPI currencyAPI;
 
-    // Listeners.
-    private ScrollListener scrollListener;
-    private SlotCrystalListener slotCrystalListener;
-
-
     public void run() {
         // Plugin Support.
         this.pluginSupport = new PluginSupport();
@@ -86,10 +80,6 @@ public class Starter {
         this.bowEnchantmentManager = new BowEnchantmentManager();
         this.wingsManager = new WingsManager();
         this.allyManager = new AllyManager();
-
-        // Listeners.
-        this.plugin.pluginManager.registerEvents(this.scrollListener = new ScrollListener(), this.plugin);
-        this.plugin.pluginManager.registerEvents(this.slotCrystalListener = new SlotCrystalListener(), this.plugin);
 
         this.skullCreator = new SkullCreator();
 
@@ -163,16 +153,6 @@ public class Starter {
 
     public ShopManager getShopManager() {
         return this.shopManager;
-    }
-
-    // Listeners.
-
-    public ScrollListener getScrollListener() {
-        return this.scrollListener;
-    }
-
-    public SlotCrystalListener getSlotCrystalListener() {
-        return this.slotCrystalListener;
     }
 
     // Plugin Utils.

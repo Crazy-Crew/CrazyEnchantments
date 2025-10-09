@@ -64,10 +64,6 @@ public class ShopListener implements Listener {
     @NotNull
     private final ShopManager shopManager = this.starter.getShopManager();
 
-    // Plugin Listeners.
-    @NotNull
-    private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
-
     // Economy Management.
     @NotNull
     private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
@@ -187,14 +183,14 @@ public class ShopListener implements Listener {
                     }
 
                     case INFO -> MenuManager.openInfoMenu(player);
-                    case PROTECTION_CRYSTAL -> playerInventory.addItem(this.protectionCrystalSettings.getCrystal());
+                    case PROTECTION_CRYSTAL -> this.itemManager.getItem("protection_crystal_item").ifPresent(action -> playerInventory.addItem(action.getItemStack()));
                     case SCRAMBLER -> this.itemManager.getItem("scrambler_item").ifPresent(action -> playerInventory.addItem(action.getItemStack()));
                     case SUCCESS_DUST -> playerInventory.addItem(Dust.SUCCESS_DUST.getDust());
                     case DESTROY_DUST -> playerInventory.addItem(Dust.DESTROY_DUST.getDust());
                     case BLACK_SCROLL -> playerInventory.addItem(Scrolls.BLACK_SCROLL.getScroll());
                     case WHITE_SCROLL -> playerInventory.addItem(Scrolls.WHITE_SCROLL.getScroll());
                     case TRANSMOG_SCROLL -> playerInventory.addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
-                    case SLOT_CRYSTAL -> playerInventory.addItem(this.slotCrystalListener.getSlotCrystal());
+                    case SLOT_CRYSTAL -> this.itemManager.getItem("slot_crystal_item").ifPresent(action -> playerInventory.addItem(action.getItemStack()));
                 }
 
                 return;

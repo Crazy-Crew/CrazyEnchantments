@@ -4,51 +4,45 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
+import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class SlotCrystalListener implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ItemManager itemManager = this.plugin.getItemManager();
 
     private final ConfigOptions options = this.plugin.getOptions();
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
     private final Starter starter = this.plugin.getStarter();
-
-    private static ItemStack slot_crystal;
-
-    public void load() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
-
-        slot_crystal = new ItemBuilder()
-                .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
-                .setName(config.getString("Settings.Slot_Crystal.Name", "&5&lSlot &b&lCrystal"))
-                .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
-                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
-    }
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack crystalItem = event.getCursor();
-        ItemStack item = event.getCurrentItem();
+        final Player player = (Player) event.getWhoClicked();
+        final ItemStack crystalItem = event.getCursor();
+        final ItemStack item = event.getCurrentItem();
 
-        if (item == null || item.isEmpty() || !isSlotCrystal(crystalItem) || isSlotCrystal(item)) return;
+        if (item == null || item.isEmpty()) return;
+
+        final Optional<CustomItem> crystal = this.itemManager.getItem("crystal_item");
+
+        if (crystal.isEmpty()) return;
+
+        final CustomItem customItem = crystal.get();
+
+        if (!customItem.isItem(crystalItem) || !customItem.isItem(item)) return;
 
         int maxEnchants = this.starter.getCrazyManager().getPlayerMaxEnchantments(player);
         int enchAmount = this.instance.getEnchantmentAmount(item, this.options.isCheckVanillaLimit());
@@ -81,15 +75,5 @@ public class SlotCrystalListener implements Listener {
             put("%enchantAmount%", String.valueOf(enchAmount));
             put("baseEnchants", String.valueOf(baseEnchants));
         }}));
-    }
-
-    private boolean isSlotCrystal(@NotNull final ItemStack crystalItem) {
-        if (crystalItem.isEmpty()) return false;
-
-        return crystalItem.getPersistentDataContainer().has(DataKeys.slot_crystal.getNamespacedKey());
-    }
-
-    public ItemStack getSlotCrystal() {
-        return slot_crystal.clone();
     }
 }
