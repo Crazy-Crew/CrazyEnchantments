@@ -14,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
@@ -55,7 +54,6 @@ public class Starter {
     private CurrencyAPI currencyAPI;
 
     // Listeners.
-    private ScramblerListener scramblerListener;
     private ScrollListener scrollListener;
     private SlotCrystalListener slotCrystalListener;
 
@@ -90,7 +88,6 @@ public class Starter {
         this.allyManager = new AllyManager();
 
         // Listeners.
-        this.plugin.pluginManager.registerEvents(this.scramblerListener = new ScramblerListener(), this.plugin);
         this.plugin.pluginManager.registerEvents(this.scrollListener = new ScrollListener(), this.plugin);
         this.plugin.pluginManager.registerEvents(this.slotCrystalListener = new SlotCrystalListener(), this.plugin);
 
@@ -169,9 +166,6 @@ public class Starter {
     }
 
     // Listeners.
-    public ScramblerListener getScramblerListener() {
-        return this.scramblerListener;
-    }
 
     public ScrollListener getScrollListener() {
         return this.scrollListener;

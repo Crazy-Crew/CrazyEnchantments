@@ -19,6 +19,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,9 +31,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 
 public class ShopListener implements Listener {
@@ -41,6 +42,8 @@ public class ShopListener implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CategoryManager categoryManager = this.plugin.getCategoryManager();
+
+    private final ItemManager itemManager = this.plugin.getItemManager();
 
     private final ConfigOptions options = this.plugin.getOptions();
 
@@ -62,8 +65,6 @@ public class ShopListener implements Listener {
     private final ShopManager shopManager = this.starter.getShopManager();
 
     // Plugin Listeners.
-    @NotNull
-    private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
     @NotNull
     private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
 
@@ -88,6 +89,9 @@ public class ShopListener implements Listener {
 
         final Collection<Category> categories = this.categoryManager.getCategories().values();
 
+
+        final PlayerInventory playerInventory = player.getInventory();
+
         for (Category category : categories) {
             if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
                 if (this.methods.isInventoryFull(player)) return;
@@ -97,7 +101,9 @@ public class ShopListener implements Listener {
                         this.currencyAPI.takeCurrency(player, category);
                     } else {
                         String needed = String.valueOf(category.getCost() - this.currencyAPI.getCurrency(player, category.getCurrency()));
+
                         this.methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
+
                         return;
                     }
                 }
@@ -107,7 +113,8 @@ public class ShopListener implements Listener {
                 if (book != null) {
                     BuyBookEvent buyBookEvent = new BuyBookEvent(this.crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
                     this.plugin.getServer().getPluginManager().callEvent(buyBookEvent);
-                    player.getInventory().addItem(book.buildBook());
+
+                    playerInventory.addItem(book.buildBook());
                 } else {
                     player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                 }
@@ -132,7 +139,7 @@ public class ShopListener implements Listener {
                     }
                 }
 
-                player.getInventory().addItem(lostBook.getLostBook(category).build());
+                playerInventory.addItem(lostBook.getLostBook(category).build());
 
                 return;
             }
@@ -180,14 +187,14 @@ public class ShopListener implements Listener {
                     }
 
                     case INFO -> MenuManager.openInfoMenu(player);
-                    case PROTECTION_CRYSTAL -> player.getInventory().addItem(this.protectionCrystalSettings.getCrystal());
-                    case SCRAMBLER -> player.getInventory().addItem(this.scramblerListener.getScramblers());
-                    case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
-                    case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
-                    case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
-                    case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
-                    case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
-                    case SLOT_CRYSTAL -> player.getInventory().addItem(this.slotCrystalListener.getSlotCrystal());
+                    case PROTECTION_CRYSTAL -> playerInventory.addItem(this.protectionCrystalSettings.getCrystal());
+                    case SCRAMBLER -> this.itemManager.getItem("scrambler_item").ifPresent(action -> playerInventory.addItem(action.getItemStack()));
+                    case SUCCESS_DUST -> playerInventory.addItem(Dust.SUCCESS_DUST.getDust());
+                    case DESTROY_DUST -> playerInventory.addItem(Dust.DESTROY_DUST.getDust());
+                    case BLACK_SCROLL -> playerInventory.addItem(Scrolls.BLACK_SCROLL.getScroll());
+                    case WHITE_SCROLL -> playerInventory.addItem(Scrolls.WHITE_SCROLL.getScroll());
+                    case TRANSMOG_SCROLL -> playerInventory.addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
+                    case SLOT_CRYSTAL -> playerInventory.addItem(this.slotCrystalListener.getSlotCrystal());
                 }
 
                 return;
@@ -198,8 +205,8 @@ public class ShopListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEnchantmentTableClick(PlayerInteractEvent event) {
         if (this.shopManager.isEnchantmentTableShop()) {
-            Player player = event.getPlayer();
-            Block block = event.getClickedBlock();
+            final Player player = event.getPlayer();
+            final Block block = event.getClickedBlock();
 
             if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == Material.ENCHANTING_TABLE) {
                 event.setCancelled(true);

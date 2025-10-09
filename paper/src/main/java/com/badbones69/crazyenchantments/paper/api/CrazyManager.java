@@ -91,8 +91,6 @@ public class CrazyManager {
 
     // Listeners.
     @NotNull
-    private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
-    @NotNull
     private final ScrollListener scrollListener = this.starter.getScrollListener();
 
     @NotNull
@@ -223,8 +221,6 @@ public class CrazyManager {
 
         // Loads the protection crystals.
         this.protectionCrystalSettings.loadProtectionCrystal();
-        // Loads the scrambler.
-        this.scramblerListener.loadScrambler();
         // Loads Slot Crystal.
         this.slotCrystalListener.load();
         // Loads the Scroll Control settings.

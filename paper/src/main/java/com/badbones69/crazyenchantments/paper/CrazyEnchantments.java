@@ -19,14 +19,10 @@ import com.badbones69.crazyenchantments.paper.enchantments.HoeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.PickaxeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.SwordEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.ToolEnchantments;
-import com.badbones69.crazyenchantments.paper.listeners.AuraListener;
-import com.badbones69.crazyenchantments.paper.listeners.DustControlListener;
-import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
-import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
-import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
-import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
+import com.badbones69.crazyenchantments.paper.listeners.*;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.ryderbelserion.fusion.core.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -56,6 +52,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private CategoryManager categoryManager;
     private PaperFileManager fileManager;
+    private ItemManager itemManager;
     private KitsManager kitsManager;
     private CrazyInstance instance;
     private ConfigOptions options;
@@ -93,6 +90,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.instance.init();
 
         this.categoryManager = this.instance.getCategoryManager();
+        this.itemManager = this.instance.getItemManager();
         this.kitsManager = this.instance.getKitsManager();
 
         this.starter = new Starter();
@@ -113,6 +111,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         this.pluginManager.registerEvents(new TinkererMenu.TinkererListener(), this);
         this.pluginManager.registerEvents(new BaseMenu.InfoMenuListener(), this);
+        this.pluginManager.registerEvents(new ScramblerListener(), this);
 
         this.pluginManager.registerEvents(new PickaxeEnchantments(), this);
         this.pluginManager.registerEvents(new SwordEnchantments(), this);
@@ -169,6 +168,10 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final PaperFileManager getFileManager() {
         return this.fileManager;
+    }
+
+    public @NotNull final ItemManager getItemManager() {
+        return this.itemManager;
     }
 
     public @NotNull final KitsManager getKitsManager() {

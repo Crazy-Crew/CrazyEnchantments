@@ -18,6 +18,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.mods.Dependencies;
 import com.badbones69.crazyenchantments.paper.support.mods.vanish.GenericVanishMod;
@@ -57,6 +58,7 @@ public class CrazyInstance {
     private final List<String> blocks = new ArrayList<>();
 
     private CategoryManager categoryManager;
+    private ItemManager itemManager;
     private KitsManager kitsManager;
 
     public void init() {
@@ -79,9 +81,11 @@ public class CrazyInstance {
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.categoryManager = new CategoryManager();
+        this.itemManager = new ItemManager();
         this.kitsManager = new KitsManager();
 
         this.categoryManager.init(); // update categories
+        this.itemManager.init(); // update items
         this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
@@ -465,6 +469,10 @@ public class CrazyInstance {
 
     public @NotNull final CategoryManager getCategoryManager() {
         return categoryManager;
+    }
+
+    public @NotNull final ItemManager getItemManager() {
+        return this.itemManager;
     }
 
     public @NotNull final KitsManager getKitsManager() {

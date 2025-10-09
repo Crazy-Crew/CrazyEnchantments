@@ -23,9 +23,7 @@ public class CommandLostBook extends BaseCommand {
     @Syntax("/crazyenchantments lostbook <category> <amount> [player]")
     public void lostbook(final CommandSender sender, final Category category, final int amount, @Optional @Nullable final Player target) {
         if (category == null) {
-            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(new HashMap<>() {{
-                put("%Category%", ""); //todo() yes
-            }}));
+            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage());
 
             return;
         }
@@ -48,10 +46,14 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+
             return;
         }
 
         if (scroll == null) {
+            //todo() add scroll message
+
             return;
         }
 
@@ -62,100 +64,99 @@ public class CommandLostBook extends BaseCommand {
     @Permission(value = "crazyenchantments.scrambler", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments scrambler <amount> [player]")
     public void scrambler(final CommandSender sender, final int amount, @Optional @Nullable final Player target) {
-        if (target == null) {
-            if (sender instanceof Player player) {
-                if (!this.methods.isInventoryFull(player)) {
-                    this.methods.addItemToInventory(player, this.scramblerListener.getScramblers(amount));
+        final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
-                    sender.sendMessage(Messages.GET_SCRAMBLER.getMessage(new HashMap<>() {{
-                        put("%Amount%", String.valueOf(amount));
-                    }}));
-                }
-            }
+        if (safePlayer == null) {
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 
             return;
         }
 
-        if (!this.methods.isInventoryFull(target)) {
-            this.methods.addItemToInventory(target, this.scramblerListener.getScramblers(amount));
+        if (this.methods.isInventoryFull(safePlayer)) {
+            sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
-            Map<String, String> placeholders = new HashMap<>() {{
-                put("%Amount%", String.valueOf(amount));
-                put("%Player%", target.getName());
-            }};
-
-            sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
-            target.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
+            return;
         }
+
+        this.itemManager.getItem("scrambler_item").ifPresent(action -> this.methods.addItemToInventory(safePlayer, action.getItemStack(amount)));
+
+        Map<String, String> placeholders = new HashMap<>() {{
+            put("%Amount%", String.valueOf(amount));
+            put("%Player%", safePlayer.getName());
+        }};
+
+        if (target != null) {
+            sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
+        }
+
+        safePlayer.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
     }
 
     @Command("crystal")
     @Permission(value = "crazyenchantments.crystal", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments crystal <amount> [player]")
     public void crystal(final CommandSender sender, final int amount, @Optional @Nullable final Player target) {
-        if (target == null) {
-            if (sender instanceof Player player) {
-                if (!this.methods.isInventoryFull(player)) {
-                    this.methods.addItemToInventory(player, this.protectionCrystalSettings.getCrystal(amount));
+        final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
-                    sender.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(new HashMap<>() {{
-                        put("%Amount%", String.valueOf(amount));
-                    }}));
-                }
-            }
+        if (safePlayer == null) {
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 
             return;
         }
 
-        if (!this.methods.isInventoryFull(target)) {
-            this.methods.addItemToInventory(target, this.protectionCrystalSettings.getCrystal(amount));
+        if (this.methods.isInventoryFull(safePlayer)) {
+            sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
-            Map<String, String> placeholders = new HashMap<>() {{
-                put("%Amount%", String.valueOf(amount));
-                put("%Player%", target.getName());
-            }};
-
-            sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
-            target.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+            return;
         }
+
+        this.methods.addItemToInventory(safePlayer, this.protectionCrystalSettings.getCrystal(amount));
+
+        Map<String, String> placeholders = new HashMap<>() {{
+            put("%Amount%", String.valueOf(amount));
+            put("%Player%", safePlayer.getName());
+        }};
+
+        if (target != null) {
+            sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
+        }
+
+        safePlayer.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
     }
 
     @Command("slotcrystal")
     @Permission(value = "crazyenchantments.slotcrystal", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments slotcrystal <amount> [player]")
     public void slotcrystal(final CommandSender sender, final int amount, @Optional @Nullable final Player target) {
-        if (target == null) {
-            if (sender instanceof Player player) {
-                if (!this.methods.isInventoryFull(player)) {
-                    final ItemStack itemStack = this.starter.getSlotCrystalListener().getSlotCrystal();
+        final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
-                    itemStack.setAmount(amount);
-
-                    this.methods.addItemToInventory(player, itemStack);
-
-                    sender.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(new HashMap<>() {{
-                        put("%Amount%", String.valueOf(amount));
-                    }}));
-                }
-            }
+        if (safePlayer == null) {
+            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 
             return;
         }
 
-        if (!this.methods.isInventoryFull(target)) {
-            final ItemStack itemStack = this.starter.getSlotCrystalListener().getSlotCrystal();
+        if (this.methods.isInventoryFull(safePlayer)) {
+            sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
-            itemStack.setAmount(amount);
-
-            this.methods.addItemToInventory(target, itemStack);
-
-            Map<String, String> placeholders = new HashMap<>() {{
-                put("%Amount%", String.valueOf(amount));
-                put("%Player%", target.getName());
-            }};
-
-            sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
-            target.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
+            return;
         }
+
+        final ItemStack itemStack = this.starter.getSlotCrystalListener().getSlotCrystal();
+
+        itemStack.setAmount(amount);
+
+        this.methods.addItemToInventory(safePlayer, itemStack);
+
+        Map<String, String> placeholders = new HashMap<>() {{
+            put("%Amount%", String.valueOf(amount));
+            put("%Player%", safePlayer.getName());
+        }};
+
+        if (target != null) {
+            sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
+        }
+
+        safePlayer.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
     }
 }

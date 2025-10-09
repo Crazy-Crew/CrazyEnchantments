@@ -7,8 +7,8 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -23,6 +23,8 @@ public class BaseCommand {
     protected final CategoryManager categoryManager = this.plugin.getCategoryManager();
 
     protected final PaperFileManager fileManager = this.plugin.getFileManager();
+
+    protected final ItemManager itemManager = this.plugin.getItemManager();
 
     protected final CrazyInstance instance = this.plugin.getInstance();
 
@@ -40,8 +42,5 @@ public class BaseCommand {
 
     // Settings.
     protected final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
-
-    // Listeners
-    protected final ScramblerListener scramblerListener = this.starter.getScramblerListener();
 
 }
