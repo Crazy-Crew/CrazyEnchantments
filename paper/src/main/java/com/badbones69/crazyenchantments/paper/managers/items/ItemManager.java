@@ -37,6 +37,10 @@ public class ItemManager {
         this.items.putIfAbsent(item, customItem);
     }
 
+    public void reloadItems() {
+        this.items.forEach((name, customItem) -> customItem.init());
+    }
+
     public Optional<CustomItem> getItem(@NotNull final String item) {
         return Optional.of(this.items.get(item));
     }

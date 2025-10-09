@@ -120,6 +120,7 @@ public class CrazyInstance {
         this.options.init(config); // re-map to objects
 
         this.categoryManager.init(); // update categories
+        this.itemManager.reloadItems(); // reload items
         this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
