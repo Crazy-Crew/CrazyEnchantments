@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 public enum MigrationType {
 
-    config_validator("ConfigValidator"),
-    enchant_validator("EnchantValidator");
+    tinker_migration("tinker_migration"),
+    enchant_migration("enchant_migration");
 
     private final String name;
 
