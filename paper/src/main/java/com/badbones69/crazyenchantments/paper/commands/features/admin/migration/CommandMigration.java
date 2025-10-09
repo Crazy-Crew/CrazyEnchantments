@@ -1,10 +1,11 @@
-package com.badbones69.crazyenchantments.paper.commands.features.admin;
+package com.badbones69.crazyenchantments.paper.commands.features.admin.migration;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.enums.MigrationType;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.types.TinkerMigration;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.types.EnchantMigration;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.enums.MigrationType;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types.LegacyMigration;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types.TinkerMigration;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types.EnchantMigration;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Flag;
@@ -28,6 +29,7 @@ public class CommandMigration extends BaseCommand {
         key.ifPresent(type -> {
             switch (type) {
                 case tinker_migration -> new TinkerMigration(sender).run();
+                case legacy_migration -> new LegacyMigration(sender).run();
                 case enchant_migration -> {
                     if (!(sender instanceof Player player)) {
                         sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());

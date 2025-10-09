@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.commands.features.admin.validation;
+package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;

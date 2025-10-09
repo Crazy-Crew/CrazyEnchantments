@@ -11,7 +11,8 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentTy
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.*;
-import com.badbones69.crazyenchantments.paper.commands.features.admin.validation.enums.MigrationType;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.CommandMigration;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.features.base.CommandHelp;
 import com.badbones69.crazyenchantments.paper.commands.features.base.CommandLimit;
 import com.badbones69.crazyenchantments.paper.commands.features.base.standalone.CommandBlackSmith;

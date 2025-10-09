@@ -1,11 +1,12 @@
-package com.badbones69.crazyenchantments.paper.commands.features.admin.validation.enums;
+package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.enums;
 
 import org.jetbrains.annotations.NotNull;
 
 public enum MigrationType {
 
     tinker_migration("tinker_migration"),
-    enchant_migration("enchant_migration");
+    enchant_migration("enchant_migration"),
+    legacy_migration("legacy_migration");
 
     private final String name;
 
