@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper.config;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.exceptions.CrazyException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 
 public class ConfigOptions {
 

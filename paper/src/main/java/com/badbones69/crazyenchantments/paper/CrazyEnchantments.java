@@ -41,15 +41,6 @@ public class CrazyEnchantments extends JavaPlugin {
         return JavaPlugin.getPlugin(CrazyEnchantments.class);
     }
 
-    private Starter starter;
-
-    // Plugin Listeners.
-    public final PluginManager pluginManager = getServer().getPluginManager();
-
-    private ArmorEnchantments armorEnchantments;
-
-    private final BossBarController bossBarController = new BossBarController(this);
-
     private CategoryManager categoryManager;
     private PaperFileManager fileManager;
     private ItemManager itemManager;
@@ -58,9 +49,21 @@ public class CrazyEnchantments extends JavaPlugin {
     private ConfigOptions options;
     private FusionPaper fusion;
 
+    // ryder start, delete all this.
+    private Starter starter;
+
+    // Plugin Listeners.
+    public final PluginManager pluginManager = getServer().getPluginManager();
+
+    private ArmorEnchantments armorEnchantments;
+
+    private final BossBarController bossBarController = new BossBarController(this);
+    // ryder end
+
     @Override
     public void onEnable() {
         this.fusion = new FusionPaper(this);
+        this.fusion.init();
 
         this.fileManager = this.fusion.getFileManager();
 
