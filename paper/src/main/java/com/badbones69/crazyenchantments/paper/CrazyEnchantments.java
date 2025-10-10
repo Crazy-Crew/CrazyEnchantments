@@ -7,7 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.commands.CommandManager;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
@@ -46,7 +46,7 @@ public class CrazyEnchantments extends JavaPlugin {
     private ItemManager itemManager;
     private KitsManager kitsManager;
     private CrazyInstance instance;
-    private ConfigOptions options;
+    private ConfigManager options;
     private FusionPaper fusion;
 
     // ryder start, delete all this.
@@ -82,7 +82,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.fileManager.addFile(path.resolve("blocks.json"), FileType.JSON);
 
-        this.options = new ConfigOptions();
+        this.options = new ConfigManager();
         this.options.init(FileKeys.config.getYamlConfiguration());
 
         if (this.options.isToggleMetrics()) { // Enable bStats
@@ -188,7 +188,7 @@ public class CrazyEnchantments extends JavaPlugin {
         return this.instance;
     }
 
-    public @NotNull final ConfigOptions getOptions() {
+    public @NotNull final ConfigManager getOptions() {
         return this.options;
     }
 

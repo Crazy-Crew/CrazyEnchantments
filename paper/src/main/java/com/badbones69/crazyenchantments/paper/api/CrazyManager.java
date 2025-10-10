@@ -25,7 +25,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
@@ -71,7 +71,7 @@ public class CrazyManager {
 
     private final KitsManager kitsManager = this.plugin.getKitsManager();
 
-    private final ConfigOptions options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getOptions();
 
     private final FusionPaper fusion = this.plugin.getFusion();
     

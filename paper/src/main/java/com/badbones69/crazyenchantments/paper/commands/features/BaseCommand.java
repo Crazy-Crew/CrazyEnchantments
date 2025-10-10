@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
@@ -28,7 +28,7 @@ public class BaseCommand {
 
     protected final CrazyInstance instance = this.plugin.getInstance();
 
-    protected final ConfigOptions options = this.plugin.getOptions();
+    protected final ConfigManager options = this.plugin.getOptions();
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 

@@ -10,7 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,7 +41,7 @@ public class PickaxeEnchantments implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final ConfigOptions options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getOptions();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();

@@ -15,7 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -42,7 +42,7 @@ public class ScrollListener implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final ConfigOptions options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getOptions();
 
     private final Starter starter = this.plugin.getStarter();
 

@@ -16,7 +16,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
@@ -48,7 +48,7 @@ public class CrazyInstance {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final PaperFileManager fileManager = this.plugin.getFileManager();
-    private final ConfigOptions options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getOptions();
     private final FusionPaper fusion = this.plugin.getFusion();
     private final ModManager modManager = this.fusion.getModManager();
     private final Path path = this.plugin.getDataPath();

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.config;
+package com.badbones69.crazyenchantments.paper.managers;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import org.bukkit.configuration.ConfigurationSection;
@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 
-public class ConfigOptions {
+public class ConfigManager {
 
     private boolean refreshPotionEffectsOnWorldChange;
     private boolean resetMaxHealth;

@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin.migration
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
+import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ public abstract class IEnchantMigration {
 
     protected final CrazyInstance instance = this.plugin.getInstance();
 
-    protected final ConfigOptions options = this.plugin.getOptions();
+    protected final ConfigManager options = this.plugin.getOptions();
 
     protected final Starter starter = this.plugin.getStarter();
 

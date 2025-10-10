@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.config.ConfigOptions;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -22,7 +21,7 @@ public class KitsManager {
 
     private final PluginManager pluginManager = this.plugin.getPluginManager();
 
-    private final ConfigOptions options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getOptions();
 
     private final FusionPaper fusion = this.plugin.getFusion();
 
