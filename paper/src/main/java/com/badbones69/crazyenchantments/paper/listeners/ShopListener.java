@@ -17,7 +17,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
-import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import org.bukkit.GameMode;
@@ -55,10 +54,6 @@ public class ShopListener implements Listener {
 
     @NotNull
     private final Methods methods = starter.getMethods();
-
-    // Settings.
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
 
     // Plugin Managers.
     @NotNull
@@ -98,7 +93,7 @@ public class ShopListener implements Listener {
                     } else {
                         String needed = String.valueOf(category.getCost() - this.currencyAPI.getCurrency(player, category.getCurrency()));
 
-                        this.methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                        this.methods.switchCurrency(player, category.getCurrency(), "{money_needed}", "{xp}", needed);
 
                         return;
                     }
@@ -129,7 +124,7 @@ public class ShopListener implements Listener {
                     } else {
                         String needed = String.valueOf(lostBook.getCost() - this.currencyAPI.getCurrency(player, lostBook.getCurrency()));
 
-                        this.methods.switchCurrency(player, lostBook.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                        this.methods.switchCurrency(player, lostBook.getCurrency(), "{money_needed}", "{xp}", needed);
 
                         return;
                     }
@@ -154,7 +149,7 @@ public class ShopListener implements Listener {
                         } else {
                             String needed = String.valueOf(option.getCost() - this.currencyAPI.getCurrency(player, option.getCurrency()));
 
-                            this.methods.switchCurrency(player, option.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                            this.methods.switchCurrency(player, option.getCurrency(), "{money_needed}", "{xp}", needed);
 
                             return;
                         }

@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
@@ -85,7 +86,7 @@ public class Methods {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
-            if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
+            if (toggle) Messages.NO_PERMISSION.sendMessage(player);
 
             return false;
         }
@@ -169,7 +170,7 @@ public class Methods {
         
         if (lore == null) lore = new ArrayList<>();
 
-        lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+        //lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
 
         item.lore(lore);
 
@@ -178,7 +179,7 @@ public class Methods {
 
     public boolean hasArgument(@NotNull final String arg, @NotNull final List<String> message) {
         for (String line : message) {
-            line = ColorUtils.color(line).toLowerCase();
+            //line = ColorUtils.color(line).toLowerCase();
 
             if (line.contains(arg.toLowerCase())) return true;
         }
@@ -214,7 +215,7 @@ public class Methods {
     public boolean isInventoryFull(@NotNull final Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
 
-        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+        Messages.INVENTORY_FULL.sendMessage(player);
 
         return true;
     }
@@ -467,9 +468,9 @@ public class Methods {
         placeholders.put(two, cost);
 
         switch (option) {
-            case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-            case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-            case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+            case VAULT -> Messages.NEED_MORE_MONEY.sendMessage(player, placeholders);
+            case XP_LEVEL -> Messages.NEED_MORE_XP_LEVELS.sendMessage(player, placeholders);
+            case XP_TOTAL -> Messages.NEED_MORE_TOTAL_XP.sendMessage(player, placeholders);
         }
     }
 
@@ -490,7 +491,7 @@ public class Methods {
     public boolean inCreativeMode(@NotNull final Player player) {
         if (player.getGameMode() != GameMode.CREATIVE) return false;
 
-        player.sendMessage(Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage());
+        Messages.PLAYER_IS_IN_CREATIVE_MODE.sendMessage(player);
 
         return true;
     }

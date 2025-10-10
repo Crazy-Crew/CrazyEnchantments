@@ -76,7 +76,7 @@ public class BossBarController {
      * @see #updateBossBar(Player, Component, float)
      */
     public void updateBossBar(@NotNull final Player player, @NotNull final String text, final float progress) {
-        updateBossBar(player, ColorUtils.legacyTranslateColourCodes(text), progress);
+        //updateBossBar(player, ColorUtils.legacyTranslateColourCodes(text), progress); //todo() legacy trash
     }
 
     /**
@@ -86,14 +86,14 @@ public class BossBarController {
      * @see #updateBossBar
      */
     public void updateBossBarGradually(@NotNull final Player player, @NotNull final String text, final float progress, final int intervals) {
-        Component newText = ColorUtils.legacyTranslateColourCodes(text);
+        //Component newText = ColorUtils.legacyTranslateColourCodes(text); //todo() legacy trash
 
         if (!hasBossBar(player)) {
-            createBossBars(player, newText, progress);
+            //createBossBars(player, newText, progress);
         } else {
-            BossBar bossBar = getBossBar(player).name(newText);
+            //BossBar bossBar = getBossBar(player).name(newText);
 
-            float from = bossBar.progress();
+            /*float from = bossBar.progress();
             float difference = (progress - from)/intervals;
 
             if ((from != progress)) {
@@ -110,7 +110,7 @@ public class BossBarController {
 
             bossBar.progress(progress);
 
-            this.bossBars.replace(player.getUniqueId(), bossBar);
+            this.bossBars.replace(player.getUniqueId(), bossBar);*/
         }
 
         player.showBossBar(getBossBar(player));

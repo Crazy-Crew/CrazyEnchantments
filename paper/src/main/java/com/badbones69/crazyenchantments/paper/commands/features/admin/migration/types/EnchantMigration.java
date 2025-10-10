@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -40,18 +41,16 @@ public class EnchantMigration extends IEnchantMigration {
             }
 
             enchantments.forEach((enchantment, level) -> {
-                builder.append(Messages.BASE_UPDATE_ENCHANTS.getMessageNoPrefix(new HashMap<>() {{
-                    put("%enchant%", enchantment.getName());
-                    put("%level%", String.valueOf(level));
-                }}));
+                Messages.BASE_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
+                    put("{enchant}", enchantment.getName());
+                    put("{level}", String.valueOf(level));
+                }});
             });
 
-            String message = Messages.MAIN_UPDATE_ENCHANTS.getMessageNoPrefix(new HashMap<>() {{
-                put("%item%", item.getType().toString());
-                put("%itemEnchants%", builder.toString());
+            Messages.MAIN_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
+                put("{item}", item.getType().toString());
+                put("{item_enchants}", builder.toString());
             }});
-
-            sender.sendMessage(message);
         }
     }
 }

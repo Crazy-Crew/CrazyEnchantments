@@ -278,7 +278,8 @@ public class ItemBuilder {
      * Get the name of the item.
      */
     public String getName() {
-        return this.itemName == null ? "" : ColorUtils.toLegacy(this.itemName);
+        //return this.itemName == null ? "" : ColorUtils.toLegacy(this.itemName); //todo() legacy trash
+        return "";
     }
 
     /**
@@ -350,14 +351,14 @@ public class ItemBuilder {
      * @return The name with all the placeholders in it.
      */
     public final String getUpdatedName() {
-        if (this.itemName == null) return "";
-        String newName = ColorUtils.toLegacy(this.itemName);
+        /*if (this.itemName == null) return "";
+        String newName = ColorUtils.toLegacy(this.itemName); //todo() legacy trash
 
         for (final Map.Entry<String, String> placeholder : this.namePlaceholders.entrySet()) {
             newName = newName.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
-        }
+        }*/
 
-        return newName;
+        return "";
     }
 
     /**
@@ -411,7 +412,7 @@ public class ItemBuilder {
 
             List<Component> newLore = getUpdatedLore();
 
-            if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+            //if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName())); //todo() legacy trash
 
             if (!newLore.isEmpty()) itemMeta.lore(newLore);
 
@@ -448,7 +449,7 @@ public class ItemBuilder {
 
         List<Component> newLore = getUpdatedLore();
 
-        if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+        //if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName())); //todo() legacy trash
 
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
 
@@ -621,7 +622,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated name.
      */
     public ItemBuilder setName(final String itemName) {
-        if (itemName != null && !itemName.isEmpty()) this.itemName = ColorUtils.legacyTranslateColourCodes(itemName);
+        //if (itemName != null && !itemName.isEmpty()) this.itemName = ColorUtils.legacyTranslateColourCodes(itemName); //todo() legacy trash
 
         return this;
     }
@@ -674,7 +675,8 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder setLore(final List<String> lore) {
-        return lore(lore.stream().map(ColorUtils::legacyTranslateColourCodes).collect(Collectors.toList()));
+        return this;
+        //return lore(lore.stream().map(ColorUtils::legacyTranslateColourCodes).collect(Collectors.toList())); //todo() legacy trash
     }
 
     /**
@@ -700,7 +702,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLore(final String lore) {
-        if (lore != null) this.itemLore.add(ColorUtils.legacyTranslateColourCodes(lore));
+        //if (lore != null) this.itemLore.add(ColorUtils.legacyTranslateColourCodes(lore)); //todo() legacy trash
 
         return this;
     }
@@ -741,13 +743,13 @@ public class ItemBuilder {
         if (this.itemLore.isEmpty()) return newLore;
 
         for (final Component line : this.itemLore) {
-            String newLine = ColorUtils.toLegacy(line);
+            //String newLine = ColorUtils.toLegacy(line); //todo() legacy trash
 
-            for (final Map.Entry<String, String> placeholder : this.lorePlaceholders.entrySet()) {
-                newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
-            }
+            //for (final Map.Entry<String, String> placeholder : this.lorePlaceholders.entrySet()) {
+            //    newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
+            //}
 
-            newLore.add(ColorUtils.legacyTranslateColourCodes(newLine));
+            //newLore.add(ColorUtils.legacyTranslateColourCodes(newLine)); //todo() legacy trash
         }
 
         return newLore;

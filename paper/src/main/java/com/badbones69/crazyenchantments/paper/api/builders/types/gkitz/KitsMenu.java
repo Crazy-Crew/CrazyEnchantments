@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
@@ -72,9 +73,9 @@ public class KitsMenu extends InventoryBuilder {
 
             if (currentLore != null) {
                 for (Component line : currentLore) {
-                    String legacyLoreLine = ColorUtils.toLegacy(line);
-                    if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
-                    lore.add(line);
+                    //String legacyLoreLine = ColorUtils.toLegacy(line); //todo() legacy trash
+                    //if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
+                    //lore.add(line);
                 }
             }
 
@@ -159,12 +160,12 @@ public class KitsMenu extends InventoryBuilder {
 
                     player.updateInventory();
 
-                    player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                    Messages.RECEIVED_GKIT.sendMessage(player, placeholders);
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                    //player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders))); //todo() legacy trash
                 }
             } else {
-                player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                Messages.NO_GKIT_PERMISSION.sendMessage(player, placeholders);
             }
         }
     }

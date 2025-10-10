@@ -70,7 +70,7 @@ public class AllyMob {
         placeholders.put("%Player%", this.owner.getName());
         placeholders.put("%Mob%", this.type.entityType.getName()); //todo() npe check
 
-        this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName())); //todo() deprecated
+        //this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName())); //todo() legacy trash
         this.ally.setCustomNameVisible(true);
 
         startSpawnTimer();

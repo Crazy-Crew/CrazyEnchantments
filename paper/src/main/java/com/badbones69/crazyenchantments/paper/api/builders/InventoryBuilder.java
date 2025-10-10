@@ -26,7 +26,7 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
     protected final Server server = this.plugin.getServer();
 
-    private final Inventory inventory;
+    private Inventory inventory;
     private final Player player;
     private String title;
     private int size;
@@ -44,7 +44,7 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
         this.kit = null;
 
-        this.inventory = this.server.createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
+        //this.inventory = this.server.createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title)); //todo() legacy trash
     }
 
     public InventoryBuilder(@NotNull final Player player, final int size, @NotNull final String title, @NotNull final GKitz kit) {
@@ -55,7 +55,7 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
         this.kit = kit;
 
-        this.inventory = this.server.createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
+        //this.inventory = this.server.createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title)); //todo() legacy trash
     }
 
     public abstract InventoryBuilder build();

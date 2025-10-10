@@ -9,13 +9,12 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -59,15 +58,16 @@ public class DustControlListener implements Listener {
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         for (final String line : config.getStringList("Settings.EnchantmentBookLore")) {
-            if (line.toLowerCase().contains("%description%")) {
-                enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
+            if (line.toLowerCase().contains("%description%")) { //todo() simplify this
+                //enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
 
                 continue;
             }
 
-            TextComponent lineToAdd = ColorUtils.legacyTranslateColourCodes(line.replaceAll("(%Success_Rate%|%success_rate%)", String.valueOf(data.getSuccessChance())).replaceAll("(%Destroy_Rate%|%destroy_rate%)", String.valueOf(data.getDestroyChance())));
+            //TextComponent lineToAdd = ColorUtils.legacyTranslateColourCodes(line.replaceAll("(%Success_Rate%|%success_rate%)", String.valueOf(data.getSuccessChance()))
+            // .replaceAll("(%Destroy_Rate%|%destroy_rate%)", String.valueOf(data.getDestroyChance())));
 
-            lore.add(lineToAdd);
+            //lore.add(lineToAdd);
         }
 
         item.editPersistentDataContainer(container -> container.set(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(data)));
@@ -123,7 +123,8 @@ public class DustControlListener implements Listener {
                 if (total >= 100) return;
 
                 if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                    player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                    //player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work.")); //todo() configurable
+
                     return;
                 }
 
@@ -150,7 +151,8 @@ public class DustControlListener implements Listener {
                 if (total <= 0) return;
 
                 if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                    player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                    //player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work.")); //todo() configurable
+
                     return;
                 }
 
@@ -198,7 +200,7 @@ public class DustControlListener implements Listener {
             event.setCancelled(true);
 
             if (this.methods.isInventoryFull(player)) {
-                player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+                Messages.INVENTORY_FULL.sendMessage(player);
 
                 return true;
             }
@@ -220,7 +222,7 @@ public class DustControlListener implements Listener {
             if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle", true)) {
                 final List<Color> colors = new ArrayList<>();
 
-                ColorUtils.color(config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime"));
+                //ColorUtils.color(config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime"));
 
                 this.methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }

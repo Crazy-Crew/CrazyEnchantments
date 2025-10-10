@@ -14,7 +14,7 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandDebug extends BaseCommand {
+public class CommandDebug extends BaseCommand { //todo() legacy trash
 
     @Command("debug")
     @Permission(value = "crazyenchantments.debug", def = PermissionDefault.OP)
@@ -40,13 +40,13 @@ public class CommandDebug extends BaseCommand {
                 sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
 
                 for (String broke : brokenEnchantments) {
-                    sender.sendMessage(ColorUtils.color("&c#" + amount + ": &6" + broke));
+                    //sender.sendMessage(ColorUtils.color("&c#" + amount + ": &6" + broke));
                     amount++;
                 }
 
-                sender.sendMessage(ColorUtils.color("&7- &cMissing from the Enchantments.yml"));
-                sender.sendMessage(ColorUtils.color("&7- &c<Enchantment Name>: option was changed"));
-                sender.sendMessage(ColorUtils.color("&7- &cYaml format has been broken."));
+                //sender.sendMessage(ColorUtils.color("&7- &cMissing from the Enchantments.yml"));
+                //sender.sendMessage(ColorUtils.color("&7- &c<Enchantment Name>: option was changed"));
+                //sender.sendMessage(ColorUtils.color("&7- &cYaml format has been broken."));
             }
 
             if (!brokenEnchantmentTypes.isEmpty()) {
@@ -55,7 +55,7 @@ public class CommandDebug extends BaseCommand {
                 sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
 
                 for (String broke : brokenEnchantmentTypes) {
-                    sender.sendMessage(ColorUtils.color("&c#" + i + ": &6" + broke));
+                    //sender.sendMessage(ColorUtils.color("&c#" + i + ": &6" + broke));
                     i++;
                 }
             }
@@ -63,6 +63,6 @@ public class CommandDebug extends BaseCommand {
 
         sender.sendMessage(ColorUtils.getPrefix("&cEnchantment Types and amount of items in each:"));
 
-        MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
+        //MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
     }
 }

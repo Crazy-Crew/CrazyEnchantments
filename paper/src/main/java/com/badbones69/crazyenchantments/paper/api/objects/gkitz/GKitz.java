@@ -119,7 +119,7 @@ public class GKitz {
                 enchantments.add("%s %s".formatted(custom.getCustomName(), level));
             }
 
-            builder.getLore().addAll(0, enchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList());
+            //builder.getLore().addAll(0, enchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList()); //todo() legacy trash
 
             builder.setEnchantments(vanilla);
 

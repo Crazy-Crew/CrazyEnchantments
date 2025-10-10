@@ -37,7 +37,7 @@ public class ProtectionCrystalItem implements CustomItem {
                 .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false))
                 .addKey(DataKeys.protection_crystal.getNamespacedKey(), "true");
 
-        this.protectionString = ColorUtils.color(config.getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"));
+        //this.protectionString = ColorUtils.color(config.getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")); //todo() legacy trash
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ProtectionCrystalItem implements CustomItem {
 
         itemStack.editPersistentDataContainer(container -> container.set(key, PersistentDataType.STRING, value));
 
-        lore.add(ColorUtils.legacyTranslateColourCodes(this.protectionString));
+        //lore.add(ColorUtils.legacyTranslateColourCodes(this.protectionString)); //todo() legacy trash
 
         itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
     }
@@ -82,7 +82,7 @@ public class ProtectionCrystalItem implements CustomItem {
         final List<Component> lore = itemStack.lore();
 
         if (lore != null) {
-            lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(this.protectionString)));
+            //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(this.protectionString))); //todo() legacy trash
 
             itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
         }

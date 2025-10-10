@@ -37,7 +37,7 @@ public class ShopManager {
 
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
-        this.inventoryName = ColorUtils.color(this.options.getInventoryName());
+        //this.inventoryName = ColorUtils.color(this.options.getInventoryName()); //todo() legacy trash
         this.inventorySize = this.options.getInventorySize();
         this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table", false);
 

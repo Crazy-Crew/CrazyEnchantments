@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -62,10 +63,10 @@ public class ScrollListener implements Listener {
 
         if (type == null) return;
 
-        Player player = (Player) event.getWhoClicked();
+        if (!(event.getWhoClicked() instanceof Player player)) return;
 
         if (scroll.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            Messages.NEED_TO_UNSTACK_ITEM.sendMessage(player);
 
             return;
         }
@@ -82,7 +83,7 @@ public class ScrollListener implements Listener {
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
                     if (this.options.isBlackScrollChanceToggle() && !this.methods.randomPicker(this.options.getBlackScrollChance(), 100)) {
-                        player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+                        Messages.BLACK_SCROLL_UNSUCCESSFUL.sendMessage(player);
 
                         return;
                     }
@@ -106,6 +107,7 @@ public class ScrollListener implements Listener {
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
 
                         player.setItemOnCursor(this.methods.removeItem(scroll));
+
                         return;
                     }
                 }
@@ -151,7 +153,7 @@ public class ScrollListener implements Listener {
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
 
-            player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+            Messages.RIGHT_CLICK_BLACK_SCROLL.sendMessage(player);
 
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {
@@ -194,8 +196,8 @@ public class ScrollListener implements Listener {
 
         orderInts(newEnchantmentOrder, enchantments); // Order Enchantments by length.
 
-        List<Component> enchantLore = newEnchantmentOrder.stream().map(i ->
-                ColorUtils.legacyTranslateColourCodes("%s %s".formatted(i.getCustomName(), NumberUtils.toRoman(data.getLevel(i.getName()))))).collect(Collectors.toList());
+        //List<Component> enchantLore = newEnchantmentOrder.stream().map(i ->
+                //ColorUtils.legacyTranslateColourCodes("%s %s".formatted(i.getCustomName(), NumberUtils.toRoman(data.getLevel(i.getName()))))).collect(Collectors.toList());
 
         List<Component> normalLore = stripNonNormalLore(lore == null ? new ArrayList<>() : lore, newEnchantmentOrder);
 
@@ -208,10 +210,10 @@ public class ScrollListener implements Listener {
         for (String selection : order) {
             switch (selection) {
                 case "CE_Enchantments" -> {
-                    if (addSpaces && !wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
-                    newLore.addAll(enchantLore);
+                    //if (addSpaces && !wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
+                    //newLore.addAll(enchantLore);
 
-                    wasEmpty = enchantLore.isEmpty();
+                    //wasEmpty = enchantLore.isEmpty();
                 }
 
                 case "Protection" -> {
@@ -240,28 +242,28 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull final PersistentDataContainerView container) {
         final List<Component> lore = new ArrayList<>();
 
-        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
-        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
+        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
+        //if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
 
         return lore;
     }
 
     private List<Component> stripNonNormalLore(@NotNull final List<Component> lore, @NotNull final List<CEnchantment> enchantments) {
         // Remove blank lines
-        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").isEmpty());
+        //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").isEmpty()); //todo() legacy trash
 
         // Remove CE enchantment lore
-        enchantments.forEach(enchant -> lore.removeIf(loreComponent ->
-                ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName()))
-        ));
+        //enchantments.forEach(enchant -> lore.removeIf(loreComponent ->
+        //        ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName()))
+        //));
 
         // Remove white-scroll protection lore
-        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(Scrolls.getWhiteScrollProtectionName())));
+        //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(Scrolls.getWhiteScrollProtectionName())));
 
         // Remove Protection-crystal protection lore
-        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                ColorUtils.stripStringColour(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
-        ));
+        //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
+        //       ColorUtils.stripStringColour(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
+        //));
 
         return lore;
     }
@@ -270,16 +272,16 @@ public class ScrollListener implements Listener {
         if (this.options.isUseSuffix()) {
             final boolean hasName = item.hasData(DataComponentTypes.ITEM_NAME);
 
-            String newName = hasName ? ColorUtils.toLegacy(item.getData(DataComponentTypes.ITEM_NAME)) :
-                    "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
+            //String newName = hasName ? ColorUtils.toLegacy(item.getData(DataComponentTypes.ITEM_NAME)) :
+                    //"&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
 
             if (hasName) {
                 for (int i = 0; i <= 100; i++) {
                     String suffixWithAmount = this.options.getSuffix().replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
 
-                    if (!newName.endsWith(suffixWithAmount)) continue;
+                    //if (!newName.endsWith(suffixWithAmount)) continue;
 
-                    newName = newName.substring(0, newName.length() - suffixWithAmount.length());
+                    //newName = newName.substring(0, newName.length() - suffixWithAmount.length());
 
                     break;
                 }
@@ -287,7 +289,7 @@ public class ScrollListener implements Listener {
 
             String amount = String.valueOf(this.options.isCountVanillaEnchantments() ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
 
-            item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.options.getSuffix().replace("%Amount%", amount).replace("%amount%", amount)));
+            //item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.options.getSuffix().replace("%Amount%", amount).replace("%amount%", amount)));
         }
     }
 
@@ -295,6 +297,7 @@ public class ScrollListener implements Listener {
         list.sort((a1, a2) -> {
             Integer string1 = map.get(a1);
             Integer string2 = map.get(a2);
+
             return string2.compareTo(string1);
         });
     }

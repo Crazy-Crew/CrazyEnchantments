@@ -194,13 +194,13 @@ public class BlackSmithMenu extends InventoryBuilder {
                 ItemStack result = item.getResultItem();
 
                 String value = String.valueOf(item.getCost());
-                String message = Messages.replacePlaceholders("%Cost%", value, BlackSmithManager.getItemCost());
+                //String message = Messages.replacePlaceholders("%Cost%", value, BlackSmithManager.getItemCost()); //todo() legacy trash
 
                 for (int slot : resultBorder) {
                     inventory.setItem(slot, BlackSmithManager.getBlueGlass());
                 }
 
-                inventory.setItem(this.outputSlot, this.methods.addLore(result, message));
+                //inventory.setItem(this.outputSlot, this.methods.addLore(result, message));
             } else {
                 inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
 

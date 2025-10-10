@@ -356,7 +356,7 @@ public class CrazyInstance {
 
             String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
 
-            newLore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+            //newLore.add(ColorUtils.legacyTranslateColourCodes(loreString)); //todo() legacy trash
 
             for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());
@@ -376,7 +376,7 @@ public class CrazyInstance {
         final List<Component> lore = itemStack.lore();
 
         if (lore != null) {
-            lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName())));
+            //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName()))); //todo() legacy trash
 
             itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
         }
@@ -407,7 +407,7 @@ public class CrazyInstance {
 
         if (lore != null) {
             for (final CEnchantment enchant : enchants) {
-                lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName())));
+                //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName()))); //todo() legacy trash
 
                 itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
             }

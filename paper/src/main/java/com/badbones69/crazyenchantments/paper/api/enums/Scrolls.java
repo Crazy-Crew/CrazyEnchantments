@@ -102,7 +102,8 @@ public enum Scrolls {
     private static final NamespacedKey whiteScrollProtectionKey = DataKeys.white_scroll_protection.getNamespacedKey();
 
     public static String getWhiteScrollProtectionName() {
-        return ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED"));
+        //return ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED"));
+        return ""; //todo() legacy trash
     }
 
     public static boolean hasWhiteScrollProtection(@NotNull final ItemStack item) {
@@ -118,7 +119,7 @@ public enum Scrolls {
 
         List<Component> lore = new ArrayList<>(itemLore != null ? itemLore.styledLines() : new ArrayList<>());
 
-        lore.add(ColorUtils.legacyTranslateColourCodes(getWhiteScrollProtectionName()));
+        //lore.add(ColorUtils.legacyTranslateColourCodes(getWhiteScrollProtectionName())); //todo() legacy trash
 
         item.editPersistentDataContainer(container -> container.set(whiteScrollProtectionKey, PersistentDataType.BOOLEAN, true));
 
@@ -138,7 +139,7 @@ public enum Scrolls {
             return item;
         }
 
-        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(getWhiteScrollProtectionName())));
+        //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(getWhiteScrollProtectionName()))); //todo() legacy trash
 
         item.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
 

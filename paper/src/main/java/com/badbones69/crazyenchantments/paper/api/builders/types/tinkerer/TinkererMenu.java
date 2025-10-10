@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
@@ -126,7 +127,9 @@ public class TinkererMenu extends InventoryBuilder {
                     this.api.giveCurrency(player, currency, total);
                 }
 
-                if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
+                if (toggle) {
+                    Messages.TINKER_SOLD_MESSAGE.sendMessage(player);
+                }
 
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
 
@@ -183,13 +186,13 @@ public class TinkererMenu extends InventoryBuilder {
 
         private boolean isFirstEmpty(InventoryClickEvent event, Player player, ItemStack current, Inventory topInventory) {
             if (topInventory.firstEmpty() == -1) {
-                player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
+                Messages.TINKER_INVENTORY_FULL.sendMessage(player);
 
                 return true;
             }
 
             if (current.getAmount() > 1) {
-                player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+                Messages.NEED_TO_UNSTACK_ITEM.sendMessage(player);
 
                 return true;
             }

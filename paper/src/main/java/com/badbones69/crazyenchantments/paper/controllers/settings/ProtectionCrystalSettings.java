@@ -13,10 +13,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +31,7 @@ public class ProtectionCrystalSettings {
     private final Methods methods = this.starter.getMethods();
 
     @NotNull
-    private final String protectionString = ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"));
+    //private final String protectionString = ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
@@ -113,7 +111,7 @@ public class ProtectionCrystalSettings {
         final List<Component> lore = item.lore();
 
         if (lore != null) {
-            lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(this.protectionString)));
+            //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(this.protectionString)));
 
             item.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
         }

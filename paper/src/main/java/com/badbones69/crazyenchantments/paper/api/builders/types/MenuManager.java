@@ -58,11 +58,11 @@ public class MenuManager {
     }
 
     public static void openKitsPreviewMenu(@NotNull final Player player, final int slots, @NotNull final GKitz kit) {
-        player.openInventory(new KitsPreviewMenu(player, slots, ColorUtils.toLegacy(kit.getDisplayItem().displayName()), kit).build().getInventory());
+        //player.openInventory(new KitsPreviewMenu(player, slots, ColorUtils.toLegacy(kit.getDisplayItem().displayName()), kit).build().getInventory()); //todo() legacy trash
     }
 
     public static void openInfoMenu(@NotNull final Player player) {
-        player.openInventory(new BaseMenu(player, KitsManager.getInventorySize(), ColorUtils.toLegacy(KitsManager.getInventoryName())).build().getInventory());
+        //player.openInventory(new BaseMenu(player, KitsManager.getInventorySize(), ColorUtils.toLegacy(KitsManager.getInventoryName())).build().getInventory()); //todo() legacy trash
     }
 
     public static void openInfoMenu(@NotNull final Player player, @NotNull final EnchantmentType type) {
@@ -72,7 +72,7 @@ public class MenuManager {
 
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
 
-        player.openInventory(new BaseMenu(player, slots, ColorUtils.toLegacy(KitsManager.getInventoryName())).setEnchantmentType(type).build().getInventory());
+        //player.openInventory(new BaseMenu(player, slots, ColorUtils.toLegacy(KitsManager.getInventoryName())).setEnchantmentType(type).build().getInventory()); //todo() legacy trash
     }
 
     public static void openBlackSmithMenu(@NotNull final Player player) {

@@ -20,7 +20,7 @@ public class KitsManager {
 
         String path = "Info-GUI-Settings";
 
-        inventoryName = ColorUtils.legacyTranslateColourCodes(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
+        //inventoryName = ColorUtils.legacyTranslateColourCodes(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info")); //todo() legacy trash
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
 
         backRight = new ItemBuilder()

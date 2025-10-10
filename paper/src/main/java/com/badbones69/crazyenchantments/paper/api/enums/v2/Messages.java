@@ -270,6 +270,9 @@ public enum Messages {
                 .replaceAll("%limitSetInConfig%", "{config_limit}")
                 .replaceAll("%Arg%", "{arg}")
                 .replaceAll("%itemEnchants%", "{item_enchants}")
-                .replaceAll("%Money_Needed%", "{money_needed");
+                .replaceAll("%Money_Needed%", "{money_needed")
+                .replaceAll("%maxEnchants%", "{max_enchants}")
+                .replaceAll("%enchantAmount%", "{enchant_amount}")
+                .replaceAll("%baseEnchants%", "{base_enchants}");
     }
 }

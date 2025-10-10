@@ -214,12 +214,12 @@ public class CEBook {
 
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : this.enchantment.getInfoDescription()) {
-                    lore.add(ColorUtils.color(enchantmentLine));
+                    //lore.add(ColorUtils.color(enchantmentLine)); //todo() legacy trash
                 }
             } else {
-                lore.add(ColorUtils.color(bookLine)
-                .replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate))
-                .replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate)));
+                //lore.add(ColorUtils.color(bookLine)
+                //.replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate)) //todo() legacy trash
+                //.replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate))); //todo() legacy trash
             }
         }
 

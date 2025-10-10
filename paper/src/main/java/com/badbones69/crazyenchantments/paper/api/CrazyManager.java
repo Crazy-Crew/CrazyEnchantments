@@ -381,7 +381,7 @@ public class CrazyManager {
 
             String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
 
-            newLore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+            //newLore.add(ColorUtils.legacyTranslateColourCodes(loreString)); //todo() legacy trash
 
             for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());

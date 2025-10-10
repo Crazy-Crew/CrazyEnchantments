@@ -33,7 +33,7 @@ public class AllyManager {
         String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
 
         for (AllyType type : AllyType.values()) {
-            this.allyTypeNameCache.put(type, ColorUtils.color(configuration.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
+            //this.allyTypeNameCache.put(type, ColorUtils.color(configuration.getString(allyTypePath + type.getConfigName(), type.getDefaultName()))); //todo() legacy trash
         }
     }
     
