@@ -1,25 +1,30 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects.crystals;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProtectionCrystalItem implements CustomItem {
 
-    private String protectionString;
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final FusionPaper fusion = this.plugin.getFusion();
+
+    private Component protectionLine;
     private ItemBuilder itemBuilder;
 
     public ProtectionCrystalItem() {
@@ -37,7 +42,7 @@ public class ProtectionCrystalItem implements CustomItem {
                 .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false))
                 .addKey(DataKeys.protection_crystal.getNamespacedKey(), "true");
 
-        //this.protectionString = ColorUtils.color(config.getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")); //todo() legacy trash
+        this.protectionLine = this.fusion.parse(config.getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"));
     }
 
     @Override
@@ -65,7 +70,7 @@ public class ProtectionCrystalItem implements CustomItem {
 
         itemStack.editPersistentDataContainer(container -> container.set(key, PersistentDataType.STRING, value));
 
-        //lore.add(ColorUtils.legacyTranslateColourCodes(this.protectionString)); //todo() legacy trash
+        lore.add(this.protectionLine);
 
         itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
     }
@@ -82,7 +87,9 @@ public class ProtectionCrystalItem implements CustomItem {
         final List<Component> lore = itemStack.lore();
 
         if (lore != null) {
-            //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(this.protectionString))); //todo() legacy trash
+            final String component = PlainTextComponentSerializer.plainText().serialize(this.protectionLine);
+
+            lore.removeIf(line -> PlainTextComponentSerializer.plainText().serialize(line).contains(component));
 
             itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
         }
