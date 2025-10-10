@@ -1,16 +1,15 @@
 Settings:
-  Tinker-Version: 1.1
-  GUIName: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Tinker GUI
+  GUIName: '<gray><b>The <dark_red><b>Crazy <red><b>Tinkerer' #Name of the Tinker GUI
   Currency: XP_Total #The currency you wish to use.
-  TradeButton: '&eClick to accept the trade' #The Red Buttons in the Tinkerer
+  TradeButton: '<yellow>Click to accept the trade' #The Red Buttons in the Tinkerer
   TradeButton-Lore: #Lore on the trade buttons.
     - ''
   BottleOptions:
     Item: 'EXPERIENCE_BOTTLE' #Item the XP bottles are
-    Name: '&aRecycled XP' #Name of the Bottle
+    Name: '<green>Recycled XP' #Name of the Bottle
     Lore: #Lore of the Bottle
-      - '&a&lRecycled &6%total%XP'
-      - '&7&l(&6&l!&7&l) &7Throw to get XP.'
+      - '<green><b>Recycled <gold>%total%XP'
+      - '<gray><b>(<gold><b>!<gray><b>) <gray>Throw to get XP.'
 Tinker:
   Vanilla-Enchantments:
     #Armor Enchantments

@@ -1,31 +1,31 @@
 Info-GUI-Settings:
   Inventory:
-    Name: '&c&lEnchantment Info'
+    Name: '<red><bold>Enchantment Info'
     Size: 18
   Back-Item:
     Right:
       Item: 'NETHER_STAR'
-      Name: '&7&l<<&b&lBack'
+      Name: '<gray><bold><<<aqua><bold>Back'
       Lore: [ ]
     Left:
       Item: 'NETHER_STAR'
-      Name: '&b&lBack&7&l>>'
+      Name: '<aqua><bold>Back<gray><bold>>>'
       Lore: [ ]
 Types:
   Helmet:
     Display-Item:
       Item: 'GOLDEN_HELMET'
       Slot: 1
-      Name: '&e&lHelmet Enchantments'
+      Name: '<yellow><bold>Helmet Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Leather Helmet'
-        - '&a- Chain Helmet'
-        - '&a- Gold Helmet'
-        - '&a- Iron Helmet'
-        - '&a- Diamond Helmet'
-        - '&a- Netherite Helmet'
-        - '&a- Turtle Helmet'
+        - '<gray>Enchantable Items:'
+        - '<green>- Leather Helmet'
+        - '<green>- Chain Helmet'
+        - '<green>- Gold Helmet'
+        - '<green>- Iron Helmet'
+        - '<green>- Diamond Helmet'
+        - '<green>- Netherite Helmet'
+        - '<green>- Turtle Helmet'
     Enchantable-Items:
       - 'LEATHER_HELMET'
       - 'CHAINMAIL_HELMET'
@@ -38,15 +38,15 @@ Types:
     Display-Item:
       Item: 'GOLDEN_BOOTS'
       Slot: 2
-      Name: '&e&lBoot Enchantments'
+      Name: '<yellow><bold>Boot Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Leather Boots'
-        - '&a- Chain Boots'
-        - '&a- Gold Boots'
-        - '&a- Iron Boots'
-        - '&a- Diamond Boots'
-        - '&a- Netherite Boots'
+        - '<gray>Enchantable Items:'
+        - '<green>- Leather Boots'
+        - '<green>- Chain Boots'
+        - '<green>- Gold Boots'
+        - '<green>- Iron Boots'
+        - '<green>- Diamond Boots'
+        - '<green>- Netherite Boots'
     Enchantable-Items:
       - 'LEATHER_BOOTS'
       - 'CHAINMAIL_BOOTS'
@@ -58,15 +58,15 @@ Types:
     Display-Item:
       Item: 'GOLDEN_CHESTPLATE'
       Slot: 3
-      Name: '&e&lArmor Enchantments'
+      Name: '<yellow><bold>Armor Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Leather Armor'
-        - '&a- Chain Armor'
-        - '&a- Gold Armor'
-        - '&a- Iron Armor'
-        - '&a- Diamond Armor'
-        - '&a- Netherite Armor'
+        - '<gray>Enchantable Items:'
+        - '<green>- Leather Armor'
+        - '<green>- Chain Armor'
+        - '<green>- Gold Armor'
+        - '<green>- Iron Armor'
+        - '<green>- Diamond Armor'
+        - '<green>- Netherite Armor'
     Enchantable-Items:
       - 'LEATHER_HELMET'
       - 'CHAINMAIL_HELMET'
@@ -97,25 +97,25 @@ Types:
     Display-Item:
       Item: 'BOW'
       Slot: 4
-      Name: '&e&lBow Enchantments'
+      Name: '<yellow><bold>Bow Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Bow'
+        - '<gray>Enchantable Items:'
+        - '<green>- Bow'
     Enchantable-Items:
       - 'BOW'
   Sword:
     Display-Item:
       Item: 'GOLDEN_SWORD'
       Slot: 5
-      Name: '&e&lSword Enchantments'
+      Name: '<yellow><bold>Sword Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Wooden Sword'
-        - '&a- Stone Sword'
-        - '&a- Gold Sword'
-        - '&a- Iron Sword'
-        - '&a- Diamond Sword'
-        - '&a- Netherite Sword'
+        - '<gray>Enchantable Items:'
+        - '<green>- Wooden Sword'
+        - '<green>- Stone Sword'
+        - '<green>- Gold Sword'
+        - '<green>- Iron Sword'
+        - '<green>- Diamond Sword'
+        - '<green>- Netherite Sword'
     Enchantable-Items:
       - 'WOODEN_SWORD'
       - 'STONE_SWORD'
@@ -127,15 +127,15 @@ Types:
     Display-Item:
       Slot: 6
       Item: 'GOLDEN_AXE'
-      Name: '&e&lAxe Enchantments'
+      Name: '<yellow><bold>Axe Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Wooden Axe'
-        - '&a- Stone Axe'
-        - '&a- Iron Axe'
-        - '&a- Golden Axe'
-        - '&a- Diamond Axe'
-        - '&a- Netherite Axe'
+        - '<gray>Enchantable Items:'
+        - '<green>- Wooden Axe'
+        - '<green>- Stone Axe'
+        - '<green>- Iron Axe'
+        - '<green>- Golden Axe'
+        - '<green>- Diamond Axe'
+        - '<green>- Netherite Axe'
     Enchantable-Items:
       - 'WOODEN_AXE'
       - 'STONE_AXE'
@@ -147,15 +147,15 @@ Types:
     Display-Item:
       Item: 'GOLDEN_HOE'
       Slot: 7
-      Name: '&e&lHoe Enchantments'
+      Name: '<yellow><bold>Hoe Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Wooden Hoe'
-        - '&a- Stone Hoe'
-        - '&a- Gold Hoe'
-        - '&a- Iron Hoe'
-        - '&a- Diamond Hoe'
-        - '&a- Netherite Hoe'
+        - '<gray>Enchantable Items:'
+        - '<green>- Wooden Hoe'
+        - '<green>- Stone Hoe'
+        - '<green>- Gold Hoe'
+        - '<green>- Iron Hoe'
+        - '<green>- Diamond Hoe'
+        - '<green>- Netherite Hoe'
     Enchantable-Items:
       - 'WOODEN_HOE'
       - 'STONE_HOE'
@@ -167,15 +167,15 @@ Types:
     Display-Item:
       Item: 'GOLDEN_PICKAXE'
       Slot: 8
-      Name: '&e&lPickaxe Enchantments'
+      Name: '<yellow><bold>Pickaxe Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Wooden Pickaxe'
-        - '&a- Stone Pickaxe'
-        - '&a- Gold Pickaxe'
-        - '&a- Iron Pickaxe'
-        - '&a- Diamond Pickaxe'
-        - '&a- Netherite Pickaxe'
+        - '<gray>Enchantable Items:'
+        - '<green>- Wooden Pickaxe'
+        - '<green>- Stone Pickaxe'
+        - '<green>- Gold Pickaxe'
+        - '<green>- Iron Pickaxe'
+        - '<green>- Diamond Pickaxe'
+        - '<green>- Netherite Pickaxe'
     Enchantable-Items:
       - 'WOODEN_PICKAXE'
       - 'STONE_PICKAXE'
@@ -187,14 +187,14 @@ Types:
     Display-Item:
       Item: 'GOLDEN_SHOVEL'
       Slot: 9
-      Name: '&e&lTool Enchantments'
+      Name: '<yellow><bold>Tool Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- All Pickaxes'
-        - '&a- All Axes'
-        - '&a- All Shovels'
-        - '&a- All Hoes'
-        - '&a- Shears'
+        - '<gray>Enchantable Items:'
+        - '<green>- All Pickaxes'
+        - '<green>- All Axes'
+        - '<green>- All Shovels'
+        - '<green>- All Hoes'
+        - '<green>- Shears'
     Enchantable-Items:
       - 'WOODEN_PICKAXE'
       - 'STONE_PICKAXE'
@@ -225,14 +225,14 @@ Types:
     Display-Item:
       Item: 'DAMAGED_ANVIL'
       Slot: 14
-      Name: '&e&lDamaged Item Enchantments'
+      Name: '<yellow><bold>Damaged Item Enchantments'
       Lore:
-        - '&7Enchantable Items:'
-        - '&a- Fishing Rods.'
-        - '&a- Shears'
-        - '&a- All Tools'
-        - '&a- All Armor'
-        - '&a- All Weapons'
+        - '<gray>Enchantable Items:'
+        - '<green>- Fishing Rods.'
+        - '<green>- Shears'
+        - '<green>- All Tools'
+        - '<green>- All Armor'
+        - '<green>- All Weapons'
     Enchantable-Items:
       - 'WOODEN_PICKAXE'
       - 'STONE_PICKAXE'
