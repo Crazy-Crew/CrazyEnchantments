@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
 import org.bukkit.command.CommandSender;
@@ -581,7 +582,7 @@ public class LegacyMigration extends IEnchantMigration {
         }
 
         try {
-            final YamlConfiguration configuration = FileKeys.messages.getYamlConfiguration();
+            /*final YamlConfiguration configuration = FileKeys.messages.getYamlConfiguration();
 
             getConfigurationSection(configuration, "Messages").ifPresentOrElse(section -> {
                 getConfigurationSection(section, "Show-Enchants-Format").ifPresent(message -> {
@@ -612,13 +613,17 @@ public class LegacyMigration extends IEnchantMigration {
 
                     section.set(key, this.utils.convertLegacy(section.getString(key, "")));
                 }
-            }, () -> failed.add("<red>⤷ Messages.yml"));
+            }, () -> failed.add("<red>⤷ Messages.yml"));*/
+
+            final Messages[] messages = Messages.values();
+
+            for (final Messages message : messages) {
+                message.migrate();
+            }
 
             FileKeys.messages.save();
 
-            if (!failed.contains("<red>⤷ Messages.yml")) {
-                success.add("<green>⤷ Messages.yml");
-            }
+            success.add("<green>⤷ Messages.yml");
         } catch (final Exception exception) {
             failed.add("<red>⤷ Messages.yml");
         }

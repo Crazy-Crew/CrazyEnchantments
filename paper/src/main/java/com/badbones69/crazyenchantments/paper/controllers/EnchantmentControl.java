@@ -5,9 +5,9 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookFailEvent;
@@ -97,10 +97,10 @@ public class EnchantmentControl implements Listener {
 
                     player.setItemOnCursor(null);
 
-                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(new HashMap<>(){{
-                        put("%Enchantment%", enchantment.getCustomName());
-                        put("%Level%", String.valueOf(ceBook.getLevel()));
-                    }}));
+                    Messages.ENCHANTMENT_UPGRADE_SUCCESS.sendMessage(player, new HashMap<>() {{
+                        put("{enchantment}", enchantment.getCustomName());
+                        put("{level}", String.valueOf(ceBook.getLevel()));
+                    }});
 
                     player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
                     // ToDo potentially add pitch and volume options.
@@ -112,18 +112,22 @@ public class EnchantmentControl implements Listener {
                     if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break", true)) {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
-                            player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+
+                            Messages.ITEM_WAS_PROTECTED.sendMessage(player);
                         } else {
                             event.setCurrentItem(instance.removeEnchantment(item, enchantment));
-                            player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
+
+                            Messages.ENCHANTMENT_UPGRADE_DESTROYED.sendMessage(player);
                         }
                     } else {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
-                            player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+
+                            Messages.ITEM_WAS_PROTECTED.sendMessage(player);
                         } else {
                             event.setCurrentItem(null);
-                            player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
+
+                            Messages.ITEM_DESTROYED.sendMessage(player);
                         }
                     }
 
@@ -136,7 +140,7 @@ public class EnchantmentControl implements Listener {
                 if (!this.methods.isEventCancelled(new BookFailEvent(player, item, ceBook))) {
                     player.setItemOnCursor(null);
 
-                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
+                    Messages.ENCHANTMENT_UPGRADE_FAILED.sendMessage(player);
 
                     this.methods.playItemBreak(player, book);
                 }
@@ -146,14 +150,14 @@ public class EnchantmentControl implements Listener {
         }
 
         if (!this.crazyManager.canAddEnchantment(player, item)) {
-            player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+            Messages.HIT_ENCHANTMENT_MAX.sendMessage(player);
 
             return;
         }
 
         for (CEnchantment enchant : enchantments.keySet()) {
             if (enchant.conflictsWith(enchantment)) {
-                player.sendMessage(Messages.CONFLICTING_ENCHANT.getMessage());
+                Messages.CONFLICTING_ENCHANT.sendMessage(player);
 
                 return;
             }
@@ -170,7 +174,7 @@ public class EnchantmentControl implements Listener {
 
             player.setItemOnCursor(null);
 
-            player.sendMessage(Messages.BOOK_WORKS.getMessage());
+            Messages.BOOK_WORKS.sendMessage(player);
 
             player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
 
@@ -183,13 +187,13 @@ public class EnchantmentControl implements Listener {
 
                 event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
 
-                player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                Messages.ITEM_WAS_PROTECTED.sendMessage(player);
             } else {
                 this.methods.playItemBreak(player, item);
 
                 event.setCurrentItem(null);
 
-                player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
+                Messages.ITEM_DESTROYED.sendMessage(player);
             }
 
             player.setItemOnCursor(null);
@@ -197,7 +201,7 @@ public class EnchantmentControl implements Listener {
             return;
         }
 
-        player.sendMessage(Messages.BOOK_FAILED.getMessage());
+        Messages.BOOK_FAILED.sendMessage(player);
 
         this.methods.playItemBreak(player, book);
 

@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
@@ -166,7 +167,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+            Messages.DISORDERED_ENEMY_HOT_BAR.sendMessage(damager);
         }
 
         // Check if CEPlayer is null as plugins like citizen use Player objects.
@@ -382,21 +383,26 @@ public class SwordEnchantments implements Listener {
     }
 
     private void rageInformPlayer(@NotNull final Player player, @NotNull final Map<String, String> placeholders, final float progress) {
-        if (Messages.RAGE_RAGE_UP.getMessageNoPrefix().isBlank()) return;
-
         if (this.options.isUseRageBossBar()) {
-            this.bossBarController.updateBossBar(player, Messages.RAGE_RAGE_UP.getMessageNoPrefix(placeholders), progress);
+            final Component component = Messages.RAGE_RAGE_UP.getMessage(player);
+
+            if (!component.equals(Component.empty())) {
+                this.bossBarController.updateBossBar(player, component, progress);
+            }
         } else {
-            player.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
+            Messages.RAGE_RAGE_UP.sendMessage(player, placeholders);
         }
     }
-    private void rageInformPlayer(@NotNull final Player player, @NotNull final Messages message, final float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
 
+    private void rageInformPlayer(@NotNull final Player player, @NotNull final Messages message, final float progress) {
         if (this.options.isUseRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
+            final Component component = message.getMessage(player);
+
+            if (!component.equals(Component.empty())) {
+                this.bossBarController.updateBossBar(player, component, progress);
+            }
         } else {
-            player.sendMessage(message.getMessage());
+            message.sendMessage(player);
         }
     }
 }

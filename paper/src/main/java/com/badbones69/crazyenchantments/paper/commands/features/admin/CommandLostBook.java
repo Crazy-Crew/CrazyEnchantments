@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -23,7 +23,7 @@ public class CommandLostBook extends BaseCommand {
     @Syntax("/crazyenchantments lostbook <category> <amount> [player]")
     public void lostbook(final CommandSender sender, final Category category, final int amount, @Optional @Nullable final Player target) {
         if (category == null) {
-            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage());
+            Messages.NOT_A_CATEGORY.sendMessage(sender);
 
             return;
         }
@@ -31,7 +31,7 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -46,7 +46,7 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -67,29 +67,29 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
         if (this.methods.isInventoryFull(safePlayer)) {
-            sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
 
         this.itemManager.getItem("scrambler_item").ifPresent(action -> this.methods.addItemToInventory(safePlayer, action.getItemStack(amount)));
 
-        Map<String, String> placeholders = new HashMap<>() {{
-            put("%Amount%", String.valueOf(amount));
-            put("%Player%", safePlayer.getName());
+        final Map<String, String> placeholders = new HashMap<>() {{
+            put("{amount}", String.valueOf(amount));
+            put("{player}", safePlayer.getName());
         }};
 
         if (target != null) {
-            sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
+            Messages.GIVE_SCRAMBLER_CRYSTAL.sendMessage(sender, placeholders);
         }
 
-        safePlayer.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
+        Messages.GET_SCRAMBLER.sendMessage(safePlayer, placeholders);
     }
 
     @Command("crystal")
@@ -99,13 +99,13 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
         if (this.methods.isInventoryFull(safePlayer)) {
-            sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
@@ -115,16 +115,16 @@ public class CommandLostBook extends BaseCommand {
 
             this.methods.addItemToInventory(safePlayer, itemStack);
 
-            Map<String, String> placeholders = new HashMap<>() {{
-                put("%Amount%", String.valueOf(amount));
-                put("%Player%", safePlayer.getName());
+            final Map<String, String> placeholders = new HashMap<>() {{
+                put("{amount}", String.valueOf(amount));
+                put("{player}", safePlayer.getName());
             }};
 
             if (target != null) {
-                sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
+                Messages.GIVE_PROTECTION_CRYSTAL.sendMessage(sender, placeholders);
             }
 
-            safePlayer.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+            Messages.GET_PROTECTION_CRYSTAL.sendMessage(safePlayer, placeholders);
         });
     }
 
@@ -135,13 +135,13 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
         if (this.methods.isInventoryFull(safePlayer)) {
-            sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
@@ -151,16 +151,16 @@ public class CommandLostBook extends BaseCommand {
 
             this.methods.addItemToInventory(safePlayer, itemStack);
 
-            Map<String, String> placeholders = new HashMap<>() {{
-                put("%Amount%", String.valueOf(amount));
-                put("%Player%", safePlayer.getName());
+            final Map<String, String> placeholders = new HashMap<>() {{
+                put("{amount}", String.valueOf(amount));
+                put("{player}", safePlayer.getName());
             }};
 
             if (target != null) {
-                sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
+                Messages.GIVE_SLOT_CRYSTAL.sendMessage(sender, placeholders);
             }
 
-            safePlayer.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
+            Messages.GET_SLOT_CRYSTAL.sendMessage(safePlayer, placeholders);
         });
     }
 }

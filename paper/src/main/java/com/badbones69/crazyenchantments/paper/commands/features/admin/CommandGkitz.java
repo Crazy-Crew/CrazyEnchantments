@@ -3,11 +3,10 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.*;
@@ -36,8 +35,7 @@ public class CommandGkitz {
     @Syntax("/gkitz")
     public void run(@NotNull final Player player) {
         if (!this.options.isGkitzToggle()) {
-            //todo() send message that kits are not enabled.
-            player.sendMessage(Messages.GKIT_NOT_ENABLED.getMessage());
+            Messages.GKIT_NOT_ENABLED.sendMessage(player);
 
             return;
         }
@@ -62,11 +60,10 @@ public class CommandGkitz {
 
                 this.crazyManager.getCEPlayer(player).removeCoolDown(kit);
 
-                sender.sendMessage(Messages.RESET_GKIT.getMessage(new HashMap<>() {{
-                    put("%Player%", player.getName());
-                    put("%Gkit%", kit.getName());
-                    put("%Kit%", kit.getName());
-                }}));
+                Messages.RESET_GKIT.sendMessage(sender, new HashMap<>() {{
+                    put("{player}", player.getName());
+                    put("{kit}", kit.getName());
+                }});
             }
 
             return;
@@ -75,11 +72,10 @@ public class CommandGkitz {
         if (sender instanceof Player player) {
             this.crazyManager.getCEPlayer(player).removeCoolDown(kit);
 
-            player.sendMessage(Messages.RESET_GKIT.getMessage(new HashMap<>() {{
-                put("%Player%", player.getName());
-                put("%Gkit%", kit.getName());
-                put("%Kit%", kit.getName());
-            }}));
+            Messages.RESET_GKIT.sendMessage(player, new HashMap<>() {{
+                put("{player}", player.getName());
+                put("{kit}", kit.getName());
+            }});
         }
     }
 
@@ -97,14 +93,13 @@ public class CommandGkitz {
                 final Player player = optionalPlayer.get();
 
                 final Map<String, String> placeholders = new HashMap<>() {{
-                    put("%Player%", player.getName());
-                    put("%Gkit%", kit.getName());
-                    put("%Kit%", kit.getName());
+                    put("{player}", player.getName());
+                    put("{kit}", kit.getName());
                 }};
 
                 giveKit(player, kit, isAdmin);
 
-                player.sendMessage(Messages.GIVEN_GKIT.getMessage(placeholders));
+                Messages.GIVEN_GKIT.sendMessage(player, placeholders);
             }
 
             return;
@@ -119,32 +114,41 @@ public class CommandGkitz {
         final CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
 
         final Map<String, String> placeholders = new HashMap<>() {{
-            put("%Player%", player.getName());
-            put("%Gkit%", kit.getName());
-            put("%Kit%", kit.getName());
+            put("{player}", player.getName());
+            put("{kit}", kit.getName());
         }};
 
         if (isAdmin) {
             cePlayer.giveGKit(kit);
 
-            player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+            Messages.RECEIVED_GKIT.sendMessage(player, placeholders);
 
             return;
         }
 
         if (!cePlayer.hasGkitPermission(kit)) {
-            player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+            Messages.NO_GKIT_PERMISSION.sendMessage(player, placeholders);
 
             return;
         }
 
         if (!cePlayer.canUseGKit(kit)) {
-            player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+            final String cooldown = cePlayer.getCoolDown(kit).getCooldown();
+            final String[] splitter = cooldown.split(",");
+
+            Map<String, String> newPlaceholders = new HashMap<>(placeholders) {{
+                put("{day}", splitter[0]);
+                put("{hour}", splitter[1]);
+                put("{minute}", splitter[2]);
+                put("{second}", splitter[3]);
+            }};
+
+            Messages.STILL_IN_COOLDOWN.sendMessage(player, newPlaceholders);
 
             return;
         }
 
-        player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+        Messages.RECEIVED_GKIT.sendMessage(player, placeholders);
 
         cePlayer.giveGKit(kit);
         cePlayer.addCoolDown(kit);

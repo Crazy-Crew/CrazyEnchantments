@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types.LegacyMigration;
@@ -32,13 +32,13 @@ public class CommandMigration extends BaseCommand {
                 case legacy_migration -> new LegacyMigration(sender).run();
                 case enchant_migration -> {
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        Messages.PLAYERS_ONLY.sendMessage(sender);
 
                         return;
                     }
 
                     if (!player.hasPermission("crazyenchantments.migrate-enchants")) {
-                        player.sendMessage(Messages.NO_PERMISSION.getMessage());
+                        Messages.NO_PERMISSION.sendMessage(player);
 
                         return;
                     }
@@ -49,7 +49,7 @@ public class CommandMigration extends BaseCommand {
                         final Optional<Player> optional = flags.getFlagValue("p", Player.class);
 
                         if (optional.isEmpty()) {
-                            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+                            Messages.NOT_ONLINE.sendMessage(sender);
                         } else {
                             argument = optional.get();
                         }

@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;

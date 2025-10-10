@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
@@ -23,14 +23,14 @@ public class CommandBook extends BaseCommand {
         Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
-        safePlayer.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(new HashMap<>() {{
-            put("%Player%", safePlayer.getName());
-        }}));
+        Messages.SEND_ENCHANTMENT_BOOK.sendMessage(safePlayer, new HashMap<>() {{
+            put("{player}", safePlayer.getName());
+        }});
 
         this.methods.addItemToInventory(safePlayer, new CEBook(enchantment, level, amount).buildBook());
     }

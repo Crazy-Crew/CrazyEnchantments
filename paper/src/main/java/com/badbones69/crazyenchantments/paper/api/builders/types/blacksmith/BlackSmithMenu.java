@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

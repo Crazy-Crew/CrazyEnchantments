@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;

@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -32,7 +32,7 @@ public class CommandSpawn extends BaseCommand {
     @Syntax("/crazyenchantments spawn [-ce/--enchantment] [-c/--category] [-l/--level 1 or 1-5] [-x] [-y] [-z] [-w/--world]")
     public void spawn(final CommandSender sender, final Flags flags) {
         if (!flags.hasFlag("ce") && !flags.hasFlag("cat")) {
-            sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
+            Messages.NOT_AN_ENCHANTMENT.sendMessage(sender);
 
             return;
         }
@@ -86,11 +86,11 @@ public class CommandSpawn extends BaseCommand {
 
         flags.getFlagValue("cat", Category.class).ifPresent(action -> world.dropItemNaturally(location, action.getLostBook().getLostBook(action).build()));
 
-        sender.sendMessage(Messages.SPAWNED_BOOK.getMessage(new HashMap<>() {{
-            put("%World%", location.getWorld().getName());
-            put("%X%", String.valueOf(location.getBlockX()));
-            put("%Y%", String.valueOf(location.getBlockY()));
-            put("%Z%", String.valueOf(location.getBlockZ()));
-        }}));
+        Messages.SPAWNED_BOOK.sendMessage(sender, new HashMap<>() {{
+            put("{world}", location.getWorld().getName());
+            put("{x}", String.valueOf(location.getBlockX()));
+            put("{y}", String.valueOf(location.getBlockY()));
+            put("{z}", String.valueOf(location.getBlockZ()));
+        }});
     }
 }

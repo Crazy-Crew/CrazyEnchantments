@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;

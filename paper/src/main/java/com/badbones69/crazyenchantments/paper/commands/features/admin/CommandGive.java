@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -23,7 +23,7 @@ public class CommandGive extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -31,7 +31,7 @@ public class CommandGive extends BaseCommand {
         final ItemStack itemStack = ItemBuilder.convertString(item).build();
 
         if (itemStack == null) {
-            sender.sendMessage(Messages.INVALID_ITEM_STRING.getMessage());
+            Messages.INVALID_ITEM_STRING.sendMessage(sender);
 
             return;
         }

@@ -4,8 +4,8 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
@@ -84,11 +84,11 @@ public class LostBookController implements Listener {
 
         player.getInventory().addItem(book.buildBook());
 
-        HashMap<String, String> placeholders = new HashMap<>();
+        final Map<String, String> placeholders = new HashMap<>();
 
-        placeholders.put("%Found%", book.getItemBuilder().getName());
+        placeholders.put("{found}", book.getItemBuilder().getName());
 
-        player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
+        Messages.CLEAN_LOST_BOOK.sendMessage(player, placeholders);
 
         if (lostBook.useFirework()) this.methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 

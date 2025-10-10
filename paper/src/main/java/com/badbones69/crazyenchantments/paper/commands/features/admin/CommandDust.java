@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -23,7 +23,7 @@ public class CommandDust extends BaseCommand {
         Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            Messages.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -43,26 +43,26 @@ public class CommandDust extends BaseCommand {
 
         switch (dust) {
             case SUCCESS_DUST -> {
-                safePlayer.sendMessage(Messages.GET_SUCCESS_DUST.getMessage(placeholders));
+                Messages.GET_SUCCESS_DUST.sendMessage(safePlayer, placeholders);
 
                 if (!sender.getName().equalsIgnoreCase(safePlayer.getName())) {
-                    sender.sendMessage(Messages.GIVE_SUCCESS_DUST.getMessage(placeholders));
+                    Messages.GIVE_SUCCESS_DUST.sendMessage(sender, placeholders);
                 }
             }
 
             case DESTROY_DUST -> {
-                safePlayer.sendMessage(Messages.GET_DESTROY_DUST.getMessage(placeholders));
+                Messages.GET_DESTROY_DUST.sendMessage(safePlayer, placeholders);
 
                 if (!sender.getName().equalsIgnoreCase(safePlayer.getName())) {
-                    sender.sendMessage(Messages.GIVE_DESTROY_DUST.getMessage(placeholders));
+                    Messages.GIVE_DESTROY_DUST.sendMessage(sender, placeholders);
                 }
             }
 
             case MYSTERY_DUST -> {
-                safePlayer.sendMessage(Messages.GET_MYSTERY_DUST.getMessage(placeholders));
+                Messages.GET_MYSTERY_DUST.sendMessage(safePlayer, placeholders);
 
                 if (!sender.getName().equalsIgnoreCase(safePlayer.getName())) {
-                    sender.sendMessage(Messages.GIVE_MYSTERY_DUST.getMessage(placeholders));
+                    Messages.GIVE_MYSTERY_DUST.sendMessage(sender, placeholders);
                 }
             }
         }

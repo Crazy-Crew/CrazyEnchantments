@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
@@ -27,7 +27,7 @@ public class CommandAdd extends BaseCommand {
         boolean isVanilla = vanillaEnchantment != null;
 
         if (vanillaEnchantment == null && customEnchantment == null) {
-            player.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
+            Messages.NOT_AN_ENCHANTMENT.sendMessage(player);
 
             return;
         }
@@ -35,7 +35,7 @@ public class CommandAdd extends BaseCommand {
         final ItemStack itemStack = this.methods.getItemInHand(player);
 
         if (itemStack.isEmpty()) {
-            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
+            Messages.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
 
             return;
         }
@@ -61,7 +61,7 @@ public class CommandAdd extends BaseCommand {
         boolean isVanilla = vanillaEnchantment != null;
 
         if (vanillaEnchantment == null && customEnchantment == null) {
-            player.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
+            Messages.NOT_AN_ENCHANTMENT.sendMessage(player);
 
             return;
         }
@@ -69,7 +69,7 @@ public class CommandAdd extends BaseCommand {
         final ItemStack itemStack = this.methods.getItemInHand(player).clone();
 
         if (itemStack.getType() == Material.AIR) {
-            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
+            Messages.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
 
             return;
         }
@@ -82,16 +82,16 @@ public class CommandAdd extends BaseCommand {
             if (this.instance.getEnchantments(itemStack).containsKey(customEnchantment)) {
                 this.methods.setItemInHand(player, this.instance.removeEnchantment(itemStack, customEnchantment));
 
-                player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(new HashMap<>() {{
-                    put("%Enchantment%", customEnchantment.getCustomName());
-                }}));
+                Messages.REMOVED_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
+                    put("{enchantment}", customEnchantment.getCustomName());
+                }});
 
                 return;
             }
         }
 
-        player.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(new HashMap<>() {{
-            put("%Enchantment%", enchantment);
-        }}));
+        Messages.DOESNT_HAVE_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
+            put("{enchantment}", customEnchantment.getCustomName());
+        }});
     }
 }

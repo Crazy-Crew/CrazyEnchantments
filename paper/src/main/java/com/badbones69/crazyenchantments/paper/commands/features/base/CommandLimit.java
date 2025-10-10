@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.base;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -19,7 +19,7 @@ public class CommandLimit extends BaseCommand {
     public void limit(final Player player) {
         Map<String, String> placeholders = new HashMap<>();
 
-        placeholders.put("%bypass%", String.valueOf(player.hasPermission("crazyenchantments.bypass.limit")));
+        placeholders.put("{bypass}", String.valueOf(player.hasPermission("crazyenchantments.bypass.limit")));
 
         final ItemStack item = player.getInventory().getItemInMainHand();
 
@@ -30,15 +30,15 @@ public class CommandLimit extends BaseCommand {
 
         int canAdd = Math.min(baseLimit - slotModifier, limit);
 
-        placeholders.put("%limit%", String.valueOf(limit));
-        placeholders.put("%baseLimit%", String.valueOf(baseLimit));
-        placeholders.put("%vanilla%", String.valueOf(this.options.isCheckVanillaLimit()));
-        placeholders.put("%item%", String.valueOf(enchantAmount));
-        placeholders.put("%slotCrystal%", String.valueOf(-slotModifier));
-        placeholders.put("%space%", String.valueOf(canAdd - enchantAmount));
-        placeholders.put("%canHave%", String.valueOf(canAdd));
-        placeholders.put("%limitSetInConfig%", String.valueOf(this.options.isUseConfigLimits()));
+        placeholders.put("{limit}", String.valueOf(limit));
+        placeholders.put("{base_limit}", String.valueOf(baseLimit));
+        placeholders.put("{vanilla}", String.valueOf(this.options.isCheckVanillaLimit()));
+        placeholders.put("{item}", String.valueOf(enchantAmount));
+        placeholders.put("{slot_crystal}", String.valueOf(-slotModifier));
+        placeholders.put("{space}", String.valueOf(canAdd - enchantAmount));
+        placeholders.put("{max_enchants}", String.valueOf(canAdd));
+        placeholders.put("{config_limit}", String.valueOf(this.options.isUseConfigLimits()));
 
-        player.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
+        Messages.LIMIT_COMMAND.sendMessage(player, placeholders);
     }
 }

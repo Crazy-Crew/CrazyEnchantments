@@ -30,7 +30,7 @@ public class CommandFix extends BaseCommand {
                 brokenEnchantments.add(enchantment);
         }
 
-        sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
+        //sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
 
         for (CEnchantments enchantment : brokenEnchantments) {
             final String path = "Enchantments." + enchantment.getName();

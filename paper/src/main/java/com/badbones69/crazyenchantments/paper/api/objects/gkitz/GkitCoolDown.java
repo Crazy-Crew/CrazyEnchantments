@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.jetbrains.annotations.NotNull;
 import java.util.Calendar;
 
@@ -34,8 +33,8 @@ public class GkitCoolDown {
     public boolean isCoolDownOver() {
         return Calendar.getInstance().after(this.coolDownTime);
     }
-    
-    public String getCoolDownLeft(@NotNull final String message) {
+
+    public String getCooldown() {
         long days = 0, hours = 0, minutes = 0, seconds = 0, total;
 
         int second = 1000, minute = second*60, hour = minute*60, day = hour*24;
@@ -52,9 +51,6 @@ public class GkitCoolDown {
             seconds = total / second;
         }
 
-        return ColorUtils.color(message.replace("%Day%", String.valueOf(days)).replace("%day%", String.valueOf(days))
-                .replace("%Hour%", String.valueOf(hours)).replace("%hour%", String.valueOf(hours))
-                .replace("%Minute%", String.valueOf(minutes)).replace("%minute%", String.valueOf(minutes))
-                .replace("%Second%", String.valueOf(seconds)).replace("%second%", String.valueOf(seconds)));
+        return "%s,%s,%s,%s".formatted(days, hours, minutes, seconds);
     }
 }

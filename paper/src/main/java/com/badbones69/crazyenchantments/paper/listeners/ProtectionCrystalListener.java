@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
