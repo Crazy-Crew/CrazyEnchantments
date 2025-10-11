@@ -1,12 +1,12 @@
 package com.badbones69.crazyenchantments.paper.managers.items;
 
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.PointerItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.ProtectionCrystalItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.ScramblerItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.SlotCrystalItem;
+import com.badbones69.crazyenchantments.paper.managers.items.objects.navigation.NavigationItem;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
@@ -25,11 +25,13 @@ public class ItemManager {
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         addItem("protection_crystal_item", new ProtectionCrystalItem());
+        addItem("back_button_right", new NavigationItem(true));
+        addItem("back_button_left", new NavigationItem(false));
         addItem("slot_crystal_item", new SlotCrystalItem());
         addItem("scrambler_item", new ScramblerItem());
         addItem("pointer_item", new PointerItem());
 
-        //this.scramblerGuiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "&8Rolling the &eScrambler")); //todo() legacy trash
+        //this.scramblerGuiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "&8Rolling the &eScrambler")); //todo() legacy trash, we need papi support as well.
         this.scramblerAnimation = config.getBoolean("Settings.Scrambler.GUI.Toggle", true);
     }
 

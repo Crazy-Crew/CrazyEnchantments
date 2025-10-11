@@ -1,64 +1,55 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects;
 
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.ScramblerConfig;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
+import com.ryderbelserion.fusion.core.api.enums.ItemState;
+import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ScramblerItem implements CustomItem {
+public class ScramblerItem extends CustomItem {
 
-    private ItemBuilder itemBuilder;
+    private final ItemBuilder itemBuilder = new ItemBuilder(ItemType.STONE);
+    private final ScramblerConfig config;
 
     public ScramblerItem() {
+        this.config = this.configManager.getScramblerConfig();
+
         init();
     }
 
     @Override
     public void init() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
-
-        this.itemBuilder = new ItemBuilder()
-                .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
-                .setName(config.getString("Settings.Scrambler.Name", "'&e&lThe Grand Scrambler"))
-                .setLore(config.getStringList("Settings.Scrambler.Lore"))
-                .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false))
-                .addKey(DataKeys.scrambler.getNamespacedKey(), "true");
+        this.itemBuilder.withCustomItem(this.config.getScramblerType())
+                .addEnchantGlint(this.config.isGlowing())
+                .setPersistentBoolean(DataKeys.scrambler.getNamespacedKey(), true);
     }
 
     @Override
-    public @NotNull final ItemStack getItemStack(final int amount) {
-        return this.itemBuilder.build();
+    public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+        return this.itemBuilder.displayLore(this.config.asItemComponents(player == null ? Audience.empty() : player))
+                .displayName(this.config.asItemComponent(player == null ? Audience.empty() : player), ItemState.ITEM_NAME)
+                .setAmount(amount).asItemStack(player == null ? Audience.empty() : player);
     }
 
     @Override
     public boolean isItem(@NotNull final ItemStack itemStack) {
-        return hasKey(itemStack, DataKeys.scrambler.getNamespacedKey());
-    }
-
-    @Override
-    public boolean hasKey(@NotNull final ItemStack itemStack, @NotNull NamespacedKey key) {
-        if (itemStack.isEmpty()) return false;
-
-        return itemStack.getPersistentDataContainer().has(key);
-    }
-
-    @Override
-    public void addKey(@NotNull final ItemStack itemStack, @NotNull final NamespacedKey key, @NotNull final String value) {
-        itemStack.editPersistentDataContainer(container -> container.set(key, PersistentDataType.STRING, value));
+        return this.itemBuilder.hasKey(DataKeys.scrambler.getNamespacedKey());
     }
 
     @Override
     public void addKey(@NotNull final NamespacedKey key, @NotNull final String value) {
-        this.itemBuilder.addKey(key, value);
+        this.itemBuilder.setPersistentString(key, value);
     }
 
     @Override
-    public void removeKey(@NotNull final ItemStack itemStack, @NotNull final NamespacedKey key) {
-        itemStack.editPersistentDataContainer(container -> container.remove(key));
+    public void removeKey(@NotNull final NamespacedKey key) {
+        this.itemBuilder.removePersistentKey(key);
     }
 }

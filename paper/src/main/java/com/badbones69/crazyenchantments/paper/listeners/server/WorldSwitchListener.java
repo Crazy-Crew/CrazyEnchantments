@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.listeners.server;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.managers.ConfigManager;
+import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;

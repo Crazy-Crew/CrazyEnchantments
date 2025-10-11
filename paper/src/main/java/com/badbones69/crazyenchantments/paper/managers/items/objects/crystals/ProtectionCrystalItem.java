@@ -1,65 +1,56 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects.crystals;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.ProtectionCrystalConfig;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
-import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.core.api.enums.ItemState;
+import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProtectionCrystalItem implements CustomItem {
+public class ProtectionCrystalItem extends CustomItem {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-    private final FusionPaper fusion = this.plugin.getFusion();
-
+    private final ItemBuilder itemBuilder = new ItemBuilder(ItemType.STONE);
+    private final ProtectionCrystalConfig config;
     private Component protectionLine;
-    private ItemBuilder itemBuilder;
 
     public ProtectionCrystalItem() {
+        this.config = this.configManager.getProtectionCrystalConfig();
+
         init();
     }
 
     @Override
     public void init() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        this.itemBuilder.withCustomItem(this.config.getProtectionType())
+                .addEnchantGlint(this.config.isGlowing())
+                .setPersistentBoolean(DataKeys.protection_crystal.getNamespacedKey(), true);
 
-        this.itemBuilder = new ItemBuilder()
-                .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
-                .setName(config.getString("Settings.ProtectionCrystal.Name", "&5&lProtection &b&lCrystal"))
-                .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false))
-                .addKey(DataKeys.protection_crystal.getNamespacedKey(), "true");
-
-        this.protectionLine = this.fusion.parse(config.getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"));
+        this.protectionLine = this.config.asComponent(Audience.empty(), this.config.getProtectionLine());
     }
 
     @Override
-    public @NotNull final ItemStack getItemStack(final int amount) {
-        return this.itemBuilder.build();
+    public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+        return this.itemBuilder.displayLore(this.config.asItemComponents(player == null ? Audience.empty() : player))
+                .displayName(this.config.asItemComponent(player == null ? Audience.empty() : player), ItemState.ITEM_NAME)
+                .asItemStack(player == null ? Audience.empty() : player);
     }
 
     @Override
     public boolean isItem(@NotNull final ItemStack itemStack) {
         return hasKey(itemStack, DataKeys.protection_crystal.getNamespacedKey());
-    }
-
-    @Override
-    public boolean hasKey(@NotNull final ItemStack itemStack, @NotNull NamespacedKey key) {
-        if (itemStack.isEmpty()) return false;
-
-        return itemStack.getPersistentDataContainer().has(key);
     }
 
     @Override
@@ -77,7 +68,7 @@ public class ProtectionCrystalItem implements CustomItem {
 
     @Override
     public void addKey(@NotNull final NamespacedKey key, @NotNull final String value) {
-        this.itemBuilder.addKey(key, value);
+        this.itemBuilder.setPersistentString(key, value);
     }
 
     @Override
@@ -93,5 +84,10 @@ public class ProtectionCrystalItem implements CustomItem {
 
             itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
         }
+    }
+
+    @Override
+    public void removeKey(@NotNull final NamespacedKey key) {
+        this.itemBuilder.removePersistentKey(key);
     }
 }
