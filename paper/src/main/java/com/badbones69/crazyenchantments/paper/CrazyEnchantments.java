@@ -112,7 +112,6 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new BlackSmithMenu.BlackSmithListener(), this);
         this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         this.pluginManager.registerEvents(new TinkererMenu.TinkererListener(), this);
-        this.pluginManager.registerEvents(new BaseMenu.InfoMenuListener(), this);
 
         this.pluginManager.registerEvents(new SlotCrystalListener(), this);
         this.pluginManager.registerEvents(new ScramblerListener(), this);

@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
+import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
@@ -10,6 +11,7 @@ import dev.triumphteam.cmd.core.annotations.Flag;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import dev.triumphteam.cmd.core.argument.keyed.Flags;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -26,14 +28,19 @@ public class CommandInfo extends BaseCommand {
         final boolean hasCustomEnchant = flags.hasFlag("ce");
 
         if (sender instanceof Player player) {
+            final YamlConfiguration configuration = FileKeys.enchantment_types.getYamlConfiguration();
+
+            final String title = configuration.getString("Info-GUI-Settings.Inventory.Name", "<red><bold>Enchantment Info");
+            final int size = configuration.getInt("Info-GUI-Settings.Inventory.Size", 18);
+
             if (!hasEnchantType && !hasCustomEnchant) {
-                MenuManager.openInfoMenu(player);
+                new BaseMenu(player, title, size).open();
 
                 return;
             }
 
             if (hasEnchantType) {
-                flags.getFlagValue("t", EnchantmentType.class).ifPresent(action -> MenuManager.openInfoMenu(player, action));
+                flags.getFlagValue("t", EnchantmentType.class).ifPresent(action -> new BaseMenu(player, title, size).setEnchantmentType(action).open());
 
                 return;
             }

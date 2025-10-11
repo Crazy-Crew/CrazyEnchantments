@@ -108,7 +108,7 @@ public class KitsMenu extends InventoryBuilder {
 
             if (currentItem == null) return;
 
-            if (!currentItem.isSimilar(KitsManager.getBackRight())) return;
+            //if (!currentItem.isSimilar(KitsManager.getBackRight())) return;
 
             MenuManager.openKitsMenu(holder.getPlayer());
         }

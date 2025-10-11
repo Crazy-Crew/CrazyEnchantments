@@ -18,7 +18,7 @@ public class KitsPreviewMenu extends InventoryBuilder {
 
         getKit().getPreviewItems().forEach(inv::addItem);
 
-        inv.setItem(inv.getSize() - 1, KitsManager.getBackRight());
+        //inv.setItem(inv.getSize() - 1, KitsManager.getBackRight());
 
         return this;
     }

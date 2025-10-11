@@ -1,83 +1,65 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
-import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
-import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import io.papermc.paper.persistence.PersistentDataContainerView;
+import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
+import com.ryderbelserion.fusion.paper.builders.gui.interfaces.GuiItem;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
-public class BaseMenu extends InventoryBuilder {
+public class BaseMenu extends StaticInventory {
 
-    public BaseMenu(@NotNull final Player player, final int size, @NotNull final String title) {
-        super(player, size, title);
+    public BaseMenu(@NotNull final Player player, @NotNull final String title, final int size) {
+        super(player, title, size);
     }
+
+    private final Player player = getPlayer();
+    private final Gui gui = getGui();
 
     @Override
-    public InventoryBuilder build() {
-        final EnchantmentType type = getEnchantmentType();
+    public void open() {
+        if (this.enchantmentType == null) {
+            for (final EnchantmentType type : MenuManager.getEnchantmentTypes()) {
+                this.gui.setItem(type.getSlot(), new GuiItem(type.getDisplayItem(), event -> {
+                    if (!(event.getWhoClicked() instanceof Player entity)) return;
 
-        final Inventory inventory = getInventory();
-
-        if (type != null) {
-            final List<CEnchantment> enchantments = type.getEnchantments();
-
-            final ItemBuilder book = this.instance.getEnchantmentBookBuilder();
-
-            for (final CEnchantment enchantment : enchantments) {
-                if (!enchantment.isActivated()) continue;
-
-                inventory.addItem(book.setName(enchantment.getInfoName()).setLore(enchantment.getInfoDescription()).build());
+                    MenuManager.openInfoMenu(entity, type);
+                }));
             }
 
-            inventory.setItem(getSize() - 1, KitsManager.getBackRight());
+            this.gui.open(this.player);
 
-            return this;
+            return;
         }
 
-        MenuManager.getEnchantmentTypes().forEach(key -> inventory.setItem(key.getSlot(), key.getDisplayItem()));
+        final List<CEnchantment> enchantments = this.enchantmentType.getEnchantments();
 
-        return this;
-    }
+        final ItemBuilder book = this.instance.getEnchantmentBookBuilder();
 
-    public static class InfoMenuListener implements Listener {
+        this.itemManager.getItem("back_button_right").ifPresent(item -> this.gui.setItem(getSize() - 1, item.asGuiEventItem(event -> {
+            if (!(event.getWhoClicked() instanceof Player entity)) return;
 
-        @EventHandler(ignoreCancelled = true)
-        public void onInfoClick(InventoryClickEvent event) {
-            if (!(event.getInventory().getHolder() instanceof BaseMenu holder)) return;
+            MenuManager.openInfoMenu(entity);
+        })));
 
-            event.setCancelled(true);
+        this.itemManager.getItem("back_button_left").ifPresent(item -> this.gui.setItem(getSize() - 8, item.asGuiEventItem(event -> {
+            if (!(event.getWhoClicked() instanceof Player entity)) return;
 
-            Player player = holder.getPlayer();
+            MenuManager.openInfoMenu(entity);
+        })));
 
-            ItemStack itemStack = event.getCurrentItem();
+        for (final CEnchantment enchantment : enchantments) {
+            if (!enchantment.isActivated()) continue;
 
-            if (itemStack == null) return;
+            final ItemStack itemStack = book.setName(enchantment.getInfoName()).setLore(enchantment.getInfoDescription()).build();
 
-            final PersistentDataContainerView view = itemStack.getPersistentDataContainer();
-
-            if (view.has(DataKeys.back_left.getNamespacedKey()) || view.has(DataKeys.back_right.getNamespacedKey())) {
-                MenuManager.openInfoMenu(player);
-
-                return;
-            }
-
-            for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
-                if (itemStack.isSimilar(enchantmentType.getDisplayItem())) {
-                    MenuManager.openInfoMenu(player, enchantmentType);
-
-                    return;
-                }
-            }
+            this.gui.addItem(new GuiItem(itemStack));
         }
+
+        this.gui.open(this.player);
     }
 }

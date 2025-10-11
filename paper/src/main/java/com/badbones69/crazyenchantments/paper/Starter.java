@@ -64,7 +64,6 @@ public class Starter {
         this.protectionCrystalSettings = new ProtectionCrystalSettings();
 
         BlackSmithManager.load();
-        KitsManager.load();
 
         MenuManager.load();
 
