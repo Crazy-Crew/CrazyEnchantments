@@ -25,11 +25,15 @@ public class PointerItem extends CustomItem {
 
     @Override
     public void init() {
+        if (this.config == null) return;
+
         this.itemBuilder.withCustomItem(this.config.getPointerItem());
     }
 
     @Override
     public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+        if (this.config == null) return this.itemBuilder.setAmount(amount).asItemStack(player);
+
         return this.itemBuilder.displayLore(this.config.asPointerComponents(player == null ? Audience.empty() : player))
                 .displayName(this.config.asPointerComponent(player == null ? Audience.empty() : player), ItemState.ITEM_NAME)
                 .asItemStack(player == null ? Audience.empty() : player);

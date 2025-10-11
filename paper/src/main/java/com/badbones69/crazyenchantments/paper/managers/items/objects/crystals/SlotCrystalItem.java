@@ -26,6 +26,8 @@ public class SlotCrystalItem extends CustomItem {
 
     @Override
     public void init() {
+        if (this.config == null) return;
+
         this.itemBuilder.withCustomItem(this.config.getSlotType())
                 .addEnchantGlint(this.config.isGlowing())
                 .setPersistentBoolean(DataKeys.slot_crystal.getNamespacedKey(), true);
@@ -33,6 +35,8 @@ public class SlotCrystalItem extends CustomItem {
 
     @Override
     public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+        if (this.config == null) return this.itemBuilder.setAmount(amount).asItemStack(player);
+
         return this.itemBuilder.displayLore(this.config.asItemComponents(player == null ? Audience.empty() : player))
                 .displayName(this.config.asItemComponent(player == null ? Audience.empty() : player), ItemState.ITEM_NAME)
                 .setAmount(amount).asItemStack(player == null ? Audience.empty() : player);

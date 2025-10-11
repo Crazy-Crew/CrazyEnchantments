@@ -28,6 +28,8 @@ public class NavigationItem extends CustomItem {
 
     @Override
     public void init() {
+        if (this.config == null) return;
+
         final String item = this.isRight ? this.config.getNavigationRightItem()
                 : this.config.getNavigationLeftItem();
 
@@ -39,6 +41,8 @@ public class NavigationItem extends CustomItem {
 
     @Override
     public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+        if (this.config == null) return this.itemBuilder.setAmount(amount).asItemStack(player);
+
         final Component component = this.isRight ? this.config.getNavigationRightName(player)
                 : this.config.getNavigationLeftName(player);
 
