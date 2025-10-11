@@ -102,7 +102,7 @@ public enum Scrolls {
     private static final NamespacedKey whiteScrollProtectionKey = DataKeys.white_scroll_protection.getNamespacedKey();
 
     public static String getWhiteScrollProtectionName() {
-        //return ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED"));
+        //return ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><b>PROTECTED"));
         return ""; //todo() legacy trash
     }
 

@@ -32,37 +32,37 @@ public class CommandDebug extends BaseCommand { //todo() legacy trash
         }
 
         if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
-            sender.sendMessage(ColorUtils.getPrefix("&aAll enchantments are loaded."));
+            sender.sendMessage(ColorUtils.getPrefix("<green>All enchantments are loaded."));
         } else {
             if (!brokenEnchantments.isEmpty()) {
                 int amount = 1;
-                sender.sendMessage(ColorUtils.getPrefix("&cMissing Enchantments:"));
-                sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
+                sender.sendMessage(ColorUtils.getPrefix("<red>Missing Enchantments:"));
+                sender.sendMessage(ColorUtils.getPrefix("<gray>These enchantments are broken due to one of the following reasons:"));
 
                 for (String broke : brokenEnchantments) {
-                    //sender.sendMessage(ColorUtils.color("&c#" + amount + ": &6" + broke));
+                    //sender.sendMessage(ColorUtils.color("<red>#" + amount + ": <gold>" + broke));
                     amount++;
                 }
 
-                //sender.sendMessage(ColorUtils.color("&7- &cMissing from the Enchantments.yml"));
-                //sender.sendMessage(ColorUtils.color("&7- &c<Enchantment Name>: option was changed"));
-                //sender.sendMessage(ColorUtils.color("&7- &cYaml format has been broken."));
+                //sender.sendMessage(ColorUtils.color("<gray>- <red>Missing from the Enchantments.yml"));
+                //sender.sendMessage(ColorUtils.color("<gray>- <red><Enchantment Name>: option was changed"));
+                //sender.sendMessage(ColorUtils.color("<gray>- <red>Yaml format has been broken."));
             }
 
             if (!brokenEnchantmentTypes.isEmpty()) {
                 int i = 1;
-                sender.sendMessage(ColorUtils.getPrefix("&cEnchantments with null types:"));
-                sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
+                sender.sendMessage(ColorUtils.getPrefix("<red>Enchantments with null types:"));
+                sender.sendMessage(ColorUtils.getPrefix("<gray>These enchantments are broken due to the enchantment type being null."));
 
                 for (String broke : brokenEnchantmentTypes) {
-                    //sender.sendMessage(ColorUtils.color("&c#" + i + ": &6" + broke));
+                    //sender.sendMessage(ColorUtils.color("<red>#" + i + ": <gold>" + broke));
                     i++;
                 }
             }
         }
 
-        sender.sendMessage(ColorUtils.getPrefix("&cEnchantment Types and amount of items in each:"));
+        sender.sendMessage(ColorUtils.getPrefix("<red>Enchantment Types and amount of items in each:"));
 
-        //MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
+        //MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("<red>" + type.getName() + ": <gold>" + type.getEnchantableMaterials().size())));
     }
 }

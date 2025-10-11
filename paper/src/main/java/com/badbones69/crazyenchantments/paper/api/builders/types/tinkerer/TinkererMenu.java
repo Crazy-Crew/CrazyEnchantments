@@ -41,7 +41,7 @@ public class TinkererMenu extends InventoryBuilder {
         final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
 
         final ItemStack button = new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE)
-                .setName(configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
+                .setName(configuration.getString("Settings.TradeButton", "<yellow>Click to accept the trade"))
                 .setLore(configuration.getStringList("Settings.TradeButton-Lore"))
                 .addKey(DataKeys.trade_button.getNamespacedKey(), "").build();
 

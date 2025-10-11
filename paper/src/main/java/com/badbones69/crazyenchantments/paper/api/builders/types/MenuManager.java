@@ -51,7 +51,7 @@ public class MenuManager {
     public static void openKitsMenu(@NotNull final Player player) {
         YamlConfiguration gkitz = FileKeys.gkitz.getYamlConfiguration();
 
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
+        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "<dark_gray>List of all GKitz")).build().getInventory());
     }
 
     public static void openKitsPreviewMenu(@NotNull final Player player, final int slots, @NotNull final GKitz kit) {
@@ -77,6 +77,6 @@ public class MenuManager {
     }
 
     public static void openTinkererMenu(@NotNull final Player player) {
-        player.openInventory(new TinkererMenu(player, 54, FileKeys.tinker.getYamlConfiguration().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
+        player.openInventory(new TinkererMenu(player, 54, FileKeys.tinker.getYamlConfiguration().getString("Settings.GUIName", "<gray><b>The <dark_red><b>Crazy <red><b>Tinkerer")).build().getInventory());
     }
 }

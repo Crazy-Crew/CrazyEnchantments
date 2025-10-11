@@ -21,11 +21,11 @@ public class ProtectionCrystalConfig extends IConfig {
         this.protectionItem = section.getString("Item", "EMERALD");
         this.protectionName = section.getString("Name", "");
         this.protectionLore = ConfigUtils.getStringList(section, List.of(
-                "&7A rare crystal that is said to",
-                "&7protect items from getting lost",
-                "&7while the owners away in the after life.",
+                "<gray>A rare crystal that is said to",
+                "<gray>protect items from getting lost",
+                "<gray>while the owners away in the after life.",
                 "",
-                "&7&l(&6&l!&7&l) &7Drag and drop on an item."
+                "<gray><b>(<gold><b>!<gray><b>) <gray>Drag and drop on an item."
         ), "Lore");
 
         this.isGlowing = section.getBoolean("Glowing", false);

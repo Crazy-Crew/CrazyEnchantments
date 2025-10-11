@@ -137,12 +137,12 @@ public class AllyMob {
     }
     
     public enum AllyType {
-        WOLF("Wolf", "&b%player%'s Saberwolf", EntityType.WOLF, 16),
-        IRON_GOLEM("Iron-Golem", "&6%player%'s Golem", EntityType.IRON_GOLEM, 200),
-        ZOMBIE("Zombie", "&2%player%'s Undead", EntityType.ZOMBIE, 45),
-        ENDERMITE("Endermite", "&5%player%'s Endermite", EntityType.ENDERMITE, 10),
-        SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10),
-        BEE("Bee", "&e%player%'s Bee", EntityType.BEE, 10);
+        WOLF("Wolf", "<aqua>%player%'s Saberwolf", EntityType.WOLF, 16),
+        IRON_GOLEM("Iron-Golem", "<gold>%player%'s Golem", EntityType.IRON_GOLEM, 200),
+        ZOMBIE("Zombie", "<dark_green>%player%'s Undead", EntityType.ZOMBIE, 45),
+        ENDERMITE("Endermite", "<dark_purple>%player%'s Endermite", EntityType.ENDERMITE, 10),
+        SILVERFISH("Silverfish", "<gray>%player%'s Silverfish", EntityType.SILVERFISH, 10),
+        BEE("Bee", "<yellow>%player%'s Bee", EntityType.BEE, 10);
         
         private final String configName;
         private final String defaultName;

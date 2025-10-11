@@ -118,13 +118,13 @@ public class PluginSupport { //todo() nah redo this whole shit show
     public void printHooks() { //todo() nein
         if (this.cachedPlugins.isEmpty()) updateHooks();
 
-        //this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
+        //this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("<dark_gray><b>=== <yellow><b>CrazyEnchantment Hook Status <dark_gray><b>==="));
 
         this.cachedPlugins.keySet().forEach(value -> {
             if (value.isPluginLoaded()) {
-                //this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&6&l" + value.name() + " &a&lFOUND"));
+                //this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("<gold><b>" + value.name() + " <green><b>FOUND"));
             } else {
-                //this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&6&l" + value.name() + " &c&lNOT FOUND"));
+                //this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.getPrefix() + ColorUtils.color("<gold><b>" + value.name() + " <red><b>NOT FOUND"));
             }
         });
     }

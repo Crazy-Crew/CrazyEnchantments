@@ -194,7 +194,7 @@ public class ScrollListener implements Listener {
         orderInts(newEnchantmentOrder, enchantments); // Order Enchantments by length.
 
         //List<Component> enchantLore = newEnchantmentOrder.stream().map(i ->
-                //ColorUtils.legacyTranslateColourCodes("%s %s".formatted(i.getCustomName(), NumberUtils.toRoman(data.getLevel(i.getName()))))).collect(Collectors.toList());
+        //ColorUtils.legacyTranslateColourCodes("%s %s".formatted(i.getCustomName(), NumberUtils.toRoman(data.getLevel(i.getName()))))).collect(Collectors.toList());
 
         List<Component> normalLore = stripNonNormalLore(lore == null ? new ArrayList<>() : lore, newEnchantmentOrder);
 
@@ -239,8 +239,8 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull final PersistentDataContainerView container) {
         final List<Component> lore = new ArrayList<>();
 
-        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
-        //if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
+        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><b>PROTECTED")));
+        //if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection")));
 
         return lore;
     }
@@ -259,7 +259,7 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-        //       ColorUtils.stripStringColour(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
+        //       ColorUtils.stripStringColour(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"))
         //));
 
         return lore;
@@ -270,7 +270,7 @@ public class ScrollListener implements Listener {
             final boolean hasName = item.hasData(DataComponentTypes.ITEM_NAME);
 
             //String newName = hasName ? ColorUtils.toLegacy(item.getData(DataComponentTypes.ITEM_NAME)) :
-                    //"&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
+            //"<aqua>" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
 
             if (hasName) {
                 for (int i = 0; i <= 100; i++) {

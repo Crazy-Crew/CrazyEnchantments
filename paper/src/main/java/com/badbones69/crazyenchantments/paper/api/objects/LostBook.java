@@ -94,7 +94,7 @@ public class LostBook {
         return new ItemBuilder()
                 .setMaterial(configuration.getString("Settings.LostBook.Item", "BOOK"))
                 .setAmount(amount)
-                .setName(configuration.getString("Settings.LostBook.Name", "&8&l&nA Lost %category%&8&l&n Book"))
+                .setName(configuration.getString("Settings.LostBook.Name", "<dark_gray><b><u>A Lost %category%<dark_gray><b><u> Book"))
                 .setNamePlaceholders(placeholders)
                 .setLore(configuration.getStringList("Settings.LostBook.Lore"))
                 .setLorePlaceholders(placeholders)

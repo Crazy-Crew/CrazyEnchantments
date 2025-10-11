@@ -31,7 +31,7 @@ public class ItemManager {
         addItem("scrambler_item", new ScramblerItem());
         addItem("pointer_item", new PointerItem());
 
-        //this.scramblerGuiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "&8Rolling the &eScrambler")); //todo() legacy trash, we need papi support as well.
+        //this.scramblerGuiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "<dark_gray>Rolling the <yellow>Scrambler")); //todo() legacy trash, we need papi support as well.
         this.scramblerAnimation = config.getBoolean("Settings.Scrambler.GUI.Toggle", true);
     }
 

@@ -70,7 +70,7 @@ public class ColorUtils {
     }
 
     public static String getPrefix() {
-        //return color(FileKeys.config.getYamlConfiguration().getString("Settings.Prefix", "&8[&aCrazyEnchantments&8]: "));
+        //return color(FileKeys.config.getYamlConfiguration().getString("Settings.Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: "));
         return "";
     }
 
@@ -104,7 +104,6 @@ public class ColorUtils {
     }
 
     public static String stripStringColour(@NotNull final String msg) {
-        //return msg.replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or])", "");
         return msg;
     }
 }

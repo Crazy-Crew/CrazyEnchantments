@@ -44,7 +44,7 @@ public class CommandGkitz {
 
         final YamlConfiguration gkitz = FileKeys.gkitz.getYamlConfiguration();
 
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 54), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
+        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 54), gkitz.getString("Settings.Inventory-Name", "<dark_gray>List of all GKitz")).build().getInventory());
     }
 
     @Command("reset")

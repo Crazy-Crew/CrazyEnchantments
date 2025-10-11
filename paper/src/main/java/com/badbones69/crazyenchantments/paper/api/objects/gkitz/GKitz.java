@@ -102,7 +102,7 @@ public class GKitz {
 
                 if (enchantment != null) {
                     if (level.contains("-")) {
-                        enchantments.add("&7%s %s".formatted(name, level));
+                        enchantments.add("<gray>%s %s".formatted(name, level));
 
                         continue;
                     }

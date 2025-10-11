@@ -44,7 +44,7 @@ public class CEnchantment {
         this.customName = name;
         this.activated = true;
         this.maxLevel = 3;
-        //this.infoName = ColorUtils.color("&7" + name); //todo() legacy trash
+        //this.infoName = ColorUtils.color("<dark_gray>" + name); //todo() legacy trash
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();

@@ -62,13 +62,13 @@ public class ConfigManager {
             Optional.ofNullable(section.getConfigurationSection("Slot_Crystal")).ifPresent(slot -> this.slotCrystalConfig = new SlotCrystalConfig(slot));
             Optional.ofNullable(section.getConfigurationSection("Scrambler")).ifPresent(scrambler -> this.scramblerConfig = new ScramblerConfig(scrambler));
 
-            this.prefix = section.getString("Prefix", "&8[&aCrazyEnchantments&8]: ");
+            this.prefix = section.getString("Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ");
 
             this.toggleMetrics = section.getBoolean("Toggle-Metrics", false);
             this.resetMaxHealth = section.getBoolean("Reset-Players-Max-Health", true);
             this.refreshPotionEffectsOnWorldChange = section.getBoolean("Refresh-Potion-Effects-On-World-Change", false);
 
-            this.inventoryName = section.getString("InvName", "&4&l&nCrazy Enchanter");
+            this.inventoryName = section.getString("InvName", "<dark_red><b><u>Crazy Enchanter");
             this.inventorySize = section.getInt("GUISize", 54);
 
             this.enchantBook = new ItemBuilder().setMaterial(section.getString("Enchantment-Book-Item", "BOOK"))
@@ -96,7 +96,7 @@ public class ConfigManager {
             this.dropBlocksBlast = section.getBoolean("EnchantmentOptions.Drop-Blocks-For-Blast", true);
             this.dropBlocksVeinMiner = section.getBoolean("EnchantmentOptions.Drop-Blocks-For-VeinMiner", true);
 
-            this.suffix = section.getString("TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
+            this.suffix = section.getString("TransmogScroll.Amount-of-Enchantments", " <gray>[<gold><u>%amount%<gray>]");
             this.countVanillaEnchantments = section.getBoolean("TransmogScroll.Count-Vanilla-Enchantments", true);
             this.useSuffix = section.getBoolean("TransmogScroll.Amount-Toggle", true);
             this.blackScrollChance = section.getInt("BlackScroll.Chance", 75);

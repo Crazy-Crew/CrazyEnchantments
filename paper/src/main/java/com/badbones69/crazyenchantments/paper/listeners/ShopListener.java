@@ -107,7 +107,7 @@ public class ShopListener implements Listener {
 
                     playerInventory.addItem(book.buildBook());
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                    player.sendMessage(ColorUtils.getPrefix("<red>The category <gold>" + category.getName() + " <red>has no enchantments assigned to it."));
                 }
 
                 return;

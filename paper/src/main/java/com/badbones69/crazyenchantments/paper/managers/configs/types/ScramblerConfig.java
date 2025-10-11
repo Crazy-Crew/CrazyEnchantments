@@ -53,8 +53,8 @@ public class ScramblerConfig extends IConfig {
         this.pointerItem = section.getString("Pointer.Item", "REDSTONE_TORCH");
         this.pointerName = section.getString("Pointer.Name", "<red><bold>Pointer");
         this.pointerLore = ConfigUtils.getStringList(section, List.of(
-                "&7Whatever percents the item lands on",
-                "&7will be the new percents on your book."
+                "<gray>Whatever percents the item lands on",
+                "<gray>will be the new percents on your book."
         ), "Pointer.Lore");
     }
 

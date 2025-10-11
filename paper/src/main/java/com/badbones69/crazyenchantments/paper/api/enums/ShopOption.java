@@ -12,67 +12,67 @@ import java.util.Map;
 
 public enum ShopOption {
 
-    GKITZ("Name", "Lore", false, "GKitz", "&c&lGKitz", List.of(
-            "&b>>&7&nClick to open&b<<"
+    GKITZ("Name", "Lore", false, "GKitz", "<red><b>GKitz", List.of(
+            "<aqua>>><gray><u>Click to open<aqua><<"
     )),
-    BLACKSMITH("Name", "Lore", false, "BlackSmith", "&7&lThe &b&lBlack &9&lSmith", List.of(
-            "&b>>&7&nClick to open&b<<"
+    BLACKSMITH("Name", "Lore", false, "BlackSmith", "<gray><b>The <aqua><b>Black <blue><b>Smith", List.of(
+            "<aqua>>><gray><u>Click to open<aqua><<"
     )),
-    TINKER("Name", "Lore", false, "Tinker", "&7&lThe &b&lCrazy &9&lTinkerer", List.of(
-            "&b>>&7&nClick to open&b<<"
+    TINKER("Name", "Lore", false, "Tinker", "<gray><b>The <aqua><b>Crazy <blue><b>Tinkerer", List.of(
+            "<aqua>>><gray><u>Click to open<aqua><<"
     )),
-    INFO("Name", "Lore", false, "Info", "&eInfo on the Enchantments", List.of(
-            "&b>>&7&nClick to view&b<<"
-    )),
-
-    PROTECTION_CRYSTAL("GUIName", "GUILore", true, "ProtectionCrystal", "&5&lProtection &b&lCrystal", List.of(
-            "&7A rare crystal that is said to",
-            "&7protect items from getting lost",
-            "&7while the owners away in the after life.",
-            "",
-            "&eCost: &e&l$500"
-    )),
-    SUCCESS_DUST("GUIName", "GUILore", true, "SuccessDust", "&aMagical Angel Dust", List.of(
-            "&a+%percent%% Success Rate",
-            "&7Apply to an Enchantment Book to",
-            "&7Increase the Success Rate by &e%percent%%"
-    )),
-    DESTROY_DUST("GUIName", "GUILore", true, "DestroyDust", "&eMagical Fixing Dust", List.of(
-            "&eCost: &a&l$500",
-            "&7Dust allows you to bring",
-            "&7down your &4Destroy Rate&7."
-    )),
-    SCRAMBLER("GUIName", "GUILore", true, "Scrambler", "&e&lThe Grand Scrambler", List.of(
-            "&7The &e&lThe Grand Scrambler &7will allow",
-            "&7you to re-roll the destroy and success rates.",
-            "&7Drag and drop it on an enchantment book",
-            "&7to get a new destroy and success rate.",
-            "",
-            "&eCost: &e&l$800"
+    INFO("Name", "Lore", false, "Info", "<yellow>Info on the Enchantments", List.of(
+            "<aqua>>><gray><u>Click to view<aqua><<"
     )),
 
-    BLACK_SCROLL("GUIName", "Lore", true, "BlackScroll", "&7Black Scroll", List.of(
-            "&eCost: &a&l$1000",
-            "&7Black Scrolls allow you to",
-            "&7take off random enchantments."
-    )),
-    WHITE_SCROLL("GUIName", "Lore", true, "WhiteScroll", "&7White Scroll", List.of(
-            "&eCost: &a&l$2000",
-            "&7White Scrolls allow you to",
-            "&7protect items from breaking."
-    )),
-    TRANSMOG_SCROLL("GUIName", "Lore", true, "TransmogScroll", "&dTransmog Scroll", List.of(
-            "&eCost: &a&l$200",
-            "&7This scroll allows you to organize",
-            "&7your enchantments and tell you how many",
-            "&7enchantments you currently have on the item."
-    )),
-    SLOT_CRYSTAL("GUIName", "GUILore", true, "Slot_Crystal", "&5&lSlot &b&lCrystal", List.of(
-            "&7A rare crystal that is said to",
-            "&7increase the amount of enchants",
-            "&7that can be added onto an item.",
+    PROTECTION_CRYSTAL("GUIName", "GUILore", true, "ProtectionCrystal", "<dark_purple><b>Protection <aqua><b>Crystal", List.of(
+            "<gray>A rare crystal that is said to",
+            "<gray>protect items from getting lost",
+            "<gray>while the owners away in the after life.",
             "",
-            "&eCost: &e&l$500"
+            "<yellow>Cost: <yellow><b>$500"
+    )),
+    SUCCESS_DUST("GUIName", "GUILore", true, "SuccessDust", "<green>Magical Angel Dust", List.of(
+            "<green>+%percent%% Success Rate",
+            "<gray>Apply to an Enchantment Book to",
+            "<gray>Increase the Success Rate by <yellow>%percent%%"
+    )),
+    DESTROY_DUST("GUIName", "GUILore", true, "DestroyDust", "<yellow>Magical Fixing Dust", List.of(
+            "<yellow>Cost: <green><b>$500",
+            "<gray>Dust allows you to bring",
+            "<gray>down your <dark_red>Destroy Rate<gray>."
+    )),
+    SCRAMBLER("GUIName", "GUILore", true, "Scrambler", "<yellow><b>The Grand Scrambler", List.of(
+            "<gray>The <yellow><b>The Grand Scrambler <gray>will allow",
+            "<gray>you to re-roll the destroy and success rates.",
+            "<gray>Drag and drop it on an enchantment book",
+            "<gray>to get a new destroy and success rate.",
+            "",
+            "<yellow>Cost: <yellow><b>$800"
+    )),
+
+    BLACK_SCROLL("GUIName", "Lore", true, "BlackScroll", "<gray>Black Scroll", List.of(
+            "<yellow>Cost: <green><b>$1000",
+            "<gray>Black Scrolls allow you to",
+            "<gray>take off random enchantments."
+    )),
+    WHITE_SCROLL("GUIName", "Lore", true, "WhiteScroll", "<gray>White Scroll", List.of(
+            "<yellow>Cost: <green><b>$2000",
+            "<gray>White Scrolls allow you to",
+            "<gray>protect items from breaking."
+    )),
+    TRANSMOG_SCROLL("GUIName", "Lore", true, "TransmogScroll", "<light_purple>Transmog Scroll", List.of(
+            "<yellow>Cost: <green><b>$200",
+            "<gray>This scroll allows you to organize",
+            "<gray>your enchantments and tell you how many",
+            "<gray>enchantments you currently have on the item."
+    )),
+    SLOT_CRYSTAL("GUIName", "GUILore", true, "Slot_Crystal", "<dark_purple><b>Slot <aqua><b>Crystal", List.of(
+            "<gray>A rare crystal that is said to",
+            "<gray>increase the amount of enchants",
+            "<gray>that can be added onto an item.",
+            "",
+            "<yellow>Cost: <yellow><b>$500"
     ));
 
     private final boolean buyable;

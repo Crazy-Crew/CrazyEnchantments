@@ -30,8 +30,8 @@ public class ProtectionCrystalSettings {
     @NotNull
     private final Methods methods = this.starter.getMethods();
 
-    @NotNull
-    //private final String protectionString = ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"));
+    //@NotNull
+    //private final String protectionString = ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 

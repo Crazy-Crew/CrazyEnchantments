@@ -174,7 +174,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("items"), (context) -> {
             final List<String> list = new ArrayList<>();
 
-            list.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
+            list.add("Item:DIAMOND_HELMET, Amount:1, Name:<gold><b>Hat, Protection:4, Overload:1-5, Hulk:2-5, Lore:<green>Line 1.,<green>Line 2.");
 
             return list;
         });

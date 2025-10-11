@@ -145,12 +145,12 @@ public class BlackSmithManager {
 
         exitButton = new ItemBuilder()
                 .setMaterial(Material.BARRIER)
-                .setName(section.getString("Results.None", "&c&lNo Results."))
+                .setName(section.getString("Results.None", "<red><bold>No Results."))
                 .setLore(section.getStringList("Results.Not-Found-Lore"))
                 .build();
 
-        //inventoryName = ColorUtils.color(section.getString("GUIName", "&8&lThe Black Smith")); //todo() legacy trash
-        itemCost = section.getString("Results.Found", "&c&lCost: &6&l%cost% XP");
+        //inventoryName = ColorUtils.color(section.getString("GUIName", "<dark_gray><bold>The Black Smith")); //todo() legacy trash
+        itemCost = section.getString("Results.Found", "<red><bold>Cost: <gold><bold>{cost} XP");
         currency = Currency.getCurrency(section.getString("Transaction.Currency", "XP_LEVEL"));
 
         bookUpgrade = section.getInt("Transaction.Costs.Book-Upgrade", 5);
