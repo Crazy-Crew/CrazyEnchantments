@@ -1,43 +1,10 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.ShopMenu;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
-import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
-import com.badbones69.crazyenchantments.paper.api.events.BuyBookEvent;
-import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
-import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
-import com.badbones69.crazyenchantments.paper.api.objects.Category;
-import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
-import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
-import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import java.util.Collection;
 
 public class ShopListener implements Listener {
 
-    @NotNull
+    /*@NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CategoryManager categoryManager = this.plugin.getCategoryManager();
@@ -202,8 +169,8 @@ public class ShopListener implements Listener {
             if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == Material.ENCHANTING_TABLE) {
                 event.setCancelled(true);
 
-                player.openInventory(new ShopMenu(player, this.shopManager.getInventorySize(), this.shopManager.getInventoryName()).build().getInventory());
+                new ShopMenu(player, this.shopManager.getInventoryName(), this.shopManager.getInventorySize()).open();
             }
         }
-    }
+    }*/
 }
