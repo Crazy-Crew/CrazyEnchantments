@@ -122,13 +122,14 @@ Settings:
     GUIName: '<dark_gray><bold>The Black Smith' #Name of the Black Smith's GUI
     Results:
       None: '<red><bold>No Results' #Name of the item when there are no results in the Black Smith
+      Type: 'BARRIER' # The type of block
       Not-Found-Lore:
         - '<gray>No results could be found.'
         - '<gray>Please put in two books of'
         - '<gray>the same enchantment and level.'
         - '<gray>Or put in two items to combined'
         - '<gray>the enchantments on them.'
-      Found: '<red><bold>Cost: <gold><bold>%cost%XP' #The lore at the bottom of the item
+      Found: '<red><bold>Cost: <gold><bold>{cost} XP' #The lore at the bottom of the item
     Transaction: #Options for the pricing
       Currency: XP_Level
       Costs: #Cost options

@@ -24,8 +24,6 @@ public class CommandReload extends BaseCommand {
 
         this.crazyManager.load();
 
-        BlackSmithManager.load();
-
         Messages.CONFIG_RELOAD.sendMessage(sender);
     }
 }

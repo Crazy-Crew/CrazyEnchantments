@@ -1,8 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
@@ -70,10 +68,6 @@ public class MenuManager {
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
 
         //player.openInventory(new BaseMenu(player, slots, ColorUtils.toLegacy(KitsManager.getInventoryName())).setEnchantmentType(type).build().getInventory()); //todo() legacy trash
-    }
-
-    public static void openBlackSmithMenu(@NotNull final Player player) {
-        player.openInventory(new BlackSmithMenu(player, 27, BlackSmithManager.getInventoryName()).build().getInventory());
     }
 
     public static void openTinkererMenu(@NotNull final Player player) {

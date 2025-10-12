@@ -63,8 +63,6 @@ public class Starter {
         // Settings.
         this.protectionCrystalSettings = new ProtectionCrystalSettings();
 
-        BlackSmithManager.load();
-
         MenuManager.load();
 
         // Economy Management.

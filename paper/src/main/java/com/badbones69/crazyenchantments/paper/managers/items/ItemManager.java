@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.managers.items;
 
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
+import com.badbones69.crazyenchantments.paper.managers.items.objects.CloseItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.PointerItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.ProtectionCrystalItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.ScramblerItem;
@@ -30,6 +31,7 @@ public class ItemManager {
         addItem("slot_crystal_item", new SlotCrystalItem());
         addItem("scrambler_item", new ScramblerItem());
         addItem("pointer_item", new PointerItem());
+        addItem("close_item", new CloseItem());
 
         //this.scramblerGuiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "<dark_gray>Rolling the <yellow>Scrambler")); //todo() legacy trash, we need papi support as well.
         this.scramblerAnimation = config.getBoolean("Settings.Scrambler.GUI.Toggle", true);

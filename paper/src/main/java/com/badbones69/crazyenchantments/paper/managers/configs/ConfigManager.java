@@ -2,10 +2,7 @@ package com.badbones69.crazyenchantments.paper.managers.configs;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.NavigationConfig;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.ProtectionCrystalConfig;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.ScramblerConfig;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.SlotCrystalConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
@@ -54,13 +51,15 @@ public class ConfigManager {
     private ProtectionCrystalConfig protectionCrystalConfig;
     private SlotCrystalConfig slotCrystalConfig;
     private NavigationConfig navigationConfig;
+    private BlackSmithConfig blackSmithConfig;
     private ScramblerConfig scramblerConfig;
 
     public void init(@NotNull final YamlConfiguration configuration) {
         Optional.ofNullable(configuration.getConfigurationSection("Settings")).ifPresentOrElse(section -> {
             Optional.ofNullable(section.getConfigurationSection("ProtectionCrystal")).ifPresent(protection -> this.protectionCrystalConfig = new ProtectionCrystalConfig(protection));
-            Optional.ofNullable(section.getConfigurationSection("Slot_Crystal")).ifPresent(slot -> this.slotCrystalConfig = new SlotCrystalConfig(slot));
+            Optional.ofNullable(section.getConfigurationSection("BlackSmith")).ifPresent(blacksmith -> this.blackSmithConfig = new BlackSmithConfig(blacksmith));
             Optional.ofNullable(section.getConfigurationSection("Scrambler")).ifPresent(scrambler -> this.scramblerConfig = new ScramblerConfig(scrambler));
+            Optional.ofNullable(section.getConfigurationSection("Slot_Crystal")).ifPresent(slot -> this.slotCrystalConfig = new SlotCrystalConfig(slot));
 
             this.prefix = section.getString("Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ");
 
@@ -118,6 +117,10 @@ public class ConfigManager {
 
     public @NotNull final SlotCrystalConfig getSlotCrystalConfig() {
         return this.slotCrystalConfig;
+    }
+
+    public @NotNull final BlackSmithConfig getBlackSmithConfig() {
+        return this.blackSmithConfig;
     }
 
     public @NotNull final NavigationConfig getNavigationConfig() {
