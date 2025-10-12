@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
+import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
@@ -15,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 public abstract class StaticInventory extends InventoryBuilder {
 
     protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    protected final ConfigManager configManager = this.plugin.getOptions();
 
     protected final ItemManager itemManager = this.plugin.getItemManager();
 
@@ -27,13 +30,14 @@ public abstract class StaticInventory extends InventoryBuilder {
     protected final Server server = this.plugin.getServer();
 
     private final Player player;
+    private final String title;
     private final int size;
     private final Gui gui;
 
     public StaticInventory(@NotNull final Player player, @NotNull final String title, final int size) {
         super(player);
 
-        this.gui = Gui.gui(this.plugin).setTitle(this.fusion.papi(this.player = player, title)).setRows(size / 9).disableInteractions().create();
+        this.gui = Gui.gui(this.plugin).setTitle(this.fusion.papi(this.player = player, this.title = title)).setRows(size / 9).disableInteractions().create();
         this.size = size;
     }
 
@@ -48,15 +52,19 @@ public abstract class StaticInventory extends InventoryBuilder {
     }
 
     public final boolean contains(@NotNull final String message) {
-        return getTitle().contains(message);
+        return getPlainTitle().contains(message);
     }
 
     public @NotNull final Player getPlayer() {
         return this.player;
     }
 
-    public @NotNull final String getTitle() {
+    public @NotNull final String getPlainTitle() {
         return this.gui.getTitle();
+    }
+
+    public @NotNull final String getTitle() {
+        return this.title;
     }
 
     public @NotNull final Gui getGui() {

@@ -18,6 +18,8 @@ public class BaseMenu extends StaticInventory {
     }
 
     private final Player player = getPlayer();
+    private final String title = getTitle();
+    private final int size = getSize();
     private final Gui gui = getGui();
 
     @Override
@@ -27,7 +29,7 @@ public class BaseMenu extends StaticInventory {
                 this.gui.setItem(type.getSlot(), new GuiItem(type.getDisplayItem(), event -> {
                     if (!(event.getWhoClicked() instanceof Player entity)) return;
 
-                    MenuManager.openInfoMenu(entity, type);
+                    new BaseMenu(entity, this.title, this.size).setEnchantmentType(type);
                 }));
             }
 
@@ -40,16 +42,16 @@ public class BaseMenu extends StaticInventory {
 
         final ItemBuilder book = this.instance.getEnchantmentBookBuilder();
 
-        this.itemManager.getItem("back_button_right").ifPresent(item -> this.gui.setItem(getSize() - 1, item.asGuiEventItem(event -> {
+        this.itemManager.getItem("back_button_right").ifPresent(item -> this.gui.setItem(this.size - 1, item.asGuiEventItem(event -> {
             if (!(event.getWhoClicked() instanceof Player entity)) return;
 
-            MenuManager.openInfoMenu(entity);
+            new BaseMenu(entity, this.title, this.size);
         })));
 
-        this.itemManager.getItem("back_button_left").ifPresent(item -> this.gui.setItem(getSize() - 8, item.asGuiEventItem(event -> {
+        this.itemManager.getItem("back_button_left").ifPresent(item -> this.gui.setItem(this.size - 8, item.asGuiEventItem(event -> {
             if (!(event.getWhoClicked() instanceof Player entity)) return;
 
-            MenuManager.openInfoMenu(entity);
+            new BaseMenu(entity, this.title, this.size);
         })));
 
         for (final CEnchantment enchantment : enchantments) {
