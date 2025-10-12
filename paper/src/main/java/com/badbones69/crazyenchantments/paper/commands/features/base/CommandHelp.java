@@ -19,7 +19,7 @@ public class CommandHelp extends BaseCommand {
     public void gui(final Player player) {
         final ShopManager shopManager = this.starter.getShopManager();
 
-        player.openInventory(new ShopMenu(player, shopManager.getInventorySize(), shopManager.getInventoryName()).build().getInventory());
+        new ShopMenu(player, shopManager.getInventoryName(), shopManager.getInventorySize()).open();
     }
 
     @Command("help")
