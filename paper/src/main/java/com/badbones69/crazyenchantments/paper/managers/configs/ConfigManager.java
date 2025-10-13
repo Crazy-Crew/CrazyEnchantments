@@ -53,6 +53,7 @@ public class ConfigManager {
     private NavigationConfig navigationConfig;
     private BlackSmithConfig blackSmithConfig;
     private ScramblerConfig scramblerConfig;
+    private KitConfig kitConfig;
 
     public void init(@NotNull final YamlConfiguration configuration) {
         Optional.ofNullable(configuration.getConfigurationSection("Settings")).ifPresentOrElse(section -> {
@@ -109,6 +110,12 @@ public class ConfigManager {
         Optional.ofNullable(enchantmentTypes.getConfigurationSection("Info-GUI-Settings.Back-Item")).ifPresentOrElse(back -> this.navigationConfig = new NavigationConfig(back), () -> {
             throw new CrazyException("Enchantment-Types.yml does not have the configuration section needed!");
         });
+
+        final YamlConfiguration kits = FileKeys.gkitz.getYamlConfiguration();
+
+        Optional.ofNullable(kits.getConfigurationSection("Settings")).ifPresentOrElse(kit -> this.kitConfig = new KitConfig(kit), () -> {
+            throw new CrazyException("GKitz.yml does not have the configuration section needed!");
+        });
     }
 
     public @NotNull final ProtectionCrystalConfig getProtectionCrystalConfig() {
@@ -129,6 +136,10 @@ public class ConfigManager {
 
     public @NotNull final ScramblerConfig getScramblerConfig() {
         return this.scramblerConfig;
+    }
+
+    public @NotNull final KitConfig getKitConfig() {
+        return this.kitConfig;
     }
 
     public final boolean isCountVanillaEnchantments() {

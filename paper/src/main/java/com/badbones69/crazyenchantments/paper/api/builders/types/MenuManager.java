@@ -1,12 +1,10 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -44,16 +42,6 @@ public class MenuManager {
 
     public static List<EnchantmentType> getEnchantmentTypes() {
         return enchantmentTypes;
-    }
-
-    public static void openKitsMenu(@NotNull final Player player) {
-        YamlConfiguration gkitz = FileKeys.gkitz.getYamlConfiguration();
-
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "<dark_gray>List of all GKitz")).build().getInventory());
-    }
-
-    public static void openKitsPreviewMenu(@NotNull final Player player, final int slots, @NotNull final GKitz kit) {
-        //player.openInventory(new KitsPreviewMenu(player, slots, ColorUtils.toLegacy(kit.getDisplayItem().displayName()), kit).build().getInventory()); //todo() legacy trash
     }
 
     public static void openInfoMenu(@NotNull final Player player) {

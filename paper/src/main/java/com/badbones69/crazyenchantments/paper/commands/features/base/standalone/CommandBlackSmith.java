@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.base.standalone;
 
-import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.BlackSmithConfig;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;

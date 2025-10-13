@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
+package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;

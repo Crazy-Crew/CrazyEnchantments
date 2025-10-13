@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.commands.CommandManager;
@@ -107,7 +106,6 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new MiscListener(), this);
         this.pluginManager.registerEvents(new DustControlListener(), this);
 
-        this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         this.pluginManager.registerEvents(new TinkererMenu.TinkererListener(), this);
 
         this.pluginManager.registerEvents(new SlotCrystalListener(), this);

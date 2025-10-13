@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.gui.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
@@ -16,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 public abstract class StaticInventory extends InventoryBuilder {
 
     protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    protected final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
 
     protected final ConfigManager configManager = this.plugin.getOptions();
 
