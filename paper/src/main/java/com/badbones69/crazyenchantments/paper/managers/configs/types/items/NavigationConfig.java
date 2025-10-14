@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.managers.configs.types;
+package com.badbones69.crazyenchantments.paper.managers.configs.types.items;
 
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.interfaces.IConfig;

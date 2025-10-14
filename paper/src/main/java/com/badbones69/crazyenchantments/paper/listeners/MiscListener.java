@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.managers.TinkerManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.TinkerConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -18,7 +18,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class MiscListener implements Listener {

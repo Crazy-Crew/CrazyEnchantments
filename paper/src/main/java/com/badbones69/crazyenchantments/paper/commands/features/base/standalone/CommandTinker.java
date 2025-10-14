@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands.features.base.standalone
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.TinkerMenu;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.TinkerConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;

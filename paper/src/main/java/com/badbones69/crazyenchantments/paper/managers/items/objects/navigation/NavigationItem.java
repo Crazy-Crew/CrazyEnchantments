@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects.navigation;
 
-import com.badbones69.crazyenchantments.paper.managers.configs.types.NavigationConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.items.NavigationConfig;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;

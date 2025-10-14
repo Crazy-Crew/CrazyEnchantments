@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects;
 
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.ScramblerConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ScramblerConfig;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;

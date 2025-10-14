@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.managers.configs.types;
+package com.badbones69.crazyenchantments.paper.managers.configs.types.guis;
 
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;

@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.BlackSmithConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.GuiItem;

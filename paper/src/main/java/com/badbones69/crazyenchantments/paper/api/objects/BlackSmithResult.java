@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
-import com.badbones69.crazyenchantments.paper.managers.configs.types.BlackSmithConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

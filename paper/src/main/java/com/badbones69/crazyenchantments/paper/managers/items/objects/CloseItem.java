@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects;
 
-import com.badbones69.crazyenchantments.paper.managers.configs.types.BlackSmithConfig;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
