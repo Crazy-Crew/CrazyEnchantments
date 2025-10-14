@@ -195,7 +195,7 @@ public enum Messages {
     }
 
     public void migrate() {
-        final YamlConfiguration configuration = FileKeys.messages.getYamlConfiguration();
+        final YamlConfiguration configuration = FileKeys.messages.getPaperConfiguration();
 
         if (isList()) {
             configuration.set(this.path, this.utils.convertLegacy(ConfigUtils.getStringList(configuration, this.defaultListMessage, this.path)));
@@ -207,7 +207,7 @@ public enum Messages {
     }
 
     private @NotNull Component parse(@NotNull final CommandSender sender, @NotNull final Map<String, String> placeholders) {
-        final YamlConfiguration configuration = FileKeys.messages.getYamlConfiguration();
+        final YamlConfiguration configuration = FileKeys.messages.getPaperConfiguration();
 
         String message;
 

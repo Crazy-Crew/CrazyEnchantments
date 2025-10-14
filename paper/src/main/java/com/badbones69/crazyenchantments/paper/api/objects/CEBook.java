@@ -60,7 +60,7 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         int successMax = config.getInt("Settings.BlackScroll.SuccessChance.Max", 100);
         int successMin = config.getInt("Settings.BlackScroll.SuccessChance.Min", 15);
@@ -202,7 +202,7 @@ public class CEBook {
 
         List<String> lore = new ArrayList<>();
 
-        final YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
 
         for (String bookLine : configuration.getStringList("Settings.EnchantmentBookLore")) {
             if (bookLine.isEmpty()) continue;

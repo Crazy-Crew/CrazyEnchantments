@@ -33,7 +33,7 @@ public class ShopManager {
         this.customizerItems.clear();
         this.shopItems.clear();
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         //this.inventoryName = ColorUtils.color(this.options.getInventoryName()); //todo() legacy trash
         this.inventorySize = this.options.getInventorySize();

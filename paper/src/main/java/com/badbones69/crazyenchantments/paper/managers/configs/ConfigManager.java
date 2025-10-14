@@ -3,12 +3,14 @@ package com.badbones69.crazyenchantments.paper.managers.configs;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.*;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.currency.VaultConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.NavigationConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ProtectionCrystalConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ScramblerConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.SlotCrystalConfig;
+import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
@@ -112,19 +114,19 @@ public class ConfigManager {
             throw new CrazyException("config.yml does not have the configuration section needed!");
         });
 
-        final YamlConfiguration enchantmentTypes = FileKeys.enchantment_types.getYamlConfiguration();
+        final YamlConfiguration enchantmentTypes = FileKeys.enchantment_types.getPaperConfiguration();
 
         Optional.ofNullable(enchantmentTypes.getConfigurationSection("Info-GUI-Settings.Back-Item")).ifPresentOrElse(back -> this.navigationConfig = new NavigationConfig(back), () -> {
             throw new CrazyException("Enchantment-Types.yml does not have the configuration section needed!");
         });
 
-        final YamlConfiguration kits = FileKeys.gkitz.getYamlConfiguration();
+        final YamlConfiguration kits = FileKeys.gkitz.getPaperConfiguration();
 
         Optional.ofNullable(kits.getConfigurationSection("Settings")).ifPresentOrElse(kit -> this.kitConfig = new KitConfig(kit), () -> {
             throw new CrazyException("GKitz.yml does not have the configuration section needed!");
         });
 
-        final YamlConfiguration tinker = FileKeys.tinker.getYamlConfiguration();
+        final YamlConfiguration tinker = FileKeys.tinker.getPaperConfiguration();
 
         Optional.ofNullable(tinker.getConfigurationSection("Settings")).ifPresentOrElse(tink -> this.tinkerConfig = new TinkerConfig(tink), () -> {
             throw new CrazyException("Tinker.yml does not have the configuration section needed!");

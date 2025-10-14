@@ -29,7 +29,7 @@ public class EnchantmentType {
     private final List<Material> enchantableMaterials = new ArrayList<>();
 
     public EnchantmentType(@NotNull final String name) {
-        final YamlConfiguration file = FileKeys.enchantment_types.getYamlConfiguration();
+        final YamlConfiguration file = FileKeys.enchantment_types.getPaperConfiguration();
 
         final String path = "Types." + name;
 

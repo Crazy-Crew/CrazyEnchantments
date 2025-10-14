@@ -24,7 +24,7 @@ public class LegacyMigration extends IEnchantMigration {
         final List<String> success = new ArrayList<>();
 
         try {
-            final YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
+            final YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
 
             getConfigurationSection(configuration, "Settings").ifPresentOrElse(section -> {
                 section.set("Prefix", this.utils.convertLegacy(section.getString("Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: </dark_gray>")));
@@ -373,7 +373,7 @@ public class LegacyMigration extends IEnchantMigration {
         }
 
         try {
-            final YamlConfiguration configuration = FileKeys.enchantment_types.getYamlConfiguration();
+            final YamlConfiguration configuration = FileKeys.enchantment_types.getPaperConfiguration();
 
             getConfigurationSection(configuration, "Info-GUI-Settings").ifPresent(action -> {
                 action.set("Back-Item.Name", this.utils.convertLegacy(action.getString("Back-Item.Name", "<gray><bold><<<aqua><bold>Back")));
@@ -532,7 +532,7 @@ public class LegacyMigration extends IEnchantMigration {
         }
 
         try {
-            final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
+            final YamlConfiguration configuration = FileKeys.tinker.getPaperConfiguration();
 
             getConfigurationSection(configuration, "Settings").ifPresentOrElse(section -> {
                 section.set("GUIName", this.utils.convertLegacy(section.getString("GUIName", "<gray><bold>The <dark_red><bold>Crazy <red><bold>Tinkerer")));
@@ -560,7 +560,7 @@ public class LegacyMigration extends IEnchantMigration {
         }
 
         try {
-            final YamlConfiguration configuration = FileKeys.enchantments.getYamlConfiguration();
+            final YamlConfiguration configuration = FileKeys.enchantments.getPaperConfiguration();
 
             getConfigurationSection(configuration, "Enchantments").ifPresentOrElse(section -> {
                 for (final String key : section.getKeys(false)) {
@@ -582,7 +582,7 @@ public class LegacyMigration extends IEnchantMigration {
         }
 
         try {
-            /*final YamlConfiguration configuration = FileKeys.messages.getYamlConfiguration();
+            /*final YamlConfiguration configuration = FileKeys.messages.getPaperConfiguration();
 
             getConfigurationSection(configuration, "Messages").ifPresentOrElse(section -> {
                 getConfigurationSection(section, "Show-Enchants-Format").ifPresent(message -> {
@@ -629,7 +629,7 @@ public class LegacyMigration extends IEnchantMigration {
         }
 
         try {
-            final YamlConfiguration configuration = FileKeys.gkitz.getYamlConfiguration();
+            final YamlConfiguration configuration = FileKeys.gkitz.getPaperConfiguration();
 
             getConfigurationSection(configuration, "Settings").ifPresent(section -> {
                 section.set("Inventory-Name", this.utils.convertLegacy(section.getString("Inventory-Name", "<dark_gray>List of all GKitz")));

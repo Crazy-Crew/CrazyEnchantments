@@ -15,7 +15,7 @@ public class TinkerMigration extends IEnchantMigration {
 
     @Override
     public void run() {
-        final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
+        final YamlConfiguration configuration = FileKeys.tinker.getPaperConfiguration();
 
         final ConfigurationSection tinkerSection = configuration.getConfigurationSection("Tinker");
 

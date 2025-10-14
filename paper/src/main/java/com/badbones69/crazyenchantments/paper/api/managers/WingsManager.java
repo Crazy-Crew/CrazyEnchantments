@@ -29,7 +29,7 @@ public class WingsManager {
     public void load() {
         this.isWingsEnabled = CEnchantments.WINGS.isActivated();
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         String path = "Settings.EnchantmentOptions.Wings.";
         this.isCloudsEnabled = config.getBoolean(path + "Clouds", true);

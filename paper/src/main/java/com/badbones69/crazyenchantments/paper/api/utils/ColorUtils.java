@@ -70,7 +70,7 @@ public class ColorUtils {
     }
 
     public static String getPrefix() {
-        //return color(FileKeys.config.getYamlConfiguration().getString("Settings.Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: "));
+        //return color(FileKeys.config.getPaperConfiguration().getString("Settings.Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: "));
         return "";
     }
 

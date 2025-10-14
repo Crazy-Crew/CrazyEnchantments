@@ -52,7 +52,7 @@ public class DustControlListener implements Listener {
             data.setDestroyChance(percent);
         }
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         for (final String line : config.getStringList("Settings.EnchantmentBookLore")) {
             if (line.toLowerCase().contains("%description%")) { //todo() simplify this
@@ -86,7 +86,7 @@ public class DustControlListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         final PersistentDataContainerView container = dust.getPersistentDataContainer();
 
@@ -214,7 +214,7 @@ public class DustControlListener implements Listener {
 
             player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
 
-            final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+            final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
             if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle", true)) {
                 final List<Color> colors = new ArrayList<>();
@@ -231,7 +231,7 @@ public class DustControlListener implements Listener {
     private Dust pickDust() {
         List<Dust> dusts = new ArrayList<>();
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success", true)) dusts.add(Dust.SUCCESS_DUST);
 

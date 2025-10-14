@@ -78,7 +78,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.fileManager.addFile(path.resolve("blocks.json"), FileType.JSON);
 
         this.options = new ConfigManager();
-        this.options.init(FileKeys.config.getYamlConfiguration());
+        this.options.init(FileKeys.config.getPaperConfiguration());
 
         if (this.options.isToggleMetrics()) { // Enable bStats
             new Metrics(this, 4494);

@@ -88,7 +88,7 @@ public class CrazyInstance {
             this.blocks.add(block);
         }
 
-        final YamlConfiguration enchantmentTypes = FileKeys.enchantment_types.getYamlConfiguration();
+        final YamlConfiguration enchantmentTypes = FileKeys.enchantment_types.getPaperConfiguration();
 
         Optional.ofNullable(enchantmentTypes.getConfigurationSection("Types")).ifPresentOrElse(section -> {
             for (final String type : section.getKeys(false)) {
@@ -98,7 +98,7 @@ public class CrazyInstance {
             throw new CrazyException("Failed to find `Types` section in Enchantment-Types.yml");
         });
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         this.categoryManager = new CategoryManager();
         this.tinkerManager = new TinkerManager();
@@ -148,7 +148,7 @@ public class CrazyInstance {
 
         this.registeredEnchantmentTypes.clear();
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         this.options.init(config); // re-map to objects
 

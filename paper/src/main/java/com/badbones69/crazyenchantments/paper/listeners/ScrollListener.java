@@ -159,7 +159,7 @@ public class ScrollListener implements Listener {
     }
 
     private ItemStack newOrderNewEnchantments(@NotNull final ItemStack item) {
-        final YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
 
         final List<Component> lore = item.lore();
 
@@ -235,8 +235,8 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull final PersistentDataContainerView container) {
         final List<Component> lore = new ArrayList<>();
 
-        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><bold>PROTECTED")));
-        //if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection")));
+        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getPaperConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><bold>PROTECTED")));
+        //if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getPaperConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection")));
 
         return lore;
     }
@@ -255,7 +255,7 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         //lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-        //       ColorUtils.stripStringColour(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"))
+        //       ColorUtils.stripStringColour(FileKeys.config.getPaperConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"))
         //));
 
         return lore;

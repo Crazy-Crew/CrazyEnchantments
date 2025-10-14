@@ -117,7 +117,7 @@ public class TinkerMenu extends StaticInventory {
 
 //            if (current.getType().toString().endsWith("STAINED_GLASS_PANE")) return;
 //
-//            final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
+//            final YamlConfiguration configuration = FileKeys.tinker.getPaperConfiguration();
 //
 //            // Adding/taking items.
 //            if (this.instance.isEnchantmentBook(current)) { // Adding a book.

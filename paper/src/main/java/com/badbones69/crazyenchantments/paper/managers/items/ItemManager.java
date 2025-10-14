@@ -24,7 +24,7 @@ public class ItemManager {
     private String scramblerGuiName;
 
     public void init() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         addItem("protection_crystal_item", new ProtectionCrystalItem());
         addItem("back_button_right", new NavigationItem(true));

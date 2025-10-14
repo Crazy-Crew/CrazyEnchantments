@@ -448,7 +448,7 @@ public class Methods {
 
         if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
 
-        int lightningSoundRange = FileKeys.config.getYamlConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+        int lightningSoundRange = FileKeys.config.getPaperConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);

@@ -33,7 +33,7 @@ public enum Scrolls {
     }
     
     public static void loadScrolls() {
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         itemBuilderScrolls.clear();
 
@@ -102,7 +102,7 @@ public enum Scrolls {
     private static final NamespacedKey whiteScrollProtectionKey = DataKeys.white_scroll_protection.getNamespacedKey();
 
     public static String getWhiteScrollProtectionName() {
-        //return ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><bold>PROTECTED"));
+        //return ColorUtils.color(FileKeys.config.getPaperConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><bold>PROTECTED"));
         return ""; //todo() legacy trash
     }
 

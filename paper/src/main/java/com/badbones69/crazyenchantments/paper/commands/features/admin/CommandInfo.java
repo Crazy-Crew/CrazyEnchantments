@@ -28,7 +28,7 @@ public class CommandInfo extends BaseCommand {
         final boolean hasCustomEnchant = flags.hasFlag("ce");
 
         if (sender instanceof Player player) {
-            final YamlConfiguration configuration = FileKeys.enchantment_types.getYamlConfiguration();
+            final YamlConfiguration configuration = FileKeys.enchantment_types.getPaperConfiguration();
 
             final String title = configuration.getString("Info-GUI-Settings.Inventory.Name", "<red><bold>Enchantment Info");
             final int size = configuration.getInt("Info-GUI-Settings.Inventory.Size", 18);

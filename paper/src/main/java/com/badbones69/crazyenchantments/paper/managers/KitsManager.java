@@ -35,7 +35,7 @@ public class KitsManager {
             return;
         }
 
-        final YamlConfiguration kits = FileKeys.gkitz.getYamlConfiguration();
+        final YamlConfiguration kits = FileKeys.gkitz.getPaperConfiguration();
 
         final ConfigurationSection section = kits.getConfigurationSection("GKitz");
 

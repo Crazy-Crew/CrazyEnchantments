@@ -42,14 +42,14 @@ public enum Dust {
         this.knownNames = knowNames;
         this.configName = configName;
 
-        YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
+        YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
         
         this.max = configuration.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
         this.min = configuration.getInt("Settings.Dust." + configName + ".PercentRange.Min", this.max);
     }
     
     public static void loadDust() {
-        YamlConfiguration configuration = FileKeys.config.getYamlConfiguration();
+        YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
 
         itemBuilderDust.clear();
 

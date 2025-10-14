@@ -71,7 +71,7 @@ public class AxeEnchantments implements Listener {
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         boolean damage = config.getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
 

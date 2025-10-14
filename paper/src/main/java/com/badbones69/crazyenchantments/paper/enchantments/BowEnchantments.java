@@ -112,7 +112,7 @@ public class BowEnchantments implements Listener {
 
             Entity lightning = location.getWorld().strikeLightningEffect(location);
 
-            final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+            final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
             int lightningSoundRange = config.getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 

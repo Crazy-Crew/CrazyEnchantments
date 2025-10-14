@@ -26,7 +26,7 @@ public class ProtectionCrystalSettings {
     private final Methods methods = null;
 
     //@NotNull
-    //private final String protectionString = ColorUtils.color(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"));
+    //private final String protectionString = ColorUtils.color(FileKeys.config.getPaperConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
@@ -78,7 +78,7 @@ public class ProtectionCrystalSettings {
     public boolean isProtectionSuccessful(@NotNull final Player player) {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
-        final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return this.methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
 

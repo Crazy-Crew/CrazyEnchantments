@@ -20,7 +20,7 @@ public class CommandFix extends BaseCommand {
     public void fix(final CommandSender sender) {
         List<CEnchantments> brokenEnchantments = new ArrayList<>();
 
-        final YamlConfiguration configuration = FileKeys.enchantments.getYamlConfiguration();
+        final YamlConfiguration configuration = FileKeys.enchantments.getPaperConfiguration();
 
         for (CEnchantments enchantment : CEnchantments.values()) {
             if (!configuration.contains("Enchantments." + enchantment.getName()))

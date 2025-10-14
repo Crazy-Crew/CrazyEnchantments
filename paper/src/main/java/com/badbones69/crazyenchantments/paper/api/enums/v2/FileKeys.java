@@ -61,7 +61,7 @@ public enum FileKeys {
         return customFile.get();
     }
 
-    public @NotNull final YamlConfiguration getYamlConfiguration() {
+    public @NotNull final YamlConfiguration getPaperConfiguration() {
         return getPaperCustomFile().getConfiguration();
     }
 

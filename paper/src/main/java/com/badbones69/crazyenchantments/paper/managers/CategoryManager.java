@@ -24,7 +24,7 @@ public class CategoryManager {
     private final Map<String, Category> categories = new HashMap<>();
 
     public void init() {
-        final ConfigurationSection section = FileKeys.config.getYamlConfiguration().getConfigurationSection("Categories");
+        final ConfigurationSection section = FileKeys.config.getPaperConfiguration().getConfigurationSection("Categories");
 
         if (section == null) {
             this.fusion.log("warn", "The categories section cannot be found in config.yml, It's possible the file is badly formatted!");
