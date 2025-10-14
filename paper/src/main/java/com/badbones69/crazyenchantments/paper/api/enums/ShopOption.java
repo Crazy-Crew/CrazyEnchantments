@@ -60,7 +60,7 @@ public enum ShopOption {
                 .setName(config.getString(itemPath + shopOption.getNamePath(), "Error getting name."))
                 .setLore(config.getStringList(itemPath + shopOption.getLorePath()))
                 .setMaterial(config.getString(itemPath + "Item", "CHEST"))
-                .setPlayerName(config.getString(itemPath + "Player"))
+                .setPlayerName(config.getString(itemPath + "Player", ""))
                 .setGlow(config.getBoolean(itemPath + "Glowing", false)),
                 config.getInt(itemPath + "Slot", 1) - 1,
                 config.getBoolean(itemPath + "InGUI", true),
