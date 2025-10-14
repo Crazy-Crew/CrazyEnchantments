@@ -25,7 +25,7 @@ public class AllyMob {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
-    private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+    private final AllyManager allyManager = null;
 
     private final AllyType type;
     private final Player owner;
@@ -153,7 +153,7 @@ public class AllyMob {
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         @NotNull
-        private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+        private final AllyManager allyManager = null;
         
         AllyType(@NotNull final String configName, @NotNull final String defaultName, @NotNull final EntityType entityType, final int maxHealth) {
             this.configName = configName;

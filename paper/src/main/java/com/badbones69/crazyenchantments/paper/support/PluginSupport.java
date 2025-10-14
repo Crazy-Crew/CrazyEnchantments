@@ -1,8 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WorldGuardUtils;
 import com.badbones69.crazyenchantments.paper.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.paper.support.claims.LandsSupport;
@@ -21,12 +19,6 @@ import java.util.Map;
 
 public class PluginSupport { //todo() nah redo this whole shit show
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
     private ClaimSupport claimPlugin = null;
 
     private WorldGuardUtils worldGuardUtils;
@@ -43,7 +35,8 @@ public class PluginSupport { //todo() nah redo this whole shit show
     public boolean inTerritory(@NotNull final Player player) {
         if (this.claimPlugin != null) return this.claimPlugin.inTerritory(player);
 
-        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().inTerritory(player);
+        //return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().inTerritory(player);
+        return false;
     }
 
     public boolean isFriendly(@NotNull final Entity pEntity, @NotNull final Entity oEntity) {
@@ -51,7 +44,7 @@ public class PluginSupport { //todo() nah redo this whole shit show
 
         if (this.claimPlugin != null) return this.claimPlugin.isFriendly(player, otherPlayer);
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
+        //if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
         if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyAPI.inSameParty(player, otherPlayer);
 
@@ -163,12 +156,6 @@ public class PluginSupport { //todo() nah redo this whole shit show
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-        @NotNull
-        private final Starter starter = this.plugin.getStarter();
-
-        @NotNull
-        private final PluginSupport pluginSupport = this.starter.getPluginSupport();
-
         public boolean isPluginLoaded() {
             Plugin plugin1 = this.plugin.getServer().getPluginManager().getPlugin(this.pluginName);
             return plugin1 != null && plugin1.isEnabled();
@@ -179,19 +166,21 @@ public class PluginSupport { //todo() nah redo this whole shit show
         }
 
         public boolean isCachedPluginLoaded() {
-            return this.pluginSupport.cachedPlugins.get(this);
+            //return this.pluginSupport.cachedPlugins.get(this);
+            return false;
         }
 
         public void addPlugin(boolean value) {
-            this.pluginSupport.cachedPlugins.put(this, value);
+            //this.pluginSupport.cachedPlugins.put(this, value);
         }
 
         public void removePlugin() {
-            this.pluginSupport.cachedPlugins.remove(this);
+            //this.pluginSupport.cachedPlugins.remove(this);
         }
 
         public boolean isPluginEnabled() {
-            return this.pluginSupport.cachedPlugins.get(this);
+            //return this.pluginSupport.cachedPlugins.get(this);
+            return false;
         }
     }
 }

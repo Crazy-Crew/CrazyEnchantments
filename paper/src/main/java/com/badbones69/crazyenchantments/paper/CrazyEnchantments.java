@@ -47,9 +47,6 @@ public class CrazyEnchantments extends JavaPlugin {
     private ConfigManager options;
     private FusionPaper fusion;
 
-    // ryder start, delete all this.
-    private Starter starter;
-
     // Plugin Listeners.
     public final PluginManager pluginManager = getServer().getPluginManager();
 
@@ -95,12 +92,6 @@ public class CrazyEnchantments extends JavaPlugin {
         this.itemManager = this.instance.getItemManager();
         this.kitsManager = this.instance.getKitsManager();
 
-        this.starter = new Starter();
-        this.starter.run();
-
-        this.starter.getCurrencyAPI().loadCurrency();
-        this.starter.getCrazyManager().load();
-
         this.pluginManager.registerEvents(new DustControlListener(), this);
         this.pluginManager.registerEvents(new SlotCrystalListener(), this);
         this.pluginManager.registerEvents(new ScramblerListener(), this);
@@ -137,13 +128,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
         if (this.armorEnchantments != null) this.armorEnchantments.stop();
 
-        if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
+        //if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
 
-        server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
-    }
-
-    public @NotNull final Starter getStarter() {
-        return this.starter;
+        //server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
     }
 
     public @NotNull final PluginManager getPluginManager() {
@@ -184,9 +171,5 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final FusionPaper getFusion() {
         return this.fusion;
-    }
-
-    public final boolean isLogging() {
-        return this.fusion.isVerbose();
     }
 }

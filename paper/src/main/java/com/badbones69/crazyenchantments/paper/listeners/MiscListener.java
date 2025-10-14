@@ -32,7 +32,7 @@ public class MiscListener implements Listener {
     private final TinkerManager tinkerManager = this.plugin.geTinkerManager();
 
     @NotNull
-    private final CrazyManager crazyManager = JavaPlugin.getPlugin(CrazyEnchantments.class).getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {

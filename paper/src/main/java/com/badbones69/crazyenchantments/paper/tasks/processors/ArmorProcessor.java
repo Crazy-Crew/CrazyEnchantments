@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.tasks.processors;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -26,11 +25,9 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Methods methods = null;
 
-    private final Methods methods = this.starter.getMethods();
-
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final PluginSupport pluginSupport = null;
 
     public ArmorProcessor() {}
 

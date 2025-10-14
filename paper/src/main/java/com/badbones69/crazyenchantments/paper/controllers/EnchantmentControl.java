@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.controllers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -38,15 +37,12 @@ public class EnchantmentControl implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyInstance instance = this.plugin.getInstance();
-    
-    @NotNull
-    private final Starter starter = plugin.getStarter();
 
     @NotNull
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = null;
 
     @NotNull
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     @EventHandler(ignoreCancelled = true)
     public void useEnchantedBook(InventoryClickEvent event) {

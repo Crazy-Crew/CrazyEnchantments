@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -51,17 +50,14 @@ public class AxeEnchantments implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final Methods methods = null;
 
     @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     // Plugin Support.
     @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final PluginSupport pluginSupport = null;
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeFeller(BlockBreakEvent event) {

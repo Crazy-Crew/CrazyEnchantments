@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -38,12 +37,9 @@ public class AllyEnchantments implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
     // Plugin Managers.
     @NotNull
-    private final AllyManager allyManager = this.starter.getAllyManager();
+    private final AllyManager allyManager = null;
 
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 

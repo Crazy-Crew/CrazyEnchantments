@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
@@ -18,8 +17,6 @@ public abstract class IEnchantMigration {
     protected final CrazyInstance instance = this.plugin.getInstance();
 
     protected final ConfigManager options = this.plugin.getOptions();
-
-    protected final Starter starter = this.plugin.getStarter();
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 

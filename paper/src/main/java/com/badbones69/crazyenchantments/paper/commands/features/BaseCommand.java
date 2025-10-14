@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.commands.features;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
@@ -28,12 +27,10 @@ public class BaseCommand {
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 
-    protected final Starter starter = this.plugin.getStarter();
-
     protected final Path path = this.plugin.getDataPath();
 
-    protected final Methods methods = this.starter.getMethods();
+    protected final Methods methods = null;
 
-    protected final CrazyManager crazyManager = this.starter.getCrazyManager();
+    protected final CrazyManager crazyManager = null;
 
 }

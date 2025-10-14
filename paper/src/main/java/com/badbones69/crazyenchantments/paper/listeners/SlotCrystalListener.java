@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
@@ -26,8 +25,6 @@ public class SlotCrystalListener implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final Starter starter = this.plugin.getStarter();
-
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
@@ -44,10 +41,14 @@ public class SlotCrystalListener implements Listener {
 
         if (!customItem.isItem(crystalItem) || !customItem.isItem(item)) return;
 
-        int maxEnchants = this.starter.getCrazyManager().getPlayerMaxEnchantments(player);
+        //int maxEnchants = this.starter.getCrazyManager().getPlayerMaxEnchantments(player);
+        int maxEnchants = 0;
         int enchAmount = this.instance.getEnchantmentAmount(item, this.options.isCheckVanillaLimit());
-        int baseEnchants = this.starter.getCrazyManager().getPlayerBaseEnchantments(player);
-        int limiter = this.starter.getCrazyManager().getEnchantmentLimiter(item);
+        //int baseEnchants = this.starter.getCrazyManager().getPlayerBaseEnchantments(player);
+        int baseEnchants = 0;
+        //int limiter = this.starter.getCrazyManager().getEnchantmentLimiter(item);
+        int limiter = 0;
+
 
         event.setCancelled(true);
 
@@ -67,7 +68,7 @@ public class SlotCrystalListener implements Listener {
 
         event.getCursor().setAmount(crystalItem.getAmount());
 
-        event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
+        //event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
         Messages.APPLIED_SLOT_CRYSTAL.sendMessage(player, new HashMap<>(4) {{
             put("{slot}", String.valueOf(-(limiter - 1)));

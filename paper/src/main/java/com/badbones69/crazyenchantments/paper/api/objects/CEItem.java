@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import org.bukkit.enchantments.Enchantment;
@@ -22,10 +21,7 @@ public class CEItem {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     private final ItemStack item;
     private final List<Enchantment> vanillaEnchantmentRemove;

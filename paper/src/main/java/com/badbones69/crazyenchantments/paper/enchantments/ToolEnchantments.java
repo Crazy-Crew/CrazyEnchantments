@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -30,10 +29,7 @@ public class ToolEnchantments implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = null;
 
     @EventHandler()
     public void onPlayerClick(PlayerInteractEvent event) {

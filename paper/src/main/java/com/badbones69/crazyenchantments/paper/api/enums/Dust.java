@@ -35,7 +35,7 @@ public enum Dust {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
-    private final Methods methods = this.plugin.getStarter().getMethods();
+    private final Methods methods  = null;
     
     Dust(@NotNull final String name, @NotNull final String configName, @NotNull final List<String> knowNames) {
         this.name = name;

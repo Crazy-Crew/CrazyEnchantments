@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.controllers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
@@ -32,13 +31,10 @@ public class LostBookController implements Listener {
     private final CategoryManager categoryManager = this.plugin.getCategoryManager();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final Methods methods = null;
 
     @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent event) {

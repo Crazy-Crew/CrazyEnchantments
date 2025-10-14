@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -40,9 +39,7 @@ public class DustControlListener implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final Starter starter = this.plugin.getStarter();
-
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = null;
 
     private void setBookLore(@NotNull final ItemStack item, final int percent, @NotNull final String rate, @NotNull final CEnchantment enchantment, @NotNull final EnchantedBook data) {
         if (item.isEmpty()) return;

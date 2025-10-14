@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.economy;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -16,9 +15,6 @@ public class CurrencyAPI {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = plugin.getStarter();
-
     /**
      * Get the amount that a player has from a specific currency.
      * @param player The player you wish to get the amount from.
@@ -28,7 +24,8 @@ public class CurrencyAPI {
     public int getCurrency(@NotNull final Player player, @NotNull final Currency currency) {
         try {
             return switch (currency) {
-                case VAULT -> (int) starter.getVaultSupport().getVault().getBalance(player);
+                case VAULT -> player.getLevel();
+                //case VAULT -> (int) starter.getVaultSupport().getVault().getBalance(player);
                 case XP_LEVEL -> player.getLevel();
                 case XP_TOTAL -> getTotalExperience(player);
             };
@@ -72,7 +69,7 @@ public class CurrencyAPI {
     public void takeCurrency(@NotNull final Player player, @NotNull final Currency currency, final int amount) {
         try {
             switch (currency) {
-                case VAULT -> starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
+                //case VAULT -> starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
@@ -88,7 +85,7 @@ public class CurrencyAPI {
     public void giveCurrency(@NotNull final Player player, @NotNull final Currency currency, final int amount) {
         try {
             switch (currency) {
-                case VAULT -> starter.getVaultSupport().getVault().depositPlayer(player, amount);
+                //case VAULT -> starter.getVaultSupport().getVault().depositPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
@@ -184,7 +181,7 @@ public class CurrencyAPI {
         for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
                 if (supportedPlugin == SupportedPlugins.VAULT) {
-                    starter.setVaultSupport(new VaultSupport());
+                    //starter.setVaultSupport(new VaultSupport());
                 }
 
                 return;

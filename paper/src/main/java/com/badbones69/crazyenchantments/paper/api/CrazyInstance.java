@@ -40,7 +40,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,6 +64,12 @@ public class CrazyInstance {
     private TinkerManager tinkerManager;
     private ItemManager itemManager;
     private KitsManager kitsManager;
+
+    //private SuperiorSkyBlockSupport skyBlockSupport;
+    //private PluginSupport pluginSupport;
+    //private VaultSupport vaultSupport;
+
+    private Methods methods;
 
     public void init() {
         this.modManager.addMod(Dependencies.generic_vanish, new GenericVanishMod());
@@ -107,6 +112,16 @@ public class CrazyInstance {
         loadShopOptions(config); // load shop options
 
         loadExamples(); // load examples
+
+        //if (PluginSupport.SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) {
+        //    this.skyBlockSupport = new SuperiorSkyBlockSupport();
+        //}
+
+        // Plugin Support.
+        //this.pluginSupport = new PluginSupport();
+        //this.pluginSupport.initializeWorldGuard();
+
+        this.methods = new Methods();
     }
 
     public void reload() {
@@ -504,5 +519,9 @@ public class CrazyInstance {
 
     public @NotNull final KitsManager getKitsManager() {
         return kitsManager;
+    }
+
+    public @NotNull final Methods getMethods() {
+        return this.methods;
     }
 }

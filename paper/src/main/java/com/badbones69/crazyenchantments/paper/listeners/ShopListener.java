@@ -14,21 +14,18 @@ public class ShopListener implements Listener {
     private final ConfigManager options = this.plugin.getOptions();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyManager crazyManager = null;
 
     @NotNull
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
-    @NotNull
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = null;
 
     // Plugin Managers.
     @NotNull
-    private final ShopManager shopManager = this.starter.getShopManager();
+    private final ShopManager shopManager = null;
 
     // Economy Management.
     @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final CurrencyAPI currencyAPI = null;
 
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent event) {

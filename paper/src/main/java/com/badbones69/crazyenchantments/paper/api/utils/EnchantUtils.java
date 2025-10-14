@@ -81,7 +81,7 @@ public class EnchantUtils {
     }
 
     public static boolean isAuraActive(@NotNull final Player player, @NotNull final CEnchantments enchant, @NotNull final Map<CEnchantment, Integer> enchants) {
-        if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
+        //if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
 
         return isActive(player, enchant, enchants);
     }
@@ -97,6 +97,7 @@ public class EnchantUtils {
     public static boolean isMoveEventActive(@NotNull final CEnchantments enchant, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchants) {
         if (!isActive(player, enchant, enchants)) return false;
 
-        return !plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);
+        //return !plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);
+        return false;
     }
 }

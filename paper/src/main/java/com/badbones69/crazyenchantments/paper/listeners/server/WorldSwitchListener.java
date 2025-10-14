@@ -12,7 +12,7 @@ public class WorldSwitchListener implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     private final ConfigManager options = this.plugin.getOptions();
 

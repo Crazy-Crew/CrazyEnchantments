@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -31,9 +30,6 @@ public class BowUtils {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
     // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
 
@@ -60,7 +56,8 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(@NotNull final Entity entity) {
-        return this.starter.getPluginSupport().allowCombat(entity.getLocation());
+        //return this.starter.getPluginSupport().allowCombat(entity.getLocation());
+        return false;
     }
 
     public EnchantedArrow getEnchantedArrow(@NotNull final Arrow arrow) {

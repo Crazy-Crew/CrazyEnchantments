@@ -17,7 +17,7 @@ public class CommandHelp extends BaseCommand {
     @Permission(value = "crazyenchantments.gui", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments")
     public void gui(final Player player) {
-        final ShopManager shopManager = this.starter.getShopManager();
+        final ShopManager shopManager = null;
 
         new ShopMenu(player, shopManager.getInventoryName(), shopManager.getInventorySize()).open();
     }

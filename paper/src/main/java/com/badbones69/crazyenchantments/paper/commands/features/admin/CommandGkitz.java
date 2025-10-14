@@ -27,7 +27,7 @@ public class CommandGkitz {
 
     private final ConfigManager options = this.plugin.getOptions();
 
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     @Command
     @Permission(value = "crazyenchantments.gkitz", def = PermissionDefault.TRUE)

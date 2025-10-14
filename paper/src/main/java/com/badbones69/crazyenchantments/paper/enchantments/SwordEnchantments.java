@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
@@ -57,24 +56,21 @@ public class SwordEnchantments implements Listener {
     private final ConfigManager options = this.plugin.getOptions();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyManager crazyManager = null;
 
     @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = null;
 
     // Plugin Support.
     @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final PluginSupport pluginSupport = null;
 
     @NotNull
     private final BossBarController bossBarController = this.plugin.getBossBarController();
 
     // Economy Management.
     @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final CurrencyAPI currencyAPI = null;
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {

@@ -20,7 +20,7 @@ public class EnchantmentType {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
-    private final Methods methods = this.plugin.getStarter().getMethods();
+    private final Methods method = null;
 
     private final String displayName;
     private final int slot;
@@ -49,7 +49,8 @@ public class EnchantmentType {
     }
 
     public EnchantmentType getFromName(@NotNull final String name) {
-        return this.methods.getFromName(name);
+        //return this.methods.getFromName(name);
+        return null;
     }
 
     public String getName() {

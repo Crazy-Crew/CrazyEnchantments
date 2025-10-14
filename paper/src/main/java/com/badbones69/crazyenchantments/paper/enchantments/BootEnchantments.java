@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
@@ -26,12 +25,9 @@ public class BootEnchantments implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
     // Plugin Managers.
     @NotNull
-    private final WingsManager wingsManager = this.starter.getWingsManager();
+    private final WingsManager wingsManager = null;
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {

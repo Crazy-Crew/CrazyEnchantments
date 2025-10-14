@@ -16,7 +16,7 @@ public class GKitzItem {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = null;
     
     private final ItemBuilder itemBuilder;
     private final Map<CEnchantment, Integer> ceEnchantments;

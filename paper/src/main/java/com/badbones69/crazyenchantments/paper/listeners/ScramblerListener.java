@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
@@ -41,10 +40,7 @@ public class ScramblerListener implements Listener {
     private final ComponentLogger logger = this.plugin.getComponentLogger();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = null;
 
     private final HashMap<Player, ScheduledTask> roll = new HashMap<>();
 

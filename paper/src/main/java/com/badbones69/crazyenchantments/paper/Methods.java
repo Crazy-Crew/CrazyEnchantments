@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.google.gson.Gson;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -35,17 +34,13 @@ import java.util.*;
 
 public class Methods {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    //@NotNull
+    //private final PluginSupport pluginSupport = null;
 
     public EnchantmentType getFromName(@NotNull final String name) {
         for (final EnchantmentType enchantmentType : this.instance.getRegisteredEnchantmentTypes()) {
@@ -351,7 +346,7 @@ public class Methods {
         spawnExplodeParticles(player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
-            if (this.pluginSupport.allowCombat(entity.getLocation())) {
+            //if (this.pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.ITEM) {
                     entity.remove();
 
@@ -359,13 +354,13 @@ public class Methods {
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (this.pluginSupport.isFriendly(player, en)) continue;
+                //if (this.pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
 
                 en.damage(5D);
 
                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
-            }
+            //}
         }
     }
 
@@ -387,7 +382,7 @@ public class Methods {
         spawnExplodeParticles(shooter.getWorld(), arrow.getLocation());
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
-            if (this.pluginSupport.allowCombat(value.getLocation())) {
+            //if (this.pluginSupport.allowCombat(value.getLocation())) {
                 if (value.getType() == EntityType.ITEM) {
                     value.remove();
 
@@ -395,7 +390,7 @@ public class Methods {
                 }
 
                 if (!(value instanceof LivingEntity livingEntity)) continue;
-                if (this.pluginSupport.isFriendly(shooter, livingEntity)) continue;
+                //if (this.pluginSupport.isFriendly(shooter, livingEntity)) continue;
                 if (shooter.getName().equalsIgnoreCase(value.getName())) continue;
 
                 EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
@@ -408,7 +403,7 @@ public class Methods {
 
                 livingEntity.setVelocity(livingEntity.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
 
-            }
+            //}
         }
     }
 
@@ -440,7 +435,7 @@ public class Methods {
 
         this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        //if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
         EventUtils.removeIgnoredEvent(damageByEntityEvent);
         EventUtils.removeIgnoredUUID(damager.getUniqueId());

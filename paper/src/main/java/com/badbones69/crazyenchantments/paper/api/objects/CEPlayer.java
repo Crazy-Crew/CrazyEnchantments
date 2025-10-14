@@ -32,7 +32,7 @@ public class CEPlayer {
     private final Server server = this.plugin.getServer();
 
     @NotNull
-    private final Methods methods = this.plugin.getStarter().getMethods();
+    private final Methods methods = null;
 
     private final Player player;
     private final List<GkitCoolDown> gkitCoolDowns;

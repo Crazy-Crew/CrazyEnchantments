@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
@@ -15,11 +14,9 @@ import java.util.Map;
 
 public class ShopMenu extends StaticInventory {
 
-    private final Starter starter = this.plugin.getStarter();
+    private final CurrencyAPI currencyAPI = null;
 
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
-
-    private final ShopManager shopManager = this.starter.getShopManager();
+    private final ShopManager shopManager = null;
 
     public ShopMenu(@NotNull final Player player, @NotNull final String title, final int size) {
         super(player, title, size);

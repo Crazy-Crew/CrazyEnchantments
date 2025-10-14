@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.builders.gui.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.InventoryBuilder;
@@ -23,7 +22,7 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    protected final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    protected final CrazyManager crazyManager = null;
 
     protected final ConfigManager configManager = this.plugin.getOptions();
 
@@ -35,11 +34,9 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 
-    protected final Starter starter = this.plugin.getStarter();
+    protected final CurrencyAPI api = null;
 
-    protected final CurrencyAPI api = this.starter.getCurrencyAPI();
-
-    protected final Methods methods = this.starter.getMethods();
+    protected final Methods methods = null;
 
     protected final Server server = this.plugin.getServer();
 

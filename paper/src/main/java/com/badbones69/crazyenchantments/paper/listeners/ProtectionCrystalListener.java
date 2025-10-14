@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
@@ -34,13 +33,10 @@ public class ProtectionCrystalListener implements Listener {
     private final ItemManager itemManager = this.plugin.getItemManager();
 
     @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final Methods methods = null;
 
     @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    private final ProtectionCrystalSettings protectionCrystalSettings = null;
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {

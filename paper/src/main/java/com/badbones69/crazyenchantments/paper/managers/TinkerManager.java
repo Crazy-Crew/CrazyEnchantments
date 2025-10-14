@@ -17,7 +17,7 @@ public class TinkerManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CurrencyAPI api = this.plugin.getStarter().getCurrencyAPI();
+    private final CurrencyAPI api = null;
 
     public boolean takeExperience(@NotNull final Player player, @NotNull final Currency currency, @NotNull final EquipmentSlot slot) {
         final PlayerInventory inventory = player.getInventory();

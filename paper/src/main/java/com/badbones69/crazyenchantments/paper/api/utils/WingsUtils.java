@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
@@ -34,13 +33,10 @@ public class WingsUtils {
     private static final Server server = plugin.getServer();
 
     @NotNull
-    private static final Starter starter = plugin.getStarter();
+    private static final PluginSupport pluginSupport = null;
 
     @NotNull
-    private static final PluginSupport pluginSupport = starter.getPluginSupport();
-
-    @NotNull
-    private static final WingsManager wingsManager = starter.getWingsManager();
+    private static final WingsManager wingsManager = null;
 
     public static void startWings() {
         if (!wingsManager.isWingsEnabled()) wingsManager.endWingsTask();
@@ -91,9 +87,9 @@ public class WingsUtils {
     private static boolean inWingsRegion(@NotNull final Player player) {
         if (!SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
-        WorldGuardVersion worldGuardVersion = starter.getPluginSupport().getWorldGuardUtils().getWorldGuardSupport();
+        //WorldGuardVersion worldGuardVersion = starter.getPluginSupport().getWorldGuardUtils().getWorldGuardSupport();
 
-        for (String region : wingsManager.getRegions()) {
+        /*for (String region : wingsManager.getRegions()) {
             if (worldGuardVersion.inRegion(region, player.getLocation())) {
                 return true;
             } else {
@@ -101,7 +97,7 @@ public class WingsUtils {
 
                 if (wingsManager.canMembersFly() && worldGuardVersion.isMember(player)) return true;
             }
-        }
+        }*/
 
         return false;
     }

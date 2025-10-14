@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -73,30 +72,27 @@ public class CrazyManager {
     private final ConfigManager options = this.plugin.getOptions();
 
     private final FusionPaper fusion = this.plugin.getFusion();
-    
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
 
     @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = null;
 
     private CropManagerVersion cropManagerVersion;
 
     @NotNull
-    private final AllyManager allyManager = this.starter.getAllyManager();
+    private final AllyManager allyManager = null;
 
     // Wings.
     @NotNull
-    private final WingsManager wingsManager = this.starter.getWingsManager();
+    private final WingsManager wingsManager = null;
 
     @NotNull
-    private final ShopManager shopManager = this.starter.getShopManager();
+    private final ShopManager shopManager = null;
     
     @NotNull
-    private final BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
+    private final BowEnchantmentManager bowEnchantmentManager = null;
     
     @NotNull
-    private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
+    private final ArmorEnchantmentManager armorEnchantmentManager = null;
 
     // Arrays.
     private final List<CEPlayer> players = new ArrayList<>();
@@ -117,7 +113,7 @@ public class CrazyManager {
 
         //this.enchantmentBookSettings.getCategories().clear();
 
-        this.starter.getPluginSupport().updateHooks();
+        //this.starter.getPluginSupport().updateHooks();
 
         // Check if we should patch player health.
         boolean resetMaxHealth = this.options.isResetMaxHealth();
