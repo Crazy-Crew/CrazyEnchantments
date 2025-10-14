@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -8,7 +9,9 @@ import dev.triumphteam.cmd.core.annotations.Optional;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.persistence.PersistentDataType;
 
 public class CommandBottle extends BaseCommand {
 
@@ -24,14 +27,16 @@ public class CommandBottle extends BaseCommand {
             return;
         }
 
-//        final ItemStack itemStack = TinkererManager.getXPBottle(xp, FileKeys.tinker.getYamlConfiguration());
-//
-//        if (itemStack == null) {
-//            return;
-//        }
-//
-//        itemStack.setAmount(amount <= 0 ? 1 : amount);
-//
-//        this.methods.addItemToInventory(safePlayer, itemStack);
+        this.itemManager.getItem("tinker_exp_bottle").ifPresent(item -> {
+            final ItemStack itemStack = item.getItemStack(safePlayer);
+
+            if (itemStack == null) return;
+
+            itemStack.editPersistentDataContainer(container -> container.set(DataKeys.experience.getNamespacedKey(), PersistentDataType.INTEGER, xp));
+
+            itemStack.setAmount(Math.max(amount, 1));
+
+            this.methods.addItemToInventory(safePlayer, itemStack);
+        });
     }
 }
