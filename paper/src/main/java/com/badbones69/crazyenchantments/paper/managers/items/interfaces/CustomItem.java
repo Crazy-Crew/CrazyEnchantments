@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public abstract class CustomItem {
@@ -35,7 +37,11 @@ public abstract class CustomItem {
 
     public abstract void removeKey(@NotNull final NamespacedKey key);
 
-    public abstract ItemStack getItemStack(@Nullable final Player player, final int amount);
+    public abstract ItemStack getItemStack(@Nullable final Player player, @NotNull final Map<String, String> placeholders, final int amount);
+
+    public ItemStack getItemStack(@Nullable final Player player, final int amount) {
+        return getItemStack(player, new HashMap<>(), amount);
+    }
 
     public ItemStack getItemStack(@Nullable final Player player) {
         return getItemStack(player, 1);
@@ -49,8 +55,12 @@ public abstract class CustomItem {
         return getItemStack(null);
     }
 
+    public GuiItem asGuiItem(@Nullable final Player player, final int amount, @NotNull final Map<String, String> placeholders, @Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
+        return new GuiItem(getItemStack(player, placeholders, amount), action);
+    }
+
     public GuiItem asGuiItem(@Nullable final Player player, final int amount, @Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
-        return new GuiItem(getItemStack(player, amount), action);
+        return asGuiItem(player, amount, new HashMap<>(), action);
     }
 
     public GuiItem asGuiItem(@Nullable final Player player, @Nullable final GuiAction<@NotNull InventoryClickEvent> action) {

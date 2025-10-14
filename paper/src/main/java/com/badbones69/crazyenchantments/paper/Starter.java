@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -61,8 +60,6 @@ public class Starter {
 
         // Settings.
         this.protectionCrystalSettings = new ProtectionCrystalSettings();
-
-        MenuManager.load();
 
         // Economy Management.
         this.currencyAPI = new CurrencyAPI();

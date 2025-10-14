@@ -535,7 +535,7 @@ public class LegacyMigration extends IEnchantMigration {
             final YamlConfiguration configuration = FileKeys.tinker.getYamlConfiguration();
 
             getConfigurationSection(configuration, "Settings").ifPresentOrElse(section -> {
-                section.set("GUIName", this.utils.convertLegacy(section.getString("GUIName", "<gray><b>The <dark_red><b>Crazy <red><b>Tinkerer")));
+                section.set("GUIName", this.utils.convertLegacy(section.getString("GUIName", "<gray><bold>The <dark_red><bold>Crazy <red><bold>Tinkerer")));
 
                 section.set("TradeButton", this.utils.convertLegacy(section.getString("TradeButton", "<yellow>Click to accept the trade")));
 
@@ -544,8 +544,8 @@ public class LegacyMigration extends IEnchantMigration {
                 section.set("BottleOptions.Name", this.utils.convertLegacy(section.getString("BottleOptions.Name", "<green>Recycled XP")));
 
                 section.set("BottleOptions.Lore", this.utils.convertLegacy(ConfigUtils.getStringList(section, List.of(
-                        "<green><b>Recycled <gold>%total%XP",
-                        "<gray><b>(<gold><b>!<gray><b>) <gray>Throw to get XP."
+                        "<green><bold>Recycled <gold>%total%XP",
+                        "<gray><bold>(<gold><bold>!<gray><bold>) <gray>Throw to get XP."
                 ), "BottleOptions.Lore")));
 
             }, () -> failed.add("<red>⤷ Tinker.yml"));

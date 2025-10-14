@@ -25,7 +25,7 @@ public class BaseMenu extends StaticInventory {
     @Override
     public void open() {
         if (this.enchantmentType == null) {
-            for (final EnchantmentType type : MenuManager.getEnchantmentTypes()) {
+            for (final EnchantmentType type : this.instance.getRegisteredEnchantmentTypes()) {
                 this.gui.setItem(type.getSlot(), new GuiItem(type.getDisplayItem(), event -> {
                     if (!(event.getWhoClicked() instanceof Player entity)) return;
 

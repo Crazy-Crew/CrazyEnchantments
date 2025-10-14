@@ -2,16 +2,16 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMainMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.KitConfig;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.*;
 import dev.triumphteam.cmd.core.argument.keyed.Flags;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,11 +39,13 @@ public class CommandGkitz {
             return;
         }
 
-        if (this.crazyManager.getCEPlayer(player) == null) this.crazyManager.loadCEPlayer(player);
+        if (this.crazyManager.getCEPlayer(player) == null) {
+            this.crazyManager.loadCEPlayer(player);
+        }
 
-        final YamlConfiguration gkitz = FileKeys.gkitz.getYamlConfiguration();
+        final KitConfig config = this.options.getKitConfig();
 
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 54), gkitz.getString("Settings.Inventory-Name", "<dark_gray>List of all GKitz")).build().getInventory());
+        new KitsMainMenu(player, config.getInventoryName(), config.getInventorySize()).open();
     }
 
     @Command("reset")

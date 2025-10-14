@@ -1079,7 +1079,7 @@ public class ItemBuilder {
                 }
             }
         } catch (Exception e) {
-            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("<red><b>ERROR")
+            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("<red><bold>ERROR")
                     .lore(Arrays.asList(Component.text("There was an error", NamedTextColor.RED),
                             Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));
             plugin.getLogger().log(Level.WARNING, "There is an error with " + placeHolder, e);

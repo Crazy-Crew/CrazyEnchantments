@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
@@ -97,7 +96,7 @@ public class ScrollListener implements Listener {
             case "WhiteScroll" -> {
                 if (Scrolls.hasWhiteScrollProtection(item)) return;
 
-                for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
+                for (EnchantmentType enchantmentType : this.instance.getRegisteredEnchantmentTypes()) {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                         event.setCancelled(true);
 
@@ -239,7 +238,7 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull final PersistentDataContainerView container) {
         final List<Component> lore = new ArrayList<>();
 
-        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><b>PROTECTED")));
+        //if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.WhiteScroll.ProtectedName", "<aqua><bold>PROTECTED")));
         //if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(FileKeys.config.getYamlConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection")));
 
         return lore;

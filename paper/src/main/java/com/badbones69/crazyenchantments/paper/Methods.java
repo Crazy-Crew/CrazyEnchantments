@@ -1,12 +1,11 @@
 package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
@@ -39,6 +38,8 @@ public class Methods {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
@@ -47,7 +48,7 @@ public class Methods {
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     public EnchantmentType getFromName(@NotNull final String name) {
-        for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
+        for (final EnchantmentType enchantmentType : this.instance.getRegisteredEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 

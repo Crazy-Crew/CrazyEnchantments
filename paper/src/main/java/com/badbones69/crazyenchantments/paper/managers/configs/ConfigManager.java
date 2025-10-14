@@ -53,6 +53,7 @@ public class ConfigManager {
     private NavigationConfig navigationConfig;
     private BlackSmithConfig blackSmithConfig;
     private ScramblerConfig scramblerConfig;
+    private TinkerConfig tinkerConfig;
     private KitConfig kitConfig;
 
     public void init(@NotNull final YamlConfiguration configuration) {
@@ -68,7 +69,7 @@ public class ConfigManager {
             this.resetMaxHealth = section.getBoolean("Reset-Players-Max-Health", true);
             this.refreshPotionEffectsOnWorldChange = section.getBoolean("Refresh-Potion-Effects-On-World-Change", false);
 
-            this.inventoryName = section.getString("InvName", "<dark_red><b><u>Crazy Enchanter");
+            this.inventoryName = section.getString("InvName", "<dark_red><bold><u>Crazy Enchanter");
             this.inventorySize = section.getInt("GUISize", 54);
 
             this.enchantBook = new ItemBuilder().setMaterial(section.getString("Enchantment-Book-Item", "BOOK"))
@@ -116,6 +117,12 @@ public class ConfigManager {
         Optional.ofNullable(kits.getConfigurationSection("Settings")).ifPresentOrElse(kit -> this.kitConfig = new KitConfig(kit), () -> {
             throw new CrazyException("GKitz.yml does not have the configuration section needed!");
         });
+
+        final YamlConfiguration tinker = FileKeys.tinker.getYamlConfiguration();
+
+        Optional.ofNullable(tinker.getConfigurationSection("Settings")).ifPresentOrElse(tink -> this.tinkerConfig = new TinkerConfig(tink), () -> {
+            throw new CrazyException("Tinker.yml does not have the configuration section needed!");
+        });
     }
 
     public @NotNull final ProtectionCrystalConfig getProtectionCrystalConfig() {
@@ -136,6 +143,10 @@ public class ConfigManager {
 
     public @NotNull final ScramblerConfig getScramblerConfig() {
         return this.scramblerConfig;
+    }
+
+    public @NotNull final TinkerConfig getTinkerConfig() {
+        return this.tinkerConfig;
     }
 
     public @NotNull final KitConfig getKitConfig() {

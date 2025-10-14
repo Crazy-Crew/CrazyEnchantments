@@ -6,6 +6,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class ProtectionCrystalConfig extends IConfig {
@@ -25,7 +27,7 @@ public class ProtectionCrystalConfig extends IConfig {
                 "<gray>protect items from getting lost",
                 "<gray>while the owners away in the after life.",
                 "",
-                "<gray><b>(<gold><b>!<gray><b>) <gray>Drag and drop on an item."
+                "<gray><bold>(<gold><bold>!<gray><bold>) <gray>Drag and drop on an item."
         ), "Lore");
 
         this.isGlowing = section.getBoolean("Glowing", false);
@@ -33,11 +35,11 @@ public class ProtectionCrystalConfig extends IConfig {
         this.protectionLine = section.getString("Protected", "<gold>Ancient Protection");
     }
 
-    public @NotNull final List<Component> asItemComponents(@NotNull final Audience player) {
+    public @NotNull final List<Component> asItemComponents(@Nullable final Audience player) {
         return asComponents(player, this.protectionLore);
     }
 
-    public @NotNull final Component asItemComponent(@NotNull final Audience player) {
+    public @NotNull final Component asItemComponent(@Nullable final Audience player) {
         return asComponent(player, this.protectionName);
     }
 

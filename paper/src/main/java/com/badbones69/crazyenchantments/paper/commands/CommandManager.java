@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -56,12 +55,12 @@ public class CommandManager {
         commandManager.registerArgument(Scrolls.class, (sender, argument) -> Scrolls.getFromName(argument));
         commandManager.registerArgument(CEnchantment.class, (sender, argument) -> instance.getEnchantmentFromName(argument));
         commandManager.registerArgument(World.class, (sender, argument) -> server.getWorld(argument));
-        commandManager.registerArgument(EnchantmentType.class, (sender, argument) -> MenuManager.getEnchantmentTypes().stream().filter(filter -> !filter.getName().equalsIgnoreCase(argument)));
+        commandManager.registerArgument(EnchantmentType.class, (sender, argument) -> instance.getRegisteredEnchantmentTypes().stream().filter(filter -> !filter.getName().equalsIgnoreCase(argument)));
         commandManager.registerArgument(PlayerBuilder.class, (sender, argument) -> new PlayerBuilder(plugin, argument));
 
         commandManager.registerArgument(MigrationType.class, (sender, argument) -> MigrationType.fromName(argument));
 
-        commandManager.registerSuggestion(EnchantmentType.class, (context) -> MenuManager.getEnchantmentTypes().stream().map(EnchantmentType::getName).toList());
+        commandManager.registerSuggestion(EnchantmentType.class, (context) -> instance.getRegisteredEnchantmentTypes().stream().map(EnchantmentType::getName).toList());
         commandManager.registerSuggestion(Player.class, (context) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
         commandManager.registerSuggestion(World.class, (context) -> server.getWorlds().stream().map(World::getName).toList());
 
@@ -174,7 +173,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("items"), (context) -> {
             final List<String> list = new ArrayList<>();
 
-            list.add("Item:DIAMOND_HELMET, Amount:1, Name:<gold><b>Hat, Protection:4, Overload:1-5, Hulk:2-5, Lore:<green>Line 1.,<green>Line 2.");
+            list.add("Item:DIAMOND_HELMET, Amount:1, Name:<gold><bold>Hat, Protection:4, Overload:1-5, Hulk:2-5, Lore:<green>Line 1.,<green>Line 2.");
 
             return list;
         });

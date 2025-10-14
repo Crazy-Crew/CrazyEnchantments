@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.Map;
 
 public class CloseItem extends CustomItem {
 
@@ -30,7 +31,7 @@ public class CloseItem extends CustomItem {
     }
 
     @Override
-    public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+    public @NotNull final ItemStack getItemStack(@Nullable final Player player, @NotNull final Map<String, String> placeholders, final int amount) {
         if (this.config == null) return this.itemBuilder.setAmount(amount).asItemStack(player);
 
         return this.itemBuilder.displayLore(this.config.asResultsComponents(player))

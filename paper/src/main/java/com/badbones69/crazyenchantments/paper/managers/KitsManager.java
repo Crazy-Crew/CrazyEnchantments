@@ -11,15 +11,12 @@ import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class KitsManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-    private final PluginManager pluginManager = this.plugin.getPluginManager();
 
     private final ConfigManager options = this.plugin.getOptions();
 
@@ -32,6 +29,8 @@ public class KitsManager {
     public void init() {
         if (!this.options.isGkitzToggle()) {
             this.kits.clear();
+
+            this.isRegistered = false;
 
             return;
         }
@@ -81,8 +80,6 @@ public class KitsManager {
 
         if (this.isRegistered) return;
 
-        this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this.plugin);
-
         this.isRegistered = true;
     }
 
@@ -110,5 +107,9 @@ public class KitsManager {
 
     public @NotNull final List<GKitz> getKits() {
         return Collections.unmodifiableList(this.kits);
+    }
+
+    public final boolean isRegistered() {
+        return this.isRegistered;
     }
 }

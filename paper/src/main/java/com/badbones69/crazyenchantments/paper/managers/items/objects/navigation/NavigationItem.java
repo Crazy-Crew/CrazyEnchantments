@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
+import java.util.Map;
 
 public class NavigationItem extends CustomItem {
 
@@ -40,7 +41,7 @@ public class NavigationItem extends CustomItem {
     }
 
     @Override
-    public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+    public @NotNull final ItemStack getItemStack(@Nullable final Player player, @NotNull final Map<String, String> placeholders, final int amount) {
         if (this.config == null) return this.itemBuilder.setAmount(amount).asItemStack(player);
 
         final Component component = this.isRight ? this.config.getNavigationRightName(player)

@@ -6,6 +6,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class SlotCrystalConfig extends IConfig {
@@ -29,11 +30,11 @@ public class SlotCrystalConfig extends IConfig {
         this.isGlowing = section.getBoolean("Glowing", false);
     }
 
-    public @NotNull final List<Component> asItemComponents(@NotNull final Audience player) {
+    public @NotNull final List<Component> asItemComponents(@Nullable final Audience player) {
         return asComponents(player, this.slotCrystalLore);
     }
 
-    public @NotNull final Component asItemComponent(@NotNull final Audience player) {
+    public @NotNull final Component asItemComponent(@Nullable final Audience player) {
         return asComponent(player, this.slotCrystalName);
     }
 

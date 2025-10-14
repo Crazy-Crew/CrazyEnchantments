@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProtectionCrystalItem extends CustomItem {
 
@@ -44,12 +45,12 @@ public class ProtectionCrystalItem extends CustomItem {
     }
 
     @Override
-    public @NotNull final ItemStack getItemStack(@Nullable final Player player, final int amount) {
+    public @NotNull final ItemStack getItemStack(@Nullable final Player player, @NotNull final Map<String, String> placeholders, final int amount) {
         if (this.config == null) return this.itemBuilder.setAmount(amount).asItemStack(player);
 
-        return this.itemBuilder.displayLore(this.config.asItemComponents(player == null ? Audience.empty() : player))
-                .displayName(this.config.asItemComponent(player == null ? Audience.empty() : player), ItemState.ITEM_NAME)
-                .asItemStack(player == null ? Audience.empty() : player);
+        return this.itemBuilder.displayLore(this.config.asItemComponents(player))
+                .displayName(this.config.asItemComponent(player), ItemState.ITEM_NAME)
+                .asItemStack(player);
     }
 
     @Override

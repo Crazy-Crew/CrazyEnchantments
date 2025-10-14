@@ -18,7 +18,7 @@ public enum DataKeys {
     lost_book("Lost_Book_Type", PersistentDataType.STRING),
     no_firework_damage("no_firework_damage", PersistentDataType.BOOLEAN),
     scroll("Crazy_Scroll", PersistentDataType.STRING),
-    experience("Experience", PersistentDataType.STRING),
+    experience("Experience", PersistentDataType.INTEGER),
     limit_reducer("Limit_Reducer", PersistentDataType.INTEGER),
     slot_crystal("Slot_Crystal", PersistentDataType.BOOLEAN),
     gkit_type("gkit", PersistentDataType.STRING),

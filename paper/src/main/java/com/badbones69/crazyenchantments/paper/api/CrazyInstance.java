@@ -12,9 +12,11 @@ import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
+import com.badbones69.crazyenchantments.paper.managers.TinkerManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
@@ -37,6 +39,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import us.crazycrew.crazyenchantments.exceptions.CrazyException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,11 +56,13 @@ public class CrazyInstance {
     private final ModManager modManager = this.fusion.getModManager();
     private final Path path = this.plugin.getDataPath();
 
+    private final List<EnchantmentType> registeredEnchantmentTypes = new ArrayList<>();
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
 
     private CategoryManager categoryManager;
+    private TinkerManager tinkerManager;
     private ItemManager itemManager;
     private KitsManager kitsManager;
 
@@ -77,9 +83,20 @@ public class CrazyInstance {
             this.blocks.add(block);
         }
 
+        final YamlConfiguration enchantmentTypes = FileKeys.enchantment_types.getYamlConfiguration();
+
+        Optional.ofNullable(enchantmentTypes.getConfigurationSection("Types")).ifPresentOrElse(section -> {
+            for (final String type : section.getKeys(false)) {
+                this.registeredEnchantmentTypes.add(new EnchantmentType(type));
+            }
+        }, () -> {
+            throw new CrazyException("Failed to find `Types` section in Enchantment-Types.yml");
+        });
+
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
         this.categoryManager = new CategoryManager();
+        this.tinkerManager = new TinkerManager();
         this.itemManager = new ItemManager();
         this.kitsManager = new KitsManager();
 
@@ -113,6 +130,8 @@ public class CrazyInstance {
 
             this.blocks.add(block);
         }
+
+        this.registeredEnchantmentTypes.clear();
 
         final YamlConfiguration config = FileKeys.config.getYamlConfiguration();
 
@@ -455,6 +474,10 @@ public class CrazyInstance {
         this.registeredEnchantments.clear();
     }
 
+    public @NotNull final List<EnchantmentType> getRegisteredEnchantmentTypes() {
+        return Collections.unmodifiableList(this.registeredEnchantmentTypes);
+    }
+
     public @NotNull final List<CEnchantment> getRegisteredEnchantments() {
         return Collections.unmodifiableList(this.registeredEnchantments);
     }
@@ -469,6 +492,10 @@ public class CrazyInstance {
 
     public @NotNull final CategoryManager getCategoryManager() {
         return categoryManager;
+    }
+
+    public @NotNull final TinkerManager getTinkerManager() {
+        return this.tinkerManager;
     }
 
     public @NotNull final ItemManager getItemManager() {

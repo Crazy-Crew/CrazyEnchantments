@@ -44,23 +44,23 @@ GKitz: #GKit options.
       Slot: 12 #Slot the item is located at in the GUI.
       Item: 'ORANGE_STAINED_GLASS_PANE' #The item that is displayed for the GKit.
       Glowing: true #If it has a glowing effect.
-      Name: '<gold><b>The Hero GKit' #Display name of the GKit.
+      Name: '<gold><bold>The Hero GKit' #Display name of the GKit.
       Lore: #The lore that goes on the display item.
         - '<gray>A kit that used to be worn'
         - '<gray>into battle by a great hero.'
         - ''
         - '<gray>Cooldown: <gold>24 Hours'
         - '<gray>Available in: <gold>%day%d, %hour%h, %minute%m, %second%s'
-        - '<gray><b>(<gold><b>!<gray><b>) <gray>Right click to preview'
+        - '<gray><bold>(<gold><bold>!<gray><bold>) <gray>Right click to preview'
     Auto-Equip: false #If armor is auto equipped onto the player if the slots are available.
     Cooldown: '24h' #Cooldown for the GKit. Available options d - Day, h - Hour, m - Minute, s - Second
     Items: #The items that are given the players.
-      - 'Item:DIAMOND_HELMET, Amount:1, Name:<gold><b>Hero Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:<green>A special helmet worn by a great hero.,<green>Take special care of this.'
-      - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:<gold><b>Hero Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<green>A special chestplate worn by a great hero.,<green>Take special care of this.'
-      - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:<gold><b>Hero Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<green>A special leggings worn by a great hero.,<green>Take special care of this.'
-      - 'Item:DIAMOND_BOOTS, Amount:1, Name:<gold><b>Hero Boots, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:<green>A special boots worn by a great hero.,<green>Take special care of this.'
+      - 'Item:DIAMOND_HELMET, Amount:1, Name:<gold><bold>Hero Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:<green>A special helmet worn by a great hero.,<green>Take special care of this.'
+      - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:<gold><bold>Hero Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<green>A special chestplate worn by a great hero.,<green>Take special care of this.'
+      - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:<gold><bold>Hero Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<green>A special leggings worn by a great hero.,<green>Take special care of this.'
+      - 'Item:DIAMOND_BOOTS, Amount:1, Name:<gold><bold>Hero Boots, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:<green>A special boots worn by a great hero.,<green>Take special care of this.'
     Fake-Items: #Items the user doesn't accrual get but can be used to show an item you get from a command.
-      - 'Item:BOOK, Amount:1, Name:<aqua><b>OverLoad V, Lore:<gray>Gives health boost,<gray>when you put it on.,'
+      - 'Item:BOOK, Amount:1, Name:<aqua><bold>OverLoad V, Lore:<gray>Gives health boost,<gray>when you put it on.,'
     Commands: #Is used if you wish to use commands to give other things to players.
       - 'ce book overload 5 1 %Player%'
   PeaceKeeper:
@@ -68,23 +68,23 @@ GKitz: #GKit options.
       Slot: 14
       Item: 'BLUE_STAINED_GLASS_PANE'
       Glowing: true
-      Name: '<blue><b>The Peace Keeper GKit'
+      Name: '<blue><bold>The Peace Keeper GKit'
       Lore:
         - '<gray>A kit that used to be worn'
         - '<gray>into battle by a peace keeper.'
         - ''
         - '<gray>Cooldown: <gold>24 Hours'
         - '<gray>Available in: <gold>%day%d, %hour%h, %minute%m, %second%s'
-        - '<gray><b>(<blue><b>!<gray><b>) <gray>Right click to preview'
+        - '<gray><bold>(<blue><bold>!<gray><bold>) <gray>Right click to preview'
     Auto-Equip: false
     Cooldown: '24h'
     Items:
-      - 'Item:DIAMOND_HELMET, Amount:1, Name:<blue><b>Peace Keeper Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:<blue>A special helmet worn by a peace keeper.,<blue>Take special care of this.'
-      - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:<blue><b>Peace Keeper Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<blue>A special chestplate worn by a peace keeper.,<blue>Take special care of this.'
-      - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:<blue><b>Peace Keeper Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<blue>A special leggings worn by a peace keeper.,<blue>Take special care of this.'
-      - 'Item:DIAMOND_BOOTS, Amount:1, Name:<blue><b>Peace Keeper Boots, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:<blue>A special boots worn by a peace keeper.,<blue>Take special care of this.'
+      - 'Item:DIAMOND_HELMET, Amount:1, Name:<blue><bold>Peace Keeper Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:<blue>A special helmet worn by a peace keeper.,<blue>Take special care of this.'
+      - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:<blue><bold>Peace Keeper Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<blue>A special chestplate worn by a peace keeper.,<blue>Take special care of this.'
+      - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:<blue><bold>Peace Keeper Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<blue>A special leggings worn by a peace keeper.,<blue>Take special care of this.'
+      - 'Item:DIAMOND_BOOTS, Amount:1, Name:<blue><bold>Peace Keeper Boots, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:<blue>A special boots worn by a peace keeper.,<blue>Take special care of this.'
     Fake-Items:
-      - 'Item:BOOK, Amount:1, Name:<aqua><b>OverLoad V, Lore:<gray>Gives health boost,<gray>when you put it on.,'
+      - 'Item:BOOK, Amount:1, Name:<aqua><bold>OverLoad V, Lore:<gray>Gives health boost,<gray>when you put it on.,'
     Commands:
       - 'ce book overload 5 1 %Player%'
   Villain:
@@ -92,22 +92,22 @@ GKitz: #GKit options.
       Slot: 16
       Item: 'RED_STAINED_GLASS_PANE'
       Glowing: true
-      Name: '<dark_red><b>The Villain GKit'
+      Name: '<dark_red><bold>The Villain GKit'
       Lore:
         - '<gray>A kit that used to be worn'
         - '<gray>into battle by an evil villain.'
         - ''
         - '<gray>Cooldown: <gold>24 Hours'
         - '<gray>Available in: <gold>%day%d, %hour%h, %minute%m, %second%s'
-        - '<gray><b>(<dark_red><b>!<gray><b>) <gray>Right click to preview'
+        - '<gray><bold>(<dark_red><bold>!<gray><bold>) <gray>Right click to preview'
     Auto-Equip: false
     Cooldown: '24h'
     Items:
-      - 'Item:DIAMOND_HELMET, Amount:1, Name:<dark_red><b>Villain Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:<red>A special helmet worn by a evil villain.,<red>Take special care of this.'
-      - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:<dark_red><b>Villain Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<red>A special chestplate worn by a evil villain.,<red>Take special care of this.'
-      - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:<dark_red><b>Villain Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<red>A special leggings worn by a evil villain.,<red>Take special care of this.'
-      - 'Item:DIAMOND_BOOTS, Amount:1, Name:<dark_red><b>Villain Boots, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:<red>A special boots worn by a evil villain.,<red>Take special care of this.'
+      - 'Item:DIAMOND_HELMET, Amount:1, Name:<dark_red><bold>Villain Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:<red>A special helmet worn by a evil villain.,<red>Take special care of this.'
+      - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:<dark_red><bold>Villain Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<red>A special chestplate worn by a evil villain.,<red>Take special care of this.'
+      - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:<dark_red><bold>Villain Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:<red>A special leggings worn by a evil villain.,<red>Take special care of this.'
+      - 'Item:DIAMOND_BOOTS, Amount:1, Name:<dark_red><bold>Villain Boots, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:<red>A special boots worn by a evil villain.,<red>Take special care of this.'
     Fake-Items:
-      - 'Item:BOOK, Amount:1, Name:<aqua><b>OverLoad V, Lore:<gray>Gives health boost,<gray>when you put it on.,'
+      - 'Item:BOOK, Amount:1, Name:<aqua><bold>OverLoad V, Lore:<gray>Gives health boost,<gray>when you put it on.,'
     Commands:
       - 'ce book overload 5 1 %Player%'

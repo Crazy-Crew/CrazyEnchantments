@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -18,8 +17,6 @@ public class CommandReload extends BaseCommand {
         this.instance.reload(); // reload the plugin.
 
         this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
-
-        MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
 
         this.crazyManager.load();
 

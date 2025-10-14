@@ -24,7 +24,7 @@ public class NavigationConfig extends IConfig {
     public NavigationConfig(@NotNull final ConfigurationSection section) {
         this.navigationRightItem = section.getString("Right.Item", "NETHER_STAR");
         this.navigationRightPlayer = section.getString("Right.Player", "");
-        this.navigationRightName = section.getString("Right.Name", "<gray><b><<<aqua><b>Back");
+        this.navigationRightName = section.getString("Right.Name", "<gray><bold><<<aqua><bold>Back");
         this.navigationRightLore = ConfigUtils.getStringList(section, "Right.Lore");
 
         this.navigationLeftItem = section.getString("Left.Item", "NETHER_STAR");

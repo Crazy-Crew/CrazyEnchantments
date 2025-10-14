@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.Pr
 import com.badbones69.crazyenchantments.paper.managers.items.objects.ScramblerItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.crystals.SlotCrystalItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.navigation.NavigationItem;
+import com.badbones69.crazyenchantments.paper.managers.items.objects.tinker.TinkerBottleItem;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
@@ -28,6 +29,7 @@ public class ItemManager {
         addItem("protection_crystal_item", new ProtectionCrystalItem());
         addItem("back_button_right", new NavigationItem(true));
         addItem("back_button_left", new NavigationItem(false));
+        addItem("tinker_exp_bottle", new TinkerBottleItem());
         addItem("slot_crystal_item", new SlotCrystalItem());
         addItem("scrambler_item", new ScramblerItem());
         addItem("pointer_item", new PointerItem());

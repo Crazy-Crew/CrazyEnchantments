@@ -1,9 +1,13 @@
 package com.badbones69.crazyenchantments.paper.api.builders.gui.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.InventoryBuilder;
+import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
@@ -13,6 +17,7 @@ import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
 public abstract class StaticInventory extends InventoryBuilder {
 
@@ -30,12 +35,18 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 
+    protected final Starter starter = this.plugin.getStarter();
+
+    protected final CurrencyAPI api = this.starter.getCurrencyAPI();
+
+    protected final Methods methods = this.starter.getMethods();
+
     protected final Server server = this.plugin.getServer();
 
     private final Player player;
     private final String title;
-    private final int size;
     private final Gui gui;
+    private int size;
 
     public StaticInventory(@NotNull final Player player, @NotNull final String title, final int size) {
         super(player);
@@ -50,6 +61,14 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     public StaticInventory setEnchantmentType(@NotNull final EnchantmentType enchantmentType) {
         this.enchantmentType = enchantmentType;
+
+        final List<CEnchantment> enchantments = this.enchantmentType.getEnchantments();
+
+        int slots = 9;
+
+        for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
+
+        this.size = slots;
 
         return this;
     }

@@ -35,10 +35,10 @@ public class CommandFix extends BaseCommand {
             configuration.set(path + ".Enabled", true);
             configuration.set(path + ".Name", enchantment.getName());
             configuration.set(path + ".Color", "<gray>");
-            configuration.set(path + ".BookColor", "<aqua><b>");
+            configuration.set(path + ".BookColor", "<aqua><bold>");
             configuration.set(path + ".MaxPower", 1);
             configuration.set(path + ".Enchantment-Type", enchantment.getType().getName());
-            configuration.set(path + ".Info.Name", "<yellow><b>" + enchantment.getName() + " <gray>(<aqua>I<gray>)");
+            configuration.set(path + ".Info.Name", "<yellow><bold>" + enchantment.getName() + " <gray>(<aqua>I<gray>)");
             configuration.set(path + ".Info.Description", enchantment.getDescription());
 
             final List<String> categories = new ArrayList<>();

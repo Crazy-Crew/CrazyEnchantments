@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.BlackSmithConfig;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
@@ -22,9 +21,8 @@ import java.util.List;
 
 public class BlackSmithMenu extends StaticInventory {
 
-    private final BlackSmithConfig config;
-
     private final ItemStack redGlass,blueGlass,grayGlass;
+    private final BlackSmithConfig config;
 
     public BlackSmithMenu(@NotNull final Player player, @NotNull final String title, final int size) {
         super(player, title, size);
@@ -90,30 +88,22 @@ public class BlackSmithMenu extends StaticInventory {
                     if (cost > 0) {
                         final Currency currency = this.config.getTransactionCurrency(); // supply currency
 
-                        final CurrencyAPI currencyAPI = this.plugin.getStarter().getCurrencyAPI();
-
-                        if (currencyAPI.canBuy(player, currency, cost)) {
-                            currencyAPI.takeCurrency(player, currency, cost);
+                        if (this.api.canBuy(player, currency, cost)) {
+                            this.api.takeCurrency(player, currency, cost);
                         } else {
-                            final String needed = String.valueOf(cost - currencyAPI.getCurrency(player, currency));
-
-                            //this.methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
+                            this.methods.switchCurrency(player, currency, "{money_needed}", "{xp}", String.valueOf(cost - this.api.getCurrency(player, currency)));
 
                             return;
                         }
 
-                        /*this.methods.addItemToInventory(player, result.getResultItem());
+                        this.methods.addItemToInventory(player, result.getResultItem());
 
-                        inventory.setItem(this.mainSlot, null);
-                        inventory.setItem(this.subSlot, null);
+                        inventory.setItem(this.inputSlot, null);
+                        inventory.setItem(this.secondaryInputSlot, null);
 
-                        playSound(player, this.levelUp);
+                        playSound(player, this.level_up);
 
-                        inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
-
-                        for (int slot : resultBorder) {
-                            inventory.setItem(slot, BlackSmithManager.getRedGlass());
-                        }*/
+                        updateBorder(inventory, result);
 
                         return;
                     }
@@ -193,7 +183,7 @@ public class BlackSmithMenu extends StaticInventory {
 
                 if (itemStack == null || itemStack.isEmpty()) continue;
 
-                //this.methods.addItemToInventory(player, itemStack);
+                this.methods.addItemToInventory(player, itemStack);
             }
 
             inventory.clear();
@@ -211,7 +201,7 @@ public class BlackSmithMenu extends StaticInventory {
             if (item.isEmpty()) return;
 
             final String value = String.valueOf(cost);
-            final String message = "{cost}".replaceAll("\\{cost}",value);
+            final String message = "{cost}".replaceAll("\\{cost}",value); //todo() cost message
 
             for (final int slot : this.resultBorder) {
                 inventory.setItem(slot, this.blueGlass);
@@ -222,7 +212,7 @@ public class BlackSmithMenu extends StaticInventory {
             return;
         }
 
-        inventory.setItem(this.outputSlot, null); //todo() exit button
+        this.itemManager.getItem("close_item").ifPresent(action -> inventory.setItem(this.outputSlot, action.getItemStack()));
 
         for (final int slot : this.resultBorder) {
             inventory.setItem(slot, this.redGlass);
