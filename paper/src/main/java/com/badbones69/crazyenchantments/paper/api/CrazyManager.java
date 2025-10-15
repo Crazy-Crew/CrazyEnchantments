@@ -14,30 +14,19 @@ import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
-import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
-import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
-import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
-import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
-import com.ryderbelserion.fusion.paper.FusionPaper;
-import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
-import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -50,15 +39,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class CrazyManager {
 
@@ -67,11 +53,7 @@ public class CrazyManager {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final KitsManager kitsManager = this.plugin.getKitsManager();
-
     private final ConfigManager options = this.plugin.getConfigManager();
-
-    private final FusionPaper fusion = this.plugin.getFusion();
 
     private CropManagerVersion cropManagerVersion;
 
@@ -92,7 +74,6 @@ public class CrazyManager {
     private final ArmorEnchantmentManager armorEnchantmentManager = null;
 
     // Arrays.
-    private final List<CEPlayer> players = new ArrayList<>();
     private final Map<Material, Double> headMap = new HashMap<>();
 
     /**
@@ -102,7 +83,7 @@ public class CrazyManager {
     public void load() {
         final YamlConfiguration enchants = FileKeys.enchantments.getPaperConfiguration();
 
-        final YamlConfiguration heads = FileKeys.head_map.getPaperConfiguration();
+        //final YamlConfiguration heads = FileKeys.head_map.getPaperConfiguration();
 
         this.headMap.clear();
 
@@ -112,33 +93,10 @@ public class CrazyManager {
 
         //this.starter.getPluginSupport().updateHooks();
 
-        // Check if we should patch player health.
-        boolean resetMaxHealth = this.options.isResetMaxHealth();
-
-        this.plugin.getServer().getOnlinePlayers().forEach(player -> {
-            // Load our players.
-            loadCEPlayer(player);
-
-            if (resetMaxHealth) {
-                @Nullable final AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
-
-                if (attribute != null) {
-                    attribute.setBaseValue(attribute.getBaseValue());
-                }
-            }
-
-            new FoliaScheduler(this.plugin, Scheduler.global_scheduler, TimeUnit.MINUTES) {
-                @Override
-                public void run() {
-                    getCEPlayers().forEach(player -> backupCEPlayer(player.getPlayer()));
-                }
-            }.runAtFixedRate(5, 5);
-        });
-
         // Invalidate cached enchants.
         CEnchantments.invalidateCachedEnchants();
 
-        ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
+        /*ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
 
         if (headSec == null) {
             this.fusion.log("warn", "HeadOdds could not be found in HeadMap.yml!");
@@ -149,7 +107,7 @@ public class CrazyManager {
                     this.headMap.put(mat, headSec.getDouble(id));
                 } catch (Exception ignored) {}
             });
-        }
+        }*/
 
         Scrolls.getWhiteScrollProtectionName();
 
@@ -223,110 +181,10 @@ public class CrazyManager {
     }
 
     /**
-     * Only needs used when the player joins the server.
-     * This plugin does it automatically, so there is no need to use it unless you have to.
-     * @param player The player you wish to load.
-     */
-    public void loadCEPlayer(@NotNull final Player player) {
-        final YamlConfiguration data = FileKeys.data.getPaperConfiguration();
-
-        String uuid = player.getUniqueId().toString();
-
-        List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
-
-        for (GKitz kit : this.kitsManager.getKits()) {
-            if (data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
-                Calendar coolDown = Calendar.getInstance();
-                coolDown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
-                gkitCoolDowns.add(new GkitCoolDown(kit, coolDown));
-            }
-        }
-
-        addCEPlayer(new CEPlayer(player, gkitCoolDowns));
-    }
-
-    /**
-     * Only needs used when the player leaves the server.
-     * This plugin removes the player automatically, so don't use this method unless needed for some reason.
-     * @param player Player you wish to remove.
-     */
-    public void unloadCEPlayer(@NotNull final Player player) {
-        final YamlConfiguration data = FileKeys.data.getPaperConfiguration();
-
-        String uuid = player.getUniqueId().toString();
-        CEPlayer cePlayer = getCEPlayer(player);
-
-        if (cePlayer != null) {
-            for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
-                data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
-            }
-
-            FileKeys.data.save();
-        }
-
-        if (cePlayer != null) {
-            removeCEPlayer(cePlayer);
-        }
-    }
-
-    /**
-     * This backup all the players data stored by this plugin.
-     * @param player The player you wish to back up.
-     */
-    public void backupCEPlayer(@NotNull final Player player) {
-        backupCEPlayer(getCEPlayer(player));
-    }
-
-    /**
-     * This backup all the players data stored by this plugin.
-     * @param cePlayer The player you wish to back up.
-     */
-    private void backupCEPlayer(@NotNull final CEPlayer cePlayer) {
-        final YamlConfiguration data = FileKeys.data.getPaperConfiguration();
-
-        String uuid = cePlayer.getPlayer().getUniqueId().toString();
-
-        for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
-            data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
-        }
-
-        FileKeys.data.save();
-    }
-
-    /**
      * @return NMS support class.
      */
     public CropManagerVersion getNMSSupport() {
         return this.cropManagerVersion;
-    }
-
-    /**
-     * This converts a normal Player into a CEPlayer that is loaded.
-     * @param player The player you want to get as a CEPlayer.
-     * @return The player but as a CEPlayer. Will return null if not found.
-     */
-    public CEPlayer getCEPlayer(@NotNull final Player player) {
-        for (CEPlayer cePlayer : getCEPlayers()) {
-            if (cePlayer.getPlayer() == player) return cePlayer;
-        }
-
-        return null;
-    }
-
-    public CEPlayer getCEPlayer(@NotNull final UUID uuid) {
-        for (CEPlayer cePlayer : getCEPlayers()) {
-            if (cePlayer.getPlayer().getUniqueId().equals(uuid)) return cePlayer;
-        }
-
-        return null;
-    }
-
-    /**
-     * This gets all the CEPlayer's that are loaded.
-     * @return All CEPlayer's that are loading and in a list.
-     */
-    public List<CEPlayer> getCEPlayers() {
-        return this.players;
     }
     
     public CEBook getRandomEnchantmentBook(@NotNull final Category category) {
@@ -665,17 +523,5 @@ public class CrazyManager {
      */
     public Map<Material, Double> getDecapitationHeadMap() {
         return this.headMap;
-    }
-
-    private void addCEPlayer(@NotNull final CEPlayer player) {
-        this.players.add(player);
-    }
-
-    private void removeCEPlayer(@NotNull final CEPlayer player) {
-        this.players.remove(player);
-    }
-
-    public int pickLevel(final int min, final int max) {
-        return min + new Random().nextInt((max + 1) - min);
     }
 }

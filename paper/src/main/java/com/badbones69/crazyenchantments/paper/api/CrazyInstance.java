@@ -54,6 +54,7 @@ public class CrazyInstance {
     private final ConfigManager options = this.plugin.getConfigManager();
     private final FusionPaper fusion = this.plugin.getFusion();
     private final ModManager modManager = this.fusion.getModManager();
+    private final Server server = this.plugin.getServer();
     private final Path path = this.plugin.getDataPath();
 
     private final List<EnchantType> registeredEnchantmentTypes = new ArrayList<>();
@@ -63,6 +64,7 @@ public class CrazyInstance {
 
     private CurrencyManager currencyManager;
     private CategoryManager categoryManager;
+    private PlayerManager playerManager;
     private TinkerManager tinkerManager;
     private ItemManager itemManager;
     private KitsManager kitsManager;
@@ -106,6 +108,8 @@ public class CrazyInstance {
         this.itemManager = new ItemManager();
         this.kitsManager = new KitsManager();
 
+        this.playerManager = new PlayerManager(); // this requires KitsManager, so it needs to be created after the KitsManager!
+
         this.currencyManager.init(); // update currencies
 
         this.categoryManager.init(); // update categories
@@ -113,6 +117,8 @@ public class CrazyInstance {
         this.itemManager.init(); // update items
 
         this.kitsManager.init(); // update kits
+
+        this.playerManager.init(); // this needs to be loaded after the kits!
 
         loadShopOptions(config); // load shop options
 
@@ -127,7 +133,7 @@ public class CrazyInstance {
         //this.pluginSupport.initializeWorldGuard();
     }
 
-    public void reload() {
+    public void reload(@Nullable final CommandSender sender) {
         this.fusion.reload(); // reload fusion api
 
         this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); // refresh files
@@ -163,9 +169,21 @@ public class CrazyInstance {
 
         this.kitsManager.init(); // update kits
 
+        for (final Player player : this.server.getOnlinePlayers()) {
+            this.playerManager.backupPlayer(player);
+        }
+
         loadShopOptions(config); // load shop options
 
         loadExamples(); // load examples
+
+        if (sender != null) {
+            MessageKeys.CONFIG_RELOAD.sendMessage(sender);
+        }
+    }
+
+    public void reload() {
+        reload(null);
     }
 
     public void loadShopOptions(final YamlConfiguration config) {
@@ -522,6 +540,10 @@ public class CrazyInstance {
 
     public @NotNull final TinkerManager getTinkerManager() {
         return this.tinkerManager;
+    }
+
+    public @NotNull final PlayerManager getPlayerManager() {
+        return this.playerManager;
     }
 
     public @NotNull final ItemManager getItemManager() {
