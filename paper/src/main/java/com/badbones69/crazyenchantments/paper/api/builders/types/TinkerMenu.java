@@ -4,8 +4,8 @@ import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInven
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.objects.TinkerEnchantInfo;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;
@@ -90,7 +90,7 @@ public class TinkerMenu extends StaticInventory {
                     }
 
                     if (toggle) {
-                        Messages.TINKER_SOLD_MESSAGE.sendMessage(player);
+                        MessageKeys.TINKER_SOLD_MESSAGE.sendMessage(player);
                     }
 
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
@@ -231,13 +231,13 @@ public class TinkerMenu extends StaticInventory {
         final Inventory inventory = event.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            Messages.TINKER_INVENTORY_FULL.sendMessage(player);
+            MessageKeys.TINKER_INVENTORY_FULL.sendMessage(player);
 
             return true;
         }
 
         if (itemStack.getAmount() > 1) {
-            Messages.NEED_TO_UNSTACK_ITEM.sendMessage(player);
+            MessageKeys.NEED_TO_UNSTACK_ITEM.sendMessage(player);
 
             return true;
         }

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.enums.pdc;
+package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.NamespacedKey;

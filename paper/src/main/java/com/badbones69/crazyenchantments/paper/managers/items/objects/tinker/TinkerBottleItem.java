@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.items.objects.tinker;
 
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;

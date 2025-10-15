@@ -3,14 +3,14 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.shop.Scrolls;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.Enchant;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
@@ -57,7 +57,7 @@ public class ScrollListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
         if (scroll.getAmount() > 1) {
-            Messages.NEED_TO_UNSTACK_ITEM.sendMessage(player);
+            MessageKeys.NEED_TO_UNSTACK_ITEM.sendMessage(player);
 
             return;
         }
@@ -74,7 +74,7 @@ public class ScrollListener implements Listener {
                     player.setItemOnCursor(Methods.removeItem(scroll));
 
                     if (this.options.isBlackScrollChanceToggle() && !Methods.randomPicker(this.options.getBlackScrollChance(), 100)) {
-                        Messages.BLACK_SCROLL_UNSUCCESSFUL.sendMessage(player);
+                        MessageKeys.BLACK_SCROLL_UNSUCCESSFUL.sendMessage(player);
 
                         return;
                     }
@@ -91,7 +91,7 @@ public class ScrollListener implements Listener {
             case "WhiteScroll" -> {
                 if (Scrolls.hasWhiteScrollProtection(item)) return;
 
-                for (EnchantmentType enchantmentType : this.instance.getRegisteredEnchantmentTypes()) {
+                for (EnchantType enchantmentType : this.instance.getRegisteredEnchantmentTypes()) {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                         event.setCancelled(true);
 
@@ -144,7 +144,7 @@ public class ScrollListener implements Listener {
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
 
-            Messages.RIGHT_CLICK_BLACK_SCROLL.sendMessage(player);
+            MessageKeys.RIGHT_CLICK_BLACK_SCROLL.sendMessage(player);
 
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {

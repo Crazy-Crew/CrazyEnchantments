@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.KitConfig;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
@@ -29,7 +29,7 @@ public class KitsPreviewMenu extends StaticInventory {
         if (!this.kitsManager.isRegistered()) {
             this.fusion.log("warn", "The kits preview menu is not enabled, either because of an error, or g-kits are not enabled.");
 
-            Messages.GKIT_NOT_ENABLED.sendMessage(player);
+            MessageKeys.GKIT_NOT_ENABLED.sendMessage(player);
 
             return;
         }

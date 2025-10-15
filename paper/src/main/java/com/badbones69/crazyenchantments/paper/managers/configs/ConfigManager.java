@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.managers.configs;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.*;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.currency.VaultConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;

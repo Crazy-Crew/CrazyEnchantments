@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.currency.types.plugins;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.currency.VaultConfig;
 import com.badbones69.crazyenchantments.paper.managers.currency.interfaces.ICurrency;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
@@ -58,7 +58,7 @@ public class VaultCurrency extends ICurrency {
 
     @Override
     public void failed(@NotNull final Player player, @NotNull final Map<String, String> placeholders) {
-        Messages.NEED_MORE_MONEY.sendMessage(player, placeholders);
+        MessageKeys.NEED_MORE_MONEY.sendMessage(player, placeholders);
     }
 
     @Override

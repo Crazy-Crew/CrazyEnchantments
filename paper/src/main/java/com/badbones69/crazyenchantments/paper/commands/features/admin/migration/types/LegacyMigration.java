@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
 import org.bukkit.command.CommandSender;
@@ -615,9 +615,9 @@ public class LegacyMigration extends IEnchantMigration {
                 }
             }, () -> failed.add("<red>⤷ Messages.yml"));*/
 
-            final Messages[] messages = Messages.values();
+            final MessageKeys[] messages = MessageKeys.values();
 
-            for (final Messages message : messages) {
+            for (final MessageKeys message : messages) {
                 message.migrate();
             }
 

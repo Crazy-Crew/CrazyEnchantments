@@ -1,6 +1,7 @@
-package com.badbones69.crazyenchantments.paper.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums.shop;
 
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;

@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
@@ -53,13 +53,13 @@ public class SlotCrystalListener implements Listener {
         event.setCancelled(true);
 
         if (enchAmount >= maxEnchants) {
-            Messages.HIT_ENCHANTMENT_MAX.sendMessage(player);
+            MessageKeys.HIT_ENCHANTMENT_MAX.sendMessage(player);
 
             return;
         }
 
         if ((baseEnchants - limiter) >= maxEnchants) {
-            Messages.MAX_SLOTS_UNLOCKED.sendMessage(player);
+            MessageKeys.MAX_SLOTS_UNLOCKED.sendMessage(player);
 
             return;
         }
@@ -70,7 +70,7 @@ public class SlotCrystalListener implements Listener {
 
         //event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
-        Messages.APPLIED_SLOT_CRYSTAL.sendMessage(player, new HashMap<>(4) {{
+        MessageKeys.APPLIED_SLOT_CRYSTAL.sendMessage(player, new HashMap<>(4) {{
             put("{slot}", String.valueOf(-(limiter - 1)));
             put("{max_enchants}", String.valueOf(maxEnchants));
             put("{enchant_amount}", String.valueOf(enchAmount));

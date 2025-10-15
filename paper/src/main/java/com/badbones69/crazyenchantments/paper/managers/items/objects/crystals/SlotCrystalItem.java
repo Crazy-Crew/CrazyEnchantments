@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.managers.items.objects.crystals;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.SlotCrystalConfig;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

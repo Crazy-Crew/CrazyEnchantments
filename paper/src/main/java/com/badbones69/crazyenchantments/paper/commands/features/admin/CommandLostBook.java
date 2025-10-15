@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.shop.Scrolls;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -24,7 +24,7 @@ public class CommandLostBook extends BaseCommand {
     @Syntax("/crazyenchantments lostbook <category> <amount> [player]")
     public void lostbook(final CommandSender sender, final Category category, final int amount, @Optional @Nullable final Player target) {
         if (category == null) {
-            Messages.NOT_A_CATEGORY.sendMessage(sender);
+            MessageKeys.NOT_A_CATEGORY.sendMessage(sender);
 
             return;
         }
@@ -32,7 +32,7 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            Messages.NOT_ONLINE.sendMessage(sender);
+            MessageKeys.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -47,7 +47,7 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            Messages.NOT_ONLINE.sendMessage(sender);
+            MessageKeys.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -68,13 +68,13 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            Messages.NOT_ONLINE.sendMessage(sender);
+            MessageKeys.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
         if (Methods.isInventoryFull(safePlayer)) {
-            Messages.INVENTORY_FULL.sendMessage(sender);
+            MessageKeys.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
@@ -87,10 +87,10 @@ public class CommandLostBook extends BaseCommand {
         }};
 
         if (target != null) {
-            Messages.GIVE_SCRAMBLER_CRYSTAL.sendMessage(sender, placeholders);
+            MessageKeys.GIVE_SCRAMBLER_CRYSTAL.sendMessage(sender, placeholders);
         }
 
-        Messages.GET_SCRAMBLER.sendMessage(safePlayer, placeholders);
+        MessageKeys.GET_SCRAMBLER.sendMessage(safePlayer, placeholders);
     }
 
     @Command("crystal")
@@ -100,13 +100,13 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            Messages.NOT_ONLINE.sendMessage(sender);
+            MessageKeys.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
         if (Methods.isInventoryFull(safePlayer)) {
-            Messages.INVENTORY_FULL.sendMessage(sender);
+            MessageKeys.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
@@ -122,10 +122,10 @@ public class CommandLostBook extends BaseCommand {
             }};
 
             if (target != null) {
-                Messages.GIVE_PROTECTION_CRYSTAL.sendMessage(sender, placeholders);
+                MessageKeys.GIVE_PROTECTION_CRYSTAL.sendMessage(sender, placeholders);
             }
 
-            Messages.GET_PROTECTION_CRYSTAL.sendMessage(safePlayer, placeholders);
+            MessageKeys.GET_PROTECTION_CRYSTAL.sendMessage(safePlayer, placeholders);
         });
     }
 
@@ -136,13 +136,13 @@ public class CommandLostBook extends BaseCommand {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            Messages.NOT_ONLINE.sendMessage(sender);
+            MessageKeys.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
 
         if (Methods.isInventoryFull(safePlayer)) {
-            Messages.INVENTORY_FULL.sendMessage(sender);
+            MessageKeys.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
@@ -158,10 +158,10 @@ public class CommandLostBook extends BaseCommand {
             }};
 
             if (target != null) {
-                Messages.GIVE_SLOT_CRYSTAL.sendMessage(sender, placeholders);
+                MessageKeys.GIVE_SLOT_CRYSTAL.sendMessage(sender, placeholders);
             }
 
-            Messages.GET_SLOT_CRYSTAL.sendMessage(safePlayer, placeholders);
+            MessageKeys.GET_SLOT_CRYSTAL.sendMessage(safePlayer, placeholders);
         });
     }
 }

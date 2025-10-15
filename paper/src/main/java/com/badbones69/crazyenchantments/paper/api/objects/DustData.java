@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.enums.pdc;
+package com.badbones69.crazyenchantments.paper.api.objects;
 
 import org.jetbrains.annotations.NotNull;
 

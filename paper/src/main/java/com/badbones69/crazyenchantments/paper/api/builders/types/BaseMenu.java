@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.GuiItem;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ public class BaseMenu extends StaticInventory {
     @Override
     public void open() {
         if (this.enchantmentType == null) {
-            for (final EnchantmentType type : this.instance.getRegisteredEnchantmentTypes()) {
+            for (final EnchantType type : this.instance.getRegisteredEnchantmentTypes()) {
                 this.gui.setItem(type.getSlot(), new GuiItem(type.getDisplayItem(), event -> {
                     if (!(event.getWhoClicked() instanceof Player entity)) return;
 

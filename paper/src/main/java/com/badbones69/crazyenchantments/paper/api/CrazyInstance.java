@@ -3,16 +3,16 @@ package com.badbones69.crazyenchantments.paper.api;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.Enchant;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantedBook;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
@@ -56,7 +56,7 @@ public class CrazyInstance {
     private final ModManager modManager = this.fusion.getModManager();
     private final Path path = this.plugin.getDataPath();
 
-    private final List<EnchantmentType> registeredEnchantmentTypes = new ArrayList<>();
+    private final List<EnchantType> registeredEnchantmentTypes = new ArrayList<>();
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
@@ -92,7 +92,7 @@ public class CrazyInstance {
 
         Optional.ofNullable(enchantmentTypes.getConfigurationSection("Types")).ifPresentOrElse(section -> {
             for (final String type : section.getKeys(false)) {
-                this.registeredEnchantmentTypes.add(new EnchantmentType(type));
+                this.registeredEnchantmentTypes.add(new EnchantType(type));
             }
         }, () -> {
             throw new CrazyException("Failed to find `Types` section in Enchantment-Types.yml");
@@ -496,7 +496,7 @@ public class CrazyInstance {
         this.registeredEnchantments.clear();
     }
 
-    public @NotNull final List<EnchantmentType> getRegisteredEnchantmentTypes() {
+    public @NotNull final List<EnchantType> getRegisteredEnchantmentTypes() {
         return Collections.unmodifiableList(this.registeredEnchantmentTypes);
     }
 

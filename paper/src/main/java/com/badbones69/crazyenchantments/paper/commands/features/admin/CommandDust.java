@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.shop.Dust;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -24,7 +24,7 @@ public class CommandDust extends BaseCommand {
         Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
         if (safePlayer == null) {
-            Messages.NOT_ONLINE.sendMessage(sender);
+            MessageKeys.NOT_ONLINE.sendMessage(sender);
 
             return;
         }
@@ -44,26 +44,26 @@ public class CommandDust extends BaseCommand {
 
         switch (dust) {
             case SUCCESS_DUST -> {
-                Messages.GET_SUCCESS_DUST.sendMessage(safePlayer, placeholders);
+                MessageKeys.GET_SUCCESS_DUST.sendMessage(safePlayer, placeholders);
 
                 if (!sender.getName().equalsIgnoreCase(safePlayer.getName())) {
-                    Messages.GIVE_SUCCESS_DUST.sendMessage(sender, placeholders);
+                    MessageKeys.GIVE_SUCCESS_DUST.sendMessage(sender, placeholders);
                 }
             }
 
             case DESTROY_DUST -> {
-                Messages.GET_DESTROY_DUST.sendMessage(safePlayer, placeholders);
+                MessageKeys.GET_DESTROY_DUST.sendMessage(safePlayer, placeholders);
 
                 if (!sender.getName().equalsIgnoreCase(safePlayer.getName())) {
-                    Messages.GIVE_DESTROY_DUST.sendMessage(sender, placeholders);
+                    MessageKeys.GIVE_DESTROY_DUST.sendMessage(sender, placeholders);
                 }
             }
 
             case MYSTERY_DUST -> {
-                Messages.GET_MYSTERY_DUST.sendMessage(safePlayer, placeholders);
+                MessageKeys.GET_MYSTERY_DUST.sendMessage(safePlayer, placeholders);
 
                 if (!sender.getName().equalsIgnoreCase(safePlayer.getName())) {
-                    Messages.GIVE_MYSTERY_DUST.sendMessage(sender, placeholders);
+                    MessageKeys.GIVE_MYSTERY_DUST.sendMessage(sender, placeholders);
                 }
             }
         }

@@ -1,8 +1,9 @@
-package com.badbones69.crazyenchantments.paper.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums.shop;
 
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.objects.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;

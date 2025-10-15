@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -20,6 +20,6 @@ public class CommandReload extends BaseCommand {
 
         this.crazyManager.load();
 
-        Messages.CONFIG_RELOAD.sendMessage(sender);
+        MessageKeys.CONFIG_RELOAD.sendMessage(sender);
     }
 }

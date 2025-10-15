@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -20,7 +20,7 @@ public class CommandInfo extends BaseCommand {
     @SuppressWarnings("ConstantValue")
     @Command("info")
     @Permission(value = "crazyenchantments.info", def = PermissionDefault.OP)
-    @Flag(flag = "t", longFlag = "type", argument = EnchantmentType.class)
+    @Flag(flag = "t", longFlag = "type", argument = EnchantType.class)
     @Flag(flag = "ce", longFlag = "custom", argument = CEnchantment.class)
     @Syntax("/crazyenchantments info [-t/--type] [-ce/--custom]")
     public void info(final CommandSender sender, final Flags flags) {
@@ -40,7 +40,7 @@ public class CommandInfo extends BaseCommand {
             }
 
             if (hasEnchantType) {
-                flags.getFlagValue("t", EnchantmentType.class).ifPresent(action -> new BaseMenu(player, title, size).setEnchantmentType(action).open());
+                flags.getFlagValue("t", EnchantType.class).ifPresent(action -> new BaseMenu(player, title, size).setEnchantmentType(action).open());
 
                 return;
             }

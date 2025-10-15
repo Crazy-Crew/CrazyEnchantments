@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.objects.enchants;
 
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,15 +11,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantmentType {
+public class EnchantType {
 
+    private final List<Material> enchantableMaterials = new ArrayList<>();
+    private final List<CEnchantment> enchantments = new ArrayList<>();
+    private final ItemStack displayItem;
     private final String displayName;
     private final int slot;
-    private final ItemStack displayItem;
-    private final List<CEnchantment> enchantments = new ArrayList<>();
-    private final List<Material> enchantableMaterials = new ArrayList<>();
 
-    public EnchantmentType(@NotNull final String name) {
+    public EnchantType(@NotNull final String name) {
         final YamlConfiguration file = FileKeys.enchantment_types.getPaperConfiguration();
 
         final String path = "Types." + name;
@@ -39,7 +39,7 @@ public class EnchantmentType {
         }
     }
 
-    public EnchantmentType getFromName(@NotNull final String name) {
+    public EnchantType getFromName(@NotNull final String name) {
         return Methods.getFromName(name);
     }
 

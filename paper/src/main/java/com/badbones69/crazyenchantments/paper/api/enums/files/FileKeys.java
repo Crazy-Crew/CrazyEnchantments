@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums.files;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;

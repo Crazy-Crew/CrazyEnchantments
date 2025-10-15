@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -90,7 +90,7 @@ public class SwordEnchantments implements Listener {
                         cePlayer.setRageLevel(0);
                         cePlayer.setRage(false);
 
-                        rageInformPlayer(player, Messages.RAGE_DAMAGED, 0f);
+                        rageInformPlayer(player, MessageKeys.RAGE_DAMAGED, 0f);
                     }
                 }
             }
@@ -158,7 +158,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            Messages.DISORDERED_ENEMY_HOT_BAR.sendMessage(damager);
+            MessageKeys.DISORDERED_ENEMY_HOT_BAR.sendMessage(damager);
         }
 
         // Check if CEPlayer is null as plugins like citizen use Player objects.
@@ -183,7 +183,7 @@ public class SwordEnchantments implements Listener {
                 cePlayer.setRage(true);
                 cePlayer.setRageLevel(1);
 
-                rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.options.getRageMaxLevel()));
+                rageInformPlayer(damager, MessageKeys.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.options.getRageMaxLevel()));
             }
 
             cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, cePlayer.getPlayer()) {
@@ -193,7 +193,7 @@ public class SwordEnchantments implements Listener {
                     cePlayer.setRage(false);
                     cePlayer.setRageLevel(0);
 
-                    rageInformPlayer(damager, Messages.RAGE_COOLED_DOWN, 0f);
+                    rageInformPlayer(damager, MessageKeys.RAGE_COOLED_DOWN, 0f);
                 }
             }.runDelayed(80));
         }
@@ -374,17 +374,17 @@ public class SwordEnchantments implements Listener {
 
     private void rageInformPlayer(@NotNull final Player player, @NotNull final Map<String, String> placeholders, final float progress) {
         if (this.options.isUseRageBossBar()) {
-            final Component component = Messages.RAGE_RAGE_UP.getMessage(player);
+            final Component component = MessageKeys.RAGE_RAGE_UP.getMessage(player);
 
             if (!component.equals(Component.empty())) {
                 this.bossBarController.updateBossBar(player, component, progress);
             }
         } else {
-            Messages.RAGE_RAGE_UP.sendMessage(player, placeholders);
+            MessageKeys.RAGE_RAGE_UP.sendMessage(player, placeholders);
         }
     }
 
-    private void rageInformPlayer(@NotNull final Player player, @NotNull final Messages message, final float progress) {
+    private void rageInformPlayer(@NotNull final Player player, @NotNull final MessageKeys message, final float progress) {
         if (this.options.isUseRageBossBar()) {
             final Component component = message.getMessage(player);
 

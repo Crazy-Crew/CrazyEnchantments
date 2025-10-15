@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
@@ -220,7 +220,7 @@ public enum CEnchantments {
     /**
      * @return The type the enchantment is.
      */
-    public EnchantmentType getType() {
+    public EnchantType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
             return Methods.getFromName(this.typeName);
         } else {

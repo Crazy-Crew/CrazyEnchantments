@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.google.gson.Gson;
@@ -38,8 +38,8 @@ public class Methods {
 
     private static final CrazyInstance instance = plugin.getInstance();
 
-    public static EnchantmentType getFromName(@NotNull final String name) {
-        for (final EnchantmentType enchantmentType : instance.getRegisteredEnchantmentTypes()) {
+    public static EnchantType getFromName(@NotNull final String name) {
+        for (final EnchantType enchantmentType : instance.getRegisteredEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
@@ -77,7 +77,7 @@ public class Methods {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
-            if (toggle) Messages.NO_PERMISSION.sendMessage(player);
+            if (toggle) MessageKeys.NO_PERMISSION.sendMessage(player);
 
             return false;
         }
@@ -202,7 +202,7 @@ public class Methods {
     public static boolean isInventoryFull(@NotNull final Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
 
-        Messages.INVENTORY_FULL.sendMessage(player);
+        MessageKeys.INVENTORY_FULL.sendMessage(player);
 
         return true;
     }
@@ -465,7 +465,7 @@ public class Methods {
     public static boolean inCreativeMode(@NotNull final Player player) {
         if (player.getGameMode() != GameMode.CREATIVE) return false;
 
-        Messages.PLAYER_IS_IN_CREATIVE_MODE.sendMessage(player);
+        MessageKeys.PLAYER_IS_IN_CREATIVE_MODE.sendMessage(player);
 
         return true;
     }

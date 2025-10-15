@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.commands.features.admin;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMainMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
@@ -34,7 +34,7 @@ public class CommandGkitz {
     @Syntax("/gkitz")
     public void run(@NotNull final Player player) {
         if (!this.options.isGkitzToggle()) {
-            Messages.GKIT_NOT_ENABLED.sendMessage(player);
+            MessageKeys.GKIT_NOT_ENABLED.sendMessage(player);
 
             return;
         }
@@ -61,7 +61,7 @@ public class CommandGkitz {
 
                 this.crazyManager.getCEPlayer(player).removeCoolDown(kit);
 
-                Messages.RESET_GKIT.sendMessage(sender, new HashMap<>() {{
+                MessageKeys.RESET_GKIT.sendMessage(sender, new HashMap<>() {{
                     put("{player}", player.getName());
                     put("{kit}", kit.getName());
                 }});
@@ -73,7 +73,7 @@ public class CommandGkitz {
         if (sender instanceof Player player) {
             this.crazyManager.getCEPlayer(player).removeCoolDown(kit);
 
-            Messages.RESET_GKIT.sendMessage(player, new HashMap<>() {{
+            MessageKeys.RESET_GKIT.sendMessage(player, new HashMap<>() {{
                 put("{player}", player.getName());
                 put("{kit}", kit.getName());
             }});
@@ -100,7 +100,7 @@ public class CommandGkitz {
 
                 giveKit(player, kit, isAdmin);
 
-                Messages.GIVEN_GKIT.sendMessage(player, placeholders);
+                MessageKeys.GIVEN_GKIT.sendMessage(player, placeholders);
             }
 
             return;
@@ -122,13 +122,13 @@ public class CommandGkitz {
         if (isAdmin) {
             cePlayer.giveGKit(kit);
 
-            Messages.RECEIVED_GKIT.sendMessage(player, placeholders);
+            MessageKeys.RECEIVED_GKIT.sendMessage(player, placeholders);
 
             return;
         }
 
         if (!cePlayer.hasGkitPermission(kit)) {
-            Messages.NO_GKIT_PERMISSION.sendMessage(player, placeholders);
+            MessageKeys.NO_GKIT_PERMISSION.sendMessage(player, placeholders);
 
             return;
         }
@@ -144,12 +144,12 @@ public class CommandGkitz {
                 put("{second}", splitter[3]);
             }};
 
-            Messages.STILL_IN_COOLDOWN.sendMessage(player, newPlaceholders);
+            MessageKeys.STILL_IN_COOLDOWN.sendMessage(player, newPlaceholders);
 
             return;
         }
 
-        Messages.RECEIVED_GKIT.sendMessage(player, placeholders);
+        MessageKeys.RECEIVED_GKIT.sendMessage(player, placeholders);
 
         cePlayer.giveGKit(kit);
         cePlayer.addCoolDown(kit);

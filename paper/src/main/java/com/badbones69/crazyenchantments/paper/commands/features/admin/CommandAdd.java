@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
@@ -28,7 +28,7 @@ public class CommandAdd extends BaseCommand {
         boolean isVanilla = vanillaEnchantment != null;
 
         if (vanillaEnchantment == null && customEnchantment == null) {
-            Messages.NOT_AN_ENCHANTMENT.sendMessage(player);
+            MessageKeys.NOT_AN_ENCHANTMENT.sendMessage(player);
 
             return;
         }
@@ -36,7 +36,7 @@ public class CommandAdd extends BaseCommand {
         final ItemStack itemStack = Methods.getItemInHand(player);
 
         if (itemStack.isEmpty()) {
-            Messages.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
+            MessageKeys.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
 
             return;
         }
@@ -62,7 +62,7 @@ public class CommandAdd extends BaseCommand {
         boolean isVanilla = vanillaEnchantment != null;
 
         if (vanillaEnchantment == null && customEnchantment == null) {
-            Messages.NOT_AN_ENCHANTMENT.sendMessage(player);
+            MessageKeys.NOT_AN_ENCHANTMENT.sendMessage(player);
 
             return;
         }
@@ -70,7 +70,7 @@ public class CommandAdd extends BaseCommand {
         final ItemStack itemStack = Methods.getItemInHand(player).clone();
 
         if (itemStack.getType() == Material.AIR) {
-            Messages.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
+            MessageKeys.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
 
             return;
         }
@@ -83,7 +83,7 @@ public class CommandAdd extends BaseCommand {
             if (this.instance.getEnchantments(itemStack).containsKey(customEnchantment)) {
                 Methods.setItemInHand(player, this.instance.removeEnchantment(itemStack, customEnchantment));
 
-                Messages.REMOVED_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
+                MessageKeys.REMOVED_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
                     put("{enchantment}", customEnchantment.getCustomName());
                 }});
 
@@ -91,7 +91,7 @@ public class CommandAdd extends BaseCommand {
             }
         }
 
-        Messages.DOESNT_HAVE_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
+        MessageKeys.DOESNT_HAVE_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
             put("{enchantment}", customEnchantment.getCustomName());
         }});
     }

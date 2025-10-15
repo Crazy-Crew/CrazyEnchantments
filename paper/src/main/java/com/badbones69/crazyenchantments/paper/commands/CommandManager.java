@@ -2,11 +2,11 @@ package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.paper.api.enums.shop.Dust;
+import com.badbones69.crazyenchantments.paper.api.enums.shop.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.*;
@@ -55,12 +55,12 @@ public class CommandManager {
         commandManager.registerArgument(Scrolls.class, (sender, argument) -> Scrolls.getFromName(argument));
         commandManager.registerArgument(CEnchantment.class, (sender, argument) -> instance.getEnchantmentFromName(argument));
         commandManager.registerArgument(World.class, (sender, argument) -> server.getWorld(argument));
-        commandManager.registerArgument(EnchantmentType.class, (sender, argument) -> instance.getRegisteredEnchantmentTypes().stream().filter(filter -> !filter.getName().equalsIgnoreCase(argument)));
+        commandManager.registerArgument(EnchantType.class, (sender, argument) -> instance.getRegisteredEnchantmentTypes().stream().filter(filter -> !filter.getName().equalsIgnoreCase(argument)));
         commandManager.registerArgument(PlayerBuilder.class, (sender, argument) -> new PlayerBuilder(plugin, argument));
 
         commandManager.registerArgument(MigrationType.class, (sender, argument) -> MigrationType.fromName(argument));
 
-        commandManager.registerSuggestion(EnchantmentType.class, (context) -> instance.getRegisteredEnchantmentTypes().stream().map(EnchantmentType::getName).toList());
+        commandManager.registerSuggestion(EnchantType.class, (context) -> instance.getRegisteredEnchantmentTypes().stream().map(EnchantType::getName).toList());
         commandManager.registerSuggestion(Player.class, (context) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
         commandManager.registerSuggestion(World.class, (context) -> server.getWorlds().stream().map(World::getName).toList());
 

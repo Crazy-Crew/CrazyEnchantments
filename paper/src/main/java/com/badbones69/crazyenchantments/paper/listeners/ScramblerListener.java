@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
@@ -202,7 +202,7 @@ public class ScramblerListener implements Listener {
         if (!isScrambler.get() || !this.instance.isEnchantmentBook(book)) return;
 
         if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
-            Messages.NEED_TO_USE_PLAYER_INVENTORY.sendMessage(player);
+            MessageKeys.NEED_TO_USE_PLAYER_INVENTORY.sendMessage(player);
 
             return;
         }

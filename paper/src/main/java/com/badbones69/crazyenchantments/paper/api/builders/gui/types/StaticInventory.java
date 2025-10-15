@@ -1,12 +1,11 @@
 package com.badbones69.crazyenchantments.paper.api.builders.gui.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
@@ -50,11 +49,11 @@ public abstract class StaticInventory extends InventoryBuilder {
         this.size = size;
     }
 
-    protected EnchantmentType enchantmentType;
+    protected EnchantType enchantmentType;
 
     public abstract void open();
 
-    public StaticInventory setEnchantmentType(@NotNull final EnchantmentType enchantmentType) {
+    public StaticInventory setEnchantmentType(@NotNull final EnchantType enchantmentType) {
         this.enchantmentType = enchantmentType;
 
         final List<CEnchantment> enchantments = this.enchantmentType.getEnchantments();

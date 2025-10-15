@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -41,13 +41,13 @@ public class EnchantMigration extends IEnchantMigration {
             }
 
             enchantments.forEach((enchantment, level) -> {
-                Messages.BASE_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
+                MessageKeys.BASE_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
                     put("{enchant}", enchantment.getName());
                     put("{level}", String.valueOf(level));
                 }});
             });
 
-            Messages.MAIN_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
+            MessageKeys.MAIN_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
                 put("{item}", item.getType().toString());
                 put("{item_enchants}", builder.toString());
             }});

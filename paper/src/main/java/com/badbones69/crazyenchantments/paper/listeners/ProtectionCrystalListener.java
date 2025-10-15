@@ -2,9 +2,9 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
@@ -58,7 +58,7 @@ public class ProtectionCrystalListener implements Listener {
         if (item.hasKey(itemStack, DataKeys.protected_item.getNamespacedKey())) return;
 
         if (itemStack.getAmount() > 1 || crystalItem.getAmount() > 1) {
-            Messages.NEED_TO_UNSTACK_ITEM.sendMessage(player);
+            MessageKeys.NEED_TO_UNSTACK_ITEM.sendMessage(player);
 
             return;
         }

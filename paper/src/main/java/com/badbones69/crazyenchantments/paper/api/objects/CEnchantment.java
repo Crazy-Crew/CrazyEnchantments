@@ -4,8 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentEvent;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.utils.RandomUtils;
 import org.bukkit.Sound;
@@ -33,7 +32,7 @@ public class CEnchantment {
     private int chanceIncrease;
     private List<String> infoDescription;
     private final List<Category> categories;
-    private EnchantmentType enchantmentType;
+    private EnchantType enchantmentType;
     private final CEnchantment enchantment;
     private Sound sound;
     private List<String> conflicts;
@@ -222,7 +221,7 @@ public class CEnchantment {
         return this;
     }
 
-    public EnchantmentType getEnchantmentType() {
+    public EnchantType getEnchantmentType() {
         return this.enchantmentType;
     }
 
@@ -237,7 +236,7 @@ public class CEnchantment {
         return this.enchantmentType != null && this.enchantmentType.canEnchantItem(item);
     }
 
-    public CEnchantment setEnchantmentType(@NotNull final EnchantmentType enchantmentType) {
+    public CEnchantment setEnchantmentType(@NotNull final EnchantType enchantmentType) {
         this.enchantmentType = enchantmentType;
 
         return this;

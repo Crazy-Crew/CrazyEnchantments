@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums.files;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum Messages {
+public enum MessageKeys {
 
     CORRECT_USAGE("Correct-Usage", "<red>The correct usage for this command is {usage}."),
     PLAYERS_ONLY("Players-Only", "<red>Only players can use this command."),
@@ -130,13 +130,13 @@ public enum Messages {
     private final String defaultMessage;
     private final String path;
 
-    Messages(@NotNull final String path, @NotNull final String message) {
+    MessageKeys(@NotNull final String path, @NotNull final String message) {
         this.defaultListMessage = List.of();
         this.defaultMessage = message;
         this.path = path;
     }
 
-    Messages(@NotNull final String path, @NotNull final List<String> message) {
+    MessageKeys(@NotNull final String path, @NotNull final List<String> message) {
         this.defaultListMessage = message;
         this.defaultMessage = "";
         this.path = path;
