@@ -128,11 +128,7 @@ public class ConfigManager {
             throw new CrazyException("GKitz.yml does not have the configuration section needed!");
         });
 
-        final YamlConfiguration tinker = FileKeys.tinker.getPaperConfiguration();
-
-        Optional.ofNullable(tinker.getConfigurationSection("Settings")).ifPresentOrElse(tink -> this.tinkerConfig = new TinkerConfig(tink), () -> {
-            throw new CrazyException("Tinker.yml does not have the configuration section needed!");
-        });
+        this.tinkerConfig = new TinkerConfig(FileKeys.tinker.getPaperConfiguration());
 
         final CommentedConfigurationNode currency = FileKeys.currency.getYamlConfiguration();
 
