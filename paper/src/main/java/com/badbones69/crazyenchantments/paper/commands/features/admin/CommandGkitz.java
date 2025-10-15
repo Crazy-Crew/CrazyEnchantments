@@ -25,7 +25,7 @@ public class CommandGkitz {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     private final CrazyManager crazyManager = null;
 

@@ -18,7 +18,7 @@ public class BlackSmithResult {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final ConfigManager configManager = this.plugin.getOptions();
+    private final ConfigManager configManager = this.plugin.getConfigManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
 

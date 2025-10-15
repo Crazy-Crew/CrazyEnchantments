@@ -18,7 +18,7 @@ public class KitsManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     private final FusionPaper fusion = this.plugin.getFusion();
 

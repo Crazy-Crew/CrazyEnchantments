@@ -21,7 +21,7 @@ public class ShopManager {
 
     private final CategoryManager categoryManager = this.plugin.getCategoryManager();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     private String inventoryName;
     private int inventorySize;

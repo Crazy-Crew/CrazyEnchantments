@@ -24,7 +24,7 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     protected final CrazyManager crazyManager = null;
 
-    protected final ConfigManager configManager = this.plugin.getOptions();
+    protected final ConfigManager configManager = this.plugin.getConfigManager();
 
     protected final ItemManager itemManager = this.plugin.getItemManager();
 

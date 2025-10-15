@@ -24,7 +24,7 @@ public class CEBook {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     @NotNull
     private final Methods methods = null;

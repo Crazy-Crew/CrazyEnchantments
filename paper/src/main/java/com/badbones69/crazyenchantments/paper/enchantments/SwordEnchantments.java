@@ -53,7 +53,7 @@ public class SwordEnchantments implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     @NotNull
     private final CrazyManager crazyManager = null;

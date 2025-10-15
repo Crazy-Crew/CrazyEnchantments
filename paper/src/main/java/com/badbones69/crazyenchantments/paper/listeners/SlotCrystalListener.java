@@ -21,7 +21,7 @@ public class SlotCrystalListener implements Listener {
 
     private final ItemManager itemManager = this.plugin.getItemManager();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
 

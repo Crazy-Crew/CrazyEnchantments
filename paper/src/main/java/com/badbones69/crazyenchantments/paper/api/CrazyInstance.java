@@ -50,7 +50,7 @@ public class CrazyInstance {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final PaperFileManager fileManager = this.plugin.getFileManager();
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
     private final FusionPaper fusion = this.plugin.getFusion();
     private final ModManager modManager = this.fusion.getModManager();
     private final Path path = this.plugin.getDataPath();

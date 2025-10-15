@@ -69,7 +69,7 @@ public class CrazyManager {
 
     private final KitsManager kitsManager = this.plugin.getKitsManager();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     private final FusionPaper fusion = this.plugin.getFusion();
 

@@ -23,7 +23,7 @@ public class BaseCommand {
 
     protected final CrazyInstance instance = this.plugin.getInstance();
 
-    protected final ConfigManager options = this.plugin.getOptions();
+    protected final ConfigManager options = this.plugin.getConfigManager();
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 

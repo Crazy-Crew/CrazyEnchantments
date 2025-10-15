@@ -11,7 +11,7 @@ public class ShopListener implements Listener {
 
     private final ItemManager itemManager = this.plugin.getItemManager();
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     @NotNull
     private final CrazyManager crazyManager = null;
@@ -43,7 +43,6 @@ public class ShopListener implements Listener {
         if (event.getClickedInventory() != player.getOpenInventory().getTopInventory()) return;
 
         final Collection<Category> categories = this.categoryManager.getCategories().values();
-
 
         final PlayerInventory playerInventory = player.getInventory();
 

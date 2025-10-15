@@ -14,7 +14,7 @@ public class WorldSwitchListener implements Listener {
 
     private final CrazyManager crazyManager = null;
 
-    private final ConfigManager options = this.plugin.getOptions();
+    private final ConfigManager options = this.plugin.getConfigManager();
 
     @EventHandler(ignoreCancelled = true)
     public void onWorldSwitch(PlayerChangedWorldEvent event) {

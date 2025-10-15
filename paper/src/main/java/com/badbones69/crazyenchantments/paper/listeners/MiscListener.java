@@ -24,7 +24,7 @@ public class MiscListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final ConfigManager configManager = this.plugin.getOptions();
+    private final ConfigManager configManager = this.plugin.getConfigManager();
 
     private final TinkerConfig config = this.configManager.getTinkerConfig();
 

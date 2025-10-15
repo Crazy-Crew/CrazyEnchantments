@@ -21,7 +21,7 @@ public abstract class CustomItem {
 
     protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    protected final ConfigManager configManager = this.plugin.getOptions();
+    protected final ConfigManager configManager = this.plugin.getConfigManager();
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 
