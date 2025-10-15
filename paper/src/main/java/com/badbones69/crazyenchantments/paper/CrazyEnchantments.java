@@ -70,7 +70,6 @@ public class CrazyEnchantments extends JavaPlugin {
                 "Enchantment-Types.yml",
                 "Enchantments.yml",
                 "GKitz.yml",
-                "HeadMap.yml",
                 "Messages.yml",
                 "Tinker.yml"
         ).forEach(file -> this.fileManager.addPaperFile(path.resolve(file)));
@@ -79,7 +78,10 @@ public class CrazyEnchantments extends JavaPlugin {
                 "currency.yml"
         ).forEach(file -> this.fileManager.addFile(path.resolve(file), FileType.YAML));
 
-        this.fileManager.addFile(path.resolve("blocks.json"), FileType.JSON);
+        List.of(
+                "blocks.json",
+                "heads.json"
+        ).forEach(file -> this.fileManager.addFile(path.resolve(file), FileType.JSON));
 
         this.options = new ConfigManager();
         this.options.init(FileKeys.config.getPaperConfiguration());

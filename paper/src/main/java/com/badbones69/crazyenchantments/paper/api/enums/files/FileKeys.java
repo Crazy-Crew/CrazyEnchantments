@@ -20,13 +20,14 @@ public enum FileKeys {
     config(FileType.PAPER, "config.yml"),
 
     blocks(FileType.JSON, "blocks.json"),
+    heads(FileType.JSON, "heads.json"),
+
     currency(FileType.YAML, "currency.yml"),
 
     data(FileType.PAPER, "Data.yml"),
     enchantment_types(FileType.PAPER, "Enchantment-Types.yml"),
     enchantments(FileType.PAPER, "Enchantments.yml"),
     gkitz(FileType.PAPER, "GKitz.yml"),
-    head_map(FileType.PAPER, "HeadMap.yml"),
     messages(FileType.PAPER, "Messages.yml"),
     tinker(FileType.PAPER, "Tinker.yml");
 

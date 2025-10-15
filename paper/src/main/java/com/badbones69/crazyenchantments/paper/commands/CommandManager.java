@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.*;
+import com.badbones69.crazyenchantments.paper.commands.features.admin.items.CommandSkull;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.CommandMigration;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.features.base.CommandHelp;
@@ -27,6 +28,7 @@ import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,6 +65,7 @@ public class CommandManager {
         commandManager.registerSuggestion(EnchantType.class, (context) -> instance.getRegisteredEnchantmentTypes().stream().map(EnchantType::getName).toList());
         commandManager.registerSuggestion(Player.class, (context) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
         commandManager.registerSuggestion(World.class, (context) -> server.getWorlds().stream().map(World::getName).toList());
+        commandManager.registerSuggestion(Mob.class, (context) -> ItemUtils.getRegistryAccess().getRegistry(RegistryKey.ENTITY_TYPE).stream().map(mob -> mob.getKey().asMinimalString()).toList());
 
         commandManager.registerSuggestion(CEnchantment.class, (context) -> {
             final List<String> list = new ArrayList<>();
@@ -192,6 +195,8 @@ public class CommandManager {
                 new CommandReload(),
                 new CommandSpawn(),
                 new CommandMigration(),
+
+                new CommandSkull(),
 
                 new CommandBlackSmith(),
                 new CommandTinker(),

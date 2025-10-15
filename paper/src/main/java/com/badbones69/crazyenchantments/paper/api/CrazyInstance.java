@@ -3,7 +3,10 @@ package com.badbones69.crazyenchantments.paper.api;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
+import com.badbones69.crazyenchantments.paper.api.objects.CustomHead;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
+import com.badbones69.crazyenchantments.paper.managers.PlayerManager;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
@@ -32,14 +35,18 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.BasicConfigurationNode;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,6 +67,7 @@ public class CrazyInstance {
     private final List<EnchantType> registeredEnchantmentTypes = new ArrayList<>();
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
+    private final Map<String, CustomHead> heads = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
 
     private CurrencyManager currencyManager;
@@ -89,6 +97,20 @@ public class CrazyInstance {
 
             this.blocks.add(block);
         }
+
+        final BasicConfigurationNode root = FileKeys.heads.getJsonConfiguration();
+
+        /*final YamlConfiguration customHeads = FileKeys.head_map.getPaperConfiguration();
+
+        Optional.ofNullable(customHeads.getConfigurationSection("HeadOdds")).ifPresentOrElse(section -> {
+            for (final String value : section.getKeys(false)) {
+                final double chance = section.getDouble(value);
+
+                this.heads.put(value, new CustomHead(value, chance));
+            }
+        }, () -> {
+            this.fusion.log("warn", "Failed to find `HeadOdds` section in HeadMap.yml");
+        });*/
 
         final YamlConfiguration enchantmentTypes = FileKeys.enchantment_types.getPaperConfiguration();
 
