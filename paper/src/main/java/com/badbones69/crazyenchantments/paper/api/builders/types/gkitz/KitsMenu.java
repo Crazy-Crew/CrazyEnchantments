@@ -68,7 +68,6 @@ public class KitsMenu extends InventoryBuilder {
             final List<Component> lore = new ArrayList<>();
             final GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
 
-
             final List<Component> currentLore = displayItem.lore();
 
             if (currentLore != null) {

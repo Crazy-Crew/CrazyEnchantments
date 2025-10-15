@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentE
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -115,6 +116,10 @@ public class CEnchantment {
 
     public String getCustomName() {
         return this.customName;
+    }
+
+    public String getStrippedName() {
+        return ChatColor.stripColor(this.customName);
     }
 
     public CEnchantment setCustomName(String customName) {

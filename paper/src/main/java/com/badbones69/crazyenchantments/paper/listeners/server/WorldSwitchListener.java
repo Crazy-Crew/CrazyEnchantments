@@ -25,7 +25,7 @@ public class WorldSwitchListener implements Listener {
 
         FileConfiguration config = Files.CONFIG.getFile();
 
-        boolean refreshEnabled = config.getBoolean("Settings.Refresh-Potion-Effects-On-World-Change");
+        boolean refreshEnabled = config.getBoolean("Settings.Refresh-Potion-Effects-On-World-Change", false);
 
         if (refreshEnabled) this.crazyManager.updatePlayerEffects(player);
     }

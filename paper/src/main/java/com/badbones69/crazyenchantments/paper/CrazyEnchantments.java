@@ -6,12 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.Blac
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
-import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
-import com.badbones69.crazyenchantments.paper.commands.CECommand;
-import com.badbones69.crazyenchantments.paper.commands.CETab;
-import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
-import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
-import com.badbones69.crazyenchantments.paper.commands.TinkerCommand;
+import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
@@ -64,39 +59,8 @@ public class CrazyEnchantments extends JavaPlugin {
         this.starter.getCurrencyAPI().loadCurrency();
 
         FileConfiguration config = Files.CONFIG.getFile();
-        FileConfiguration tinker = Files.TINKER.getFile();
 
-        if (!config.contains("Settings.CESuccessOverride")) {
-            config.set("Settings.CESuccessOverride", "-1");
-
-            Files.CONFIG.saveFile();
-        }
-
-        if (!config.contains("Settings.CESuccessOverride")) {
-            config.set("Settings.CEFailureOverride", "-1");
-
-            Files.CONFIG.saveFile();
-        }
-
-        if (!config.contains("Settings.Toggle-Metrics")) {
-            config.set("Settings.Toggle-Metrics", false);
-
-            Files.CONFIG.saveFile();
-        }
-
-        if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
-            config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
-            
-            Files.CONFIG.saveFile();
-        }
-
-        if (!tinker.contains("Settings.Tinker-Version")) {
-            tinker.set("Settings.Tinker-Version", 1.0);
-
-            Files.TINKER.saveFile();
-        }
-
-        if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
+        if (config.getBoolean("Settings.Toggle-Metrics", false)) new Metrics(this, 4494);
 
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(new ShopListener(), this);
@@ -136,12 +100,7 @@ public class CrazyEnchantments extends JavaPlugin {
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
 
-        registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
-
-        registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
-        registerCommand(getCommand("blacksmith"), null, new BlackSmithCommand());
-
-        registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
+        CommandManager.load();
 
         FileUtils.loadFiles();
     }

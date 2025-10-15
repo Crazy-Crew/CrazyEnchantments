@@ -263,7 +263,7 @@ public class CrazyManager {
         }
 
         if (this.gkitzToggle) {
-            final ConfigurationSection section = gkit.getConfigurationSection("Gkitz");
+            final ConfigurationSection section = gkit.getConfigurationSection("GKitz");
 
             if (section == null) {
                 this.fusion.log("warn", "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
