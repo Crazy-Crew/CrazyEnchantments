@@ -8,7 +8,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
 public class VaultCurrency extends ICurrency {
@@ -22,7 +21,7 @@ public class VaultCurrency extends ICurrency {
     private Economy vault;
 
     @Override
-    public void add(@NotNull final Player player, final int amount) {
+    public void add(@NotNull final Player player, final double amount) {
         if (this.vault == null || !isEnabled()) {
             return;
         }
@@ -31,7 +30,7 @@ public class VaultCurrency extends ICurrency {
     }
 
     @Override
-    public void minus(@NotNull final Player player, final int amount) {
+    public void minus(@NotNull final Player player, final double amount) {
         if (this.vault == null || !isEnabled()) {
             return;
         }
@@ -40,7 +39,7 @@ public class VaultCurrency extends ICurrency {
     }
 
     @Override
-    public boolean hasAmount(@NotNull final Player player, final int amount) {
+    public boolean hasAmount(@NotNull final Player player, final double amount) {
         if (this.vault == null || !isEnabled()) {
             return false;
         }

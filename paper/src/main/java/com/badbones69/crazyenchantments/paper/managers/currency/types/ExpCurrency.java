@@ -9,17 +9,17 @@ import java.util.Map;
 public class ExpCurrency extends ICurrency {
 
     @Override
-    public void add(@NotNull final Player player, final int amount) {
-        player.setTotalExperience(player.getTotalExperience() + amount);
+    public void add(@NotNull final Player player, final double amount) {
+        player.setTotalExperience((int) (player.getTotalExperience() + amount));
     }
 
     @Override
-    public void minus(@NotNull final Player player, final int amount) {
-        player.setTotalExperience(player.getTotalExperience() - amount);
+    public void minus(@NotNull final Player player, final double amount) {
+        player.setTotalExperience((int) (player.getTotalExperience() - amount));
     }
 
     @Override
-    public final boolean hasAmount(@NotNull final Player player, final int amount) {
+    public final boolean hasAmount(@NotNull final Player player, final double amount) {
         return player.getTotalExperience() >= amount;
     }
 

@@ -9,17 +9,17 @@ import java.util.Map;
 public class LevelCurrency extends ICurrency {
 
     @Override
-    public void add(@NotNull final Player player, final int amount) {
-        player.setLevel(player.getLevel() + amount);
+    public void add(@NotNull final Player player, final double amount) {
+        player.setLevel((int) (player.getLevel() + amount));
     }
 
     @Override
-    public void minus(@NotNull final Player player, final int amount) {
-        player.setLevel(player.getLevel() - amount);
+    public void minus(@NotNull final Player player, final double amount) {
+        player.setLevel((int) (player.getLevel() - amount));
     }
 
     @Override
-    public final boolean hasAmount(@NotNull final Player player, final int amount) {
+    public final boolean hasAmount(@NotNull final Player player, final double amount) {
         return player.getLevel() >= amount;
     }
 

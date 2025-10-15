@@ -16,11 +16,11 @@ public abstract class ICurrency {
 
     protected final Server server = this.plugin.getServer();
 
-    public abstract void add(@NotNull final Player player, final int amount);
+    public abstract void add(@NotNull final Player player, final double amount);
 
-    public abstract void minus(@NotNull final Player player, final int amount);
+    public abstract void minus(@NotNull final Player player, final double amount);
 
-    public abstract boolean hasAmount(@NotNull final Player player, final int amount);
+    public abstract boolean hasAmount(@NotNull final Player player, final double amount);
 
     public abstract double getAmount(@NotNull final Player player);
 

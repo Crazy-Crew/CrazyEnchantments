@@ -41,7 +41,7 @@ public class CurrencyManager {
         }
     }
 
-    public void addAmount(@NotNull final Currency currency, @NotNull final Player player, final int cost) {
+    public void addAmount(@NotNull final Currency currency, @NotNull final Player player, final double cost) {
         if (!this.currencies.containsKey(currency)) {
             return;
         }
@@ -49,7 +49,7 @@ public class CurrencyManager {
         this.currencies.get(currency).add(player, cost);
     }
 
-    public void takeAmount(@NotNull final Currency currency, @NotNull final Player player, final int cost) {
+    public void takeAmount(@NotNull final Currency currency, @NotNull final Player player, final double cost) {
         if (!this.currencies.containsKey(currency)) {
             return;
         }
@@ -57,7 +57,7 @@ public class CurrencyManager {
         this.currencies.get(currency).minus(player, cost);
     }
 
-    public void failed(@NotNull final Currency currency, @NotNull final Player player, final int cost) {
+    public void failed(@NotNull final Currency currency, @NotNull final Player player, final double cost) {
         if (!this.currencies.containsKey(currency)) {
             return;
         }
@@ -79,7 +79,7 @@ public class CurrencyManager {
         return this.currencies.get(currency).getAmount(player);
     }
 
-    public boolean hasAmount(@NotNull final Currency currency, @NotNull final Player player, final int cost) {
+    public boolean hasAmount(@NotNull final Currency currency, @NotNull final Player player, final double cost) {
         if (!this.currencies.containsKey(currency)) {
             return false;
         }
