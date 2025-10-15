@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
@@ -88,15 +88,15 @@ public class BlackSmithMenu extends StaticInventory {
                     if (cost > 0) {
                         final Currency currency = this.config.getTransactionCurrency(); // supply currency
 
-                        if (this.api.canBuy(player, currency, cost)) {
-                            this.api.takeCurrency(player, currency, cost);
+                        if (this.currencyManager.hasAmount(currency, player, cost)) {
+                            this.currencyManager.takeAmount(currency, player, cost);
                         } else {
-                            this.methods.switchCurrency(player, currency, "{money_needed}", "{xp}", String.valueOf(cost - this.api.getCurrency(player, currency)));
+                            this.currencyManager.failed(currency, player, cost);
 
                             return;
                         }
 
-                        this.methods.addItemToInventory(player, result.getResultItem());
+                        //this.methods.addItemToInventory(player, result.getResultItem());
 
                         inventory.setItem(this.inputSlot, null);
                         inventory.setItem(this.secondaryInputSlot, null);
@@ -183,7 +183,7 @@ public class BlackSmithMenu extends StaticInventory {
 
                 if (itemStack == null || itemStack.isEmpty()) continue;
 
-                this.methods.addItemToInventory(player, itemStack);
+                //this.methods.addItemToInventory(player, itemStack);
             }
 
             inventory.clear();

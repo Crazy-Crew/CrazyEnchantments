@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.economy;
+package com.badbones69.crazyenchantments.paper.managers.currency.enums;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,24 +20,36 @@ public enum Currency {
      * @return True if it is supported and false if not.
      */
     public static boolean isCurrency(@NotNull final String currency) {
-        for (Currency value : Currency.values()) {
-            if (currency.equalsIgnoreCase(value.getName())) return true;
+        boolean isCurrency = false;
+
+        for (final Currency value : Currency.values()) {
+            if (!currency.equalsIgnoreCase(value.getName())) continue;
+
+            isCurrency = true;
+
+            break;
         }
 
-        return false;
+        return isCurrency;
     }
     
     /**
      * Get a currency enum.
-     * @param currency The currency you want.
+     * @param name The currency you want.
      * @return The currency enum.
      */
-    public static Currency getCurrency(@NotNull final String currency) {
-        for (Currency value : Currency.values()) {
-            if (currency.equalsIgnoreCase(value.getName())) return value;
+    public static Currency getCurrency(@NotNull final String name) {
+        Currency currency = Currency.XP_LEVEL;
+
+        for (final Currency value : Currency.values()) {
+            if (!name.equalsIgnoreCase(value.getName())) continue;
+
+            currency = value;
+
+            break;
         }
 
-        return Currency.XP_LEVEL;
+        return currency;
     }
     
     /**

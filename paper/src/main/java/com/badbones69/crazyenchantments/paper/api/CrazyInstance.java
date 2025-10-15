@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
@@ -19,6 +19,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.managers.TinkerManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.mods.Dependencies;
@@ -60,6 +61,7 @@ public class CrazyInstance {
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
 
+    private CurrencyManager currencyManager;
     private CategoryManager categoryManager;
     private TinkerManager tinkerManager;
     private ItemManager itemManager;
@@ -100,13 +102,18 @@ public class CrazyInstance {
 
         final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
+        this.currencyManager = new CurrencyManager();
         this.categoryManager = new CategoryManager();
         this.tinkerManager = new TinkerManager();
         this.itemManager = new ItemManager();
         this.kitsManager = new KitsManager();
 
+        this.currencyManager.init(); // update currencies
+
         this.categoryManager.init(); // update categories
+
         this.itemManager.init(); // update items
+
         this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
@@ -152,8 +159,12 @@ public class CrazyInstance {
 
         this.options.init(config); // re-map to objects
 
+        this.currencyManager.init(); // update currencies
+
         this.categoryManager.init(); // update categories
+
         this.itemManager.reloadItems(); // reload items
+
         this.kitsManager.init(); // update kits
 
         loadShopOptions(config); // load shop options
@@ -503,6 +514,10 @@ public class CrazyInstance {
 
     public @NotNull final ItemBuilder getEnchantmentBookBuilder() {
         return new ItemBuilder(this.options.getEnchantBook());
+    }
+
+    public @NotNull final CurrencyManager getCurrencyManager() {
+        return this.currencyManager;
     }
 
     public @NotNull final CategoryManager getCategoryManager() {

@@ -4,8 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
@@ -17,6 +16,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
+import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import net.kyori.adventure.text.Component;
@@ -68,9 +68,7 @@ public class SwordEnchantments implements Listener {
     @NotNull
     private final BossBarController bossBarController = this.plugin.getBossBarController();
 
-    // Economy Management.
-    @NotNull
-    private final CurrencyAPI currencyAPI = null;
+    private final CurrencyManager currencyManager = this.instance.getCurrencyManager();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
@@ -206,14 +204,14 @@ public class SwordEnchantments implements Listener {
         if (en instanceof Player player && EnchantUtils.isEventActive(CEnchantments.SKILLSWIPE, damager, item, enchantments)) {
             int amount = 4 + enchantments.get(CEnchantments.SKILLSWIPE.getEnchantment());
 
-            if (player.getTotalExperience() > 0) {
-                if (this.currencyAPI.getCurrency(player, Currency.XP_TOTAL) >= amount) {
-                    this.currencyAPI.takeCurrency(player, Currency.XP_TOTAL, amount);
+            if (player.getTotalExperience() > 0) { //todo() allow changing this to give money by adding per enchant currency support.
+                if (this.currencyManager.hasAmount(Currency.XP_TOTAL, player, amount)) {
+                    this.currencyManager.takeAmount(Currency.XP_TOTAL, player, amount);
                 } else {
                     player.setTotalExperience(0);
                 }
 
-                this.currencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
+                this.currencyManager.addAmount(Currency.XP_TOTAL, damager, amount);
             }
         }
 

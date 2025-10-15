@@ -5,11 +5,11 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.InventoryBuilder;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
+import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
@@ -32,9 +32,9 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     protected final CrazyInstance instance = this.plugin.getInstance();
 
-    protected final FusionPaper fusion = this.plugin.getFusion();
+    protected final CurrencyManager currencyManager = this.instance.getCurrencyManager();
 
-    protected final CurrencyAPI api = null;
+    protected final FusionPaper fusion = this.plugin.getFusion();
 
     protected final Methods methods = null;
 

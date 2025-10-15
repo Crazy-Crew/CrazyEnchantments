@@ -1,9 +1,10 @@
 package com.badbones69.crazyenchantments.paper.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -17,7 +18,9 @@ public class TinkerManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CurrencyAPI api = null;
+    private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final CurrencyManager currencyManager = this.instance.getCurrencyManager();
 
     public boolean takeExperience(@NotNull final Player player, @NotNull final Currency currency, @NotNull final EquipmentSlot slot) {
         final PlayerInventory inventory = player.getInventory();
@@ -36,7 +39,7 @@ public class TinkerManager {
 
         inventory.setItem(slot, null);
 
-        this.api.giveCurrency(player, currency, amount);
+        this.currencyManager.addAmount(currency, player, amount);
 
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
 

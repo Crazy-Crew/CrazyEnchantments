@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.configs.types.guis;
 
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.interfaces.IConfig;
 import net.kyori.adventure.audience.Audience;

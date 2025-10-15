@@ -10,9 +10,9 @@ import com.badbones69.crazyenchantments.paper.managers.configs.types.items.Navig
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ProtectionCrystalConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ScramblerConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.SlotCrystalConfig;
-import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.util.Optional;
 
@@ -63,6 +63,8 @@ public class ConfigManager {
     private ScramblerConfig scramblerConfig;
     private TinkerConfig tinkerConfig;
     private KitConfig kitConfig;
+
+    private VaultConfig vaultConfig;
 
     public void init(@NotNull final YamlConfiguration configuration) {
         Optional.ofNullable(configuration.getConfigurationSection("Settings")).ifPresentOrElse(section -> {
@@ -131,6 +133,12 @@ public class ConfigManager {
         Optional.ofNullable(tinker.getConfigurationSection("Settings")).ifPresentOrElse(tink -> this.tinkerConfig = new TinkerConfig(tink), () -> {
             throw new CrazyException("Tinker.yml does not have the configuration section needed!");
         });
+
+        final CommentedConfigurationNode currency = FileKeys.currency.getYamlConfiguration();
+
+        Optional.of(currency.node("settings", "vault")).ifPresentOrElse(config -> this.vaultConfig = new VaultConfig(config), () -> {
+            throw new CrazyException("currency.yml does not have the configuration node needed!");
+        });
     }
 
     public @NotNull final ProtectionCrystalConfig getProtectionCrystalConfig() {
@@ -155,6 +163,10 @@ public class ConfigManager {
 
     public @NotNull final TinkerConfig getTinkerConfig() {
         return this.tinkerConfig;
+    }
+
+    public @NotNull final VaultConfig getVaultConfig() {
+        return this.vaultConfig;
     }
 
     public @NotNull final KitConfig getKitConfig() {

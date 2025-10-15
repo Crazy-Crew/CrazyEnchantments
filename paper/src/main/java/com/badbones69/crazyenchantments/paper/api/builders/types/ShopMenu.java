@@ -1,8 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
@@ -13,8 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShopMenu extends StaticInventory {
-
-    private final CurrencyAPI currencyAPI = null;
 
     private final ShopManager shopManager = null;
 
@@ -28,8 +25,10 @@ public class ShopMenu extends StaticInventory {
     public void open() {
         final Map<String, String> placeholders = new HashMap<>();
 
+        final Player player = getPlayer();
+
         for (final Currency currency : Currency.values()) {
-            placeholders.put("{" + currency.getName() + "}", String.valueOf(this.currencyAPI.getCurrency(getPlayer(), currency)));
+            placeholders.put("{" + currency.getName() + "}", String.valueOf(this.currencyManager.getAmount(currency, player)));
         }
 
         for (final Map.Entry<ItemBuilder, Integer> builders : this.shopManager.getCustomizerItems().entrySet()) {

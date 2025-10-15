@@ -75,6 +75,10 @@ public class CrazyEnchantments extends JavaPlugin {
                 "Tinker.yml"
         ).forEach(file -> this.fileManager.addPaperFile(path.resolve(file)));
 
+        List.of(
+                "currency.yml"
+        ).forEach(file -> this.fileManager.addFile(path.resolve(file), FileType.YAML));
+
         this.fileManager.addFile(path.resolve("blocks.json"), FileType.JSON);
 
         this.options = new ConfigManager();
@@ -133,9 +137,6 @@ public class CrazyEnchantments extends JavaPlugin {
         //server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
     }
 
-    public @NotNull final PluginManager getPluginManager() {
-        return this.pluginManager;
-    }
 
     public @NotNull final BossBarController getBossBarController() {
         return bossBarController;
@@ -147,6 +148,14 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final PaperFileManager getFileManager() {
         return this.fileManager;
+    }
+
+    public @NotNull final PluginManager getPluginManager() {
+        return this.pluginManager;
+    }
+
+    public @NotNull final ConfigManager getConfigManager() {
+        return this.options;
     }
 
     public @NotNull final TinkerManager geTinkerManager() {
@@ -163,10 +172,6 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final CrazyInstance getInstance() {
         return this.instance;
-    }
-
-    public @NotNull final ConfigManager getOptions() {
-        return this.options;
     }
 
     public @NotNull final FusionPaper getFusion() {
