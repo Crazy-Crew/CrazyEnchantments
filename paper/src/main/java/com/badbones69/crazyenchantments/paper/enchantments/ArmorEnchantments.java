@@ -62,9 +62,6 @@ public class ArmorEnchantments implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Methods methods = null;
-
-    @NotNull
     private final CrazyManager crazyManager = null;
 
     // Settings.
@@ -318,11 +315,11 @@ public class ArmorEnchantments implements Listener {
             if (EnchantUtils.isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(enchants.get(CEnchantments.CACTUS.getEnchantment()));
 
             if (EnchantUtils.isEventActive(CEnchantments.STORMCALLER, player, armor, enchants)) {
-                Entity lightning = this.methods.lightning(damager);
+                Entity lightning = Methods.lightning(damager);
 
-                for (LivingEntity en : this.methods.getNearbyLivingEntities(2D, player)) {
+                for (LivingEntity en : Methods.getNearbyLivingEntities(2D, player)) {
                     EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(en, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(player).withDirectEntity(lightning).build(), 5D);
-                    this.methods.entityEvent(player, en, damageByEntityEvent);
+                    Methods.entityEvent(player, en, damageByEntityEvent);
                 }
 
                 damager.damage(5D);
@@ -361,7 +358,7 @@ public class ArmorEnchantments implements Listener {
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();
 
-        if (!this.pluginSupport.allowCombat(other.getLocation()) || this.pluginSupport.isFriendly(player, other) || this.methods.hasPermission(other, "bypass.aura", false)) return;
+        if (!this.pluginSupport.allowCombat(other.getLocation()) || this.pluginSupport.isFriendly(player, other) || Methods.hasPermission(other, "bypass.aura", false)) return;
 
         Map<CEnchantment, Integer> enchantments = Map.of(enchant.getEnchantment(), level);
 
@@ -412,7 +409,7 @@ public class ArmorEnchantments implements Listener {
             Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.SELFDESTRUCT, player, item, enchantments)) {
-                this.methods.explode(player);
+                Methods.explode(player);
 
                 List<ItemStack> items = event.getDrops().stream().filter(drop -> ProtectionCrystalSettings.isProtected(drop.getPersistentDataContainer()) && this.protectionCrystalSettings.isProtectionSuccessful(player)).toList();
 

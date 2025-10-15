@@ -31,9 +31,6 @@ public class CEPlayer {
 
     private final Server server = this.plugin.getServer();
 
-    @NotNull
-    private final Methods methods = null;
-
     private final Player player;
     private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
@@ -111,7 +108,7 @@ public class CEPlayer {
                 }
             }
 
-            this.methods.addItemToInventory(this.player, item);
+            Methods.addItemToInventory(this.player, item);
         }
 
         new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {

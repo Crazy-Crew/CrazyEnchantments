@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -58,9 +58,6 @@ public class SwordEnchantments implements Listener {
     @NotNull
     private final CrazyManager crazyManager = null;
 
-    @NotNull
-    private final Methods methods = null;
-
     // Plugin Support.
     @NotNull
     private final PluginSupport pluginSupport = null;
@@ -77,7 +74,7 @@ public class SwordEnchantments implements Listener {
         if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (this.options.isBreakRageOnDamage() && event.getEntity() instanceof Player player) {
-            final ItemStack itemStack = this.methods.getItemInHand(player);
+            final ItemStack itemStack = Methods.getItemInHand(player);
 
             if (!itemStack.isEmpty()) {
                 CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
@@ -103,7 +100,7 @@ public class SwordEnchantments implements Listener {
         if (!(event.getDamager() instanceof final Player damager)) return;
 
         CEPlayer cePlayer = this.crazyManager.getCEPlayer(damager);
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
         if (item.isEmpty()) return;
 
@@ -115,7 +112,7 @@ public class SwordEnchantments implements Listener {
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISARMER, damager, item, enchantments)) {
             Player player = (Player) event.getEntity();
 
-            EquipmentSlot equipmentSlot = getSlot(this.methods.percentPick(4, 0));
+            EquipmentSlot equipmentSlot = getSlot(Methods.percentPick(4, 0));
 
             ItemStack armor = switch (equipmentSlot) {
                 case HEAD -> player.getEquipment().getHelmet();
@@ -133,7 +130,7 @@ public class SwordEnchantments implements Listener {
                     case FEET -> player.getEquipment().setBoots(null);
                 }
 
-                this.methods.addItemToInventory(player, armor);
+                Methods.addItemToInventory(player, armor);
             }
         }
 
@@ -269,10 +266,9 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.PARALYZE, damager, item, enchantments)) {
-
-            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, damager)) {
+            for (LivingEntity entity : Methods.getNearbyLivingEntities(2D, damager)) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, DamageSource.builder(DamageType.INDIRECT_MAGIC).withDirectEntity(damager).build(), 5D);
-                this.methods.entityEvent(damager, entity, damageByEntityEvent);
+                Methods.entityEvent(damager, entity, damageByEntityEvent);
             }
 
             en.getWorld().strikeLightningEffect(en.getLocation());
@@ -312,7 +308,7 @@ public class SwordEnchantments implements Listener {
 
         Player damager = event.getEntity().getKiller();
         Player player = event.getEntity();
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
         Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.HEADLESS, damager, item, enchantments)) {
@@ -336,7 +332,7 @@ public class SwordEnchantments implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
             Player damager = event.getEntity().getKiller();
-            ItemStack item = this.methods.getItemInHand(damager);
+            ItemStack item = Methods.getItemInHand(damager);
 
             if (item.isEmpty()) return;
 

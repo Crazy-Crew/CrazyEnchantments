@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.currency.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.managers.currency.interfaces.ICurrency;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

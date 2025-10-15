@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;

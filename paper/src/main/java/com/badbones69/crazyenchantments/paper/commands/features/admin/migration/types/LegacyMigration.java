@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
 import org.bukkit.command.CommandSender;

@@ -28,9 +28,6 @@ public class ToolEnchantments implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
-    private final Methods methods = null;
-
     @EventHandler()
     public void onPlayerClick(PlayerInteractEvent event) {
         // Check what hand is being used as the event fires for each hand.
@@ -40,7 +37,7 @@ public class ToolEnchantments implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTelepathy(BlockDropItemEvent event) {
         Player player = event.getPlayer();
-        ItemStack tool = this.methods.getItemInHand(player);
+        ItemStack tool = Methods.getItemInHand(player);
 
         if (tool.isEmpty()) return;
 
@@ -48,11 +45,11 @@ public class ToolEnchantments implements Listener {
 
         event.setCancelled(true);
 
-        this.methods.addItemToInventory(player, event.getItems());
+        Methods.addItemToInventory(player, event.getItems());
     }
 
     private void updateEffects(@NotNull final Player player) {
-        ItemStack item = this.methods.getItemInHand(player);
+        ItemStack item = Methods.getItemInHand(player);
 
         if (item.isEmpty()) return;
 

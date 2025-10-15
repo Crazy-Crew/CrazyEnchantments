@@ -1,16 +1,12 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,12 +26,6 @@ public enum Dust {
     private final List<String> knownNames;
     private final int max;
     private final int min;
-
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    @NotNull
-    private final Methods methods  = null;
     
     Dust(@NotNull final String name, @NotNull final String configName, @NotNull final List<String> knowNames) {
         this.name = name;
@@ -87,7 +77,7 @@ public enum Dust {
     }
     
     public ItemStack getDust(final int amount) {
-        return getDust(this.methods.percentPick(this.max, this.min), amount);
+        return getDust(Methods.percentPick(this.max, this.min), amount);
     }
 
     public ItemStack getDust(final int percent, final int amount) {

@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.managers.TinkerManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;

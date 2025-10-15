@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.currency.types.plugins;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.currency.VaultConfig;
 import com.badbones69.crazyenchantments.paper.managers.currency.interfaces.ICurrency;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;

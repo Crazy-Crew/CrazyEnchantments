@@ -1,26 +1,17 @@
 package com.badbones69.crazyenchantments.paper.api.objects.enchants;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnchantmentType {
-
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    @NotNull
-    private final Methods method = null;
 
     private final String displayName;
     private final int slot;
@@ -49,8 +40,7 @@ public class EnchantmentType {
     }
 
     public EnchantmentType getFromName(@NotNull final String name) {
-        //return this.methods.getFromName(name);
-        return null;
+        return Methods.getFromName(name);
     }
 
     public String getName() {

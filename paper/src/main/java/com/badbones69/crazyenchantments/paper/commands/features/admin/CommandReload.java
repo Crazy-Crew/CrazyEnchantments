@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;

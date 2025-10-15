@@ -29,8 +29,6 @@ public class BaseCommand {
 
     protected final Path path = this.plugin.getDataPath();
 
-    protected final Methods methods = null;
-
     protected final CrazyManager crazyManager = null;
 
 }

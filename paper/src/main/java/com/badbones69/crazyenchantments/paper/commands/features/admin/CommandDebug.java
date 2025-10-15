@@ -1,8 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -31,12 +30,12 @@ public class CommandDebug extends BaseCommand { //todo() legacy trash
         }
 
         if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
-            sender.sendMessage(ColorUtils.getPrefix("<green>All enchantments are loaded."));
+            //sender.sendMessage(ColorUtils.getPrefix("<green>All enchantments are loaded."));
         } else {
             if (!brokenEnchantments.isEmpty()) {
                 int amount = 1;
-                sender.sendMessage(ColorUtils.getPrefix("<red>Missing Enchantments:"));
-                sender.sendMessage(ColorUtils.getPrefix("<gray>These enchantments are broken due to one of the following reasons:"));
+                //sender.sendMessage(ColorUtils.getPrefix("<red>Missing Enchantments:"));
+                //sender.sendMessage(ColorUtils.getPrefix("<gray>These enchantments are broken due to one of the following reasons:"));
 
                 for (String broke : brokenEnchantments) {
                     //sender.sendMessage(ColorUtils.color("<red>#" + amount + ": <gold>" + broke));
@@ -50,8 +49,8 @@ public class CommandDebug extends BaseCommand { //todo() legacy trash
 
             if (!brokenEnchantmentTypes.isEmpty()) {
                 int i = 1;
-                sender.sendMessage(ColorUtils.getPrefix("<red>Enchantments with null types:"));
-                sender.sendMessage(ColorUtils.getPrefix("<gray>These enchantments are broken due to the enchantment type being null."));
+                //sender.sendMessage(ColorUtils.getPrefix("<red>Enchantments with null types:"));
+                //sender.sendMessage(ColorUtils.getPrefix("<gray>These enchantments are broken due to the enchantment type being null."));
 
                 for (String broke : brokenEnchantmentTypes) {
                     //sender.sendMessage(ColorUtils.color("<red>#" + i + ": <gold>" + broke));
@@ -60,7 +59,7 @@ public class CommandDebug extends BaseCommand { //todo() legacy trash
             }
         }
 
-        sender.sendMessage(ColorUtils.getPrefix("<red>Enchantment Types and amount of items in each:"));
+        //sender.sendMessage(ColorUtils.getPrefix("<red>Enchantment Types and amount of items in each:"));
 
         //MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("<red>" + type.getName() + ": <gold>" + type.getEnchantableMaterials().size())));
     }

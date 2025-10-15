@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.controllers.settings;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -19,14 +19,8 @@ import java.util.UUID;
 
 public class ProtectionCrystalSettings {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    @NotNull
-    private final Methods methods = null;
-
     //@NotNull
-    //private final String protectionString = ColorUtils.color(FileKeys.config.getPaperConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection"));
+    //private final String protectionString = ColorUtils.color(FileKeys.config.getPaperConfiguration().getString("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection")); //todo() this
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
@@ -80,7 +74,7 @@ public class ProtectionCrystalSettings {
 
         final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
-        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return this.methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
+        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
 
         return true;
     }

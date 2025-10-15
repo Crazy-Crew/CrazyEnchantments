@@ -7,8 +7,8 @@ import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -38,8 +38,6 @@ public class DustControlListener implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyInstance instance = this.plugin.getInstance();
-
-    private final Methods methods = null;
 
     private void setBookLore(@NotNull final ItemStack item, final int percent, @NotNull final String rate, @NotNull final CEnchantment enchantment, @NotNull final EnchantedBook data) {
         if (item.isEmpty()) return;
@@ -114,7 +112,7 @@ public class DustControlListener implements Listener {
         if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
             int per = dustData.getChance();
 
-            if (this.methods.hasArgument("%success_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
+            if (Methods.hasArgument("%success_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
                 int total = bookData.getSuccessChance();
 
                 if (total >= 100) return;
@@ -134,7 +132,7 @@ public class DustControlListener implements Listener {
 
                 setBookLore(book, per, "Success", enchantment, bookData);
 
-                player.setItemOnCursor(this.methods.removeItem(dust));
+                player.setItemOnCursor(Methods.removeItem(dust));
             }
 
             return;
@@ -143,7 +141,7 @@ public class DustControlListener implements Listener {
         if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
             int per = dustData.getChance();
 
-            if (this.methods.hasArgument("%destroy_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
+            if (Methods.hasArgument("%destroy_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
                 int total = bookData.getDestroyChance();
                 if (total <= 0) return;
 
@@ -162,7 +160,7 @@ public class DustControlListener implements Listener {
 
                 setBookLore(book, per, "Destroy", enchantment, bookData);
 
-                player.setItemOnCursor(this.methods.removeItem(dust));
+                player.setItemOnCursor(Methods.removeItem(dust));
             }
         }
     }
@@ -196,19 +194,19 @@ public class DustControlListener implements Listener {
         } else if (data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
             event.setCancelled(true);
 
-            if (this.methods.isInventoryFull(player)) {
+            if (Methods.isInventoryFull(player)) {
                 Messages.INVENTORY_FULL.sendMessage(player);
 
                 return true;
             }
 
             if (mainHand) {
-                inventory.setItemInMainHand(this.methods.removeItem(item));
+                inventory.setItemInMainHand(Methods.removeItem(item));
             } else {
-                inventory.setItemInOffHand(this.methods.removeItem(item));
+                inventory.setItemInOffHand(Methods.removeItem(item));
             }
 
-            ItemStack item2 = pickDust().getDust(this.methods.percentPick(data.getChance() + 1, 1), 1);
+            ItemStack item2 = pickDust().getDust(Methods.percentPick(data.getChance() + 1, 1), 1);
 
             inventory.addItem(item2);
 
@@ -221,7 +219,7 @@ public class DustControlListener implements Listener {
 
                 //ColorUtils.color(config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime"));
 
-                this.methods.fireWork(player.getLocation().add(0, 1, 0), colors);
+                Methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }
         }
 

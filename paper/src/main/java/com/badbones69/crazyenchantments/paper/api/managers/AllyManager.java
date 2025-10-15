@@ -1,10 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;

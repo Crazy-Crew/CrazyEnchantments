@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -72,7 +73,7 @@ public class CommandSpawn extends BaseCommand {
                 final String getter = level.get();
 
                 if (getter.contains("-")) {
-                    value = this.methods.getRandomNumber(getter);
+                    value = Methods.getRandomNumber(getter);
                 } else {
                     value = Integer.parseInt(getter);
                 }

@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
@@ -32,7 +33,7 @@ public class CommandAdd extends BaseCommand {
             return;
         }
 
-        final ItemStack itemStack = this.methods.getItemInHand(player);
+        final ItemStack itemStack = Methods.getItemInHand(player);
 
         if (itemStack.isEmpty()) {
             Messages.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
@@ -43,11 +44,11 @@ public class CommandAdd extends BaseCommand {
         if (isVanilla) {
             itemStack.addUnsafeEnchantment(vanillaEnchantment, level);
 
-            this.methods.setItemInHand(player, itemStack);
+            Methods.setItemInHand(player, itemStack);
         } else {
             this.crazyManager.addEnchantment(itemStack, customEnchantment, level);
 
-            this.methods.setItemInHand(player, itemStack);
+            Methods.setItemInHand(player, itemStack);
         }
     }
 
@@ -66,7 +67,7 @@ public class CommandAdd extends BaseCommand {
             return;
         }
 
-        final ItemStack itemStack = this.methods.getItemInHand(player).clone();
+        final ItemStack itemStack = Methods.getItemInHand(player).clone();
 
         if (itemStack.getType() == Material.AIR) {
             Messages.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
@@ -77,10 +78,10 @@ public class CommandAdd extends BaseCommand {
         if (isVanilla) {
             itemStack.removeEnchantment(vanillaEnchantment);
 
-            this.methods.setItemInHand(player, itemStack);
+            Methods.setItemInHand(player, itemStack);
         } else {
             if (this.instance.getEnchantments(itemStack).containsKey(customEnchantment)) {
-                this.methods.setItemInHand(player, this.instance.removeEnchantment(itemStack, customEnchantment));
+                Methods.setItemInHand(player, this.instance.removeEnchantment(itemStack, customEnchantment));
 
                 Messages.REMOVED_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
                     put("{enchantment}", customEnchantment.getCustomName());

@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -47,9 +47,6 @@ public class BowEnchantments implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyInstance instance = this.plugin.getInstance();
-
-    @NotNull
-    private final Methods methods = null;
 
     // Plugin Support.
     @NotNull
@@ -103,7 +100,7 @@ public class BowEnchantments implements Listener {
         this.bowUtils.spawnWebs(event.getHitEntity(), enchantedArrow);
 
         if (EnchantUtils.isEventActive(CEnchantments.BOOM, shooter, enchantedArrow.bow(), enchantedArrow.enchantments())) {
-            this.methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
+            Methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
             enchantedArrow.arrow().remove();
         }
 
@@ -121,7 +118,7 @@ public class BowEnchantments implements Listener {
             } catch (Exception ignore) {
             }
 
-            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
+            for (LivingEntity entity : Methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);

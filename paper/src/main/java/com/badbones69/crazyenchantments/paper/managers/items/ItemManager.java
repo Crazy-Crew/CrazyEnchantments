@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.items;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.CloseItem;
 import com.badbones69.crazyenchantments.paper.managers.items.objects.PointerItem;

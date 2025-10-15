@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;

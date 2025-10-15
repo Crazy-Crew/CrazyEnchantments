@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.objects.TinkerEnchantInfo;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;

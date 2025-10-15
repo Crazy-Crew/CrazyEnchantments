@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.enums.v2;
+package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;

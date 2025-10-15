@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -50,9 +50,6 @@ public class AxeEnchantments implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Methods methods = null;
-
-    @NotNull
     private final CrazyManager crazyManager = null;
 
     // Plugin Support.
@@ -64,7 +61,7 @@ public class AxeEnchantments implements Listener {
         if (!event.isDropItems() || EventUtils.isIgnoredEvent(event)) return;
 
         Player player = event.getPlayer();
-        ItemStack currentItem = methods.getItemInHand(player);
+        ItemStack currentItem = Methods.getItemInHand(player);
 
         Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
@@ -79,11 +76,11 @@ public class AxeEnchantments implements Listener {
 
         for (Block block : blockList) {
             if (block == event.getBlock()) continue;
-            if (this.methods.playerBreakBlock(player, block, currentItem, true)) continue;
-            if (damage) this.methods.removeDurability(currentItem, player);
+            if (Methods.playerBreakBlock(player, block, currentItem, true)) continue;
+            if (damage) Methods.removeDurability(currentItem, player);
         }
 
-        if (!damage) this.methods.removeDurability(currentItem, player);
+        if (!damage) Methods.removeDurability(currentItem, player);
 
     }
 
@@ -137,7 +134,7 @@ public class AxeEnchantments implements Listener {
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!(event.getDamager() instanceof Player damager)) return;
 
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
 
@@ -184,14 +181,14 @@ public class AxeEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.DEMONFORGED, damager, item, enchantments) && entity instanceof Player player) {
 
-            ItemStack armorItem = switch (this.methods.percentPick(4, 0)) {
+            ItemStack armorItem = switch (Methods.percentPick(4, 0)) {
                 case 1 -> player.getEquipment().getHelmet();
                 case 2 -> player.getEquipment().getChestplate();
                 case 3 -> player.getEquipment().getLeggings();
                 default -> player.getEquipment().getBoots();
             };
 
-            this.methods.removeDurability(armorItem, player);
+            Methods.removeDurability(armorItem, player);
         }
     }
 
@@ -204,7 +201,7 @@ public class AxeEnchantments implements Listener {
         if (!this.pluginSupport.allowCombat(player.getLocation())) return;
 
         Player damager = player.getKiller();
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
         if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.instance.getEnchantments(item))) {
             event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
@@ -217,7 +214,7 @@ public class AxeEnchantments implements Listener {
 
         if (killer == null) return;
 
-        ItemStack item = this.methods.getItemInHand(killer);
+        ItemStack item = Methods.getItemInHand(killer);
         Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
         Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
 

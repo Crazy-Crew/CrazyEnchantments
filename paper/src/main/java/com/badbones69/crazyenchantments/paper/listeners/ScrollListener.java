@@ -6,8 +6,8 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -39,8 +39,6 @@ public class ScrollListener implements Listener {
 
     private final ConfigManager options = this.plugin.getConfigManager();
 
-    private final Methods methods = null;
-
     @EventHandler(ignoreCancelled = true)
     public void onScrollUse(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
@@ -66,16 +64,16 @@ public class ScrollListener implements Listener {
 
         switch (type.getConfigName()) {
             case "BlackScroll" -> {
-                if (this.methods.isInventoryFull(player)) return;
+                if (Methods.isInventoryFull(player)) return;
 
                 final List<CEnchantment> enchantments = this.instance.getEnchantmentsOnItem(item);
 
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     event.setCancelled(true);
 
-                    player.setItemOnCursor(this.methods.removeItem(scroll));
+                    player.setItemOnCursor(Methods.removeItem(scroll));
 
-                    if (this.options.isBlackScrollChanceToggle() && !this.methods.randomPicker(this.options.getBlackScrollChance(), 100)) {
+                    if (this.options.isBlackScrollChanceToggle() && !Methods.randomPicker(this.options.getBlackScrollChance(), 100)) {
                         Messages.BLACK_SCROLL_UNSUCCESSFUL.sendMessage(player);
 
                         return;
@@ -99,7 +97,7 @@ public class ScrollListener implements Listener {
 
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
 
-                        player.setItemOnCursor(this.methods.removeItem(scroll));
+                        player.setItemOnCursor(Methods.removeItem(scroll));
 
                         return;
                     }
@@ -118,7 +116,7 @@ public class ScrollListener implements Listener {
                 event.setCancelled(true);
                 event.setCurrentItem(orderedItem);
 
-                player.setItemOnCursor(this.methods.removeItem(scroll));
+                player.setItemOnCursor(Methods.removeItem(scroll));
             }
         }
     }

@@ -36,8 +36,6 @@ public abstract class StaticInventory extends InventoryBuilder {
 
     protected final FusionPaper fusion = this.plugin.getFusion();
 
-    protected final Methods methods = null;
-
     protected final Server server = this.plugin.getServer();
 
     private final Player player;

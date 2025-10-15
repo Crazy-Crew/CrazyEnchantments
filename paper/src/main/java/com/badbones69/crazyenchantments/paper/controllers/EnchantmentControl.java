@@ -5,8 +5,8 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookFailEvent;
@@ -39,9 +39,6 @@ public class EnchantmentControl implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Methods methods = null;
-
-    @NotNull
     private final CrazyManager crazyManager = null;
 
     @EventHandler(ignoreCancelled = true)
@@ -58,7 +55,7 @@ public class EnchantmentControl implements Listener {
            || item.getAmount() > 1
            || !this.instance.isEnchantmentBook(book)
            || this.instance.isEnchantmentBook(item)
-           || this.methods.inCreativeMode(player)
+           || Methods.inCreativeMode(player)
         ) return;
 
         final CEBook ceBook = this.instance.getBook(book);
@@ -74,7 +71,7 @@ public class EnchantmentControl implements Listener {
 
         PreBookApplyEvent preApplyEvent = new PreBookApplyEvent(player, item, ceBook);
 
-        if (this.methods.isEventCancelled(preApplyEvent)) return;
+        if (Methods.isEventCancelled(preApplyEvent)) return;
 
         if (hasEnchantment) {
             if (!config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle")
@@ -84,7 +81,7 @@ public class EnchantmentControl implements Listener {
             event.setCancelled(true);
 
             if (preApplyEvent.getSuccessful()) {
-                if (!this.methods.isEventCancelled(new BookApplyEvent(player, item, ceBook))) {
+                if (!Methods.isEventCancelled(new BookApplyEvent(player, item, ceBook))) {
                     final ItemStack clone = item.clone();
 
                     this.crazyManager.addEnchantment(clone, enchantment, ceBook.getLevel());
@@ -104,7 +101,7 @@ public class EnchantmentControl implements Listener {
 
                 return;
             } else if (preApplyEvent.getDestroyed()) {
-                if (!this.methods.isEventCancelled(new BookDestroyEvent(player, item, ceBook))) {
+                if (!Methods.isEventCancelled(new BookDestroyEvent(player, item, ceBook))) {
                     if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break", true)) {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
@@ -128,17 +125,17 @@ public class EnchantmentControl implements Listener {
                     }
 
                     player.setItemOnCursor(null);
-                    this.methods.playItemBreak(player, book);
+                    Methods.playItemBreak(player, book);
                 }
 
                 return;
             } else {
-                if (!this.methods.isEventCancelled(new BookFailEvent(player, item, ceBook))) {
+                if (!Methods.isEventCancelled(new BookFailEvent(player, item, ceBook))) {
                     player.setItemOnCursor(null);
 
                     Messages.ENCHANTMENT_UPGRADE_FAILED.sendMessage(player);
 
-                    this.methods.playItemBreak(player, book);
+                    Methods.playItemBreak(player, book);
                 }
 
                 return;
@@ -179,13 +176,13 @@ public class EnchantmentControl implements Listener {
 
         if (preApplyEvent.getDestroyed()) {
             if (hasWhiteScrollProtection) {
-                this.methods.playItemBreak(player, book);
+                Methods.playItemBreak(player, book);
 
                 event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
 
                 Messages.ITEM_WAS_PROTECTED.sendMessage(player);
             } else {
-                this.methods.playItemBreak(player, item);
+                Methods.playItemBreak(player, item);
 
                 event.setCurrentItem(null);
 
@@ -199,7 +196,7 @@ public class EnchantmentControl implements Listener {
 
         Messages.BOOK_FAILED.sendMessage(player);
 
-        this.methods.playItemBreak(player, book);
+        Methods.playItemBreak(player, book);
 
         if (config.getBoolean("Settings.EnchantmentOptions.Limit.Change-On-Fail", true)) event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, 1));
 
@@ -212,7 +209,7 @@ public class EnchantmentControl implements Listener {
         if (event.useInteractedBlock().equals(Event.Result.ALLOW)) return;
 
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && FileKeys.config.getPaperConfiguration().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description", true)) {
-            ItemStack item = this.methods.getItemInHand(event.getPlayer());
+            ItemStack item = Methods.getItemInHand(event.getPlayer());
 
             final CEBook book = this.instance.getBook(item);
 

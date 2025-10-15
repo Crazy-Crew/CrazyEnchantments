@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -36,7 +37,7 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        this.methods.addItemToInventory(safePlayer, category.getLostBook().getLostBook(category, amount).build());
+        Methods.addItemToInventory(safePlayer, category.getLostBook().getLostBook(category, amount).build());
     }
 
     @Command("scroll")
@@ -57,7 +58,7 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        this.methods.addItemToInventory(safePlayer, scroll.getScroll(amount));
+        Methods.addItemToInventory(safePlayer, scroll.getScroll(amount));
     }
 
     @Command("scrambler")
@@ -72,13 +73,13 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        if (this.methods.isInventoryFull(safePlayer)) {
+        if (Methods.isInventoryFull(safePlayer)) {
             Messages.INVENTORY_FULL.sendMessage(sender);
 
             return;
         }
 
-        this.itemManager.getItem("scrambler_item").ifPresent(action -> this.methods.addItemToInventory(safePlayer, action.getItemStack(amount)));
+        this.itemManager.getItem("scrambler_item").ifPresent(action -> Methods.addItemToInventory(safePlayer, action.getItemStack(amount)));
 
         final Map<String, String> placeholders = new HashMap<>() {{
             put("{amount}", String.valueOf(amount));
@@ -104,7 +105,7 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        if (this.methods.isInventoryFull(safePlayer)) {
+        if (Methods.isInventoryFull(safePlayer)) {
             Messages.INVENTORY_FULL.sendMessage(sender);
 
             return;
@@ -113,7 +114,7 @@ public class CommandLostBook extends BaseCommand {
         this.itemManager.getItem("protection_crystal_item").ifPresent(action -> {
             final ItemStack itemStack = action.getItemStack(amount);
 
-            this.methods.addItemToInventory(safePlayer, itemStack);
+            Methods.addItemToInventory(safePlayer, itemStack);
 
             final Map<String, String> placeholders = new HashMap<>() {{
                 put("{amount}", String.valueOf(amount));
@@ -140,7 +141,7 @@ public class CommandLostBook extends BaseCommand {
             return;
         }
 
-        if (this.methods.isInventoryFull(safePlayer)) {
+        if (Methods.isInventoryFull(safePlayer)) {
             Messages.INVENTORY_FULL.sendMessage(sender);
 
             return;
@@ -149,7 +150,7 @@ public class CommandLostBook extends BaseCommand {
         this.itemManager.getItem("slot_crystal_item").ifPresent(action -> {
             final ItemStack itemStack = action.getItemStack(amount);
 
-            this.methods.addItemToInventory(safePlayer, itemStack);
+            Methods.addItemToInventory(safePlayer, itemStack);
 
             final Map<String, String> placeholders = new HashMap<>() {{
                 put("{amount}", String.valueOf(amount));

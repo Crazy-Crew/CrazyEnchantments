@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,9 +25,6 @@ public class CEBook {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     private final ConfigManager options = this.plugin.getConfigManager();
-
-    @NotNull
-    private final Methods methods = null;
 
     private CEnchantment enchantment;
     private int amount;
@@ -67,8 +64,8 @@ public class CEBook {
         int destroyMax = config.getInt("Settings.BlackScroll.DestroyChance.Max", 100);
         int destroyMin = config.getInt("Settings.BlackScroll.DestroyChance.Min", 15);
 
-        this.destroyRate = this.methods.percentPick(destroyMax, destroyMin);
-        this.successRate = this.methods.percentPick(successMax, successMin);
+        this.destroyRate = Methods.percentPick(destroyMax, destroyMin);
+        this.successRate = Methods.percentPick(successMax, successMin);
     }
     
     /**
@@ -87,8 +84,8 @@ public class CEBook {
      * @param category The category for the rates.
      */
     public CEBook(@NotNull final CEnchantment enchantment, final int level, final int amount, @NotNull final Category category) {
-        this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
-        this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
+        this.destroyRate = Methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
+        this.successRate = Methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
@@ -234,7 +231,7 @@ public class CEBook {
      * @return True if the success rate was successful.
      */
     public boolean roleSuccess() {
-        return methods.randomPicker(this.getSuccessRate(), 100);
+        return Methods.randomPicker(this.getSuccessRate(), 100);
     }
 
     /**
@@ -242,7 +239,7 @@ public class CEBook {
      * @return True if the destroy rate was successful.
      */
     public boolean roleDestroy() {
-        return methods.randomPicker(this.getDestroyRate(), 100);
+        return Methods.randomPicker(this.getDestroyRate(), 100);
     }
 
 }

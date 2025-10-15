@@ -55,30 +55,6 @@ public class ColorUtils {
         };
     }
 
-    public static void sendMessage(@NotNull final CommandSender commandSender, @NotNull final String message, final boolean prefixToggle) {
-        /*if (message.isEmpty()) return;
-
-        String prefix = getPrefix();
-
-        if (commandSender instanceof Player player) {
-            if (!prefix.isEmpty() && prefixToggle) player.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix))); else player.sendMessage(color(message));
-
-            return;
-        }
-
-        if (!prefix.isEmpty() && prefixToggle) commandSender.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix))); else commandSender.sendMessage(color(message));*/
-    }
-
-    public static String getPrefix() {
-        //return color(FileKeys.config.getPaperConfiguration().getString("Settings.Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: "));
-        return "";
-    }
-
-    public static String getPrefix(@NotNull final String msg) {
-        //return color(getPrefix() + msg);
-        return msg;
-    }
-
     public static ItemBuilder getRandomPaneColor() {
         Random random = new Random();
 

@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -71,8 +71,6 @@ public class CrazyInstance {
     //private PluginSupport pluginSupport;
     //private VaultSupport vaultSupport;
 
-    private Methods methods;
-
     public void init() {
         this.modManager.addMod(Dependencies.generic_vanish, new GenericVanishMod());
 
@@ -127,8 +125,6 @@ public class CrazyInstance {
         // Plugin Support.
         //this.pluginSupport = new PluginSupport();
         //this.pluginSupport.initializeWorldGuard();
-
-        this.methods = new Methods();
     }
 
     public void reload() {
@@ -534,9 +530,5 @@ public class CrazyInstance {
 
     public @NotNull final KitsManager getKitsManager() {
         return kitsManager;
-    }
-
-    public @NotNull final Methods getMethods() {
-        return this.methods;
     }
 }

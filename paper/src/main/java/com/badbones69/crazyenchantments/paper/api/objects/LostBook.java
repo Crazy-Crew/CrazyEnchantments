@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -88,7 +88,7 @@ public class LostBook {
 
         final Map<String, String> placeholders = new HashMap<>();
 
-        placeholders.put("%Category%", category.getDisplayItem().getName());
+        placeholders.put("{category}", category.getDisplayItem().getName());
 
         return new ItemBuilder()
                 .setMaterial(configuration.getString("Settings.LostBook.Item", "BOOK"))

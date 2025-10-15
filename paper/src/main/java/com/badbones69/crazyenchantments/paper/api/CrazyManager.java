@@ -7,7 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
@@ -72,9 +72,6 @@ public class CrazyManager {
     private final ConfigManager options = this.plugin.getConfigManager();
 
     private final FusionPaper fusion = this.plugin.getFusion();
-
-    @NotNull
-    private final Methods methods = null;
 
     private CropManagerVersion cropManagerVersion;
 
@@ -179,7 +176,7 @@ public class CrazyManager {
                 final String enchantmentType = enchants.getString(path + ".Enchantment-Type", "");
 
                 if (!enchantmentType.isEmpty()) {
-                    final EnchantmentType type = this.methods.getFromName(enchantmentType);
+                    final EnchantmentType type = Methods.getFromName(enchantmentType);
 
                     enchantment.setEnchantmentType(type == null ? cEnchantment.getType() : type);
                 }

@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
@@ -38,9 +38,6 @@ public class ScramblerListener implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     private final ComponentLogger logger = this.plugin.getComponentLogger();
-
-    @NotNull
-    private final Methods methods = null;
 
     private final HashMap<Player, ScheduledTask> roll = new HashMap<>();
 
@@ -131,9 +128,9 @@ public class ScramblerListener implements Listener {
 
                             clone = item.withType(instance.getEnchantmentBookItem().getType());
 
-                            methods.setDurability(item, methods.getDurability(instance.getEnchantmentBookItem()));
+                            Methods.setDurability(item, Methods.getDurability(instance.getEnchantmentBookItem()));
 
-                            methods.addItemToInventory(player, clone);
+                            Methods.addItemToInventory(player, clone);
                         } else {
                             logger.error("The item at slot 13 is null, We cannot continue!");
                         }
@@ -228,7 +225,7 @@ public class ScramblerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onScramblerClick(PlayerInteractEvent event) {
-        ItemStack item = this.methods.getItemInHand(event.getPlayer());
+        ItemStack item = Methods.getItemInHand(event.getPlayer());
 
         if (item.isEmpty()) return;
 

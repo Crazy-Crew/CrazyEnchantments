@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
@@ -96,7 +97,7 @@ public class BlackSmithMenu extends StaticInventory {
                             return;
                         }
 
-                        //this.methods.addItemToInventory(player, result.getResultItem());
+                        Methods.addItemToInventory(player, result.getResultItem());
 
                         inventory.setItem(this.inputSlot, null);
                         inventory.setItem(this.secondaryInputSlot, null);
@@ -183,7 +184,7 @@ public class BlackSmithMenu extends StaticInventory {
 
                 if (itemStack == null || itemStack.isEmpty()) continue;
 
-                //this.methods.addItemToInventory(player, itemStack);
+                Methods.addItemToInventory(player, itemStack);
             }
 
             inventory.clear();

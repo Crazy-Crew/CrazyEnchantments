@@ -16,9 +16,6 @@ public class ShopListener implements Listener {
     @NotNull
     private final CrazyManager crazyManager = null;
 
-    @NotNull
-    private final Methods methods = null;
-
     // Plugin Managers.
     @NotNull
     private final ShopManager shopManager = null;
@@ -48,7 +45,7 @@ public class ShopListener implements Listener {
 
         for (Category category : categories) {
             if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
-                if (this.methods.isInventoryFull(player)) return;
+                if (Methods.isInventoryFull(player)) return;
 
                 if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                     if (this.currencyAPI.canBuy(player, category)) {
@@ -56,7 +53,7 @@ public class ShopListener implements Listener {
                     } else {
                         String needed = String.valueOf(category.getCost() - this.currencyAPI.getCurrency(player, category.getCurrency()));
 
-                        this.methods.switchCurrency(player, category.getCurrency(), "{money_needed}", "{xp}", needed);
+                        Methods.switchCurrency(player, category.getCurrency(), "{money_needed}", "{xp}", needed);
 
                         return;
                     }
@@ -79,7 +76,7 @@ public class ShopListener implements Listener {
             LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {
-                if (this.methods.isInventoryFull(player)) return;
+                if (Methods.isInventoryFull(player)) return;
 
                 if (lostBook.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                     if (this.currencyAPI.canBuy(player, lostBook)) {
@@ -87,7 +84,7 @@ public class ShopListener implements Listener {
                     } else {
                         String needed = String.valueOf(lostBook.getCost() - this.currencyAPI.getCurrency(player, lostBook.getCurrency()));
 
-                        this.methods.switchCurrency(player, lostBook.getCurrency(), "{money_needed}", "{xp}", needed);
+                        Methods.switchCurrency(player, lostBook.getCurrency(), "{money_needed}", "{xp}", needed);
 
                         return;
                     }
@@ -104,7 +101,7 @@ public class ShopListener implements Listener {
                 // If the option is buy-able then it check to see if they player can buy it and take the money.
 
                 if (option.isBuyable()) {
-                    if (this.methods.isInventoryFull(player)) return;
+                    if (Methods.isInventoryFull(player)) return;
 
                     if (option.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                         if (this.currencyAPI.canBuy(player, option)) {
@@ -112,7 +109,7 @@ public class ShopListener implements Listener {
                         } else {
                             String needed = String.valueOf(option.getCost() - this.currencyAPI.getCurrency(player, option.getCurrency()));
 
-                            this.methods.switchCurrency(player, option.getCurrency(), "{money_needed}", "{xp}", needed);
+                            Methods.switchCurrency(player, option.getCurrency(), "{money_needed}", "{xp}", needed);
 
                             return;
                         }
@@ -121,7 +118,7 @@ public class ShopListener implements Listener {
 
                 switch (option) {
                     case GKITZ -> {
-                        if (!this.methods.hasPermission(player, "gkitz", true)) return;
+                        if (!Methods.hasPermission(player, "gkitz", true)) return;
 
                         if (!this.options.isGkitzToggle()) return;
 
@@ -129,13 +126,13 @@ public class ShopListener implements Listener {
                     }
 
                     case BLACKSMITH -> {
-                        if (!this.methods.hasPermission(player, "blacksmith", true)) return;
+                        if (!Methods.hasPermission(player, "blacksmith", true)) return;
 
                         MenuManager.openBlackSmithMenu(player);
                     }
 
                     case TINKER -> {
-                        if (!this.methods.hasPermission(player, "tinker", true)) return;
+                        if (!Methods.hasPermission(player, "tinker", true)) return;
 
                         MenuManager.openTinkererMenu(player);
                     }

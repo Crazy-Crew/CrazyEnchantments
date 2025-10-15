@@ -222,7 +222,7 @@ public enum CEnchantments {
      */
     public EnchantmentType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
-            return this.methods.getFromName(this.typeName);
+            return Methods.getFromName(this.typeName);
         } else {
             return getEnchantment().getEnchantmentType();
         }

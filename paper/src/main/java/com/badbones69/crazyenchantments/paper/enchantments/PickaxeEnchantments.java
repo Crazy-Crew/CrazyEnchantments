@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
@@ -42,9 +42,6 @@ public class PickaxeEnchantments implements Listener {
 
     private final ConfigManager options = this.plugin.getConfigManager();
 
-    @NotNull
-    private final Methods methods = null;
-
     private final Map<Player, Map<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -75,7 +72,7 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         Block initialBlock = event.getBlock();
 
-        ItemStack currentItem = this.methods.getItemInHand(player);
+        ItemStack currentItem = Methods.getItemInHand(player);
 
         if (currentItem.isEmpty()) return;
 
@@ -101,12 +98,12 @@ public class PickaxeEnchantments implements Listener {
             if (block.isEmpty()) continue;
             if (!this.instance.hasBlock(block.getType().key().asMinimalString())) continue;
 
-            if (this.methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksBlast())) continue;
+            if (Methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksBlast())) continue;
 
-            if (damage) this.methods.removeDurability(currentItem, player);
+            if (damage) Methods.removeDurability(currentItem, player);
         }
 
-        if (!damage) this.methods.removeDurability(currentItem, player);
+        if (!damage) Methods.removeDurability(currentItem, player);
     }
 
 
@@ -118,7 +115,7 @@ public class PickaxeEnchantments implements Listener {
 
         Block currentBlock = event.getBlock();
 
-        ItemStack currentItem = this.methods.getItemInHand(player);
+        ItemStack currentItem = Methods.getItemInHand(player);
 
         if (currentItem.isEmpty()) return;
 
@@ -141,12 +138,12 @@ public class PickaxeEnchantments implements Listener {
         for (Block block : blockList) {
             if (block.isEmpty()) continue;
 
-            if (this.methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksVeinMiner())) continue;
+            if (Methods.playerBreakBlock(player, block, currentItem, this.options.isDropBlocksVeinMiner())) continue;
 
-            if (damage) this.methods.removeDurability(currentItem, player);
+            if (damage) Methods.removeDurability(currentItem, player);
         }
 
-        if (!damage) this.methods.removeDurability(currentItem, player);
+        if (!damage) Methods.removeDurability(currentItem, player);
     }
 
     private boolean massBlockBreakCheck(Player player, Set<Block> blockList) {
@@ -163,7 +160,7 @@ public class PickaxeEnchantments implements Listener {
 
         Player player = event.getPlayer();
 
-        ItemStack item = this.methods.getItemInHand(player);
+        ItemStack item = Methods.getItemInHand(player);
 
         if (item.isEmpty()) return;
 
@@ -221,7 +218,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (event.getExpToDrop() <= 0) return; // If block doesn't drop xp on break, return.
 
-        ItemStack item = this.methods.getItemInHand(player);
+        ItemStack item = Methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(item);
 
         if (!EnchantUtils.isEventActive(CEnchantments.EXPERIENCE, player, item, enchants)) return;
@@ -303,7 +300,7 @@ public class PickaxeEnchantments implements Listener {
             default -> {}
         }
 
-        return this.methods.getEnchantBlocks(loc, loc2);
+        return Methods.getEnchantBlocks(loc, loc2);
     }
 
     private boolean isOre(@NotNull final Material material) {

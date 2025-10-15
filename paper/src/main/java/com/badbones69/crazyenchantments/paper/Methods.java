@@ -1,10 +1,9 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
@@ -31,26 +30,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Methods {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final CrazyInstance instance = this.plugin.getInstance();
+    private static final CrazyInstance instance = plugin.getInstance();
 
-    // Plugin Support.
-    //@NotNull
-    //private final PluginSupport pluginSupport = null;
-
-    public EnchantmentType getFromName(@NotNull final String name) {
-        for (final EnchantmentType enchantmentType : this.instance.getRegisteredEnchantmentTypes()) {
+    public static EnchantmentType getFromName(@NotNull final String name) {
+        for (final EnchantmentType enchantmentType : instance.getRegisteredEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
         return null;
     }
 
-    public int getRandomNumber(@NotNull final String range) {
+    public static int getRandomNumber(@NotNull final String range) {
         int number = 1;
         String[] split = range.split("-");
 
@@ -65,12 +61,11 @@ public class Methods {
         return number;
     }
 
-    public int getRandomNumber(final int min, final int max) {
-        Random random = new Random();
-        return min + random.nextInt(max - min);
+    public static int getRandomNumber(final int min, final int max) {
+        return min + ThreadLocalRandom.current().nextInt(max - min);
     }
 
-    public boolean hasPermission(@NotNull final CommandSender sender, @NotNull final String perm, final boolean toggle) {
+    public static boolean hasPermission(@NotNull final CommandSender sender, @NotNull final String perm, final boolean toggle) {
         if (sender instanceof Player player) {
             return hasPermission(player, perm, toggle);
         } else {
@@ -78,7 +73,7 @@ public class Methods {
         }
     }
 
-    public boolean hasPermission(@NotNull final Player player, @NotNull final String perm, final boolean toggle) {
+    public static boolean hasPermission(@NotNull final Player player, @NotNull final String perm, final boolean toggle) {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
@@ -89,26 +84,26 @@ public class Methods {
     }
 
     @NotNull
-    public ItemStack getItemInHand(@NotNull final Player player) {
+    public static ItemStack getItemInHand(@NotNull final Player player) {
         return player.getInventory().getItemInMainHand();
     }
 
-    public void setItemInHand(@NotNull final Player player, @NotNull final ItemStack item) {
+    public static void setItemInHand(@NotNull final Player player, @NotNull final ItemStack item) {
         if (item.isEmpty()) return;
 
         player.getInventory().setItemInMainHand(item);
     }
 
     @Nullable
-    public Player getPlayer(@NotNull final String name) {
-        return this.plugin.getServer().getPlayer(name);
+    public static Player getPlayer(@NotNull final String name) {
+        return plugin.getServer().getPlayer(name);
     }
 
-    public void removeItem(@NotNull final ItemStack item, @NotNull final Player player) {
+    public static void removeItem(@NotNull final ItemStack item, @NotNull final Player player) {
         removeItem(item, player, 1);
     }
 
-    public void removeItem(@NotNull final ItemStack item, @NotNull final Player player, final int amount) {
+    public static void removeItem(@NotNull final ItemStack item, @NotNull final Player player, final int amount) {
         if (item.isEmpty()) return;
 
         try {
@@ -139,12 +134,12 @@ public class Methods {
     }
 
     @Nullable
-    public ItemStack removeItem(@NotNull final ItemStack item) {
+    public static ItemStack removeItem(@NotNull final ItemStack item) {
         return removeItem(item, 1);
     }
 
     @Nullable
-    public ItemStack removeItem(@NotNull final ItemStack item, final int amount) {
+    public static ItemStack removeItem(@NotNull final ItemStack item, final int amount) {
         if (item.isEmpty()) return item;
 
         ItemStack itemStack = item.clone();
@@ -159,7 +154,7 @@ public class Methods {
     }
 
     @NotNull
-    public ItemStack addLore(@NotNull final ItemStack item, @NotNull final String loreString) {
+    public static ItemStack addLore(@NotNull final ItemStack item, @NotNull final String loreString) {
         if (item.isEmpty()) return item;
 
         List<net.kyori.adventure.text.Component> lore = item.lore();
@@ -173,7 +168,7 @@ public class Methods {
         return item;
     }
 
-    public boolean hasArgument(@NotNull final String arg, @NotNull final List<String> message) {
+    public static boolean hasArgument(@NotNull final String arg, @NotNull final List<String> message) {
         for (String line : message) {
             //line = ColorUtils.color(line).toLowerCase();
 
@@ -183,23 +178,19 @@ public class Methods {
         return false;
     }
 
-    public boolean randomPicker(final int min, final int max) {
+    public static boolean randomPicker(final int min, final int max) {
         if (max <= min || max <= 0) return true;
 
-        Random random = new Random();
-
-        int chance = 1 + random.nextInt(max);
+        int chance = 1 + ThreadLocalRandom.current().nextInt(max);
 
         return chance <= min;
     }
 
-    public Integer percentPick(final int max, final int min) {
+    public static int percentPick(final int max, final int min) {
         if (max == min) {
             return max;
         } else {
-            Random random = new Random();
-
-            return min + random.nextInt(max - min);
+            return min + ThreadLocalRandom.current().nextInt(max - min);
         }
     }
 
@@ -208,7 +199,7 @@ public class Methods {
      * @param player The {@link Player} who's inventory should be checked.
      * @return Returns if the player's inventory is full while letting them know.
      */
-    public boolean isInventoryFull(@NotNull final Player player) {
+    public static boolean isInventoryFull(@NotNull final Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
 
         Messages.INVENTORY_FULL.sendMessage(player);
@@ -221,18 +212,18 @@ public class Methods {
      * @param player The {@link Player} to give items to.
      * @param item The {@link ItemStack} to give to the player.
      */
-    public void addItemToInventory(@NotNull final Player player, @NotNull final ItemStack item) {
+    public static void addItemToInventory(@NotNull final Player player, @NotNull final ItemStack item) {
         if (item.isEmpty()) return;
 
         player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
 
-    public void addItemToInventory(@NotNull final Player player, @NotNull final List<Item> itemList) {
+    public static void addItemToInventory(@NotNull final Player player, @NotNull final List<Item> itemList) {
         itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
     }
 
     @NotNull
-    public List<LivingEntity> getNearbyLivingEntities(final double radius, @NotNull final Entity entity) {
+    public static List<LivingEntity> getNearbyLivingEntities(final double radius, @NotNull final Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
         List<LivingEntity> entities = new ArrayList<>();
 
@@ -244,11 +235,11 @@ public class Methods {
     }
 
     @NotNull
-    public List<Entity> getNearbyEntities(final double radius, @NotNull final Entity entity) {
+    public static List<Entity> getNearbyEntities(final double radius, @NotNull final Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
     }
 
-    public void fireWork(@NotNull final Location loc, @NotNull final List<Color> colors) {
+    public static void fireWork(@NotNull final Location loc, @NotNull final List<Color> colors) {
         Firework firework = loc.getWorld().spawn(loc, Firework.class);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
 
@@ -263,7 +254,7 @@ public class Methods {
 
         addFirework(firework);
 
-        new FoliaScheduler(this.plugin, loc) {
+        new FoliaScheduler(plugin, loc) {
             @Override
             public void run() {
                 firework.detonate();
@@ -271,11 +262,11 @@ public class Methods {
         }.runDelayed(2);
     }
 
-    public void addFirework(@NotNull final Entity firework) {
+    public static void addFirework(@NotNull final Entity firework) {
         firework.getPersistentDataContainer().set(DataKeys.no_firework_damage.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
     }
 
-    public int getMaxDurability(@NotNull final ItemStack item) {
+    public static int getMaxDurability(@NotNull final ItemStack item) {
         int durability = item.getType().getMaxDurability();
 
         if (item.hasData(DataComponentTypes.MAX_DAMAGE)) {
@@ -289,7 +280,7 @@ public class Methods {
         return durability;
     }
 
-    public int getDurability(@NotNull ItemStack item) {
+    public static int getDurability(@NotNull ItemStack item) {
         int durability = 0;
 
         if (item.isEmpty()) return durability;
@@ -305,13 +296,13 @@ public class Methods {
         return durability;
     }
 
-    public void setDurability(@NotNull final ItemStack item, int newDamage) {
+    public static void setDurability(@NotNull final ItemStack item, int newDamage) {
         newDamage = Math.max(newDamage, 0);
 
         item.setData(DataComponentTypes.DAMAGE, newDamage);
     }
 
-    public void removeDurability(@NotNull final ItemStack item, @NotNull final Player player) {
+    public static void removeDurability(@NotNull final ItemStack item, @NotNull final Player player) {
         final int maxDurability = getMaxDurability(item);
         final int durability = getDurability(item);
 
@@ -342,7 +333,7 @@ public class Methods {
         }
     }
 
-    public void explode(@NotNull final Entity player) {
+    public static void explode(@NotNull final Entity player) {
         spawnExplodeParticles(player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
@@ -370,7 +361,7 @@ public class Methods {
         return gson;
     }
 
-    private void spawnExplodeParticles(@NotNull final World world, @NotNull final Location location) {
+    private static void spawnExplodeParticles(@NotNull final World world, @NotNull final Location location) {
         world.spawnParticle(Particle.FLAME, location, 200);
         world.spawnParticle(Particle.CLOUD, location, 30, .4F, .5F, .4F);
         world.spawnParticle(Particle.EXPLOSION, location, 2);
@@ -378,7 +369,7 @@ public class Methods {
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
     }
 
-    public void explode(@NotNull final Entity shooter, @NotNull final Entity arrow) {
+    public static void explode(@NotNull final Entity shooter, @NotNull final Entity arrow) {
         spawnExplodeParticles(shooter.getWorld(), arrow.getLocation());
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
@@ -395,7 +386,7 @@ public class Methods {
 
                 EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
 
-                this.plugin.getServer().getPluginManager().callEvent(event);
+                plugin.getServer().getPluginManager().callEvent(event);
 
                 if (event.isCancelled()) continue;
 
@@ -408,7 +399,7 @@ public class Methods {
     }
 
     @NotNull
-    public Set<Block> getEnchantBlocks(@NotNull final Location loc, @NotNull final Location loc2) {
+    public static Set<Block> getEnchantBlocks(@NotNull final Location loc, @NotNull final Location loc2) {
         Set<Block> blockList = new HashSet<>();
 
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
@@ -429,11 +420,11 @@ public class Methods {
         return blockList;
     }
 
-    public void entityEvent(@NotNull final Player damager, @NotNull final LivingEntity entity, @NotNull final EntityDamageEvent damageByEntityEvent) {
+    public static void entityEvent(@NotNull final Player damager, @NotNull final LivingEntity entity, @NotNull final EntityDamageEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
 
-        this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
+        plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
         //if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
@@ -441,7 +432,7 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public Entity lightning(@NotNull final LivingEntity entity) {
+    public static Entity lightning(@NotNull final LivingEntity entity) {
         Location loc = entity.getLocation();
 
         Entity lightning = null;
@@ -457,25 +448,12 @@ public class Methods {
         return lightning;
     }
 
-    public void switchCurrency(@NotNull final Player player, @NotNull final Currency option, @NotNull final String one, @NotNull final String two, @NotNull final String cost) {
-        Map<String, String> placeholders = new HashMap<>();
-
-        placeholders.put(one, cost);
-        placeholders.put(two, cost);
-
-        switch (option) {
-            case VAULT -> Messages.NEED_MORE_MONEY.sendMessage(player, placeholders);
-            case XP_LEVEL -> Messages.NEED_MORE_XP_LEVELS.sendMessage(player, placeholders);
-            case XP_TOTAL -> Messages.NEED_MORE_TOTAL_XP.sendMessage(player, placeholders);
-        }
-    }
-
     /**
      *
      * @param event The event to check.
      * @return True if the event is cancelled.
      */
-    public boolean isEventCancelled(@NotNull final Event event) {
+    public static boolean isEventCancelled(@NotNull final Event event) {
         return !event.callEvent();
     }
 
@@ -484,7 +462,7 @@ public class Methods {
      * @param player The {@link Player} whom to check.
      * @return True if the player is in creative mode.
      */
-    public boolean inCreativeMode(@NotNull final Player player) {
+    public static boolean inCreativeMode(@NotNull final Player player) {
         if (player.getGameMode() != GameMode.CREATIVE) return false;
 
         Messages.PLAYER_IS_IN_CREATIVE_MODE.sendMessage(player);
@@ -496,7 +474,7 @@ public class Methods {
      * Plays item break sound and effect.
      * @param player The {@link Player} who's item broke.
      */
-    public void playItemBreak(@NotNull final Player player, @NotNull final ItemStack item) {
+    public static void playItemBreak(@NotNull final Player player, @NotNull final ItemStack item) {
         if (item.isEmpty()) return;
 
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
@@ -513,7 +491,7 @@ public class Methods {
      * @param tool ItemStack used to break the block.
      * @return If the event was cancelled.
      */
-    public boolean playerBreakBlock(@NotNull final Player player, @NotNull final Block block, @NotNull final ItemStack tool, final boolean hasDrops) {
+    public static boolean playerBreakBlock(@NotNull final Player player, @NotNull final Block block, @NotNull final ItemStack tool, final boolean hasDrops) {
         // My favorite chain of methods I created. Feel free to ask if there are problems. -TDL
         BlockBreakEvent blockBreak = new BlockBreakEvent(block, player);
 
@@ -525,7 +503,7 @@ public class Methods {
 
         EventUtils.addIgnoredEvent(blockBreak);
 
-        this.plugin.getServer().getPluginManager().callEvent(blockBreak);
+        plugin.getServer().getPluginManager().callEvent(blockBreak);
 
         EventUtils.removeIgnoredEvent(blockBreak);
 
@@ -546,7 +524,7 @@ public class Methods {
      * @param block The block that is dropping xp.
      * @param expToDrop The amount of xp it should drop.
      */
-    private void dropXP(@NotNull final Block block, final int expToDrop) {
+    private static void dropXP(@NotNull final Block block, final int expToDrop) {
         if (expToDrop < 1) return;
 
         ExperienceOrb exp = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
@@ -560,14 +538,14 @@ public class Methods {
      * @param block The block that was broken.
      * @param items The items that will be dropped from the broken block.
      */
-    private void blockDropItems(@NotNull final Player player, @NotNull final Block block, @NotNull final Collection<ItemStack> items) {
+    private static void blockDropItems(@NotNull final Player player, @NotNull final Block block, @NotNull final Collection<ItemStack> items) {
         List<Item> dropItems = new ArrayList<>();
 
         items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
 
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
 
-        this.plugin.getServer().getPluginManager().callEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         // If cancelled, removes the blocks as they should have never been there.
         // This mimics the method that the base server uses.
@@ -580,7 +558,7 @@ public class Methods {
      * @param item The {@link ItemStack} used to break the block.
      * @return The amount of xp the block would drop when broken by that item.
      */
-    private int getXPThroughNMS(@NotNull final Block block, @NotNull final ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
+    private static int getXPThroughNMS(@NotNull final Block block, @NotNull final ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
         CraftBlock cb = (CraftBlock) block;
 
         net.minecraft.world.level.block.state.BlockState iWorldblockdata = cb.getNMS();

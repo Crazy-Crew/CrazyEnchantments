@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
@@ -31,9 +31,6 @@ public class ProtectionCrystalListener implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final ItemManager itemManager = this.plugin.getItemManager();
-
-    @NotNull
-    private final Methods methods = null;
 
     @NotNull
     private final ProtectionCrystalSettings protectionCrystalSettings = null;
@@ -68,7 +65,7 @@ public class ProtectionCrystalListener implements Listener {
 
         event.setCancelled(true);
 
-        player.setItemOnCursor(this.methods.removeItem(crystalItem));
+        player.setItemOnCursor(Methods.removeItem(crystalItem));
 
         item.addKey(itemStack, DataKeys.protected_item.getNamespacedKey(), "true");
 

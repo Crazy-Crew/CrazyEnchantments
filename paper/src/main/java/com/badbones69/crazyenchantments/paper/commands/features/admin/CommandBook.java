@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
@@ -32,6 +33,6 @@ public class CommandBook extends BaseCommand {
             put("{player}", safePlayer.getName());
         }});
 
-        this.methods.addItemToInventory(safePlayer, new CEBook(enchantment, level, amount).buildBook());
+        Methods.addItemToInventory(safePlayer, new CEBook(enchantment, level, amount).buildBook());
     }
 }

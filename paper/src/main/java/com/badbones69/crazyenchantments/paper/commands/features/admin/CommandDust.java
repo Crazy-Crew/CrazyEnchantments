@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.v2.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -34,7 +35,7 @@ public class CommandDust extends BaseCommand {
             return;
         }
 
-        this.methods.addItemToInventory(safePlayer, dust.getDust(percent, amount));
+        Methods.addItemToInventory(safePlayer, dust.getDust(percent, amount));
 
         Map<String, String> placeholders = new HashMap<>() {{
             put("%Amount%", String.valueOf(amount));

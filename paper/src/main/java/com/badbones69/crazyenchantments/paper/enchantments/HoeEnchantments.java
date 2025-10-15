@@ -41,9 +41,6 @@ public class HoeEnchantments implements Listener {
     private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Methods methods = null;
-
-    @NotNull
     private final CrazyManager crazyManager = null;
 
     private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
@@ -60,7 +57,7 @@ public class HoeEnchantments implements Listener {
         if (event.getHand() != EquipmentSlot.HAND) return;
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ItemStack hoe = this.methods.getItemInHand(player);
+            ItemStack hoe = Methods.getItemInHand(player);
 
             Block block = event.getClickedBlock();
 
@@ -72,7 +69,7 @@ public class HoeEnchantments implements Listener {
             if (this.seedlings.contains(block.getType()) && !this.crazyManager.getNMSSupport().isFullyGrown(block) && EnchantUtils.isEventActive(CEnchantments.GREENTHUMB, player, hoe, enchantments)) {
                 fullyGrowPlant(block);
 
-                if (player.getGameMode() != GameMode.CREATIVE) this.methods.removeDurability(hoe, player);
+                if (player.getGameMode() != GameMode.CREATIVE) Methods.removeDurability(hoe, player);
             }
 
             if (block.getType() == Material.GRASS_BLOCK || block.getType() == Material.DIRT || block.getType() == Material.SOUL_SAND || block.getType() == Material.FARMLAND) {
@@ -96,17 +93,17 @@ public class HoeEnchantments implements Listener {
                         if (enchantments.containsKey(CEnchantments.PLANTER.getEnchantment())) plantSeedSuccess(soil, player, hasGreenThumb);
 
                         // Take durability from the hoe for each block set to a soil.
-                        if (player.getGameMode() != GameMode.CREATIVE) this.methods.removeDurability(hoe, player);
+                        if (player.getGameMode() != GameMode.CREATIVE) Methods.removeDurability(hoe, player);
                     }
                 }
 
                 // Take durability from players not in Creative
                 // Checking else to make sure the item does have Tiller.
                 if (player.getGameMode() != GameMode.CREATIVE && CEnchantments.PLANTER.isActivated() && enchantments.containsKey(CEnchantments.PLANTER.getEnchantment()) && !enchantments.containsKey(CEnchantments.TILLER.getEnchantment())
-                        && plantSeedSuccess(block, player, hasGreenThumb)) this.methods.removeDurability(hoe, player);
+                        && plantSeedSuccess(block, player, hasGreenThumb)) Methods.removeDurability(hoe, player);
             }
         } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated()
-                && this.instance.getEnchantments(this.methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
+                && this.instance.getEnchantments(Methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
             Map<Block, BlockFace> blockFace = new HashMap<>();
 
             blockFace.put(event.getClickedBlock(), event.getBlockFace());
@@ -125,7 +122,7 @@ public class HoeEnchantments implements Listener {
 
             if (!this.harvesterCrops.contains(plant.getType())) return;
 
-            ItemStack hoe = this.methods.getItemInHand(player);
+            ItemStack hoe = Methods.getItemInHand(player);
 
             Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(hoe);
 
@@ -139,7 +136,7 @@ public class HoeEnchantments implements Listener {
 
             if (!this.crazyManager.getNMSSupport().isFullyGrown(plant)) return;
 
-            getAreaCrops(plant, blockFace).forEach(block -> this.methods.playerBreakBlock(player, block, hoe, true));
+            getAreaCrops(plant, blockFace).forEach(block -> Methods.playerBreakBlock(player, block, hoe, true));
         }
     }
 
@@ -188,7 +185,7 @@ public class HoeEnchantments implements Listener {
         if (seedType != null) {
             if (soil.getType() != Material.FARMLAND && !isSoulSand) soil.setType(Material.FARMLAND);
 
-            if (player.getGameMode() != GameMode.CREATIVE && !playerSeedItem.isEmpty()) this.methods.removeItem(playerSeedItem, player); // Take seed from player
+            if (player.getGameMode() != GameMode.CREATIVE && !playerSeedItem.isEmpty()) Methods.removeItem(playerSeedItem, player); // Take seed from player
 
             plant.setType(seedType);
 
@@ -291,6 +288,6 @@ public class HoeEnchantments implements Listener {
             default -> {}
         }
 
-        return this.methods.getEnchantBlocks(loc, loc2);
+        return Methods.getEnchantBlocks(loc, loc2);
     }
 }
