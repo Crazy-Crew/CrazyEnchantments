@@ -1,10 +1,14 @@
 [versions]
 ## Paper
 paperweight = "2.0.0-beta.19" # https://github.com/PaperMC/paperweight
-paper = "1.21.8-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
+paper = "1.21.10-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
-# Minecraft
-minecraft = "1.21.8"
+## Kyori
+adventure = "4.25.0" # https://github.com/KyoriPowered/adventure
+
+## Minecraft
+minecraft = "1.21.10" # https://minecraft.net
+brigadier = "1.3.10" # https://minecraft.net
 
 # Plugins
 worldguard = "7.0.13"            # https://dev.bukkit.org/projects/worldguard/files
@@ -46,6 +50,10 @@ hikari = "4.0.3"
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
 
 [libraries]
+# https://minecraft.net
+minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
+brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
+
 worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 
@@ -98,6 +106,11 @@ mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
 
 kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
 
+# https://github.com/KyoriPowered/adventure
+kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
+kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
 # https://central.sonatype.com/artifact/com.intellectualsites.informative-annotations/informative-annotations
 informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" }
 # https://mvnrepository.com/artifact/com.intellectualsites.paster
@@ -116,6 +129,12 @@ shared = [
     "oraxen",
     "vault",
     "nexo"
+]
+
+adventure = [
+    "kyori-logger",
+    "kyori-text",
+    "kyori-api"
 ]
 
 build = [
