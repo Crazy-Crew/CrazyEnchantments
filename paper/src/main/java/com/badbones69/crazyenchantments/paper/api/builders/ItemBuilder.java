@@ -169,13 +169,13 @@ public class ItemBuilder {
         this.namespaces = new HashMap<>();
     }
 
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private static final CrazyInstance instance = plugin.getInstance();
 
-    private final Server server = plugin.getServer();
+    private static final Server server = plugin.getServer();
 
-    private final ComponentLogger logger = plugin.getComponentLogger();
+    private static final ComponentLogger logger = plugin.getComponentLogger();
 
     /**
      * Deduplicate an item builder.
@@ -376,7 +376,7 @@ public class ItemBuilder {
 
             if (this.isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
                 if (this.isURL) {
-                    final PlayerProfile profile = this.server.createProfile(UUID.randomUUID(), null);
+                    final PlayerProfile profile = server.createProfile(UUID.randomUUID(), null);
 
                     profile.setProperty(new ProfileProperty("", ""));
 
@@ -385,7 +385,7 @@ public class ItemBuilder {
                     try {
                         textures.setSkin(URI.create(this.player).toURL(), PlayerTextures.SkinModel.CLASSIC);
                     } catch (final MalformedURLException exception) {
-                        this.logger.warn("The url is malformed", exception);
+                        logger.warn("The url is malformed", exception);
                     }
 
                     profile.setTextures(textures);
@@ -1023,6 +1023,7 @@ public class ItemBuilder {
                             itemBuilder.setAmount(1);
                         }
                     }
+
                     case "damage" -> {
                         try {
                             itemBuilder.setDamage(Integer.parseInt(value));
@@ -1030,17 +1031,21 @@ public class ItemBuilder {
                             itemBuilder.setDamage(0);
                         }
                     }
+
                     case "lore" -> itemBuilder.setLore(List.of(value.split(",")));
                     case "player" -> itemBuilder.setPlayerName(value);
                     case "unbreakable-item" -> {
                         if (value.isEmpty() || value.equalsIgnoreCase("true")) itemBuilder.setUnbreakable(true);
                     }
+
                     case "trim-pattern" -> {
                         if (!value.isEmpty()) itemBuilder.setTrimPattern(Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
+
                     case "trim-material" -> {
                         if (!value.isEmpty()) itemBuilder.setTrimMaterial(Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
+
                     default -> {
                         if (value.contains("-")) {
                             String[] val = value.split("-");
@@ -1055,10 +1060,11 @@ public class ItemBuilder {
 
                         if (enchantment != null) {
                             if (number != 0) itemBuilder.addEnchantments(enchantment, number);
+
                             continue;
                         }
 
-                        CEnchantment ceEnchant = instance.getEnchantmentFromName(option);
+                        CEnchantment ceEnchant = plugin.getInstance().getEnchantmentFromName(option);
 
                         if (ceEnchant != null) {
                             if (number != 0) itemBuilder.addCEEnchantments(ceEnchant, number);
@@ -1078,11 +1084,11 @@ public class ItemBuilder {
                     }
                 }
             }
-        } catch (Exception e) {
-            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("<red><bold>ERROR")
+        } catch (final Exception exception) {
+            /*itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("<red><bold>ERROR")
                     .lore(Arrays.asList(Component.text("There was an error", NamedTextColor.RED),
-                            Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));
-            plugin.getLogger().log(Level.WARNING, "There is an error with " + placeHolder, e);
+                            Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));*/
+            plugin.getLogger().log(Level.WARNING, "There is an error with " + itemString, exception);
         }
 
         return itemBuilder;

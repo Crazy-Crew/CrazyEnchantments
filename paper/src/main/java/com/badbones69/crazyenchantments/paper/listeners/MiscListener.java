@@ -35,12 +35,12 @@ public class MiscListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        this.crazyManager.loadCEPlayer(event.getPlayer());
+        //this.crazyManager.loadCEPlayer(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.crazyManager.unloadCEPlayer(event.getPlayer());
+        //this.crazyManager.unloadCEPlayer(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true)

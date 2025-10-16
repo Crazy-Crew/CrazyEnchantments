@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api;
 
+import com.badbones69.crazyenchantments.CrazyPlugin;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -34,19 +35,23 @@ import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.BasicConfigurationNode;
+import us.crazycrew.crazyenchantments.enums.Mode;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,21 +59,22 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class CrazyInstance {
+public class CrazyInstance extends CrazyPlugin {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final PaperFileManager fileManager = this.plugin.getFileManager();
     private final ConfigManager options = this.plugin.getConfigManager();
-    private final FusionPaper fusion = this.plugin.getFusion();
-    private final ModManager modManager = this.fusion.getModManager();
     private final Server server = this.plugin.getServer();
     private final Path path = this.plugin.getDataPath();
 
     private final List<EnchantType> registeredEnchantmentTypes = new ArrayList<>();
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
+    private final Map<String, Map<String, CustomHead>> heads = new HashMap<>(); // category, ( head_name, custom_head[base64, chance] )
     private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
-    private final Map<String, CustomHead> heads = new HashMap<>();
     private final List<String> blocks = new ArrayList<>();
+
+    private final ModManager modManager;
+    private final FusionPaper fusion;
 
     private CurrencyManager currencyManager;
     private CategoryManager categoryManager;
@@ -77,10 +83,18 @@ public class CrazyInstance {
     private ItemManager itemManager;
     private KitsManager kitsManager;
 
+    public CrazyInstance(@NotNull final FusionPaper fusion) {
+        super(fusion);
+
+        this.modManager = fusion.getModManager();
+        this.fusion = fusion;
+    }
+
     //private SuperiorSkyBlockSupport skyBlockSupport;
     //private PluginSupport pluginSupport;
     //private VaultSupport vaultSupport;
 
+    @Override
     public void init() {
         this.modManager.addMod(Dependencies.generic_vanish, new GenericVanishMod());
 
@@ -155,7 +169,8 @@ public class CrazyInstance {
         //this.pluginSupport.initializeWorldGuard();
     }
 
-    public void reload(@Nullable final CommandSender sender) {
+    @Override
+    public void reload(@Nullable final Audience audience) {
         this.fusion.reload(); // reload fusion api
 
         this.fileManager.refresh(false).saveFile(this.path.resolve("Data.yml")); // refresh files
@@ -199,13 +214,34 @@ public class CrazyInstance {
 
         loadExamples(); // load examples
 
-        if (sender != null) {
-            MessageKeys.CONFIG_RELOAD.sendMessage(sender);
+        if (audience != null) {
+            MessageKeys.CONFIG_RELOAD.sendMessage(audience);
         }
     }
 
-    public void reload() {
-        reload(null);
+    @Override
+    public void registerPermission(@NotNull final Mode mode, @NotNull final String parent, @NotNull final String description, @NotNull final Map<String, Boolean> children) {
+        PermissionDefault permissionDefault;
+
+        switch (mode) {
+            case NOT_OP -> permissionDefault = PermissionDefault.NOT_OP;
+            case TRUE -> permissionDefault = PermissionDefault.TRUE;
+            case FALSE -> permissionDefault = PermissionDefault.FALSE;
+            default -> permissionDefault = PermissionDefault.OP;
+        }
+
+        final PluginManager pluginManager = this.server.getPluginManager();
+
+        if (pluginManager.getPermission(parent) != null) return;
+
+        final Permission permission = new Permission(
+                parent,
+                description,
+                permissionDefault,
+                children
+        );
+
+        pluginManager.addPermission(permission);
     }
 
     public void loadShopOptions(final YamlConfiguration config) {
@@ -288,24 +324,24 @@ public class CrazyInstance {
 
                         Files.delete(path);
                     } catch (final IOException exception) {
-                        this.fusion.log("warn", "Failed to delete {} in loop, Reason: {}", path, exception.getMessage());
+                        this.fusion.log("warn", "Failed to delete {} in loop, Reason: {}", path, exception);
                     }
                 });
             } catch (final Exception exception) {
-                this.fusion.log("warn", "Failed to delete {}, Reason: {}", this.path.resolve("examples"), exception.getMessage());
+                this.fusion.log("warn", "Failed to delete {}, Reason: {}", this.path.resolve("examples"), exception);
             }
 
-            List.of(
+            List.of( //todo() this throws an npe
                     "config.yml",
                     "Data.yml",
                     "Enchantment-Types.yml",
                     "Enchantments.yml",
                     "GKitz.yml",
-                    "HeadMap.yml",
                     "Messages.yml",
                     "Tinker.yml",
 
-                    "blocks.json"
+                    "blocks.json",
+                    "heads.json"
             ).forEach(file -> this.fileManager.extractFile(this.path.resolve("examples").resolve(file)));
         }
     }

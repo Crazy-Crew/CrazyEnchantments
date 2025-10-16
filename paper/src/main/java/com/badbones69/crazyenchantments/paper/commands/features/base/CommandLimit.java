@@ -23,9 +23,12 @@ public class CommandLimit extends BaseCommand {
 
         final ItemStack item = player.getInventory().getItemInMainHand();
 
-        int limit = this.crazyManager.getPlayerMaxEnchantments(player);
-        int baseLimit = this.crazyManager.getPlayerBaseEnchantments(player);
-        int slotModifier = item.isEmpty() ? 0 : this.crazyManager.getEnchantmentLimiter(item);
+        //int limit = this.crazyManager.getPlayerMaxEnchantments(player);
+        int limit = 0;
+        //int baseLimit = this.crazyManager.getPlayerBaseEnchantments(player);
+        int baseLimit = 0;
+        //int slotModifier = item.isEmpty() ? 0 : this.crazyManager.getEnchantmentLimiter(item);
+        int slotModifier = 0;
         int enchantAmount = item.isEmpty() ? 0 : this.instance.getEnchantmentAmount(item, this.options.isCheckVanillaLimit());
 
         int canAdd = Math.min(baseLimit - slotModifier, limit);

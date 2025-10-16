@@ -28,7 +28,7 @@ public class ScramblerItem extends CustomItem {
     public void init() {
         if (this.config == null) return;
 
-        this.itemBuilder.withCustomItem(this.config.getScramblerType())
+        this.itemBuilder.withCustomItem(this.config.getScramblerType().toLowerCase())
                 .addEnchantGlint(this.config.isGlowing())
                 .setPersistentBoolean(DataKeys.scrambler.getNamespacedKey(), true);
     }

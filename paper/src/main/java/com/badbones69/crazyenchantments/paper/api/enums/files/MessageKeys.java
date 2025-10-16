@@ -4,8 +4,8 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
@@ -142,11 +142,11 @@ public enum MessageKeys {
         this.path = path;
     }
 
-    public Component getMessage(@NotNull final CommandSender sender) {
+    public Component getMessage(@NotNull final Audience sender) {
         return getMessage(sender, new HashMap<>());
     }
 
-    public Component getMessage(@NotNull final CommandSender sender, @NotNull final String placeholder, @NotNull final String replacement) {
+    public Component getMessage(@NotNull final Audience sender, @NotNull final String placeholder, @NotNull final String replacement) {
         Map<String, String> placeholders = new HashMap<>() {{
             put(placeholder, replacement);
         }};
@@ -154,23 +154,23 @@ public enum MessageKeys {
         return getMessage(sender, placeholders);
     }
 
-    public Component getMessage(@NotNull final CommandSender sender, @NotNull final Map<String, String> placeholders) {
+    public Component getMessage(@NotNull final Audience sender, @NotNull final Map<String, String> placeholders) {
         return parse(sender, placeholders);
     }
 
-    public void sendMessage(@NotNull final CommandSender sender, @NotNull final String placeholder, @NotNull final String replacement) {
+    public void sendMessage(@NotNull final Audience sender, @NotNull final String placeholder, @NotNull final String replacement) {
         sendRichMessage(sender, placeholder, replacement);
     }
 
-    public void sendMessage(@NotNull final CommandSender sender, @NotNull final Map<String, String> placeholders) {
+    public void sendMessage(@NotNull final Audience sender, @NotNull final Map<String, String> placeholders) {
         sendRichMessage(sender, placeholders);
     }
 
-    public void sendMessage(@NotNull final CommandSender sender) {
+    public void sendMessage(@NotNull final Audience sender) {
         sendRichMessage(sender);
     }
 
-    public void sendRichMessage(@NotNull final CommandSender sender, @NotNull final String placeholder, @NotNull final String replacement) {
+    public void sendRichMessage(@NotNull final Audience sender, @NotNull final String placeholder, @NotNull final String replacement) {
         final Component message = getMessage(sender, placeholder, replacement);
 
         if (message.equals(Component.empty())) return;
@@ -178,7 +178,7 @@ public enum MessageKeys {
         sender.sendMessage(message);
     }
 
-    public void sendRichMessage(@NotNull final CommandSender sender, @NotNull final Map<String, String> placeholders) {
+    public void sendRichMessage(@NotNull final Audience sender, @NotNull final Map<String, String> placeholders) {
         final Component message = getMessage(sender, placeholders);
 
         if (message.equals(Component.empty())) return;
@@ -186,7 +186,7 @@ public enum MessageKeys {
         sender.sendMessage(message);
     }
 
-    public void sendRichMessage(@NotNull final CommandSender sender) {
+    public void sendRichMessage(@NotNull final Audience sender) {
         final Component message = getMessage(sender);
 
         if (message.equals(Component.empty())) return;
@@ -206,7 +206,7 @@ public enum MessageKeys {
         configuration.set(this.path, this.utils.convertLegacy(configuration.getString(this.path, this.defaultMessage)));
     }
 
-    private @NotNull Component parse(@NotNull final CommandSender sender, @NotNull final Map<String, String> placeholders) {
+    private @NotNull Component parse(@NotNull final Audience sender, @NotNull final Map<String, String> placeholders) {
         final YamlConfiguration configuration = FileKeys.messages.getPaperConfiguration();
 
         String message;

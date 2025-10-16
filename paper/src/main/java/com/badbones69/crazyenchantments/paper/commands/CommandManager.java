@@ -129,6 +129,8 @@ public class CommandManager {
             return numbers;
         });
 
+        commandManager.registerSuggestion(SuggestionKey.of("players"), (context) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
+
         commandManager.registerSuggestion(SuggestionKey.of("migrators"), (context) -> {
             final List<String> migrators = new ArrayList<>();
 

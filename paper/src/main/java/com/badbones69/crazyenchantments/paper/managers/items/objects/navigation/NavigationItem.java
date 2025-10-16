@@ -37,7 +37,7 @@ public class NavigationItem extends CustomItem {
         final String player = this.isRight ? this.config.getNavigationRightPlayer()
                 : this.config.getNavigationLeftPlayer();
 
-        this.itemBuilder.withCustomItem(item).withSkull(player);
+        this.itemBuilder.withCustomItem(item.toLowerCase()).withSkull(player);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class PointerItem extends CustomItem {
     public void init() {
         if (this.config == null) return;
 
-        this.itemBuilder.withCustomItem(this.config.getPointerItem());
+        this.itemBuilder.withCustomItem(this.config.getPointerItem().toLowerCase());
     }
 
     @Override

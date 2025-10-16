@@ -28,7 +28,7 @@ public class SlotCrystalItem extends CustomItem {
     public void init() {
         if (this.config == null) return;
 
-        this.itemBuilder.withCustomItem(this.config.getSlotType())
+        this.itemBuilder.withCustomItem(this.config.getSlotType().toLowerCase())
                 .addEnchantGlint(this.config.isGlowing())
                 .setPersistentBoolean(DataKeys.slot_crystal.getNamespacedKey(), true);
     }

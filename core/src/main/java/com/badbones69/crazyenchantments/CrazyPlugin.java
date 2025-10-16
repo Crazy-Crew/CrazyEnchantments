@@ -5,7 +5,7 @@ import com.ryderbelserion.fusion.core.FusionCore;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 
-public class CrazyPlugin extends ICrazyEnchantments {
+public abstract class CrazyPlugin extends ICrazyEnchantments {
 
     private final FusionCore fusion;
     private final Path dataPath;

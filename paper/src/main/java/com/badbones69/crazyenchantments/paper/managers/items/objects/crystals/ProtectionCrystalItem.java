@@ -37,7 +37,7 @@ public class ProtectionCrystalItem extends CustomItem {
     public void init() {
         if (this.config == null) return;
 
-        this.itemBuilder.withCustomItem(this.config.getProtectionType())
+        this.itemBuilder.withCustomItem(this.config.getProtectionType().toLowerCase())
                 .addEnchantGlint(this.config.isGlowing())
                 .setPersistentBoolean(DataKeys.protection_crystal.getNamespacedKey(), true);
 

@@ -46,7 +46,7 @@ public class CommandAdd extends BaseCommand {
 
             Methods.setItemInHand(player, itemStack);
         } else {
-            this.crazyManager.addEnchantment(itemStack, customEnchantment, level);
+            //this.crazyManager.addEnchantment(itemStack, customEnchantment, level);
 
             Methods.setItemInHand(player, itemStack);
         }

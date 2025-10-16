@@ -27,7 +27,7 @@ public class CloseItem extends CustomItem {
     public void init() {
         if (this.config == null) return;
 
-        this.itemBuilder.withCustomItem(this.config.getResultsType());
+        this.itemBuilder.withCustomItem(this.config.getResultsType().toLowerCase());
     }
 
     @Override

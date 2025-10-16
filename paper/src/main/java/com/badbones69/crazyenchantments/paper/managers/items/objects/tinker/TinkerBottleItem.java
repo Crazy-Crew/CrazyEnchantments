@@ -28,7 +28,7 @@ public class TinkerBottleItem extends CustomItem {
     public void init() {
         if (this.config == null) return;
 
-        this.itemBuilder.withCustomItem(this.config.getBottleItem());
+        this.itemBuilder.withCustomItem(this.config.getBottleItem().toLowerCase());
     }
 
     @Override
