@@ -15,11 +15,7 @@ public class ReloadCommand<S> extends BaseCommand<S> {
 
     @Override
     protected int execute(@NotNull CommandContext<S> context) {
-        final ISource source = getSource(context);
-
-        this.plugin.reload();
-
-        //this.messageRegistry.getMessage(MessageKeys.reload_plugin).send(source.getAudience());
+        this.plugin.reload(getSource(context).getAudience());
 
         return 1;
     }

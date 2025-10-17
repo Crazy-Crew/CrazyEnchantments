@@ -1,16 +1,17 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
+import com.badbones69.crazyenchantments.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ConfigUtils;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
+import com.badbones69.crazyenchantments.registry.MessageRegistry;
+import net.kyori.adventure.key.Key;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import us.crazycrew.crazyenchantments.interfaces.IMessage;
+import java.util.*;
 
 public class LegacyMigration extends IEnchantMigration {
 
@@ -615,13 +616,19 @@ public class LegacyMigration extends IEnchantMigration {
                 }
             }, () -> failed.add("<red>⤷ Messages.yml"));*/
 
-            final MessageKeys[] messages = MessageKeys.values();
+            final MessageRegistry messageRegistry = this.instance.getMessageRegistry();
 
-            for (final MessageKeys message : messages) {
+            final @NotNull Map<Key, Map<Key, IMessage>> registry = messageRegistry.getMessages();
+
+            final Collection<IMessage> messages = registry.get(us.crazycrew.crazyenchantments.constants.MessageKeys.default_locale).values();
+
+            for (final IMessage message : messages) {
                 message.migrate();
             }
 
-            FileKeys.messages.save();
+            Files.messages.save();
+
+            messageRegistry.init(); // refresh messages!
 
             success.add("<green>⤷ Messages.yml");
         } catch (final Exception exception) {

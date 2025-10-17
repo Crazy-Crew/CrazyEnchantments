@@ -98,8 +98,6 @@ public class Message implements IMessage {
                     this.fusion.log("warn", "Failed to migrate %s in %s".formatted(this.path, this.location), exception);
                 }
             }
-
-            action.save();
         }, () -> this.fusion.log("warn", "Failed to migrate %s in %s".formatted(this.path, this.location)));
     }
 

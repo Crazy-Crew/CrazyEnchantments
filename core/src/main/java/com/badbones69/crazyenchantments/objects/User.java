@@ -3,13 +3,11 @@ package com.badbones69.crazyenchantments.objects;
 import com.badbones69.crazyenchantments.CrazyPlugin;
 import com.badbones69.crazyenchantments.registry.MessageRegistry;
 import com.ryderbelserion.fusion.core.FusionCore;
-import com.ryderbelserion.fusion.core.files.FileManager;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyenchantments.interfaces.IUser;
 import us.crazycrew.crazyenchantments.ICrazyEnchantments;
-import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,10 +18,6 @@ public class User extends IUser {
     private final MessageRegistry messageRegistry = this.plugin.getMessageRegistry();
 
     private final FusionCore fusion = this.plugin.getFusion();
-
-    private final FileManager fileManager = this.fusion.getFileManager();
-
-    private final Path path = this.fusion.getDataPath();
 
     private final Audience audience;
 

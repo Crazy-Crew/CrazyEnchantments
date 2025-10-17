@@ -21,8 +21,10 @@ public abstract class CrazyPlugin extends ICrazyEnchantments {
     private UserRegistry userRegistry;
 
     public void init() {
-        this.messageRegistry = new MessageRegistry(this.userRegistry = new UserRegistry());
+        this.messageRegistry = new MessageRegistry();
         this.messageRegistry.init();
+
+        this.userRegistry = new UserRegistry();
     }
 
     @Override

@@ -53,6 +53,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.BasicConfigurationNode;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import us.crazycrew.crazyenchantments.enums.Mode;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.io.IOException;
@@ -216,7 +217,7 @@ public class CrazyInstance extends CrazyPlugin {
         loadExamples(); // load examples
 
         if (audience != null) {
-            MessageKeys.CONFIG_RELOAD.sendMessage(audience);
+            getUserRegistry().getUser(audience).sendMessage(MessageKeys.config_reload);
         }
     }
 

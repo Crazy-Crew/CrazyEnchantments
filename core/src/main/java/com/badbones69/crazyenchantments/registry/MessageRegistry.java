@@ -13,10 +13,7 @@ import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import us.crazycrew.crazyenchantments.interfaces.IMessage;
 import us.crazycrew.crazyenchantments.interfaces.registry.IMessageRegistry;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MessageRegistry implements IMessageRegistry {
 
@@ -29,12 +26,6 @@ public class MessageRegistry implements IMessageRegistry {
     private final StringUtils utils = this.fusion.getStringUtils();
 
     private final Map<Key, Map<Key, IMessage>> messages = new HashMap<>(); // locale key, (message key, message context)
-
-    private final UserRegistry userRegistry;
-
-    public MessageRegistry(@NotNull final UserRegistry userRegistry) {
-        this.userRegistry = userRegistry;
-    }
 
     @Override
     public void addMessage(@NotNull final Key locale, @NotNull final Key key, @NotNull final IMessage message) {
@@ -63,6 +54,10 @@ public class MessageRegistry implements IMessageRegistry {
     @Override
     public @NotNull final IMessage getMessage(@NotNull final Key locale, @NotNull final Key key) {
         return this.messages.getOrDefault(locale, this.messages.get(MessageKeys.default_locale)).get(key);
+    }
+
+    public @NotNull final Map<Key, Map<Key, IMessage>> getMessages() {
+        return Collections.unmodifiableMap(this.messages);
     }
 
     @Override
