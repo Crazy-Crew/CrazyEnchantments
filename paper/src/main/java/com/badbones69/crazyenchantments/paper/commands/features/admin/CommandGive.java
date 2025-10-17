@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.Nullable;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 
 public class CommandGive extends BaseCommand {
 
@@ -23,8 +24,10 @@ public class CommandGive extends BaseCommand {
     public void give(final CommandSender sender, @Suggestion("items") final String item, @Nullable @Optional final Player target) {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
+        final User user = this.userRegistry.getUser(sender);
+
         if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }
@@ -32,7 +35,7 @@ public class CommandGive extends BaseCommand {
         final ItemStack itemStack = ItemBuilder.convertString(item).build();
 
         if (itemStack == null) {
-            MessageKeys.INVALID_ITEM_STRING.sendMessage(sender);
+            user.sendMessage(MessageKeys.invalid_item_string);
 
             return;
         }

@@ -13,6 +13,8 @@ public interface IMessageRegistry {
 
     IMessage getMessage(@NotNull final Key locale, @NotNull final Key key);
 
+    IMessage getMessage(@NotNull final Key key);
+
     @ApiStatus.Internal
     void init();
 

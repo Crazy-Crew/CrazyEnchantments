@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration;
 
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types.LegacyMigration;
@@ -14,6 +14,7 @@ import dev.triumphteam.cmd.core.argument.keyed.Flags;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.Optional;
 
 public class CommandMigration extends BaseCommand {
@@ -31,14 +32,16 @@ public class CommandMigration extends BaseCommand {
                 case tinker_migration -> new TinkerMigration(sender).run();
                 case legacy_migration -> new LegacyMigration(sender).run();
                 case enchant_migration -> {
+                    final User user = this.userRegistry.getUser(sender);
+
                     if (!(sender instanceof Player player)) {
-                        MessageKeys.PLAYERS_ONLY.sendMessage(sender);
+                        user.sendMessage(MessageKeys.players_only);
 
                         return;
                     }
 
                     if (!player.hasPermission("crazyenchantments.migrate-enchants")) {
-                        MessageKeys.NO_PERMISSION.sendMessage(player);
+                        user.sendMessage(MessageKeys.no_permission);
 
                         return;
                     }
@@ -49,7 +52,7 @@ public class CommandMigration extends BaseCommand {
                         final Optional<Player> optional = flags.getFlagValue("p", Player.class);
 
                         if (optional.isEmpty()) {
-                            MessageKeys.NOT_ONLINE.sendMessage(sender);
+                            user.sendMessage(MessageKeys.not_online);
                         } else {
                             argument = optional.get();
                         }

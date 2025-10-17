@@ -11,9 +11,11 @@ import us.crazycrew.crazyenchantments.interfaces.registry.IUserRegistry;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class ICrazyEnchantments {
 
+    public static final UUID console = UUID.fromString("00000000-0000-0000-0000-000000000000");
     public static final String namespace = "crazyenchantments";
 
     public static <T extends ICrazyEnchantments> T getInstance(@NotNull final Class<T> classObject) {

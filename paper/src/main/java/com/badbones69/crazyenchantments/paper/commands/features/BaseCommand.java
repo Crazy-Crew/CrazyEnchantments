@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.managers.HeadManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +24,8 @@ public class BaseCommand {
     protected final ItemManager itemManager = this.plugin.getItemManager();
 
     protected final CrazyInstance instance = this.plugin.getInstance();
+
+    protected final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     protected final ConfigManager options = this.plugin.getConfigManager();
 

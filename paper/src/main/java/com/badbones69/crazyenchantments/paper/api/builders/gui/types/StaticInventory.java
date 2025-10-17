@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
 import org.bukkit.Server;
@@ -30,6 +31,8 @@ public abstract class StaticInventory extends InventoryBuilder {
     protected final KitsManager kitsManager = this.plugin.getKitsManager();
 
     protected final CrazyInstance instance = this.plugin.getInstance();
+
+    protected final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     protected final CurrencyManager currencyManager = this.instance.getCurrencyManager();
 

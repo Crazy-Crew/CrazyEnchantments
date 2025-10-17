@@ -1,9 +1,10 @@
 package com.badbones69.crazyenchantments.paper.managers.currency.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.managers.currency.interfaces.ICurrency;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.Map;
 
 public class LevelCurrency extends ICurrency {
@@ -30,7 +31,7 @@ public class LevelCurrency extends ICurrency {
 
     @Override
     public void failed(@NotNull final Player player, @NotNull final Map<String, String> placeholders) {
-        MessageKeys.NEED_MORE_XP_LEVELS.sendMessage(player, placeholders);
+        this.userRegistry.getUser(player).sendMessage(MessageKeys.need_more_xp_lvls, placeholders);
     }
 
     @Override

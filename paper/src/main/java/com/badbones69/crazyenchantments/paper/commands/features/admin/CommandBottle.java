@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.persistence.PersistentDataType;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 
 public class CommandBottle extends BaseCommand {
 
@@ -20,10 +21,12 @@ public class CommandBottle extends BaseCommand {
     @Permission(value = "crazyenchantments.bottle", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments bottle <player> <xp> <amount>")
     public void bottle(final CommandSender sender, final int xp, final int amount, @Optional final Player target) {
-        Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
+        final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
+
+        final User user = this.userRegistry.getUser(sender);
 
         if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }

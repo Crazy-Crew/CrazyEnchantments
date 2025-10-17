@@ -4,9 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -23,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +38,8 @@ public class ScramblerListener implements Listener {
     private final ItemManager itemManager = this.plugin.getItemManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     private final ComponentLogger logger = this.plugin.getComponentLogger();
 
@@ -202,7 +206,7 @@ public class ScramblerListener implements Listener {
         if (!isScrambler.get() || !this.instance.isEnchantmentBook(book)) return;
 
         if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
-            MessageKeys.NEED_TO_USE_PLAYER_INVENTORY.sendMessage(player);
+            this.userRegistry.getUser(player).sendMessage(MessageKeys.need_to_use_player_inventory);
 
             return;
         }

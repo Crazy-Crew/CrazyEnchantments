@@ -1,17 +1,20 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -24,6 +27,8 @@ public class SlotCrystalListener implements Listener {
     private final ConfigManager options = this.plugin.getConfigManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -52,14 +57,16 @@ public class SlotCrystalListener implements Listener {
 
         event.setCancelled(true);
 
+        final User user = this.userRegistry.getUser(player);
+
         if (enchAmount >= maxEnchants) {
-            MessageKeys.HIT_ENCHANTMENT_MAX.sendMessage(player);
+            user.sendMessage(MessageKeys.hit_enchantment_max);
 
             return;
         }
 
         if ((baseEnchants - limiter) >= maxEnchants) {
-            MessageKeys.MAX_SLOTS_UNLOCKED.sendMessage(player);
+            user.sendMessage(MessageKeys.hit_slot_max);
 
             return;
         }
@@ -70,7 +77,7 @@ public class SlotCrystalListener implements Listener {
 
         //event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
-        MessageKeys.APPLIED_SLOT_CRYSTAL.sendMessage(player, new HashMap<>(4) {{
+        user.sendMessage(MessageKeys.hit_slot_max, new HashMap<>(4) {{
             put("{slot}", String.valueOf(-(limiter - 1)));
             put("{max_enchants}", String.valueOf(maxEnchants));
             put("{enchant_amount}", String.valueOf(enchAmount));

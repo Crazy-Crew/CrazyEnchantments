@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
@@ -14,6 +14,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.HashMap;
 
 public class CommandAdd extends BaseCommand {
@@ -27,8 +29,10 @@ public class CommandAdd extends BaseCommand {
 
         boolean isVanilla = vanillaEnchantment != null;
 
+        final User user = this.userRegistry.getUser(player);
+
         if (vanillaEnchantment == null && customEnchantment == null) {
-            MessageKeys.NOT_AN_ENCHANTMENT.sendMessage(player);
+            user.sendMessage(MessageKeys.not_an_enchantment);
 
             return;
         }
@@ -36,7 +40,7 @@ public class CommandAdd extends BaseCommand {
         final ItemStack itemStack = Methods.getItemInHand(player);
 
         if (itemStack.isEmpty()) {
-            MessageKeys.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
+            user.sendMessage(MessageKeys.doesnt_have_item_in_hand);
 
             return;
         }
@@ -61,8 +65,10 @@ public class CommandAdd extends BaseCommand {
 
         boolean isVanilla = vanillaEnchantment != null;
 
+        final User user = this.userRegistry.getUser(player);
+
         if (vanillaEnchantment == null && customEnchantment == null) {
-            MessageKeys.NOT_AN_ENCHANTMENT.sendMessage(player);
+            user.sendMessage(MessageKeys.not_an_enchantment);
 
             return;
         }
@@ -70,7 +76,7 @@ public class CommandAdd extends BaseCommand {
         final ItemStack itemStack = Methods.getItemInHand(player).clone();
 
         if (itemStack.getType() == Material.AIR) {
-            MessageKeys.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
+            user.sendMessage(MessageKeys.doesnt_have_item_in_hand);
 
             return;
         }
@@ -83,7 +89,7 @@ public class CommandAdd extends BaseCommand {
             if (this.instance.getEnchantments(itemStack).containsKey(customEnchantment)) {
                 Methods.setItemInHand(player, this.instance.removeEnchantment(itemStack, customEnchantment));
 
-                MessageKeys.REMOVED_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
+                user.sendMessage(MessageKeys.remove_enchantment, new HashMap<>() {{
                     put("{enchantment}", customEnchantment.getCustomName());
                 }});
 
@@ -91,7 +97,7 @@ public class CommandAdd extends BaseCommand {
             }
         }
 
-        MessageKeys.DOESNT_HAVE_ENCHANTMENT.sendMessage(player, new HashMap<>() {{
+        user.sendMessage(MessageKeys.doesnt_have_enchantment, new HashMap<>() {{
             put("{enchantment}", customEnchantment.getCustomName());
         }});
     }

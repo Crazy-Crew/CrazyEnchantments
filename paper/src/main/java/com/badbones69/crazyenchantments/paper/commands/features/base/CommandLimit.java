@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.commands.features.base;
 
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -8,6 +7,7 @@ import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +42,6 @@ public class CommandLimit extends BaseCommand {
         placeholders.put("{max_enchants}", String.valueOf(canAdd));
         placeholders.put("{config_limit}", String.valueOf(this.options.isUseConfigLimits()));
 
-        MessageKeys.LIMIT_COMMAND.sendMessage(player, placeholders);
+        this.userRegistry.getUser(player).sendMessage(MessageKeys.limit_command, placeholders);
     }
 }

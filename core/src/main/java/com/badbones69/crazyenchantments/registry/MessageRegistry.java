@@ -56,6 +56,11 @@ public class MessageRegistry implements IMessageRegistry {
         return this.messages.getOrDefault(locale, this.messages.get(MessageKeys.default_locale)).get(key);
     }
 
+    @Override
+    public @NotNull final IMessage getMessage(@NotNull final Key key) { // only used for console command sender
+        return this.messages.get(MessageKeys.default_locale).get(key);
+    }
+
     public @NotNull final Map<Key, Map<Key, IMessage>> getMessages() {
         return Collections.unmodifiableMap(this.messages);
     }

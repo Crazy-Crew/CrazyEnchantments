@@ -1,7 +1,9 @@
 package com.badbones69.crazyenchantments.paper.managers.currency.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +15,10 @@ public abstract class ICurrency {
     protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     protected final ConfigManager configManager = this.plugin.getConfigManager();
+
+    protected final CrazyInstance instance = this.plugin.getInstance();
+
+    protected final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     protected final Server server = this.plugin.getServer();
 

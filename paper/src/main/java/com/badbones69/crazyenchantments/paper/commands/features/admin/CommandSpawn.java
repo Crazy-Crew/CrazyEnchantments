@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -32,8 +33,10 @@ public class CommandSpawn extends BaseCommand {
     @Flag(flag = "cat", longFlag = "category", argument = Category.class)
     @Syntax("/crazyenchantments spawn [-ce/--enchantment] [-c/--category] [-l/--level 1 or 1-5] [-x] [-y] [-z] [-w/--world]")
     public void spawn(final CommandSender sender, final Flags flags) {
+        final User user = this.userRegistry.getUser(sender);
+
         if (!flags.hasFlag("ce") && !flags.hasFlag("cat")) {
-            MessageKeys.NOT_AN_ENCHANTMENT.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_an_enchantment);
 
             return;
         }
@@ -87,7 +90,7 @@ public class CommandSpawn extends BaseCommand {
 
         flags.getFlagValue("cat", Category.class).ifPresent(action -> world.dropItemNaturally(location, action.getLostBook().getLostBook(action).build()));
 
-        MessageKeys.SPAWNED_BOOK.sendMessage(sender, new HashMap<>() {{
+        user.sendMessage(MessageKeys.spawned_book, new HashMap<>() {{
             put("{world}", location.getWorld().getName());
             put("{x}", String.valueOf(location.getBlockX()));
             put("{y}", String.valueOf(location.getBlockY()));

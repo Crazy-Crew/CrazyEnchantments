@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
@@ -7,7 +8,6 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.managers.PlayerManager;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
@@ -17,8 +17,10 @@ import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.managers.currency.CurrencyManager;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -41,6 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +58,8 @@ public class SwordEnchantments implements Listener {
     private final PluginManager pluginManager = this.server.getPluginManager();
 
     private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     private final PlayerManager playerManager = this.instance.getPlayerManager();
 
@@ -96,7 +101,7 @@ public class SwordEnchantments implements Listener {
                         cePlayer.setRageLevel(0);
                         cePlayer.setRage(false);
 
-                        rageInformPlayer(player, MessageKeys.RAGE_DAMAGED, 0f);
+                        rageInformPlayer(player, MessageKeys.rage_damaged, 0f);
                     }
                 });
             }
@@ -138,7 +143,7 @@ public class SwordEnchantments implements Listener {
                     cePlayer.setRage(true);
                     cePlayer.setRageLevel(1);
 
-                    rageInformPlayer(damagerEntity, MessageKeys.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.options.getRageMaxLevel()));
+                    rageInformPlayer(damagerEntity, MessageKeys.rage_building, ((float) cePlayer.getRageLevel() / (float) this.options.getRageMaxLevel()));
                 }
 
                 cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, damager) {
@@ -148,7 +153,7 @@ public class SwordEnchantments implements Listener {
                         cePlayer.setRage(false);
                         cePlayer.setRageLevel(0);
 
-                        rageInformPlayer(damagerEntity, MessageKeys.RAGE_COOLED_DOWN, 0f);
+                        rageInformPlayer(damagerEntity, MessageKeys.rage_cooled_down, 0f);
                     }
                 }.runDelayed(80));
             }
@@ -193,7 +198,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            MessageKeys.DISORDERED_ENEMY_HOT_BAR.sendMessage(damagerEntity);
+            this.userRegistry.getUser(damagerEntity).sendMessage(MessageKeys.disordered_enemy_hot_bar);
         }
 
         if (livingEntity instanceof Player player && EnchantUtils.isEventActive(CEnchantments.SKILLSWIPE, damagerEntity, item, enchantments)) {
@@ -391,26 +396,30 @@ public class SwordEnchantments implements Listener {
     }
 
     private void rageInformPlayer(@NotNull final Player player, @NotNull final Map<String, String> placeholders, final float progress) {
+        final User user = this.userRegistry.getUser(player);
+
         if (this.options.isUseRageBossBar()) {
-            final Component component = MessageKeys.RAGE_RAGE_UP.getMessage(player);
+            final Component component = user.getComponent(MessageKeys.rage_rage_up);
 
             if (!component.equals(Component.empty())) {
                 this.bossBarController.updateBossBar(player, component, progress);
             }
         } else {
-            MessageKeys.RAGE_RAGE_UP.sendMessage(player, placeholders);
+            user.sendMessage(MessageKeys.rage_rage_up, placeholders);
         }
     }
 
-    private void rageInformPlayer(@NotNull final Player player, @NotNull final MessageKeys message, final float progress) {
+    private void rageInformPlayer(@NotNull final Player player, @NotNull final Key message, final float progress) {
+        final User user = this.userRegistry.getUser(player);
+
         if (this.options.isUseRageBossBar()) {
-            final Component component = message.getMessage(player);
+            final Component component = user.getComponent(message);
 
             if (!component.equals(Component.empty())) {
                 this.bossBarController.updateBossBar(player, component, progress);
             }
         } else {
-            message.sendMessage(player);
+            user.sendMessage(message);
         }
     }
 }

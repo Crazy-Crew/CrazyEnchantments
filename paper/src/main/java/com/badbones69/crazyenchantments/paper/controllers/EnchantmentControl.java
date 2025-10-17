@@ -1,18 +1,19 @@
 package com.badbones69.crazyenchantments.paper.controllers;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.shop.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.paper.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,6 +29,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +41,8 @@ public class EnchantmentControl implements Listener {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
+
     @NotNull
     private final CrazyManager crazyManager = null;
 
@@ -46,6 +51,8 @@ public class EnchantmentControl implements Listener {
         final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
 
         Player player = (Player) event.getWhoClicked();
+
+        final User user = this.userRegistry.getUser(player);
 
         ItemStack item = event.getCurrentItem();
         ItemStack book = event.getCursor();
@@ -90,7 +97,7 @@ public class EnchantmentControl implements Listener {
 
                     player.setItemOnCursor(null);
 
-                    MessageKeys.ENCHANTMENT_UPGRADE_SUCCESS.sendMessage(player, new HashMap<>() {{
+                    user.sendMessage(MessageKeys.enchantment_upgrade_success, new HashMap<>() {{
                         put("{enchantment}", enchantment.getCustomName());
                         put("{level}", String.valueOf(ceBook.getLevel()));
                     }});
@@ -106,21 +113,21 @@ public class EnchantmentControl implements Listener {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
 
-                            MessageKeys.ITEM_WAS_PROTECTED.sendMessage(player);
+                            user.sendMessage(MessageKeys.item_was_protected);
                         } else {
                             event.setCurrentItem(instance.removeEnchantment(item, enchantment));
 
-                            MessageKeys.ENCHANTMENT_UPGRADE_DESTROYED.sendMessage(player);
+                            user.sendMessage(MessageKeys.enchantment_upgrade_destroyed);
                         }
                     } else {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
 
-                            MessageKeys.ITEM_WAS_PROTECTED.sendMessage(player);
+                            user.sendMessage(MessageKeys.item_was_protected);
                         } else {
                             event.setCurrentItem(null);
 
-                            MessageKeys.ITEM_DESTROYED.sendMessage(player);
+                            user.sendMessage(MessageKeys.item_destroyed);
                         }
                     }
 
@@ -133,7 +140,7 @@ public class EnchantmentControl implements Listener {
                 if (!Methods.isEventCancelled(new BookFailEvent(player, item, ceBook))) {
                     player.setItemOnCursor(null);
 
-                    MessageKeys.ENCHANTMENT_UPGRADE_FAILED.sendMessage(player);
+                    user.sendMessage(MessageKeys.enchantment_upgrade_failed);
 
                     Methods.playItemBreak(player, book);
                 }
@@ -143,14 +150,14 @@ public class EnchantmentControl implements Listener {
         }
 
         if (!this.crazyManager.canAddEnchantment(player, item)) {
-            MessageKeys.HIT_ENCHANTMENT_MAX.sendMessage(player);
+            user.sendMessage(MessageKeys.hit_enchantment_max);
 
             return;
         }
 
         for (CEnchantment enchant : enchantments.keySet()) {
             if (enchant.conflictsWith(enchantment)) {
-                MessageKeys.CONFLICTING_ENCHANT.sendMessage(player);
+                user.sendMessage(MessageKeys.conflicting_enchant);
 
                 return;
             }
@@ -167,7 +174,7 @@ public class EnchantmentControl implements Listener {
 
             player.setItemOnCursor(null);
 
-            MessageKeys.BOOK_WORKS.sendMessage(player);
+            user.sendMessage(MessageKeys.book_works);
 
             player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
 
@@ -180,13 +187,13 @@ public class EnchantmentControl implements Listener {
 
                 event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
 
-                MessageKeys.ITEM_WAS_PROTECTED.sendMessage(player);
+                user.sendMessage(MessageKeys.item_was_protected);
             } else {
                 Methods.playItemBreak(player, item);
 
                 event.setCurrentItem(null);
 
-                MessageKeys.ITEM_DESTROYED.sendMessage(player);
+                user.sendMessage(MessageKeys.item_destroyed);
             }
 
             player.setItemOnCursor(null);
@@ -194,7 +201,7 @@ public class EnchantmentControl implements Listener {
             return;
         }
 
-        MessageKeys.BOOK_FAILED.sendMessage(player);
+        user.sendMessage(MessageKeys.book_failed);
 
         Methods.playItemBreak(player, book);
 

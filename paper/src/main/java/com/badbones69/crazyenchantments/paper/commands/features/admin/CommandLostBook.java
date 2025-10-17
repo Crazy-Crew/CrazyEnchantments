@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.shop.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.Nullable;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,16 +24,18 @@ public class CommandLostBook extends BaseCommand {
     @Permission(value = "crazyenchantments.lostbook", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments lostbook <category> <amount> [player]")
     public void lostbook(final CommandSender sender, final Category category, final int amount, @Optional @Nullable final Player target) {
-        if (category == null) {
-            MessageKeys.NOT_A_CATEGORY.sendMessage(sender);
+        final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
+
+        final User user = this.userRegistry.getUser(sender);
+
+        if (safePlayer == null) {
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }
 
-        final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
-
-        if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+        if (category == null) {
+            user.sendMessage(MessageKeys.not_a_category);
 
             return;
         }
@@ -46,8 +49,10 @@ public class CommandLostBook extends BaseCommand {
     public void scroll(final CommandSender sender, final Scrolls scroll, final int amount, @Optional @Nullable final Player target) {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
+        final User user = this.userRegistry.getUser(sender);
+
         if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }
@@ -67,14 +72,16 @@ public class CommandLostBook extends BaseCommand {
     public void scrambler(final CommandSender sender, final int amount, @Optional @Nullable final Player target) {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
+        final User user = this.userRegistry.getUser(sender);
+
         if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }
 
         if (Methods.isInventoryFull(safePlayer)) {
-            MessageKeys.INVENTORY_FULL.sendMessage(sender);
+            user.sendMessage(MessageKeys.inventory_full);
 
             return;
         }
@@ -87,10 +94,10 @@ public class CommandLostBook extends BaseCommand {
         }};
 
         if (target != null) {
-            MessageKeys.GIVE_SCRAMBLER_CRYSTAL.sendMessage(sender, placeholders);
+            user.sendMessage(MessageKeys.give_scrambler_crystal, placeholders);
         }
 
-        MessageKeys.GET_SCRAMBLER.sendMessage(safePlayer, placeholders);
+        this.userRegistry.getUser(safePlayer).sendMessage(MessageKeys.get_scrambler_crystal, placeholders);
     }
 
     @Command("crystal")
@@ -99,14 +106,16 @@ public class CommandLostBook extends BaseCommand {
     public void crystal(final CommandSender sender, final int amount, @Optional @Nullable final Player target) {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
+        final User user = this.userRegistry.getUser(sender);
+
         if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }
 
         if (Methods.isInventoryFull(safePlayer)) {
-            MessageKeys.INVENTORY_FULL.sendMessage(sender);
+            user.sendMessage(MessageKeys.inventory_full);
 
             return;
         }
@@ -122,10 +131,10 @@ public class CommandLostBook extends BaseCommand {
             }};
 
             if (target != null) {
-                MessageKeys.GIVE_PROTECTION_CRYSTAL.sendMessage(sender, placeholders);
+                user.sendMessage(MessageKeys.give_protection_crystal, placeholders);
             }
 
-            MessageKeys.GET_PROTECTION_CRYSTAL.sendMessage(safePlayer, placeholders);
+            this.userRegistry.getUser(safePlayer).sendMessage(MessageKeys.get_protection_crystal, placeholders);
         });
     }
 
@@ -135,17 +144,20 @@ public class CommandLostBook extends BaseCommand {
     public void slotcrystal(final CommandSender sender, final int amount, @Optional @Nullable final Player target) {
         final Player safePlayer = target == null ? sender instanceof Player player ? player : null : target;
 
+        final User user = this.userRegistry.getUser(sender);
+
         if (safePlayer == null) {
-            MessageKeys.NOT_ONLINE.sendMessage(sender);
+            user.sendMessage(MessageKeys.not_online);
 
             return;
         }
 
         if (Methods.isInventoryFull(safePlayer)) {
-            MessageKeys.INVENTORY_FULL.sendMessage(sender);
+            user.sendMessage(MessageKeys.inventory_full);
 
             return;
         }
+
 
         this.itemManager.getItem("slot_crystal_item").ifPresent(action -> {
             final ItemStack itemStack = action.getItemStack(amount);
@@ -158,10 +170,10 @@ public class CommandLostBook extends BaseCommand {
             }};
 
             if (target != null) {
-                MessageKeys.GIVE_SLOT_CRYSTAL.sendMessage(sender, placeholders);
+                user.sendMessage(MessageKeys.give_slot_crystal, placeholders);
             }
 
-            MessageKeys.GET_SLOT_CRYSTAL.sendMessage(safePlayer, placeholders);
+            this.userRegistry.getUser(safePlayer).sendMessage(MessageKeys.get_slot_crystal, placeholders);
         });
     }
 }

@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.managers.currency.types.plugins;
 
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.currency.VaultConfig;
 import com.badbones69.crazyenchantments.paper.managers.currency.interfaces.ICurrency;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
@@ -8,6 +7,8 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.Map;
 
 public class VaultCurrency extends ICurrency {
@@ -58,7 +59,7 @@ public class VaultCurrency extends ICurrency {
 
     @Override
     public void failed(@NotNull final Player player, @NotNull final Map<String, String> placeholders) {
-        MessageKeys.NEED_MORE_MONEY.sendMessage(player, placeholders);
+        this.userRegistry.getUser(player).sendMessage(MessageKeys.need_more_money, placeholders);
     }
 
     @Override

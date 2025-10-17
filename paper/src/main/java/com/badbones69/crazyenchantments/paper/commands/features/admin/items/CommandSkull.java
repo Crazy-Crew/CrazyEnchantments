@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.items;
 
 import com.badbones69.crazyenchantments.enums.Files;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.ryderbelserion.fusion.core.api.support.ModSupport;
 import com.ryderbelserion.fusion.paper.builders.ItemBuilder;
@@ -15,6 +15,7 @@ import dev.triumphteam.cmd.core.argument.keyed.Flags;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.UUID;
 
 public class CommandSkull extends BaseCommand {
@@ -40,14 +42,20 @@ public class CommandSkull extends BaseCommand {
     public void skull(@NotNull final CommandSender sender, final Flags flags) {
         final BasicConfigurationNode root = Files.heads.getJsonConfiguration();
 
+        final User user = this.userRegistry.getUser(sender);
+
         if (flags.hasFlag("item")) {
-            if (!(sender instanceof Player player)) return;
+            if (!(sender instanceof Player player)) {
+                user.sendMessage(MessageKeys.players_only);
+
+                return;
+            }
 
             final PlayerInventory inventory = player.getInventory();
             final ItemStack itemStack = inventory.getItemInMainHand();
 
             if (itemStack.isEmpty()) {
-                MessageKeys.DOESNT_HAVE_ITEM_IN_HAND.sendMessage(player);
+                user.sendMessage(MessageKeys.doesnt_have_item_in_hand);
 
                 return;
             }

@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.migration.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.commands.features.admin.migration.interfaces.IEnchantMigration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import java.util.*;
 
 public class EnchantMigration extends IEnchantMigration {
@@ -29,6 +30,8 @@ public class EnchantMigration extends IEnchantMigration {
             return;
         }
 
+        final User user = this.userRegistry.getUser(this.player);
+
         for (final ItemStack item : items) {
             StringBuilder builder = new StringBuilder();
 
@@ -41,13 +44,13 @@ public class EnchantMigration extends IEnchantMigration {
             }
 
             enchantments.forEach((enchantment, level) -> {
-                MessageKeys.BASE_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
+                user.sendMessage(MessageKeys.show_enchants_format_base, new HashMap<>() {{
                     put("{enchant}", enchantment.getName());
                     put("{level}", String.valueOf(level));
                 }});
             });
 
-            MessageKeys.MAIN_UPDATE_ENCHANTS.sendMessage(sender, new HashMap<>() {{
+            user.sendMessage(MessageKeys.show_enchants_format_main, new HashMap<>() {{
                 put("{item}", item.getType().toString());
                 put("{item_enchants}", builder.toString());
             }});

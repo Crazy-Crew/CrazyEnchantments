@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.KitConfig;
 import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
@@ -9,6 +9,7 @@ import com.ryderbelserion.fusion.paper.builders.gui.interfaces.GuiItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 
 public class KitsPreviewMenu extends StaticInventory {
 
@@ -26,10 +27,12 @@ public class KitsPreviewMenu extends StaticInventory {
     public void open() {
         final Player player = getPlayer();
 
+        final User user = this.userRegistry.getUser(player);
+
         if (!this.kitsManager.isRegistered()) {
             this.fusion.log("warn", "The kits preview menu is not enabled, either because of an error, or g-kits are not enabled.");
 
-            MessageKeys.GKIT_NOT_ENABLED.sendMessage(player);
+            user.sendMessage(MessageKeys.gkitz_not_enabled);
 
             return;
         }

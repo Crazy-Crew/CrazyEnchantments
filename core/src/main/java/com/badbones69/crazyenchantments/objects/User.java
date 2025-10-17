@@ -5,7 +5,9 @@ import com.badbones69.crazyenchantments.registry.MessageRegistry;
 import com.ryderbelserion.fusion.core.FusionCore;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import us.crazycrew.crazyenchantments.interfaces.IUser;
 import us.crazycrew.crazyenchantments.ICrazyEnchantments;
 import java.util.Locale;
@@ -25,11 +27,16 @@ public class User extends IUser {
         this.audience = audience;
     }
 
-    private String locale = "en-US";
+    private Key locale = MessageKeys.default_locale;
+
+    @Override
+    public Component getComponent(@NotNull final Key key, @NotNull final Map<String, String> placeholders) {
+        return this.messageRegistry.getMessage(getLocale(), key).getComponent(getAudience(), placeholders);
+    }
 
     @Override
     public void sendMessage(@NotNull final Key key, @NotNull final Map<String, String> placeholders) {
-        this.messageRegistry.getMessage(getLocaleKey(), key).send(getAudience(), placeholders);
+        this.messageRegistry.getMessage(getLocale(), key).send(getAudience(), placeholders);
     }
 
     @Override
@@ -42,7 +49,7 @@ public class User extends IUser {
         final String country = locale.getCountry();
         final String language = locale.getLanguage();
 
-        this.locale = String.format("%s-%s", language, country);
+        this.locale = Key.key(ICrazyEnchantments.namespace, String.format("%s-%s.yml", language, country));
 
         this.fusion.log("warn", "Locale Debug: Country: {}, Language: {}", country, language);
     }
@@ -52,14 +59,8 @@ public class User extends IUser {
         return this.audience;
     }
 
-    public @NotNull final Key getLocaleKey() {
-        final String locale = "%s.yml".formatted(getLocale());
-
-        return Key.key(ICrazyEnchantments.namespace, locale);
-    }
-
     @Override
-    public @NotNull final String getLocale() {
+    public @NotNull final Key getLocale() {
         return this.locale;
     }
 }

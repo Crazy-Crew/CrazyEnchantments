@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.base;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.ShopMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -10,6 +9,7 @@ import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
 
 public class CommandHelp extends BaseCommand {
 
@@ -26,6 +26,6 @@ public class CommandHelp extends BaseCommand {
     @Permission(value = "crazyenchantments.help", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments help")
     public void help(final CommandSender sender) {
-        MessageKeys.HELP.sendMessage(sender);
+        this.userRegistry.getUser(sender).sendMessage(MessageKeys.help);
     }
 }

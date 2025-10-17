@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
@@ -7,13 +8,13 @@ import com.badbones69.crazyenchantments.paper.api.enums.shop.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -29,6 +30,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.*;
 
 public class ScrollListener implements Listener {
@@ -36,6 +39,8 @@ public class ScrollListener implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     private final ConfigManager options = this.plugin.getConfigManager();
 
@@ -56,8 +61,10 @@ public class ScrollListener implements Listener {
 
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
+        final User user = this.userRegistry.getUser(player);
+
         if (scroll.getAmount() > 1) {
-            MessageKeys.NEED_TO_UNSTACK_ITEM.sendMessage(player);
+            user.sendMessage(MessageKeys.need_to_unstack_item);
 
             return;
         }
@@ -74,7 +81,7 @@ public class ScrollListener implements Listener {
                     player.setItemOnCursor(Methods.removeItem(scroll));
 
                     if (this.options.isBlackScrollChanceToggle() && !Methods.randomPicker(this.options.getBlackScrollChance(), 100)) {
-                        MessageKeys.BLACK_SCROLL_UNSUCCESSFUL.sendMessage(player);
+                        user.sendMessage(MessageKeys.black_scroll_unsuccessful);
 
                         return;
                     }
@@ -144,7 +151,7 @@ public class ScrollListener implements Listener {
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
 
-            MessageKeys.RIGHT_CLICK_BLACK_SCROLL.sendMessage(player);
+            this.userRegistry.getUser(player).sendMessage(MessageKeys.right_click_black_scroll);
 
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {

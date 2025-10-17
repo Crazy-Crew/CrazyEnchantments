@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.objects.TinkerEnchantInfo;
 import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
 import com.ryderbelserion.fusion.core.api.enums.ItemState;
@@ -25,6 +25,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +92,7 @@ public class TinkerMenu extends StaticInventory {
                     }
 
                     if (toggle) {
-                        MessageKeys.TINKER_SOLD_MESSAGE.sendMessage(player);
+                        this.userRegistry.getUser(player).sendMessage(MessageKeys.tinker_sold_msg);
                     }
 
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
@@ -230,14 +232,16 @@ public class TinkerMenu extends StaticInventory {
     private boolean isFirstEmpty(final Player player, final ItemStack itemStack, final InventoryClickEvent event) {
         final Inventory inventory = event.getInventory();
 
+        final User user = this.userRegistry.getUser(player);
+
         if (inventory.firstEmpty() == -1) {
-            MessageKeys.TINKER_INVENTORY_FULL.sendMessage(player);
+            user.sendMessage(MessageKeys.tinker_inventory_full);
 
             return true;
         }
 
         if (itemStack.getAmount() > 1) {
-            MessageKeys.NEED_TO_UNSTACK_ITEM.sendMessage(player);
+            user.sendMessage(MessageKeys.need_to_unstack_item);
 
             return true;
         }

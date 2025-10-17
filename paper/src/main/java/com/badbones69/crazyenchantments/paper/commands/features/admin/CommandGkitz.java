@@ -1,13 +1,14 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin;
 
+import com.badbones69.crazyenchantments.objects.User;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMainMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.managers.PlayerManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.KitConfig;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.*;
 import dev.triumphteam.cmd.core.argument.keyed.Flags;
@@ -18,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +35,8 @@ public class CommandGkitz {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
+
     private final PlayerManager playerManager = this.instance.getPlayerManager();
 
     @Command
@@ -39,7 +44,7 @@ public class CommandGkitz {
     @Syntax("/gkitz")
     public void run(@NotNull final Player player) {
         if (!this.options.isGkitzToggle()) {
-            MessageKeys.GKIT_NOT_ENABLED.sendMessage(player);
+            this.userRegistry.getUser(player).sendMessage(MessageKeys.gkitz_not_enabled);
 
             return;
         }
@@ -78,7 +83,9 @@ public class CommandGkitz {
             final boolean isNotReceiver = sender instanceof ConsoleCommandSender || target.isPresent() && !target.get().toString().equalsIgnoreCase(receiver.toString());
 
             if (isNotReceiver) {
-                MessageKeys.RESET_GKIT.sendMessage(sender, new HashMap<>() {{
+                final User user = this.userRegistry.getUser(sender);
+
+                user.sendMessage(MessageKeys.reset_gkit, new HashMap<>() {{
                     put("{player}", player.getName());
                     put("{kit}", kit.getName());
                 }});
@@ -110,11 +117,15 @@ public class CommandGkitz {
             put("{kit}", kit.getName());
         }};
 
-        MessageKeys.GIVEN_GKIT.sendMessage(sender, placeholders);
+        final User author = this.userRegistry.getUser(sender);
+
+        author.sendMessage(MessageKeys.given_gkit, placeholders);
 
         this.playerManager.getPlayer(player).ifPresentOrElse(cePlayer -> {
+            final User user = this.userRegistry.getUser(player);
+
             if (sender.hasPermission("crazyenchantments.gkitz.give")) {
-                MessageKeys.RECEIVED_GKIT.sendMessage(player, placeholders);
+                user.sendMessage(MessageKeys.received_gkit, placeholders);
 
                 cePlayer.giveGKit(kit);
 
@@ -122,7 +133,7 @@ public class CommandGkitz {
             }
 
             if (!cePlayer.hasGkitPermission(kit)) {
-                MessageKeys.NO_GKIT_PERMISSION.sendMessage(player, placeholders);
+                user.sendMessage(MessageKeys.no_gkit_permission, placeholders);
 
                 return;
             }
@@ -138,7 +149,7 @@ public class CommandGkitz {
                     put("{second}", splitter[3]);
                 }};
 
-                MessageKeys.STILL_IN_COOLDOWN.sendMessage(player, newPlaceholders);
+                user.sendMessage(MessageKeys.still_in_cooldown, newPlaceholders);
 
                 return;
             }
@@ -151,7 +162,7 @@ public class CommandGkitz {
             final boolean isNotReceiver = sender instanceof ConsoleCommandSender || target.isPresent() && !target.get().toString().equalsIgnoreCase(receiver.toString());
 
             if (isNotReceiver) {
-                MessageKeys.RECEIVED_GKIT.sendMessage(player, placeholders);
+                author.sendMessage(MessageKeys.received_gkit, placeholders);
             }
         }, () -> {
             //todo() debug

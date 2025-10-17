@@ -2,12 +2,13 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.items.interfaces.CustomItem;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.constants.MessageKeys;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +34,10 @@ public class ProtectionCrystalListener implements Listener {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final ItemManager itemManager = this.plugin.getItemManager();
+
+    private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     @NotNull
     private final ProtectionCrystalSettings protectionCrystalSettings = null;
@@ -58,7 +65,7 @@ public class ProtectionCrystalListener implements Listener {
         if (item.hasKey(itemStack, DataKeys.protected_item.getNamespacedKey())) return;
 
         if (itemStack.getAmount() > 1 || crystalItem.getAmount() > 1) {
-            MessageKeys.NEED_TO_UNSTACK_ITEM.sendMessage(player);
+            this.userRegistry.getUser(player).sendMessage(MessageKeys.need_to_unstack_item);
 
             return;
         }
