@@ -132,9 +132,6 @@ public enum CEnchantments {
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    @NotNull
-    private final Methods methods = null;
-
     private final String name;
     private final String typeName;
     private final boolean hasChanceSystem;

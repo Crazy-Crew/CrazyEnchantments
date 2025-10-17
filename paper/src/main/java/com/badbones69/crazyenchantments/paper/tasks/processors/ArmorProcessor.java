@@ -25,8 +25,6 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
 
     private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final Methods methods = null;
-
     private final PluginSupport pluginSupport = null;
 
     public ArmorProcessor() {}
@@ -185,7 +183,7 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
             public void run() {
                 if (!EnchantUtils.normalEnchantEvent(CEnchantments.HELLFORGED, player, item)) return;
 
-                final int armorDurability = methods.getDurability(item);
+                final int armorDurability = Methods.getDurability(item);
 
                 if (armorDurability <= 0) return;
 
@@ -193,7 +191,7 @@ public class ArmorProcessor extends PoolProcessor { //todo() what do I even fuck
 
                 finalArmorDurability -= enchantments.get(CEnchantments.HELLFORGED.getEnchantment());
 
-                methods.setDurability(item, finalArmorDurability);
+                Methods.setDurability(item, finalArmorDurability);
             }
         }.runNextTick();
     }
