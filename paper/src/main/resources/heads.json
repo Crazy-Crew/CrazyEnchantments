@@ -1,17 +1,5 @@
 {
-  "mobs": {
-    "zombie": [
-
-    ]
-  },
-
-  "players": {
-    "ryderbelserion": [
-
-    ]
-  },
-
-  "custom": {
-    "name": "base64"
-  }
+  "mobs": {},
+  "players": {},
+  "custom": {}
 }

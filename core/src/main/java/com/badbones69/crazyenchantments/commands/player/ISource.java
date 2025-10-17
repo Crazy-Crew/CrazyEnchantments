@@ -1,13 +1,17 @@
 package com.badbones69.crazyenchantments.commands.player;
 
 import com.badbones69.crazyenchantments.CrazyPlugin;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazyenchantments.objects.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.interfaces.IUser;
 
 public abstract class ISource {
 
     protected final CrazyPlugin plugin = ICrazyEnchantments.getInstance(CrazyPlugin.class);
+
+    protected final UserRegistry userRegistry = this.plugin.getUserRegistry();
 
     private final Audience audience;
 
@@ -21,7 +25,7 @@ public abstract class ISource {
         return this.audience;
     }
 
-    /*public IUser getSender() {
+    public IUser getSender() {
         return this.userRegistry.getUser(this.audience);
-    }*/
+    }
 }

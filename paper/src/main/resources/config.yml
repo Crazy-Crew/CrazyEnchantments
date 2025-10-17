@@ -1,10 +1,18 @@
-###################################
-## Currency Types: https://github.com/badbones69/Crazy-Enchantments/wiki/Currency-Types
-## Commands and Permissions: https://github.com/badbones69/Crazy-Enchantments/wiki/Commands-and-Permissions
-## 1.9 and up players use these sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-###################################################################
+# Support: https://discord.gg/badbones-s-live-chat-182615261403283459
+# Github: https://github.com/Crazy-Crew
+#
+# Issues: https://github.com/Crazy-Crew/CrazyEnchantments/issues
+# Features: https://github.com/Crazy-Crew/CrazyEnchantments/issues
+# Wiki: https://docs.crazycrew.us/docs/plugins/crazyenchantments
+root:
+  # The prefix that appears in front of commands!
+  prefix: "<dark_gray>[<green>CrazyEnchantments</green>]</dark_gray> <reset>"
+  # This option will tell the plugin to send all messages as action bars or messages in chat.
+  #
+  # send_actionbar -> sends messages in actionbar.
+  # send_message -> sends messages in chat.
+  message-action: "send_message"
 Settings:
-  Prefix: '<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ' #The prefix in the messages
   Toggle-Metrics: true #Turn on and off if your server stats are sent to https://bstats.org/ - Requires a restart!
   Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the player's data gets backed up.
   Reset-Players-Max-Health: true #This is for some servers that get a health duplication glitch from plugins like CombatTagPlus(v1.2.3 down)

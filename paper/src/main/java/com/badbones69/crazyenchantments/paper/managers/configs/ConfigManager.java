@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.managers.configs;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.*;
@@ -10,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.managers.configs.types.items.Navig
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ProtectionCrystalConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.ScramblerConfig;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.items.SlotCrystalConfig;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -17,6 +19,10 @@ import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.util.Optional;
 
 public class ConfigManager {
+
+    private final FusionPaper fusion = CrazyEnchantments.getPlugin().getFusion();
+
+    private String messageAction;
 
     private boolean refreshPotionEffectsOnWorldChange;
     private boolean resetMaxHealth;
@@ -67,13 +73,24 @@ public class ConfigManager {
     private VaultConfig vaultConfig;
 
     public void init(@NotNull final YamlConfiguration configuration) {
+        Optional.ofNullable(configuration.getConfigurationSection("root")).ifPresentOrElse(section -> {
+            this.prefix = section.getString("prefix", "<dark_gray>[<green>CrazyEnchantments</green>]</dark_gray> <reset>");
+            this.messageAction = section.getString("message-action", "send_message");
+        }, () -> {
+            this.fusion.log("warn", "Failed to find `root` section in the config.yml");
+
+            this.messageAction = "send_message";
+        });
+
         Optional.ofNullable(configuration.getConfigurationSection("Settings")).ifPresentOrElse(section -> {
             Optional.ofNullable(section.getConfigurationSection("ProtectionCrystal")).ifPresent(protection -> this.protectionCrystalConfig = new ProtectionCrystalConfig(protection));
             Optional.ofNullable(section.getConfigurationSection("BlackSmith")).ifPresent(blacksmith -> this.blackSmithConfig = new BlackSmithConfig(blacksmith));
             Optional.ofNullable(section.getConfigurationSection("Scrambler")).ifPresent(scrambler -> this.scramblerConfig = new ScramblerConfig(scrambler));
             Optional.ofNullable(section.getConfigurationSection("Slot_Crystal")).ifPresent(slot -> this.slotCrystalConfig = new SlotCrystalConfig(slot));
 
-            this.prefix = section.getString("Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ");
+            if (this.prefix == null) { // if not found above, bind it here.
+                this.prefix = section.getString("Prefix", "<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ");
+            }
 
             this.toggleMetrics = section.getBoolean("Toggle-Metrics", false);
             this.resetMaxHealth = section.getBoolean("Reset-Players-Max-Health", true);
@@ -290,7 +307,11 @@ public class ConfigManager {
         return this.enchantBook;
     }
 
-    public String getPrefix() {
+    public @NotNull final String getPrefix() {
         return this.prefix;
+    }
+
+    public @NotNull final String getMessageAction() {
+        return this.messageAction;
     }
 }

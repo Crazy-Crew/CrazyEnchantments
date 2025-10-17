@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.commands.player.ISource;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazyenchantments.objects.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.ICrazyEnchantments;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;

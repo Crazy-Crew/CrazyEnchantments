@@ -38,6 +38,8 @@ import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -217,6 +219,39 @@ public class CrazyInstance extends CrazyPlugin {
         if (audience != null) {
             MessageKeys.CONFIG_RELOAD.sendMessage(audience);
         }
+    }
+
+    @Override
+    public void broadcast(@NotNull final Component component, @NotNull final String permission) {
+        if (permission.isEmpty()) {
+            this.server.broadcast(component);
+
+            return;
+        }
+
+        this.server.broadcast(component, permission);
+    }
+
+    @Override
+    public final boolean hasPermission(@NotNull final Audience audience, @NotNull final String permission) {
+        final CommandSender sender = (CommandSender) audience;
+
+        return sender.hasPermission(permission);
+    }
+
+    @Override
+    public final boolean isConsoleSender(@NotNull final Audience audience) {
+        return audience instanceof ConsoleCommandSender;
+    }
+
+    @Override
+    public @NotNull final String getMessageType() {
+        return this.options.getMessageAction();
+    }
+
+    @Override
+    public @NotNull final String getPrefix() {
+        return this.options.getPrefix();
     }
 
     @Override
