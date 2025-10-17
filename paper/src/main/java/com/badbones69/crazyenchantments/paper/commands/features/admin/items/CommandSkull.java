@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.items;
 
 import com.badbones69.crazyenchantments.enums.Files;
-import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
 import com.ryderbelserion.fusion.core.api.support.ModSupport;
@@ -41,7 +40,7 @@ public class CommandSkull extends BaseCommand {
     public void skull(@NotNull final CommandSender sender, final Flags flags) {
         final BasicConfigurationNode root = Files.heads.getJsonConfiguration();
 
-        flags.getFlagValue("item", void.class).ifPresent(flag -> {
+        if (flags.hasFlag("item")) {
             if (!(sender instanceof Player player)) return;
 
             final PlayerInventory inventory = player.getInventory();
@@ -53,13 +52,15 @@ public class CommandSkull extends BaseCommand {
                 return;
             }
 
-            flags.getFlagValue("player", void.class).ifPresent(action -> {
+            if (flags.hasFlag("player")) {
                 final String playerName = player.getName();
 
                 this.fusion.log("warn", "Player %s".formatted(playerName));
 
                 save(root.node("players", player.getName()), itemStack, flags.getFlagValue("chance", Double.class).orElse(1.0), playerName);
-            });
+
+                return;
+            }
 
             if (flags.hasFlag("head")) {
                 final String name = UUID.randomUUID().toString();
@@ -103,53 +104,65 @@ public class CommandSkull extends BaseCommand {
                 this.fusion.log("warn", "Type %s".formatted(type));
 
                 save(root.node("mobs", material.key().asMinimalString()), itemStack, flags.getFlagValue("chance", Double.class).orElse(1.0), playerName);
+
+                return;
             }
-        });
 
-        flags.getFlagValue("player", PlayerBuilder.class).ifPresent(builder -> {
-            String playerName = "";
+            return;
+        }
 
-            final Player player = builder.getPlayer();
+        if (flags.hasFlag("player")) {
+            flags.getFlagValue("player", PlayerBuilder.class).ifPresent(builder -> {
+                String playerName = "";
 
-            if (player == null) {
-                final OfflinePlayer offlinePlayer = builder.getOfflinePlayer();
+                final Player player = builder.getPlayer();
 
-                if (offlinePlayer != null) {
-                    playerName = offlinePlayer.getName();
+                if (player == null) {
+                    final OfflinePlayer offlinePlayer = builder.getOfflinePlayer();
+
+                    if (offlinePlayer != null) {
+                        playerName = offlinePlayer.getName();
+                    }
+                } else {
+                    playerName = player.getName();
                 }
-            } else {
-                playerName = player.getName();
-            }
 
-            if (playerName == null || playerName.isEmpty()) return;
+                if (playerName == null || playerName.isEmpty()) return;
 
-            final ConfigurationNode child = root.node("players", playerName);
+                final ConfigurationNode child = root.node("players", playerName);
 
-            this.fusion.log("warn", "Player Value %s".formatted(playerName));
+                this.fusion.log("warn", "Player Value %s".formatted(playerName));
 
-            save(child, new ItemBuilder(ItemType.PLAYER_HEAD).asSkullBuilder().withName(playerName).build().asItemStack(), flags.getFlagValue("chance", Double.class).orElse(1.0), playerName);
-        });
+                save(child, new ItemBuilder(ItemType.PLAYER_HEAD).asSkullBuilder().withName(playerName).build().asItemStack(), flags.getFlagValue("chance", Double.class).orElse(1.0), playerName);
+            });
+        }
 
-        flags.getFlagValue("mob", Mob.class).ifPresent(mob -> {
-            ItemType itemType = null;
+        if (flags.hasFlag("mob")) {
+            flags.getFlagValue("mob", Mob.class).ifPresent(mob -> {
+                ItemType itemType = null;
 
-            switch (mob.getType()) {
-                case ZOMBIE -> itemType = ItemType.ZOMBIE_HEAD;
-                case SKELETON -> itemType = ItemType.SKELETON_SKULL;
-                case CREEPER -> itemType = ItemType.CREEPER_HEAD;
-                case PIGLIN -> itemType = ItemType.PIGLIN_HEAD;
-                case WITHER_SKELETON -> itemType = ItemType.WITHER_SKELETON_SKULL;
-                case ENDER_DRAGON -> itemType = ItemType.DRAGON_HEAD;
-            }
+                switch (mob.getType()) {
+                    case ZOMBIE -> itemType = ItemType.ZOMBIE_HEAD;
+                    case SKELETON -> itemType = ItemType.SKELETON_SKULL;
+                    case CREEPER -> itemType = ItemType.CREEPER_HEAD;
+                    case PIGLIN -> itemType = ItemType.PIGLIN_HEAD;
+                    case WITHER_SKELETON -> itemType = ItemType.WITHER_SKELETON_SKULL;
+                    case ENDER_DRAGON -> itemType = ItemType.DRAGON_HEAD;
+                }
 
-            if (itemType == null) return;
+                if (itemType == null) {
+                    this.fusion.log("warn", "Item Type is null!");
 
-            final String key = itemType.key().asMinimalString();
+                    return;
+                }
 
-            this.fusion.log("warn", "Key %s".formatted(key));
+                final String key = itemType.key().asMinimalString();
 
-            save(root.node("mobs", key), itemType.createItemStack(), flags.getFlagValue("chance", Double.class).orElse(1.0), key);
-        });
+                this.fusion.log("warn", "Key %s".formatted(key));
+
+                save(root.node("mobs", key), itemType.createItemStack(), flags.getFlagValue("chance", Double.class).orElse(1.0), key);
+            });
+        }
 
         if (flags.hasFlag("head")) {
             if (this.headManager == null || !this.fusion.isModReady(ModSupport.head_database)) {
