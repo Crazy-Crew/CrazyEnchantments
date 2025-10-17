@@ -216,16 +216,16 @@ public class AxeEnchantments implements Listener {
 
         ItemStack item = Methods.getItemInHand(killer);
         Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
-        Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
-
-        if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
-            double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
-
-            if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, killer, item, enchantments, multiplier)) {
-                ItemStack head = new ItemBuilder().setMaterial(headMat).build();
-                event.getDrops().add(head);
-            }
-        }
+//        Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+//
+//        if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
+//            double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
+//
+//            if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, killer, item, enchantments, multiplier)) {
+//                ItemStack head = new ItemBuilder().setMaterial(headMat).build();
+//                event.getDrops().add(head);
+//            }
+//        }
     }
 
     private void removeBadPotions(@NotNull final Player player) {

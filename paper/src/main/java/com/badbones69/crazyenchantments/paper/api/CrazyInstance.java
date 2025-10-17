@@ -52,7 +52,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.configurate.BasicConfigurationNode;
 import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import us.crazycrew.crazyenchantments.enums.Mode;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
@@ -114,7 +113,7 @@ public class CrazyInstance extends CrazyPlugin {
             this.blocks.add(block);
         }
 
-        final BasicConfigurationNode root = Files.heads.getJsonConfiguration();
+        //final BasicConfigurationNode root = Files.heads.getJsonConfiguration();
 
         /*final YamlConfiguration customHeads = FileKeys.head_map.getPaperConfiguration();
 

@@ -363,15 +363,15 @@ public class SwordEnchantments implements Listener {
             event.setDroppedExp(event.getDroppedExp() * (enchantments.get(CEnchantments.INQUISITIVE.getEnchantment()) + 1));
         }
 
-        final Material material = EntityUtils.getHeadMaterial(livingEntity);
-
-        if (material != null && !EventUtils.containsDrop(event, material)) {
-            final double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(material, 0.0);
-
-            if (multiplier > 0.0 && EnchantUtils.isEventActive(CEnchantments.HEADLESS, killer, itemStack, enchantments, multiplier)) {
-                event.getDrops().add(ItemStack.of(material));
-            }
-        }
+//        final Material material = EntityUtils.getHeadMaterial(livingEntity);
+//
+//        if (material != null && !EventUtils.containsDrop(event, material)) {
+//            final double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(material, 0.0);
+//
+//            if (multiplier > 0.0 && EnchantUtils.isEventActive(CEnchantments.HEADLESS, killer, itemStack, enchantments, multiplier)) {
+//                event.getDrops().add(ItemStack.of(material));
+//            }
+//        }
 
         if (livingEntity instanceof Player livingPlayer && EnchantUtils.isEventActive(CEnchantments.CHARGE, killer, itemStack, enchantments)) {
             final int radius = 4 + enchantments.get(CEnchantments.CHARGE.getEnchantment());

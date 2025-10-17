@@ -73,9 +73,6 @@ public class CrazyManager {
     @NotNull
     private final ArmorEnchantmentManager armorEnchantmentManager = null;
 
-    // Arrays.
-    private final Map<Material, Double> headMap = new HashMap<>();
-
     /**
      * Loads everything for the Crazy Enchantments plugin.
      * Do not use unless needed.
@@ -85,8 +82,6 @@ public class CrazyManager {
 
         //final YamlConfiguration heads = FileKeys.head_map.getPaperConfiguration();
 
-        this.headMap.clear();
-
         this.instance.purgeEnchantments();
 
         //this.enchantmentBookSettings.getCategories().clear();
@@ -95,19 +90,6 @@ public class CrazyManager {
 
         // Invalidate cached enchants.
         CEnchantments.invalidateCachedEnchants();
-
-        /*ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
-
-        if (headSec == null) {
-            this.fusion.log("warn", "HeadOdds could not be found in HeadMap.yml!");
-        } else {
-            headSec.getKeys(false).forEach(id -> {
-                try {
-                    Material mat = new ItemBuilder().setMaterial(id).getMaterial();
-                    this.headMap.put(mat, headSec.getDouble(id));
-                } catch (Exception ignored) {}
-            });
-        }*/
 
         Scrolls.getWhiteScrollProtectionName();
 
@@ -516,12 +498,5 @@ public class CrazyManager {
         }
 
         return randomLevel;
-    }
-
-    /**
-     * @return The head multiplier map for decapitation and headless.
-     */
-    public Map<Material, Double> getDecapitationHeadMap() {
-        return this.headMap;
     }
 }
