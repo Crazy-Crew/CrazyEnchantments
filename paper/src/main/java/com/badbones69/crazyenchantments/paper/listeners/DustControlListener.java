@@ -12,11 +12,13 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.google.gson.Gson;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -40,6 +42,8 @@ public class DustControlListener implements Listener {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ComponentLogger logger = this.plugin.getComponentLogger();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -90,9 +94,12 @@ public class DustControlListener implements Listener {
         if (book.getAmount() > 1) return;
 
         final PersistentDataContainerView container = dust.getPersistentDataContainer();
+        final PersistentDataContainerView bookContainer = book.getPersistentDataContainer();
 
-        final DustData dustData = Methods.getGson().fromJson(container.get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
-        final EnchantedBook bookData = Methods.getGson().fromJson(container.get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
+        final Gson gson = Methods.getGson();
+
+        final DustData dustData = gson.fromJson(container.get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
+        final EnchantedBook bookData = gson.fromJson(bookContainer.get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
 
         if (bookData == null || dustData == null) return;
 
@@ -110,7 +117,9 @@ public class DustControlListener implements Listener {
 
         if (!toggle) return;
 
-        if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
+        final String configName = dustData.getConfigName();
+
+        if (configName.equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
             int per = dustData.getChance();
 
             if (this.methods.hasArgument("%success_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
@@ -138,7 +147,7 @@ public class DustControlListener implements Listener {
             return;
         }
 
-        if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
+        if (configName.equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
             int per = dustData.getChance();
 
             if (this.methods.hasArgument("%destroy_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
