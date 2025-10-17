@@ -1,11 +1,13 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
+import com.badbones69.crazyenchantments.paper.managers.PlayerManager;
 import com.badbones69.crazyenchantments.paper.managers.TinkerManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
 import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.TinkerConfig;
+import com.badbones69.crazyenchantments.registry.UserRegistry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -18,11 +20,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.jetbrains.annotations.NotNull;
 
 public class MiscListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyInstance instance = this.plugin.getInstance();
+
+    private final PlayerManager playerManager = this.instance.getPlayerManager();
+
+    private final UserRegistry userRegistry = this.instance.getUserRegistry();
 
     private final ConfigManager configManager = this.plugin.getConfigManager();
 
@@ -30,17 +37,22 @@ public class MiscListener implements Listener {
 
     private final TinkerManager tinkerManager = this.plugin.geTinkerManager();
 
-    @NotNull
-    private final CrazyManager crazyManager = null;
-
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        //this.crazyManager.loadCEPlayer(event.getPlayer());
+        final Player player = event.getPlayer();
+
+        this.playerManager.loadPlayer(player);
+
+        this.userRegistry.addUser(player);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        //this.crazyManager.unloadCEPlayer(event.getPlayer());
+        final Player player = event.getPlayer();
+
+        this.playerManager.unloadPlayer(player, false);
+
+        this.userRegistry.removeUser(player);
     }
 
     @EventHandler(ignoreCancelled = true)
