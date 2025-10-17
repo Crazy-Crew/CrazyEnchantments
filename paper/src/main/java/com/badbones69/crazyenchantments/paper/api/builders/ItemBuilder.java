@@ -1,19 +1,13 @@
 package com.badbones69.crazyenchantments.paper.api.builders;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
@@ -122,7 +116,7 @@ public class ItemBuilder {
     // Custom Data
     private int customModelData;
     private boolean useCustomModelData;
-    private Map<NamespacedKey, String> namespaces;
+    private final Map<NamespacedKey, String> namespaces;
 
     /**
      * Create a blank item builder.
@@ -175,9 +169,13 @@ public class ItemBuilder {
         this.namespaces = new HashMap<>();
     }
 
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = plugin.getStarter();
+    private static final CrazyInstance instance = plugin.getInstance();
+
+    private static final Server server = plugin.getServer();
+
+    private static final ComponentLogger logger = plugin.getComponentLogger();
 
     /**
      * Deduplicate an item builder.
@@ -280,7 +278,8 @@ public class ItemBuilder {
      * Get the name of the item.
      */
     public String getName() {
-        return this.itemName == null ? "" : ColorUtils.toLegacy(this.itemName);
+        //return this.itemName == null ? "" : ColorUtils.toLegacy(this.itemName); //todo() legacy trash
+        return "";
     }
 
     /**
@@ -352,19 +351,15 @@ public class ItemBuilder {
      * @return The name with all the placeholders in it.
      */
     public final String getUpdatedName() {
-        if (this.itemName == null) return "";
-        String newName = ColorUtils.toLegacy(this.itemName);
+        /*if (this.itemName == null) return "";
+        String newName = ColorUtils.toLegacy(this.itemName); //todo() legacy trash
 
         for (final Map.Entry<String, String> placeholder : this.namePlaceholders.entrySet()) {
             newName = newName.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
-        }
+        }*/
 
-        return newName;
+        return "";
     }
-
-    private final Server server = plugin.getServer();
-
-    private final ComponentLogger logger = plugin.getComponentLogger();
 
     /**
      * Builder the item from all the information that was given to the builder.
@@ -381,7 +376,7 @@ public class ItemBuilder {
 
             if (this.isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
                 if (this.isURL) {
-                    final PlayerProfile profile = this.server.createProfile(UUID.randomUUID(), null);
+                    final PlayerProfile profile = server.createProfile(UUID.randomUUID(), null);
 
                     profile.setProperty(new ProfileProperty("", ""));
 
@@ -390,7 +385,7 @@ public class ItemBuilder {
                     try {
                         textures.setSkin(URI.create(this.player).toURL(), PlayerTextures.SkinModel.CLASSIC);
                     } catch (final MalformedURLException exception) {
-                        this.logger.warn("The url is malformed", exception);
+                        logger.warn("The url is malformed", exception);
                     }
 
                     profile.setTextures(textures);
@@ -417,7 +412,7 @@ public class ItemBuilder {
 
             List<Component> newLore = getUpdatedLore();
 
-            if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+            //if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName())); //todo() legacy trash
 
             if (!newLore.isEmpty()) itemMeta.lore(newLore);
 
@@ -454,7 +449,7 @@ public class ItemBuilder {
 
         List<Component> newLore = getUpdatedLore();
 
-        if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+        //if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName())); //todo() legacy trash
 
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
 
@@ -511,46 +506,8 @@ public class ItemBuilder {
         return item;
     }
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    private final EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
-
     public void addEnchantments(final ItemStack itemStack, final Map<CEnchantment, Integer> enchantments) {
-        if (this.crazyManager != null) {
-            this.crazyManager.addEnchantments(itemStack, enchantments);
-
-            return;
-        }
-
-        final Map<CEnchantment, Integer> currentEnchantments = this.settings.getEnchantments(itemStack);
-
-        this.settings.removeEnchantments(itemStack, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
-
-        final String data = itemStack.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
-        final Enchant enchantData = data != null ? Methods.getGson().fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
-
-        List<Component> lore = itemStack.lore();
-
-        if (lore == null) lore = new ArrayList<>();
-
-        for (final Map.Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
-            final CEnchantment enchantment = entry.getKey();
-            final int level = entry.getValue();
-
-            final String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
-
-            lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
-
-            for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
-                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
-            }
-        }
-
-        itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
-
-        itemStack.editPersistentDataContainer(container -> {
-            container.set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(enchantData));
-        });
+        instance.addEnchantments(itemStack, enchantments);
     }
 
     /**
@@ -665,10 +622,11 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated name.
      */
     public ItemBuilder setName(final String itemName) {
-        if (itemName != null && !itemName.isEmpty()) this.itemName = ColorUtils.legacyTranslateColourCodes(itemName);
+        //if (itemName != null && !itemName.isEmpty()) this.itemName = ColorUtils.legacyTranslateColourCodes(itemName); //todo() legacy trash
 
         return this;
     }
+
     public ItemBuilder setName(final Component itemName) {
         if (itemName != null) this.itemName = itemName;
 
@@ -711,17 +669,18 @@ public class ItemBuilder {
     }
 
     /**
-     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
+     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code.
      *
      * @param lore The lore of the item in the builder.
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder setLore(final List<String> lore) {
-        return lore(lore.stream().map(ColorUtils::legacyTranslateColourCodes).collect(Collectors.toList()));
+        return this;
+        //return lore(lore.stream().map(ColorUtils::legacyTranslateColourCodes).collect(Collectors.toList())); //todo() legacy trash
     }
 
     /**
-     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
+     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code.
      *
      * @param lore The lore of the item in the builder.
      * @return The ItemBuilder with updated info.
@@ -737,13 +696,13 @@ public class ItemBuilder {
     }
 
     /**
-     * Add a line to the current lore of the item. This will auto force color in the lore that contains color code. (&a, &c, &7, etc...)
+     * Add a line to the current lore of the item. This will auto force color in the lore that contains color code.
      *
      * @param lore The new line you wish to add.
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLore(final String lore) {
-        if (lore != null) this.itemLore.add(ColorUtils.legacyTranslateColourCodes(lore));
+        //if (lore != null) this.itemLore.add(ColorUtils.legacyTranslateColourCodes(lore)); //todo() legacy trash
 
         return this;
     }
@@ -784,13 +743,13 @@ public class ItemBuilder {
         if (this.itemLore.isEmpty()) return newLore;
 
         for (final Component line : this.itemLore) {
-            String newLine = ColorUtils.toLegacy(line);
+            //String newLine = ColorUtils.toLegacy(line); //todo() legacy trash
 
-            for (final Map.Entry<String, String> placeholder : this.lorePlaceholders.entrySet()) {
-                newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
-            }
+            //for (final Map.Entry<String, String> placeholder : this.lorePlaceholders.entrySet()) {
+            //    newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
+            //}
 
-            newLore.add(ColorUtils.legacyTranslateColourCodes(newLine));
+            //newLore.add(ColorUtils.legacyTranslateColourCodes(newLine)); //todo() legacy trash
         }
 
         return newLore;
@@ -1064,6 +1023,7 @@ public class ItemBuilder {
                             itemBuilder.setAmount(1);
                         }
                     }
+
                     case "damage" -> {
                         try {
                             itemBuilder.setDamage(Integer.parseInt(value));
@@ -1071,17 +1031,21 @@ public class ItemBuilder {
                             itemBuilder.setDamage(0);
                         }
                     }
+
                     case "lore" -> itemBuilder.setLore(List.of(value.split(",")));
                     case "player" -> itemBuilder.setPlayerName(value);
                     case "unbreakable-item" -> {
                         if (value.isEmpty() || value.equalsIgnoreCase("true")) itemBuilder.setUnbreakable(true);
                     }
+
                     case "trim-pattern" -> {
                         if (!value.isEmpty()) itemBuilder.setTrimPattern(Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
+
                     case "trim-material" -> {
                         if (!value.isEmpty()) itemBuilder.setTrimMaterial(Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
+
                     default -> {
                         if (value.contains("-")) {
                             String[] val = value.split("-");
@@ -1096,13 +1060,15 @@ public class ItemBuilder {
 
                         if (enchantment != null) {
                             if (number != 0) itemBuilder.addEnchantments(enchantment, number);
+
                             continue;
                         }
 
-                        CEnchantment ceEnchant = plugin.getStarter().getCrazyManager().getEnchantmentFromName(option);
+                        CEnchantment ceEnchant = plugin.getInstance().getEnchantmentFromName(option);
 
                         if (ceEnchant != null) {
                             if (number != 0) itemBuilder.addCEEnchantments(ceEnchant, number);
+
                             continue;
                         }
 
@@ -1118,11 +1084,11 @@ public class ItemBuilder {
                     }
                 }
             }
-        } catch (Exception e) {
-            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR")
+        } catch (final Exception exception) {
+            /*itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("<red><bold>ERROR")
                     .lore(Arrays.asList(Component.text("There was an error", NamedTextColor.RED),
-                            Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));
-            plugin.getLogger().log(Level.WARNING, "There is an error with " + placeHolder, e);
+                            Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));*/
+            plugin.getLogger().log(Level.WARNING, "There is an error with " + itemString, exception);
         }
 
         return itemBuilder;

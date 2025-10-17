@@ -1,13 +1,14 @@
 package com.badbones69.crazyenchantments.paper.support.interfaces;
 
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 public interface CropManagerVersion {
     
-    void fullyGrowPlant(Block block);
+    void fullyGrowPlant(@NotNull final Block block);
     
-    boolean isFullyGrown(Block block);
+    boolean isFullyGrown(@NotNull final Block block);
     
-    void hydrateSoil(Block soil);
+    void hydrateSoil(@NotNull final Block soil);
     
 }

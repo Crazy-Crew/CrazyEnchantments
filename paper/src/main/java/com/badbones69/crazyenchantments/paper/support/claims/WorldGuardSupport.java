@@ -18,7 +18,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     private final WorldGuard instance = WorldGuard.getInstance();
     
     @Override
-    public boolean allowsPVP(Location loc) {
+    public boolean allowsPVP(@NotNull final Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
@@ -34,7 +34,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     }
     
     @Override
-    public boolean allowsBreak(Location loc) {
+    public boolean allowsBreak(@NotNull final Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
@@ -50,7 +50,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     }
     
     @Override
-    public boolean allowsExplosions(Location loc) {
+    public boolean allowsExplosions(@NotNull final Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
@@ -66,7 +66,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     }
     
     @Override
-    public boolean inRegion(String regionName, Location loc) {
+    public boolean inRegion(@NotNull final String regionName, @NotNull final Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
@@ -86,7 +86,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     }
     
     @Override
-    public boolean isMember(Player player) {
+    public boolean isMember(@NotNull final Player player) {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 
@@ -106,7 +106,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     }
     
     @Override
-    public boolean isOwner(Player player) {
+    public boolean isOwner(@NotNull final Player player) {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 

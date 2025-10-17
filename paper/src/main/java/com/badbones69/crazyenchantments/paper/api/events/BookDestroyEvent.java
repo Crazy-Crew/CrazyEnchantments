@@ -19,7 +19,7 @@ public class BookDestroyEvent extends Event implements Cancellable {
     private final CEnchantment enchantment;
     private final CEBook ceBook;
     
-    public BookDestroyEvent(Player player, ItemStack enchantedItem, CEBook ceBook) {
+    public BookDestroyEvent(@NotNull final Player player, @NotNull final ItemStack enchantedItem, @NotNull final CEBook ceBook) {
         this.level = ceBook.getLevel();
         this.player = player;
         this.enchantment = ceBook.getEnchantment();
@@ -54,7 +54,7 @@ public class BookDestroyEvent extends Event implements Cancellable {
     }
     
     @Override
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 

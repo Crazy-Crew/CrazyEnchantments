@@ -17,17 +17,17 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
     private boolean cancel;
     private final ItemStack item;
     
-    public EnchantmentUseEvent(Player player, CEnchantment enchantment, ItemStack item) {
+    public EnchantmentUseEvent(@NotNull final Player player, @NotNull final CEnchantment enchantment, @NotNull final ItemStack item) {
         this.player = player;
         this.enchantment = enchantment;
-        cancel = false;
+        this.cancel = false;
         this.item = item;
     }
     
-    public EnchantmentUseEvent(Player player, CEnchantments enchantments, ItemStack item) {
+    public EnchantmentUseEvent(@NotNull final Player player, @NotNull final CEnchantments enchantments, @NotNull final ItemStack item) {
         this.player = player;
-        enchantment = enchantments.getEnchantment();
-        cancel = false;
+        this.enchantment = enchantments.getEnchantment();
+        this.cancel = false;
         this.item = item;
     }
     
@@ -66,7 +66,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
      * @param cancel true if you wish to cancel this event
      */
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCancelled(final boolean cancel) {
         this.cancel = cancel;
     }
 

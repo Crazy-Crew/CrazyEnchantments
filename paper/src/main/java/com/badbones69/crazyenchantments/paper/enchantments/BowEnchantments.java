@@ -2,9 +2,9 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -12,12 +12,12 @@ import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
 import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
@@ -46,25 +46,18 @@ public class BowEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     // Plugin Support.
     @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final PluginSupport pluginSupport = null;
 
     // Plugin Managers.
     @NotNull
-    private final BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
+    private final BowEnchantmentManager bowEnchantmentManager = null;
 
     @NotNull
-    private final BowUtils bowUtils = this.starter.getBowUtils();
+    private final BowUtils bowUtils = null;
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
@@ -72,11 +65,14 @@ public class BowEnchantments implements Listener {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getEntity().getUniqueId())) return;
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
 
-        ItemStack bow = event.getBow();
+        final ItemStack bow = event.getBow();
+
+        if (bow == null) return;
 
         if (!this.bowUtils.allowsCombat(player)) return;
 
-        Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(bow);
+        Map<CEnchantment, Integer> enchants = this.instance.getEnchantments(bow);
+
         if (enchants.isEmpty()) return;
 
         // Add the arrow to the list.
@@ -88,7 +84,6 @@ public class BowEnchantments implements Listener {
 
             for (int i = 1; i <= power; i++) this.bowUtils.spawnArrows(player, arrow, bow);
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -105,7 +100,7 @@ public class BowEnchantments implements Listener {
         this.bowUtils.spawnWebs(event.getHitEntity(), enchantedArrow);
 
         if (EnchantUtils.isEventActive(CEnchantments.BOOM, shooter, enchantedArrow.bow(), enchantedArrow.enchantments())) {
-            this.methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
+            Methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
             enchantedArrow.arrow().remove();
         }
 
@@ -114,14 +109,16 @@ public class BowEnchantments implements Listener {
 
             Entity lightning = location.getWorld().strikeLightningEffect(location);
 
-            int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+            final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
+
+            int lightningSoundRange = config.getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
             try {
                 location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
             } catch (Exception ignore) {
             }
 
-            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
+            for (LivingEntity entity : Methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
@@ -160,7 +157,7 @@ public class BowEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.pluginSupport.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
             int heal = 1 + enchantedArrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
+            double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue(); //todo() npe
 
             if (entity.getHealth() < maxHealth) {
                 if (entity.getHealth() + heal < maxHealth) entity.setHealth(entity.getHealth() + heal);

@@ -1,38 +1,27 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentEvent;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
+import com.badbones69.crazyenchantments.paper.managers.CategoryManager;
+import com.badbones69.crazyenchantments.utils.RandomUtils;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CEnchantment {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CategoryManager categoryManager = this.plugin.getCategoryManager();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     private String name;
     private String customName;
@@ -43,18 +32,18 @@ public class CEnchantment {
     private int chanceIncrease;
     private List<String> infoDescription;
     private final List<Category> categories;
-    private EnchantmentType enchantmentType;
-    private final CEnchantment instance;
+    private EnchantType enchantmentType;
+    private final CEnchantment enchantment;
     private Sound sound;
     private List<String> conflicts;
 
-    public CEnchantment(String name) {
-        this.instance = this;
+    public CEnchantment(@NotNull final String name) {
+        this.enchantment = this;
         this.name = name;
         this.customName = name;
         this.activated = true;
         this.maxLevel = 3;
-        this.infoName = ColorUtils.color("&7" + name);
+        //this.infoName = ColorUtils.color("<dark_gray>" + name); //todo() legacy trash
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
@@ -68,8 +57,9 @@ public class CEnchantment {
         return this.conflicts;
     }
 
-    public CEnchantment setConflicts(List<String> conflicts) {
+    public CEnchantment setConflicts(@NotNull final List<String> conflicts) {
         this.conflicts = conflicts;
+
         return this;
     }
 
@@ -79,7 +69,7 @@ public class CEnchantment {
      * @param other The enchantment to check against
      * @return True if there is a conflict.
      */
-    public boolean conflictsWith(CEnchantment other) {
+    public boolean conflictsWith(@NotNull final CEnchantment other) {
         return conflicts.contains(other.name);
     }
 
@@ -87,16 +77,17 @@ public class CEnchantment {
     public Sound getSound() {
         return this.sound;
     }
-    public CEnchantment setSound(String soundString) {
-        if (soundString == null || soundString.isBlank()) {
+
+    public CEnchantment setSound(@NotNull final String soundString) {
+        if (soundString.isBlank()) {
             this.sound = Sound.ENTITY_PLAYER_LEVELUP;
+
             return this;
         }
 
         try {
-            this.sound = Sound.valueOf(soundString);
-        } catch (IllegalArgumentException e) {
-            //plugin.getLogger().warning(name + " has an invalid sound set.");
+            this.sound = Sound.valueOf(soundString); //todo() deprecated
+        } catch (final IllegalArgumentException exception) {
             this.sound = Sound.ENTITY_PLAYER_LEVELUP;
         }
 
@@ -107,7 +98,7 @@ public class CEnchantment {
         return this.name;
     }
 
-    public CEnchantment setName(String name) {
+    public CEnchantment setName(@NotNull final String name) {
         this.name = name;
 
         return this;
@@ -117,7 +108,7 @@ public class CEnchantment {
         return this.customName;
     }
 
-    public CEnchantment setCustomName(String customName) {
+    public CEnchantment setCustomName(@NotNull final String customName) {
         this.customName = customName;
 
         return this;
@@ -127,7 +118,7 @@ public class CEnchantment {
         return this.activated;
     }
 
-    public CEnchantment setActivated(boolean activated) {
+    public CEnchantment setActivated(final boolean activated) {
         this.activated = activated;
 
         return this;
@@ -137,7 +128,7 @@ public class CEnchantment {
         return this.maxLevel;
     }
 
-    public CEnchantment setMaxLevel(int maxLevel) {
+    public CEnchantment setMaxLevel(final int maxLevel) {
         this.maxLevel = maxLevel;
 
         return this;
@@ -147,8 +138,8 @@ public class CEnchantment {
         return this.infoName;
     }
 
-    public CEnchantment setInfoName(String infoName) {
-        this.infoName = ColorUtils.color(infoName);
+    public CEnchantment setInfoName(@NotNull final String infoName) {
+        //this.infoName = ColorUtils.color(infoName); //todo() legacy trash
 
         return this;
     }
@@ -157,7 +148,7 @@ public class CEnchantment {
         return this.chance;
     }
 
-    public CEnchantment setChance(int chance) {
+    public CEnchantment setChance(final int chance) {
         this.chance = chance;
 
         return this;
@@ -167,7 +158,7 @@ public class CEnchantment {
         return this.chanceIncrease;
     }
 
-    public CEnchantment setChanceIncrease(int chanceIncrease) {
+    public CEnchantment setChanceIncrease(final int chanceIncrease) {
         this.chanceIncrease = chanceIncrease;
 
         return this;
@@ -177,13 +168,13 @@ public class CEnchantment {
         return this.chance > 0;
     }
 
-    public boolean chanceSuccessful(int enchantmentLevel) {
+    public boolean chanceSuccessful(final int enchantmentLevel) {
         return this.chanceSuccessful(enchantmentLevel, 1.0);
     }
 
-    public boolean chanceSuccessful(int enchantmentLevel, double multiplier) {
+    public boolean chanceSuccessful(final int enchantmentLevel, final double multiplier) {
         int newChance = this.chance + (this.chanceIncrease * (enchantmentLevel - 1));
-        int pickedChance = this.methods.getRandomNumber (0, 100);
+        int pickedChance = RandomUtils.getRandomNumber(0, 100);
 
         newChance = (int) (newChance * multiplier);
 
@@ -194,17 +185,17 @@ public class CEnchantment {
         return this.infoDescription;
     }
 
-    public CEnchantment setInfoDescription(List<String> infoDescription) {
+    public CEnchantment setInfoDescription(@NotNull final List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
-        infoDescription.forEach(lore -> info.add(ColorUtils.color(lore)));
+        //infoDescription.forEach(lore -> info.add(ColorUtils.color(lore))); //todo() legacy trash
 
         this.infoDescription = info;
 
         return this;
     }
 
-    public CEnchantment addCategory(Category category) {
+    public CEnchantment addCategory(@Nullable final Category category) {
         if (category != null) this.categories.add(category);
 
         return this;
@@ -214,18 +205,23 @@ public class CEnchantment {
         return this.categories;
     }
 
-    public CEnchantment setCategories(List<String> categories) {
+    public CEnchantment setCategories(@NotNull final List<String> categories) {
+        for (String name : categories) {
+            final Optional<Category> category = this.categoryManager.getCategory(name);
 
-        for (String categoryString : categories) {
-            Category category = this.enchantmentBookSettings.getCategory(categoryString);
+            if (category.isEmpty()) {
+                //todo() debug
 
-            if (category != null) this.categories.add(category);
+                continue;
+            }
+
+            this.categories.add(category.get());
         }
 
         return this;
     }
 
-    public EnchantmentType getEnchantmentType() {
+    public EnchantType getEnchantmentType() {
         return this.enchantmentType;
     }
 
@@ -236,33 +232,37 @@ public class CEnchantment {
      * @param item Item to test
      * @return True if the cEnchantment may be applied, otherwise False
      */
-    public boolean canEnchantItem(@NotNull ItemStack item) {
+    public boolean canEnchantItem(@NotNull final ItemStack item) {
         return this.enchantmentType != null && this.enchantmentType.canEnchantItem(item);
     }
 
-    public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
+    public CEnchantment setEnchantmentType(@NotNull final EnchantType enchantmentType) {
         this.enchantmentType = enchantmentType;
 
         return this;
     }
 
     public void registerEnchantment() {
-        RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(this.instance);
+        final RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(this.enchantment);
+
         this.plugin.getServer().getPluginManager().callEvent(event);
-        this.crazyManager.registerEnchantment(this.instance);
 
-        if (this.enchantmentType != null) this.enchantmentType.addEnchantment(this.instance);
+        this.instance.registerEnchantment(this.enchantment);
 
-        this.categories.forEach(category -> category.addEnchantment(this.instance));
+        if (this.enchantmentType != null) this.enchantmentType.addEnchantment(this.enchantment);
+
+        this.categories.forEach(category -> category.addEnchantment(this.enchantment));
     }
 
     public void unregisterEnchantment() {
-        UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(this.instance);
+        final UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(this.enchantment);
+
         this.plugin.getServer().getPluginManager().callEvent(event);
-        this.crazyManager.unregisterEnchantment(this.instance);
 
-        if (this.enchantmentType != null) this.enchantmentType.removeEnchantment(this.instance);
+        this.instance.unregisterEnchantment(this.enchantment);
 
-        this.categories.forEach(category -> category.addEnchantment(this.instance));
+        if (this.enchantmentType != null) this.enchantmentType.removeEnchantment(this.enchantment);
+
+        this.categories.forEach(category -> category.addEnchantment(this.enchantment));
     }
 }

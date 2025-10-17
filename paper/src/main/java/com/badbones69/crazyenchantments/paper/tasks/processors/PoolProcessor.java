@@ -5,11 +5,12 @@ import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public abstract class PoolProcessor {
+public abstract class PoolProcessor { //todo() nah, I, I don't think we need this.
 
     private final CrazyEnchantments plugin =  JavaPlugin.getPlugin(CrazyEnchantments.class);
 
@@ -27,16 +28,18 @@ public abstract class PoolProcessor {
      * Adds the task into the thread pool to be processed.
      * @param process The {@link Runnable} to process.
      */
-    public void add(final Runnable process) {
-        executor.submit(process);
+    public void add(@NotNull final Runnable process) {
+        this.executor.submit(process);
     }
 
     /**
      * Creates the thread pool used to process tasks.
      */
     public void start() {
-        if (executor == null) executor = new ThreadPoolExecutor(1, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(maxQueueSize));
-        executor.allowCoreThreadTimeOut(true);
+        if (this.executor == null) this.executor = new ThreadPoolExecutor(1, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(this.maxQueueSize));
+
+        this.executor.allowCoreThreadTimeOut(true);
+
         resizeChecker();
     }
 
@@ -44,9 +47,11 @@ public abstract class PoolProcessor {
      * Terminates the thread pool.
      */
     public void stop() {
-        taskId.cancel();
-        executor.shutdown();
-        executor = null;
+        this.taskId.cancel();
+
+        this.executor.shutdown();
+
+        this.executor = null;
     }
 
     /**
