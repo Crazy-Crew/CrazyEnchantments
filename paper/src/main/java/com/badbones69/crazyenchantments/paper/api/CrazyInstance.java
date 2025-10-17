@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.CrazyPlugin;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CustomHead;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import com.badbones69.crazyenchantments.paper.managers.PlayerManager;
@@ -28,6 +27,7 @@ import com.badbones69.crazyenchantments.paper.managers.items.ItemManager;
 import com.badbones69.crazyenchantments.paper.managers.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.mods.Dependencies;
 import com.badbones69.crazyenchantments.paper.support.mods.vanish.GenericVanishMod;
+import com.badbones69.crazyenchantments.enums.Files;
 import com.ryderbelserion.fusion.core.api.support.ModManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -56,7 +56,6 @@ import org.spongepowered.configurate.BasicConfigurationNode;
 import us.crazycrew.crazyenchantments.enums.Mode;
 import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
@@ -100,7 +99,7 @@ public class CrazyInstance extends CrazyPlugin {
     public void init() {
         this.modManager.addMod(Dependencies.generic_vanish, new GenericVanishMod());
 
-        final List<String> blocks = ConfigUtils.getStringList(FileKeys.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
+        final List<String> blocks = ConfigUtils.getStringList(Files.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
 
         for (final String block : blocks) {
             final ItemType itemType = ItemUtils.getItemType(block);
@@ -114,7 +113,7 @@ public class CrazyInstance extends CrazyPlugin {
             this.blocks.add(block);
         }
 
-        final BasicConfigurationNode root = FileKeys.heads.getJsonConfiguration();
+        final BasicConfigurationNode root = Files.heads.getJsonConfiguration();
 
         /*final YamlConfiguration customHeads = FileKeys.head_map.getPaperConfiguration();
 
@@ -180,7 +179,7 @@ public class CrazyInstance extends CrazyPlugin {
         // clear, and re-fill list with new blocks.
         this.blocks.clear();
 
-        final List<String> blocks = ConfigUtils.getStringList(FileKeys.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
+        final List<String> blocks = ConfigUtils.getStringList(Files.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();
 
         for (final String block : blocks) {
             final ItemType itemType = ItemUtils.getItemType(block);
@@ -352,12 +351,12 @@ public class CrazyInstance extends CrazyPlugin {
 
     public void loadExamples() {
         if (this.options.isUpdateExamplesFolder()) {
-            try (final Stream<Path> values = Files.walk(this.path.resolve("examples"))) {
+            try (final Stream<Path> values = java.nio.file.Files.walk(this.path.resolve("examples"))) {
                 values.sorted(Comparator.reverseOrder()).forEach(path -> {
                     try {
                         this.fusion.log("info", "Successfully deleted path {}, re-generating the examples later.", path);
 
-                        Files.delete(path);
+                        java.nio.file.Files.delete(path);
                     } catch (final IOException exception) {
                         this.fusion.log("warn", "Failed to delete {} in loop, Reason: {}", path, exception);
                     }

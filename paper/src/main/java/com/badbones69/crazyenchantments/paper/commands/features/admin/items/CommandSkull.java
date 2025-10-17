@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.features.admin.items;
 
+import com.badbones69.crazyenchantments.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.files.MessageKeys;
 import com.badbones69.crazyenchantments.paper.commands.features.BaseCommand;
@@ -38,7 +39,7 @@ public class CommandSkull extends BaseCommand {
     @Flag(flag = "h", longFlag = "head", argument = Void.class)
     @Flag(flag = "i", longFlag = "item", argument = Void.class)
     public void skull(@NotNull final CommandSender sender, final Flags flags) {
-        final BasicConfigurationNode root = FileKeys.heads.getJsonConfiguration();
+        final BasicConfigurationNode root = Files.heads.getJsonConfiguration();
 
         flags.getFlagValue("item", void.class).ifPresent(flag -> {
             if (!(sender instanceof Player player)) return;
@@ -172,7 +173,7 @@ public class CommandSkull extends BaseCommand {
                 }
             });
 
-            FileKeys.heads.save();
+            Files.heads.save();
         }
     }
 
@@ -187,6 +188,6 @@ public class CommandSkull extends BaseCommand {
             this.fusion.log("warn", "Failed to write %s(%s) to file".formatted(message, base64));
         }
 
-        FileKeys.heads.save();
+        Files.heads.save();
     }
 }

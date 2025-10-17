@@ -19,9 +19,6 @@ public enum FileKeys {
 
     config(FileType.PAPER, "config.yml"),
 
-    blocks(FileType.JSON, "blocks.json"),
-    heads(FileType.JSON, "heads.json"),
-
     currency(FileType.YAML, "currency.yml"),
 
     data(FileType.PAPER, "Data.yml"),
