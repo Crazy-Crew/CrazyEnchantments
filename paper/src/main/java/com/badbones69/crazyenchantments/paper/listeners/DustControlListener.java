@@ -92,6 +92,9 @@ public class DustControlListener implements Listener {
 
         final PersistentDataContainerView bookContainer = book.getPersistentDataContainer();
         final PersistentDataContainerView container = dust.getPersistentDataContainer();
+        final PersistentDataContainerView bookContainer = book.getPersistentDataContainer();
+
+        final Gson gson = Methods.getGson();
 
         final DustData dustData = Methods.getGson().fromJson(container.get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
         final EnchantedBook bookData = Methods.getGson().fromJson(bookContainer.get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
@@ -114,7 +117,9 @@ public class DustControlListener implements Listener {
 
         if (!toggle) return;
 
-        if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
+        final String configName = dustData.getConfigName();
+
+        if (configName.equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
             int per = dustData.getChance();
 
             if (Methods.hasArgument("%success_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
@@ -143,7 +148,7 @@ public class DustControlListener implements Listener {
             return;
         }
 
-        if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
+        if (configName.equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
             int per = dustData.getChance();
 
             if (Methods.hasArgument("%destroy_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
