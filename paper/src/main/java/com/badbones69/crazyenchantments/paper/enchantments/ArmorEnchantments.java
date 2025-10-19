@@ -115,7 +115,7 @@ public class ArmorEnchantments implements Listener {
             final PersistentDataContainerView newView = newItem.getPersistentDataContainer();
             final PersistentDataContainerView oldView = oldItem.getPersistentDataContainer();
 
-            if (!newView.has(key) && oldView.has(key)) return;
+            if (!newView.has(key) && !oldView.has(key)) return;
 
             if (Objects.equals(newView.get(key, PersistentDataType.STRING), oldView.get(key, PersistentDataType.STRING))) return;
 
