@@ -96,7 +96,9 @@ public class CrazyInstance extends CrazyPlugin {
     //private VaultSupport vaultSupport;
 
     @Override
-    public void init() {
+    public void init(@NotNull final Audience audience) {
+        super.init(audience);
+
         this.modManager.addMod(Dependencies.generic_vanish, new GenericVanishMod());
 
         final List<String> blocks = ConfigUtils.getStringList(Files.blocks.getJsonConfiguration(), "blocks").stream().filter(String::isEmpty).toList();

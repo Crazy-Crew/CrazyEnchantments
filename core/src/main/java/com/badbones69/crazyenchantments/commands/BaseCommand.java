@@ -1,19 +1,19 @@
 package com.badbones69.crazyenchantments.commands;
 
 import com.badbones69.crazyenchantments.CrazyPlugin;
+import us.crazycrew.crazyenchantments.ICrazyProvider;
 import us.crazycrew.crazyenchantments.enums.Mode;
 import com.badbones69.crazyenchantments.commands.player.ISource;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazyenchantments.ICrazyEnchantments;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 public abstract class BaseCommand<S> extends LiteralArgumentBuilder<S> {
 
-    protected final CrazyPlugin plugin = ICrazyEnchantments.getInstance(CrazyPlugin.class);
+    protected final CrazyPlugin plugin = (CrazyPlugin) ICrazyProvider.getInstance();
 
     private final Function<S, ISource> function;
     private final String permission;

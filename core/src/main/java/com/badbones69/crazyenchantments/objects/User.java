@@ -7,15 +7,16 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyenchantments.ICrazyEnchantments;
 import us.crazycrew.crazyenchantments.constants.MessageKeys;
 import us.crazycrew.crazyenchantments.interfaces.IUser;
-import us.crazycrew.crazyenchantments.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.ICrazyProvider;
 import java.util.Locale;
 import java.util.Map;
 
 public class User extends IUser {
 
-    private final CrazyPlugin plugin = ICrazyEnchantments.getInstance(CrazyPlugin.class);
+    private final CrazyPlugin plugin = (CrazyPlugin) ICrazyProvider.getInstance();
 
     private final MessageRegistry messageRegistry = this.plugin.getMessageRegistry();
 
@@ -49,7 +50,11 @@ public class User extends IUser {
         final String country = locale.getCountry();
         final String language = locale.getLanguage();
 
-        this.locale = Key.key(ICrazyEnchantments.namespace, String.format("%s-%s.yml", language, country));
+        final String value = "%s_%s.yml".formatted(language, country).toLowerCase();
+
+        if (!value.equalsIgnoreCase("en_us.yml")) {
+            this.locale = Key.key(ICrazyEnchantments.namespace, value);
+        }
 
         this.fusion.log("warn", "Locale Debug: Country: {}, Language: {}", country, language);
     }

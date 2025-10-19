@@ -10,7 +10,7 @@ import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-import us.crazycrew.crazyenchantments.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.ICrazyProvider;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ public enum Files {
     blocks("blocks.json", FileType.JSON),
     heads("heads.json", FileType.JSON);
 
-    private final CrazyPlugin plugin = ICrazyEnchantments.getInstance(CrazyPlugin.class);
+    private final CrazyPlugin plugin = (CrazyPlugin) ICrazyProvider.getInstance();
 
     private final FusionCore fusion = this.plugin.getFusion();
 

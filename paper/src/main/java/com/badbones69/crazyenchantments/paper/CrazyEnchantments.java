@@ -87,7 +87,7 @@ public class CrazyEnchantments extends JavaPlugin {
         }
 
         this.instance = new CrazyInstance(this.fusion);
-        this.instance.init();
+        this.instance.init(getServer().getConsoleSender());
 
         this.categoryManager = this.instance.getCategoryManager();
         this.tinkerManager = this.instance.getTinkerManager();

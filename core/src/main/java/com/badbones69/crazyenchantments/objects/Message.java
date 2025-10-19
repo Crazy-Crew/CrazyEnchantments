@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import us.crazycrew.crazyenchantments.interfaces.IMessage;
-import us.crazycrew.crazyenchantments.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.ICrazyProvider;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class Message implements IMessage {
 
-    private final CrazyPlugin plugin = ICrazyEnchantments.getInstance(CrazyPlugin.class);
+    private final CrazyPlugin plugin = (CrazyPlugin) ICrazyProvider.getInstance();
 
     private final FusionCore fusion = this.plugin.getFusion();
 

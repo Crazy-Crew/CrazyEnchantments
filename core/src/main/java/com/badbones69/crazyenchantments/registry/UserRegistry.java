@@ -6,12 +6,13 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyenchantments.ICrazyEnchantments;
+import us.crazycrew.crazyenchantments.ICrazyProvider;
 import us.crazycrew.crazyenchantments.interfaces.registry.IUserRegistry;
 import java.util.*;
 
 public class UserRegistry implements IUserRegistry<User> {
 
-    private final CrazyPlugin plugin = ICrazyEnchantments.getInstance(CrazyPlugin.class);
+    private final CrazyPlugin plugin = (CrazyPlugin) ICrazyProvider.getInstance();
 
     private final Map<UUID, User> users = new HashMap<>();
 
