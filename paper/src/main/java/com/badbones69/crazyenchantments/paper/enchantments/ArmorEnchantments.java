@@ -109,6 +109,8 @@ public class ArmorEnchantments implements Listener {
         final NamespacedKey key = DataKeys.enchantments.getNamespacedKey();
 
         event.getEquipmentChanges().forEach((slot, action) -> {
+            if (slot.isHand()) return;
+
             final ItemStack newItem = action.newItem();
             final ItemStack oldItem = action.oldItem();
 
