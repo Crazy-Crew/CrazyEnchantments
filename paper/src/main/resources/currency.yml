@@ -1,0 +1,7 @@
+# Currency Settings
+settings:
+  # Vault Settings
+  vault:
+    # Should vault support be enabled?
+    # This requires Vault on the server!
+    enabled: true

@@ -2,11 +2,10 @@ package com.badbones69.crazyenchantments.paper.tasks.processors;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.attribute.Attribute;
@@ -17,33 +16,33 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
-public class ArmorProcessor extends PoolProcessor {
+public class ArmorProcessor extends PoolProcessor { //todo() what do I even fucking do with this lol
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
-    private final Methods methods = this.starter.getMethods();
-
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final PluginSupport pluginSupport = null;
 
     public ArmorProcessor() {}
 
-    public void add(UUID id){
+    public void add(@NotNull final UUID id){
         add(() -> process(id));
     }
 
-    public void process(UUID playerId) {
+    public void process(@NotNull final UUID playerId) {
         Player player = this.plugin.getServer().getPlayer(playerId);
 
         if (player == null) return;
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
+            if (armor == null || armor.isEmpty()) continue;
+
+            Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(armor);
+
             if (enchantments.isEmpty()) continue;
 
             int heal = 1;
@@ -68,13 +67,22 @@ public class ArmorProcessor extends PoolProcessor {
             useHellForge(player, armor, enchantments);
         }
 
-        PlayerInventory inv = player.getInventory();
+        PlayerInventory inventory = player.getInventory();
 
-        useHellForge(player, inv.getItemInMainHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
-        useHellForge(player, inv.getItemInOffHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
+        final ItemStack mainHand = inventory.getItemInMainHand();
+
+        if (!mainHand.isEmpty()) {
+            useHellForge(player, mainHand, this.instance.getEnchantments(mainHand));
+        }
+
+        final ItemStack offHand = inventory.getItemInOffHand();
+
+        if (!offHand.isEmpty()) {
+            useHellForge(player, offHand, this.instance.getEnchantments(offHand));
+        }
     }
 
-    private void checkCommander(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
+    private void checkCommander(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.COMMANDER, player, enchantments)) return;
 
         int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
@@ -101,7 +109,7 @@ public class ArmorProcessor extends PoolProcessor {
 
     }
 
-    private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
+    private void checkAngel(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments, final int radius) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -138,7 +146,7 @@ public class ArmorProcessor extends PoolProcessor {
         }.runNextTick();
     }
 
-    private void checkImplants(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
+    private void checkImplants(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.IMPLANTS, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -151,7 +159,7 @@ public class ArmorProcessor extends PoolProcessor {
         }.runNextTick();
     }
 
-    private void checkNursery(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int heal, double maxHealth) {
+    private void checkNursery(@NotNull final ItemStack armor, @NotNull final Player player, @NotNull final Map<CEnchantment, Integer> enchantments, final int heal, final double maxHealth) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.NURSERY, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -165,7 +173,9 @@ public class ArmorProcessor extends PoolProcessor {
         }.runNextTick();
     }
 
-    private void useHellForge(Player player, ItemStack item, Map<CEnchantment, Integer> enchantments) {
+    private void useHellForge(@NotNull final Player player, @NotNull final ItemStack item, @NotNull final Map<CEnchantment, Integer> enchantments) {
+        if (item.isEmpty()) return;
+
         if (!EnchantUtils.isMoveEventActive(CEnchantments.HELLFORGED, player, enchantments)) return;
 
         new FoliaScheduler(this.plugin, null, player) {
@@ -173,7 +183,7 @@ public class ArmorProcessor extends PoolProcessor {
             public void run() {
                 if (!EnchantUtils.normalEnchantEvent(CEnchantments.HELLFORGED, player, item)) return;
 
-                final int armorDurability = methods.getDurability(item);
+                final int armorDurability = Methods.getDurability(item);
 
                 if (armorDurability <= 0) return;
 
@@ -181,7 +191,7 @@ public class ArmorProcessor extends PoolProcessor {
 
                 finalArmorDurability -= enchantments.get(CEnchantments.HELLFORGED.getEnchantment());
 
-                methods.setDurability(item, finalArmorDurability);
+                Methods.setDurability(item, finalArmorDurability);
             }
         }.runNextTick();
     }

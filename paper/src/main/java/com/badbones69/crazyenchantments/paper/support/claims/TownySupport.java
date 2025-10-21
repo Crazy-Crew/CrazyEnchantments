@@ -9,15 +9,16 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jline.utils.Log;
 
 public class TownySupport implements ClaimSupport {
 
-    public boolean isFriendly(Player player, Player other) {
+    public boolean isFriendly(@NotNull final Player player, @NotNull final Player other) {
         return CombatUtil.isAlly(player.getName(), other.getName());
     }
 
-    public boolean inTerritory(Player player) {
+    public boolean inTerritory(@NotNull final Player player) {
         TownyAPI api = TownyAPI.getInstance();
 
         if (api == null) return true;
@@ -39,9 +40,9 @@ public class TownySupport implements ClaimSupport {
         return false;
     }
 
-    public boolean canBreakBlock(Player player, Block block) { return true; }
+    public boolean canBreakBlock(@NotNull final Player player, @NotNull final Block block) { return true; }
 
-    public static boolean allowsCombat(Location location) {
+    public static boolean allowsCombat(@NotNull final Location location) {
         TownyAPI api = TownyAPI.getInstance();
 
         if (api == null) return true;

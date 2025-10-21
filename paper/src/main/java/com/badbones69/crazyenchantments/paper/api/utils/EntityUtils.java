@@ -2,10 +2,11 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityUtils {
 
-    public static Material getHeadMaterial(Entity entity) {
+    public static Material getHeadMaterial(@NotNull final Entity entity) {
         return switch (entity.getType()) {
             case ZOMBIE -> Material.ZOMBIE_HEAD;
             case SKELETON -> Material.SKELETON_SKULL;

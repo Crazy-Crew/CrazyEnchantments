@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
@@ -26,7 +25,7 @@ public class AllyMob {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
-    private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+    private final AllyManager allyManager = null;
 
     private final AllyType type;
     private final Player owner;
@@ -36,7 +35,7 @@ public class AllyMob {
     private long spawnTime;
     private ScheduledTask runnable;
 
-    public AllyMob(Player owner, AllyType type) {
+    public AllyMob(@NotNull final Player owner, @NotNull final AllyType type) {
         this.type = type;
         this.owner = owner;
         this.instance = this;
@@ -54,24 +53,24 @@ public class AllyMob {
         return this.ally;
     }
 
-    public void spawnAlly(long spawnTime) {
+    public void spawnAlly(final long spawnTime) {
         spawnAlly(this.owner.getLocation(), spawnTime);
     }
 
-    public void spawnAlly(Location location, long spawnTime) {
+    public void spawnAlly(@NotNull final Location location, final long spawnTime) {
         this.spawnTime = spawnTime;
 
         this.ally = (LivingEntity) location.getWorld().spawnEntity(location, this.type.entityType);
 
-        this.ally.getAttribute(Attribute.MAX_HEALTH).setBaseValue(this.type.maxHealth);
+        this.ally.getAttribute(Attribute.MAX_HEALTH).setBaseValue(this.type.maxHealth); //todo() npe check
 
         this.ally.setHealth(this.type.maxHealth);
 
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%Player%", this.owner.getName());
-        placeholders.put("%Mob%", this.type.entityType.getName());
+        placeholders.put("%Mob%", this.type.entityType.getName()); //todo() npe check
 
-        this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
+        //this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName())); //todo() legacy trash
         this.ally.setCustomNameVisible(true);
 
         startSpawnTimer();
@@ -85,7 +84,7 @@ public class AllyMob {
         this.ally.remove();
     }
 
-    public void attackEnemy(final LivingEntity enemy) {
+    public void attackEnemy(@NotNull final LivingEntity enemy) {
         new FoliaScheduler(this.plugin, null, this.ally) {
             @Override
             public void run() {
@@ -138,12 +137,12 @@ public class AllyMob {
     }
     
     public enum AllyType {
-        WOLF("Wolf", "&b%player%'s Saberwolf", EntityType.WOLF, 16),
-        IRON_GOLEM("Iron-Golem", "&6%player%'s Golem", EntityType.IRON_GOLEM, 200),
-        ZOMBIE("Zombie", "&2%player%'s Undead", EntityType.ZOMBIE, 45),
-        ENDERMITE("Endermite", "&5%player%'s Endermite", EntityType.ENDERMITE, 10),
-        SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10),
-        BEE("Bee", "&e%player%'s Bee", EntityType.BEE, 10);
+        WOLF("Wolf", "<aqua>%player%'s Saberwolf", EntityType.WOLF, 16),
+        IRON_GOLEM("Iron-Golem", "<gold>%player%'s Golem", EntityType.IRON_GOLEM, 200),
+        ZOMBIE("Zombie", "<dark_green>%player%'s Undead", EntityType.ZOMBIE, 45),
+        ENDERMITE("Endermite", "<dark_purple>%player%'s Endermite", EntityType.ENDERMITE, 10),
+        SILVERFISH("Silverfish", "<gray>%player%'s Silverfish", EntityType.SILVERFISH, 10),
+        BEE("Bee", "<yellow>%player%'s Bee", EntityType.BEE, 10);
         
         private final String configName;
         private final String defaultName;
@@ -154,9 +153,9 @@ public class AllyMob {
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         @NotNull
-        private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+        private final AllyManager allyManager = null;
         
-        AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
+        AllyType(@NotNull final String configName, @NotNull final String defaultName, @NotNull final EntityType entityType, final int maxHealth) {
             this.configName = configName;
             this.defaultName = defaultName;
             this.entityType = entityType;

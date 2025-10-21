@@ -8,10 +8,12 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FactionsUUIDSupport implements ClaimSupport {
 
-    public boolean isFriendly(Player player, Player other) {
+    public boolean isFriendly(@NotNull final Player player, @NotNull final Player other) {
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
         FPlayer oPlayer = FPlayers.getInstance().getByPlayer(other);
 
@@ -29,23 +31,23 @@ public class FactionsUUIDSupport implements ClaimSupport {
         }
     }
 
-    public boolean inTerritory(Player player) {
+    public boolean inTerritory(@NotNull final Player player) {
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
 
         return !isWilderness(fPlayer) && (fPlayer.isInOwnTerritory() || fPlayer.isInAllyTerritory());
     }
 
-    public boolean canBreakBlock(Player player, Block block) {
+    public boolean canBreakBlock(@NotNull final Player player, @NotNull final Block block) {
         Faction fBlock = Board.getInstance().getFactionAt(new FLocation(block.getLocation()));
 
         return isWilderness(fBlock) || FPlayers.getInstance().getByPlayer(player).getFaction() == fBlock;
     }
 
-    private boolean isWilderness(FPlayer player) {
+    private boolean isWilderness(@NotNull final FPlayer player) {
         return isWilderness(player.getFaction());
     }
 
-    private boolean isWilderness(Faction faction) {
+    private boolean isWilderness(@Nullable final Faction faction) {
         return faction != null && faction.isWilderness();
     }
 }

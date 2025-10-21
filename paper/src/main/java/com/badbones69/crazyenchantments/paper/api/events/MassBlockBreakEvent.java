@@ -6,7 +6,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Set;
 
 public class MassBlockBreakEvent extends Event implements Cancellable {
@@ -16,7 +15,7 @@ public class MassBlockBreakEvent extends Event implements Cancellable {
     private boolean cancelled;
     private final Set<Block> blockList;
     
-    public MassBlockBreakEvent(Player player, Set<Block> blockList) {
+    public MassBlockBreakEvent(@NotNull final Player player, @NotNull final Set<Block> blockList) {
         this.player = player;
         this.cancelled = false;
         this.blockList = blockList;
@@ -36,7 +35,7 @@ public class MassBlockBreakEvent extends Event implements Cancellable {
     }
     
     @Override
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 

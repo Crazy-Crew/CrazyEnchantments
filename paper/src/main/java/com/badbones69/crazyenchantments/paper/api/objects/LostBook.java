@@ -1,16 +1,16 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
+import com.badbones69.crazyenchantments.paper.api.enums.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LostBook {
 
@@ -24,8 +24,8 @@ public class LostBook {
     private final boolean useSound;
     private Sound sound;
 
-    public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,
-    boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
+    public LostBook(final int slot, final boolean inGUI, @NotNull final ItemBuilder displayItem, final int cost, @NotNull final Currency currency,
+                    final boolean useFirework, @NotNull final List<Color> fireworkColors, final boolean useSound, @NotNull final String sound) {
         this.slot = slot - 1;
         this.inGUI = inGUI;
         this.displayItem = displayItem;
@@ -35,14 +35,12 @@ public class LostBook {
         this.fireworkColors = fireworkColors;
 
         try { // If the sound doesn't exist it will not error.
-            this.sound = Sound.valueOf(sound);
-        } catch (Exception e) {
-            CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-            plugin.getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
-            this.sound = null;
+            this.sound = Sound.valueOf(sound); //todo() deprecated
+        } catch (Exception exception) {
+            this.sound = Sound.BLOCK_ANVIL_PLACE;
         }
 
-        this.useSound = sound != null && useSound;
+        this.useSound = !sound.isEmpty() && useSound;
     }
     
     public int getSlot() {
@@ -81,21 +79,24 @@ public class LostBook {
         return this.sound;
     }
     
-    public ItemBuilder getLostBook(Category category) {
+    public ItemBuilder getLostBook(@NotNull final Category category) {
         return getLostBook(category, 1);
     }
 
-    public ItemBuilder getLostBook(Category category, int amount) {
-        FileConfiguration file = Files.CONFIG.getFile();
-        HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put("%Category%", category.getDisplayItem().getName());
+    public ItemBuilder getLostBook(@NotNull final Category category, final int amount) {
+        final YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
+
+        final Map<String, String> placeholders = new HashMap<>();
+
+        placeholders.put("{category}", category.getDisplayItem().getName());
+
         return new ItemBuilder()
-        .setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
-        .setAmount(amount)
-        .setName(file.getString("Settings.LostBook.Name", "Error getting name."))
-        .setNamePlaceholders(placeholders)
-        .setLore(file.getStringList("Settings.LostBook.Lore"))
-        .setLorePlaceholders(placeholders)
-        .addKey(DataKeys.lost_book.getNamespacedKey(), category.getName());
+                .setMaterial(configuration.getString("Settings.LostBook.Item", "BOOK"))
+                .setAmount(amount)
+                .setName(configuration.getString("Settings.LostBook.Name", "<dark_gray><bold><u>A Lost %category%<dark_gray><bold><u> Book"))
+                .setNamePlaceholders(placeholders)
+                .setLore(configuration.getStringList("Settings.LostBook.Lore"))
+                .setLorePlaceholders(placeholders)
+                .addKey(DataKeys.lost_book.getNamespacedKey(), category.getName());
     }
 }
