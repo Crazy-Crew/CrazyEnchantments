@@ -32,7 +32,7 @@ public class CrazyLoader implements PluginBootstrap {
     public void bootstrap(@NotNull BootstrapContext context) {
         this.paper = new FusionPaper(context);
 
-        this.enchantmentRegistry = new EnchantmentRegistry();
+        this.enchantmentRegistry = new EnchantmentRegistry(this.paper);
         this.enchantmentRegistry.init();
 
         final Collection<ICustomEnchantment> enchants = this.enchantmentRegistry.getEnchantments().values();

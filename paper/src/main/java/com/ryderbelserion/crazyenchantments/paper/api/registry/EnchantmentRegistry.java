@@ -24,17 +24,23 @@ import java.util.Set;
 
 public class EnchantmentRegistry {
 
-    private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
+    private final FusionPaper fusion;
 
-    private final FileManager fileManager = this.fusion.getFileManager();
-    private final Path path = this.fusion.getDataPath();
+    private final FileManager fileManager;
+    private final Path path;
 
     private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
+
+    public EnchantmentRegistry(@NotNull final FusionPaper fusion) {
+        this.fusion = fusion;
+        this.fileManager = this.fusion.getFileManager();
+        this.path = this.fusion.getDataPath();
+    }
 
     public void init() { // runs on startup
         this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML).addFolder(this.path.resolve("enchants"), FileType.YAML);
 
-        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this));
+        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fusion));
     }
 
     public void reload() { // runs on reload in case they deleted a static file.

@@ -29,17 +29,20 @@ import java.util.*;
 
 public class VeinMinerEnchant implements ICustomEnchantment {
 
-    private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
-
-    private final FileManager fileManager = this.fusion.getFileManager();
-    private final Path path = this.fusion.getDataPath();
+    private final FusionPaper fusion;
+    private final FileManager fileManager;
+    private final Path path;
 
     public static final Key veinminer_key = Key.key("crazyenchantments:veinminer");
 
     private final EnchantmentRegistry registry;
 
-    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry) {
+    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry, @NotNull final FusionPaper fusion) {
         this.registry = registry;
+
+        this.fusion = fusion;
+        this.fileManager = this.fusion.getFileManager();
+        this.path = this.fusion.getDataPath();
 
         build();
     }
