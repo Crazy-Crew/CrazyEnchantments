@@ -74,16 +74,15 @@ public class TinkererManager {
      * @return XP Bottle with custom amount of xp stored in it.
      */
     public static ItemStack getXPBottle(String amount, FileConfiguration config) {
-        String id = config.getString("Settings.BottleOptions.Item");
-        String name = config.getString("Settings.BottleOptions.Name");
+        String id = config.getString("Settings.BottleOptions.Item", "EXPERIENCE_BOTTLE");
+        String name = config.getString("Settings.BottleOptions.Name", "");
         List<String> lore = new ArrayList<>();
 
         for (String l : config.getStringList("Settings.BottleOptions.Lore")) {
             lore.add(l.replace("%Total%", amount).replace("%total%", amount));
         }
 
-        assert id != null;
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build();
+        return new ItemBuilder().setMaterial(id).setName(name).setItemModel(config.getString("Settings.BottleOptions.Model.Namespace", ""), config.getString("Settings.BottleOptions.Model.Key", "")).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
     public static int getTotalXP(ItemStack item, FileConfiguration config) {

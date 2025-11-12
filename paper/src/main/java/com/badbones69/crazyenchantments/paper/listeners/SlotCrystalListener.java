@@ -36,6 +36,7 @@ public class SlotCrystalListener implements Listener {
         slot_crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
                 .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
+                .setItemModel(config.getString("Settings.Slot_Crystal.Model.Namespace", ""), config.getString("Settings.Slot_Crystal.Model.Key", ""))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
                 .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
     }

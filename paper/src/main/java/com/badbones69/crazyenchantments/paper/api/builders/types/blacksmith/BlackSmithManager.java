@@ -143,8 +143,9 @@ public class BlackSmithManager {
         }
 
         exitButton = new ItemBuilder()
-                .setMaterial(Material.BARRIER)
+                .setMaterial(section.getString("Results.Item.Type", "BARRIER"))
                 .setName(section.getString("Results.None", "&c&lNo Results."))
+                .setItemModel(section.getString("Results.Item.Model.Namespace", ""), section.getString("Results.Item.Model.Key", ""))
                 .setLore(section.getStringList("Results.Not-Found-Lore"))
                 .build();
 

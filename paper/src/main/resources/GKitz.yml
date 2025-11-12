@@ -43,6 +43,12 @@ GKitz: #GKit options.
     Display: #All the display option in the GUI.
       Slot: 12 #Slot the item is located at in the GUI.
       Item: 'ORANGE_STAINED_GLASS_PANE' #The item that is displayed for the GKit.
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: true #If it has a glowing effect.
       Name: '&6&lThe Hero GKit' #Display name of the GKit.
       Lore: #The lore that goes on the display item.
@@ -67,6 +73,12 @@ GKitz: #GKit options.
     Display:
       Slot: 14
       Item: 'BLUE_STAINED_GLASS_PANE'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: true
       Name: '&9&lThe Peace Keeper GKit'
       Lore:
@@ -79,6 +91,8 @@ GKitz: #GKit options.
     Auto-Equip: false
     Cooldown: '24h'
     Items:
+      # An example of how to use Item-Model here.
+      #- 'Item:DIAMOND_HELMET, Item-Model:minecraft!diamond_axe, Amount:1, Name:&9&lPeace Keeper Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:&9A special helmet worn by a peace keeper.,&9Take special care of this.'
       - 'Item:DIAMOND_HELMET, Amount:1, Name:&9&lPeace Keeper Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:&9A special helmet worn by a peace keeper.,&9Take special care of this.'
       - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:&9&lPeace Keeper Chestplate, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:&9A special chestplate worn by a peace keeper.,&9Take special care of this.'
       - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:&9&lPeace Keeper Leggings, Protection:4, Thorns:3, Overload:0-5, Hulk:2-5, Lore:&9A special leggings worn by a peace keeper.,&9Take special care of this.'
@@ -91,6 +105,12 @@ GKitz: #GKit options.
     Display:
       Slot: 16
       Item: 'RED_STAINED_GLASS_PANE'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: true
       Name: '&4&lThe Villain GKit'
       Lore:
