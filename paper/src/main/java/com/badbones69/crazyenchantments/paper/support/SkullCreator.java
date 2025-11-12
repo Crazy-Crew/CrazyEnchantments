@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
@@ -25,7 +24,7 @@ import java.util.UUID;
  *
  * @author Dean B on 12/28/2016.
  */
-public class SkullCreator {
+public class SkullCreator { //todo() this can fuck off, I appreciate you Dean B, but we're in 2025.
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);

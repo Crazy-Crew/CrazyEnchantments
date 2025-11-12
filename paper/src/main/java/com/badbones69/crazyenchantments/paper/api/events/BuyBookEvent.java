@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.events;
 
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import org.bukkit.event.Event;
@@ -22,7 +22,7 @@ public class BuyBookEvent extends Event {
      * @param price Price of the book.
      * @param book CEBook being bought.
      */
-    public BuyBookEvent(CEPlayer player, Currency currency, int price, CEBook book) {
+    public BuyBookEvent(@NotNull final CEPlayer player, @NotNull final Currency currency, final int price, @NotNull final CEBook book) {
         this.book = book;
         this.price = price;
         this.player = player;

@@ -10,7 +10,7 @@ public class RegisteredCEnchantmentEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final CEnchantment enchantment;
     
-    public RegisteredCEnchantmentEvent(CEnchantment enchantment) {
+    public RegisteredCEnchantmentEvent(@NotNull final CEnchantment enchantment) {
         this.enchantment = enchantment;
     }
     

@@ -21,7 +21,7 @@ public class AuraActiveEvent extends Event {
      * @param enchantment The aura enchantment that is activated.
      * @param level The power of the aura enchantment.
      */
-    public AuraActiveEvent(Player player, Player other, CEnchantments enchantment, int level) {
+    public AuraActiveEvent(@NotNull final Player player, @NotNull final Player other, @NotNull final CEnchantments enchantment, final int level) {
         this.player = player;
         this.other = other;
         this.enchantment = enchantment;

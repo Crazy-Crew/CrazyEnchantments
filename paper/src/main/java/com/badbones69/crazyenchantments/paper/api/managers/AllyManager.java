@@ -1,18 +1,17 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +27,12 @@ public class AllyManager {
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
     
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        YamlConfiguration configuration = FileKeys.config.getPaperConfiguration();
+
         String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
 
         for (AllyType type : AllyType.values()) {
-            this.allyTypeNameCache.put(type, ColorUtils.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
+            //this.allyTypeNameCache.put(type, ColorUtils.color(configuration.getString(allyTypePath + type.getConfigName(), type.getDefaultName()))); //todo() legacy trash
         }
     }
     
@@ -40,9 +40,10 @@ public class AllyManager {
         return this.allyMobs;
     }
     
-    public void addAllyMob(AllyMob allyMob) {
+    public void addAllyMob(@Nullable final AllyMob allyMob) {
         if (allyMob != null) {
             this.allyMobs.add(allyMob);
+
             UUID owner = allyMob.getOwner().getUniqueId();
 
             if (this.allyOwners.containsKey(owner)) {
@@ -55,7 +56,7 @@ public class AllyManager {
         }
     }
     
-    public void removeAllyMob(AllyMob allyMob) {
+    public void removeAllyMob(@Nullable final AllyMob allyMob) {
         if (allyMob != null) {
             this.allyMobs.remove(allyMob);
             UUID owner = allyMob.getOwner().getUniqueId();
@@ -76,7 +77,7 @@ public class AllyManager {
                 new FoliaScheduler(this.plugin, null, entity) {
                     @Override
                     public void run() {
-                        entity.remove();;
+                        entity.remove();
                     }
                 }.runNextTick();
             }
@@ -86,7 +87,7 @@ public class AllyManager {
         }
     }
 
-    public void forceRemoveAllies(final Player owner) {
+    public void forceRemoveAllies(@NotNull final Player owner) {
         for (final AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
             final LivingEntity entity = ally.getAlly();
 
@@ -103,7 +104,7 @@ public class AllyManager {
         this.allyOwners.remove(owner.getUniqueId());
     }
 
-    public void setEnemy(final Player owner, final Entity enemy) {
+    public void setEnemy(@NotNull final Player owner, @NotNull final Entity enemy) {
         this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> {
             new FoliaScheduler(this.plugin, null, ally.getAlly()) {
                 @Override
@@ -118,17 +119,17 @@ public class AllyManager {
         return this.allyTypeNameCache;
     }
     
-    public boolean isAlly(Player player, Entity livingEntity) {
+    public boolean isAlly(@NotNull final Player player, @NotNull final Entity livingEntity) {
         if (isAllyMob(livingEntity)) return isAlly(player, getAllyMob(livingEntity));
 
         return false;
     }
     
-    public boolean isAlly(Player player, AllyMob ally) {
+    public boolean isAlly(@NotNull final Player player, @NotNull final AllyMob ally) {
         return ally.getOwner().getUniqueId() == player.getUniqueId();
     }
     
-    public boolean isAllyMob(Entity livingEntity) {
+    public boolean isAllyMob(@NotNull final Entity livingEntity) {
         for (AllyMob ally : this.allyMobs) {
             if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return true;
         }
@@ -136,7 +137,7 @@ public class AllyManager {
         return false;
     }
     
-    public AllyMob getAllyMob(Entity livingEntity) {
+    public AllyMob getAllyMob(@NotNull final Entity livingEntity) {
         for (AllyMob ally : this.allyMobs) {
             if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return ally;
         }

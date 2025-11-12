@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,15 +19,15 @@ public class EventUtils {
         return ignoredEvents;
     }
 
-    public static boolean isIgnoredEvent(Event event) {
+    public static boolean isIgnoredEvent(@NotNull final Event event) {
         return ignoredEvents.contains(event);
     }
 
-    public static void addIgnoredEvent(Event event) {
+    public static void addIgnoredEvent(@NotNull final Event event) {
         ignoredEvents.add(event);
     }
 
-    public static void removeIgnoredUUID(UUID uuid) {
+    public static void removeIgnoredUUID(@NotNull final UUID uuid) {
         ignoredUUIDs.remove(uuid);
     }
 
@@ -34,22 +35,22 @@ public class EventUtils {
         return ignoredUUIDs;
     }
 
-    public static boolean isIgnoredUUID(UUID uuid) {
+    public static boolean isIgnoredUUID(@NotNull final UUID uuid) {
         return ignoredUUIDs.contains(uuid);
     }
 
-    public static void addIgnoredUUID(UUID uuid) {
+    public static void addIgnoredUUID(@NotNull final UUID uuid) {
         ignoredUUIDs.add(uuid);
     }
 
-    public static void removeIgnoredEvent(Event event) {
+    public static void removeIgnoredEvent(@NotNull final Event event) {
         ignoredEvents.remove(event);
     }
 
-    public static boolean containsDrop(EntityDeathEvent event, Material material) {
+    public static boolean containsDrop(@NotNull final EntityDeathEvent event, @NotNull final Material material) {
         boolean hasDroppedMat = true;
 
-        if (material != null && !material.isAir()) {
+        if (!material.isAir()) {
             hasDroppedMat = false;
 
             for (ItemStack drop : event.getDrops()) {

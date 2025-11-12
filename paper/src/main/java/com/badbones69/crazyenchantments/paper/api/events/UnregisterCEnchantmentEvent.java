@@ -10,7 +10,7 @@ public class UnregisterCEnchantmentEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final CEnchantment enchantment;
     
-    public UnregisterCEnchantmentEvent(CEnchantment enchantment) {
+    public UnregisterCEnchantmentEvent(@NotNull final CEnchantment enchantment) {
         this.enchantment = enchantment;
     }
     

@@ -2,10 +2,9 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
@@ -131,14 +130,7 @@ public enum CEnchantments {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     private final String name;
     private final String typeName;
@@ -158,7 +150,7 @@ public enum CEnchantments {
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
      */
-    CEnchantments(String name, String typeName) {
+    CEnchantments(@NotNull final String name, @NotNull final String typeName) {
         this.name = name;
         this.typeName = typeName;
         this.chance = 0;
@@ -172,7 +164,7 @@ public enum CEnchantments {
      * @param chance The chance the enchantment has to active.
      * @param chanceIncrease The amount the chance increases by every level.
      */
-    CEnchantments(String name, String typeName, int chance, int chanceIncrease) {
+    CEnchantments(@NotNull final String name, @NotNull final String typeName, final int chance, final int chanceIncrease) {
         this.name = name;
         this.typeName = typeName;
         this.chance = chance;
@@ -225,9 +217,9 @@ public enum CEnchantments {
     /**
      * @return The type the enchantment is.
      */
-    public EnchantmentType getType() {
+    public EnchantType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
-            return this.methods.getFromName(this.typeName);
+            return Methods.getFromName(this.typeName);
         } else {
             return getEnchantment().getEnchantmentType();
         }
@@ -245,7 +237,7 @@ public enum CEnchantments {
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        if (this.cachedEnchantment == null) this.cachedEnchantment = this.crazyManager.getEnchantmentFromName(this.name);
+        if (this.cachedEnchantment == null) this.cachedEnchantment = this.instance.getEnchantmentFromName(this.name);
 
         return this.cachedEnchantment;
     }
@@ -254,7 +246,7 @@ public enum CEnchantments {
      * Check to see if the enchantment's chance is successful.
      * @return True if the chance was successful and false if not.
      */
-    public boolean chanceSuccessful(int level) {
+    public boolean chanceSuccessful(final int level) {
         return this.chanceSuccessful(level, 1.0);
     }
 
@@ -262,7 +254,7 @@ public enum CEnchantments {
      * Check to see if the enchantment's chance is successful.
      * @return True if the chance was successful and false if not.
      */
-    public boolean chanceSuccessful(int level, double multiplier) {
+    public boolean chanceSuccessful(final int level, final double multiplier) {
         return getEnchantment().chanceSuccessful(level, multiplier);
     }
 

@@ -1,11 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +11,10 @@ import java.util.Map;
 public class GKitzItem {
 
     @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    @NotNull
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = null;
     
     private final ItemBuilder itemBuilder;
-    private final HashMap<CEnchantment, Integer> ceEnchantments;
+    private final Map<CEnchantment, Integer> ceEnchantments;
     
     /**
      * Make an empty gkit item.
@@ -32,7 +27,7 @@ public class GKitzItem {
     /**
      * Make an empty gkit item.
      */
-    public GKitzItem(ItemBuilder itemBuilder) {
+    public GKitzItem(@NotNull final ItemBuilder itemBuilder) {
         this.itemBuilder = itemBuilder;
         this.ceEnchantments = new HashMap<>();
     }
@@ -41,7 +36,7 @@ public class GKitzItem {
      * @param enchant Crazy Enchantment
      * @param level Level of the enchantment
      */
-    public void addCEEnchantment(CEnchantment enchant, int level) {
+    public void addCEEnchantment(@NotNull final CEnchantment enchant, final int level) {
         this.ceEnchantments.put(enchant, level);
     }
     
@@ -49,7 +44,7 @@ public class GKitzItem {
      * @return Returns a fully finished item.
      */
     public ItemStack build() {
-        ItemStack item = this.itemBuilder.build();
+        final ItemStack item = this.itemBuilder.build();
 
         for (Map.Entry<CEnchantment, Integer> enchantment : this.ceEnchantments.entrySet()) {
             this.crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());

@@ -1,45 +1,50 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.api.builders.gui.types.StaticInventory;
+import com.badbones69.crazyenchantments.paper.managers.currency.enums.Currency;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.ryderbelserion.fusion.paper.builders.gui.interfaces.Gui;
+import com.ryderbelserion.fusion.paper.builders.gui.interfaces.GuiItem;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShopMenu extends InventoryBuilder {
+public class ShopMenu extends StaticInventory {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final ShopManager shopManager = null;
 
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
-
-    private final ShopManager shopManager = this.starter.getShopManager();
-
-    public ShopMenu(Player player, int size, String title) {
-        super(player, size, title);
+    public ShopMenu(@NotNull final Player player, @NotNull final String title, final int size) {
+        super(player, title, size);
     }
 
+    private final Gui gui = getGui();
+
     @Override
-    public InventoryBuilder build() {
-        HashMap<String, String> placeholders = new HashMap<>();
+    public void open() {
+        final Map<String, String> placeholders = new HashMap<>();
 
-        for (Currency currency : Currency.values()) {
-            placeholders.put("%" + currency.getName() + "%", String.valueOf(this.currencyAPI.getCurrency(getPlayer(), currency)));
+        final Player player = getPlayer();
+
+        for (final Currency currency : Currency.values()) {
+            placeholders.put("{" + currency.getName() + "}", String.valueOf(this.currencyManager.getAmount(currency, player)));
         }
 
-        for (Map.Entry<ItemBuilder, Integer> itemBuilders : this.shopManager.getCustomizerItems().entrySet()) {
-            itemBuilders.getKey().setNamePlaceholders(placeholders).setLorePlaceholders(placeholders);
-            getInventory().setItem(itemBuilders.getValue(), itemBuilders.getKey().build());
+        for (final Map.Entry<ItemBuilder, Integer> builders : this.shopManager.getCustomizerItems().entrySet()) {
+            final ItemBuilder itemBuilder = builders.getKey();
+            final int slot = builders.getValue();
+
+            this.gui.setItem(slot, new GuiItem(itemBuilder.setNamePlaceholders(placeholders).setLorePlaceholders(placeholders).build()));
         }
 
-        this.shopManager.getShopItems().keySet().forEach(itemBuilder -> getInventory().setItem(this.shopManager.getShopItems().get(itemBuilder), itemBuilder.build()));
+        final Map<ItemBuilder, Integer> cache = this.shopManager.getShopItems();
 
-        return this;
+        for (final Map.Entry<ItemBuilder, Integer> builders : cache.entrySet()) {
+            final ItemBuilder itemBuilder = builders.getKey();
+            final int slot = builders.getValue();
+
+            this.gui.setItem(slot, new GuiItem(itemBuilder.build()));
+        }
     }
 }

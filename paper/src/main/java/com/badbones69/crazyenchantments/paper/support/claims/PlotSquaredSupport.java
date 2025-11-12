@@ -4,10 +4,11 @@ import com.badbones69.crazyenchantments.paper.support.interfaces.claims.PlotSqua
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class PlotSquaredSupport implements PlotSquaredVersion {
 
-    public boolean inTerritory(Player player) {
+    public boolean inTerritory(@NotNull final Player player) {
         PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
         Plot plot = plotPlayer.getCurrentPlot();
 

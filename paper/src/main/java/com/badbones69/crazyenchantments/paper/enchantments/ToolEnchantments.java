@@ -2,11 +2,10 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,15 +26,7 @@ public class ToolEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    // Settings.
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     @EventHandler()
     public void onPlayerClick(PlayerInteractEvent event) {
@@ -47,18 +37,23 @@ public class ToolEnchantments implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTelepathy(BlockDropItemEvent event) {
         Player player = event.getPlayer();
-        ItemStack tool = this.methods.getItemInHand(player);
+        ItemStack tool = Methods.getItemInHand(player);
 
-        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, this.enchantmentBookSettings.getEnchantments(tool))) return;
+        if (tool.isEmpty()) return;
+
+        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, this.instance.getEnchantments(tool))) return;
 
         event.setCancelled(true);
 
-        this.methods.addItemToInventory(player, event.getItems());
+        Methods.addItemToInventory(player, event.getItems());
     }
 
-    private void updateEffects(Player player) {
-        ItemStack item = this.methods.getItemInHand(player);
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+    private void updateEffects(@NotNull final Player player) {
+        ItemStack item = Methods.getItemInHand(player);
+
+        if (item.isEmpty()) return;
+
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
         int potionTime = 5 * 20;
 

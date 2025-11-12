@@ -2,21 +2,21 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.files.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -47,48 +47,44 @@ public class AxeEnchantments implements Listener {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyInstance instance = this.plugin.getInstance();
 
     @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = null;
 
     // Plugin Support.
     @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final PluginSupport pluginSupport = null;
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeFeller(BlockBreakEvent event) {
         if (!event.isDropItems() || EventUtils.isIgnoredEvent(event)) return;
 
         Player player = event.getPlayer();
-        ItemStack currentItem = methods.getItemInHand(player);
+        ItemStack currentItem = Methods.getItemInHand(player);
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(currentItem);
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
-        boolean damage = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
+
+        final YamlConfiguration config = FileKeys.config.getPaperConfiguration();
+
+        boolean damage = config.getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
 
         if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
 
         for (Block block : blockList) {
             if (block == event.getBlock()) continue;
-            if (this.methods.playerBreakBlock(player, block, currentItem, true)) continue;
-            if (damage) this.methods.removeDurability(currentItem, player);
+            if (Methods.playerBreakBlock(player, block, currentItem, true)) continue;
+            if (damage) Methods.removeDurability(currentItem, player);
         }
 
-        if (!damage) this.methods.removeDurability(currentItem, player);
+        if (!damage) Methods.removeDurability(currentItem, player);
 
     }
 
-    private Set<Block> getTree(Block startBlock, int maxBlocks) {
+    private Set<Block> getTree(@NotNull final Block startBlock, final int maxBlocks) {
         Set<Block> checkedBlocks = new HashSet<>(), tree = new HashSet<>();
         Queue<Block> queue = new LinkedList<>();
         queue.add(startBlock);
@@ -105,6 +101,7 @@ public class AxeEnchantments implements Listener {
                         if (x == 0 && y == 0 && z == 0) continue; // Skip initial block.
 
                         Block neighbor = currentBlock.getRelative(x, y, z);
+
                         if (neighbor.isEmpty() || checkedBlocks.contains(neighbor)) continue;
                         if (notInRange(startX, neighbor.getX()) || notInRange(startZ, neighbor.getZ())) continue;
 
@@ -112,7 +109,9 @@ public class AxeEnchantments implements Listener {
 
                         if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES"))) {
                             if (neighborType.endsWith("LOG")) tree.add(neighbor);
+
                             checkedBlocks.add(neighbor);
+
                             queue.add(neighbor);
                         }
                     }
@@ -122,7 +121,7 @@ public class AxeEnchantments implements Listener {
         return tree;
     }
 
-    private boolean notInRange(int startPos, int pos2) {
+    private boolean notInRange(final int startPos, final int pos2) {
         int range = 5;
         return pos2 > (startPos + range) || pos2 < (startPos - range);
     }
@@ -135,11 +134,11 @@ public class AxeEnchantments implements Listener {
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!(event.getDamager() instanceof Player damager)) return;
 
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 1));
@@ -182,14 +181,14 @@ public class AxeEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.DEMONFORGED, damager, item, enchantments) && entity instanceof Player player) {
 
-            ItemStack armorItem = switch (this.methods.percentPick(4, 0)) {
+            ItemStack armorItem = switch (Methods.percentPick(4, 0)) {
                 case 1 -> player.getEquipment().getHelmet();
                 case 2 -> player.getEquipment().getChestplate();
                 case 3 -> player.getEquipment().getLeggings();
                 default -> player.getEquipment().getBoots();
             };
 
-            this.methods.removeDurability(armorItem, player);
+            Methods.removeDurability(armorItem, player);
         }
     }
 
@@ -202,9 +201,9 @@ public class AxeEnchantments implements Listener {
         if (!this.pluginSupport.allowCombat(player.getLocation())) return;
 
         Player damager = player.getKiller();
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
-        if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.enchantmentBookSettings.getEnchantments(item))) {
+        if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.instance.getEnchantments(item))) {
             event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
         }
     }
@@ -215,21 +214,21 @@ public class AxeEnchantments implements Listener {
 
         if (killer == null) return;
 
-        ItemStack item = this.methods.getItemInHand(killer);
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
-        Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
-
-        if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
-            double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
-
-            if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, killer, item, enchantments, multiplier)) {
-                ItemStack head = new ItemBuilder().setMaterial(headMat).build();
-                event.getDrops().add(head);
-            }
-        }
+        ItemStack item = Methods.getItemInHand(killer);
+        Map<CEnchantment, Integer> enchantments = this.instance.getEnchantments(item);
+//        Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+//
+//        if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
+//            double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
+//
+//            if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, killer, item, enchantments, multiplier)) {
+//                ItemStack head = new ItemBuilder().setMaterial(headMat).build();
+//                event.getDrops().add(head);
+//            }
+//        }
     }
 
-    private void removeBadPotions(Player player) {
+    private void removeBadPotions(@NotNull final Player player) {
         List<PotionEffectType> bad = new ArrayList<>() {{
             add(PotionEffectType.BLINDNESS);
             add(PotionEffectType.NAUSEA);

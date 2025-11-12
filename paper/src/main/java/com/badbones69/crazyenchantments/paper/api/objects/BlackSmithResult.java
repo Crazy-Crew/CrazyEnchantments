@@ -1,52 +1,64 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.api.CrazyInstance;
+import com.badbones69.crazyenchantments.paper.managers.configs.ConfigManager;
+import com.badbones69.crazyenchantments.paper.managers.configs.types.guis.BlackSmithConfig;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import us.crazycrew.crazyenchantments.exceptions.CrazyException;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class BlackSmithResult {
 
-    private int cost = 0;
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final ConfigManager configManager = this.plugin.getConfigManager();
+
+    private final CrazyInstance instance = this.plugin.getInstance();
+
     private ItemStack resultItem;
+    private int cost = 0;
     
-    public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
-        resultItem = mainItem.clone();
+    public BlackSmithResult(@NotNull final Player player, @Nullable ItemStack mainItem, @NotNull final ItemStack subItem) {
+        if (mainItem == null || mainItem.isEmpty()) {
+            throw new CrazyException("The ItemStack used with BlackSmith is either empty, or null.");
+        }
 
-        CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        final BlackSmithConfig config = this.configManager.getBlackSmithConfig();
 
-        CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+        final int bookUpgrade = config.getTransactionUpgrade();
+        final int powerUp = config.getTransactionPowerUp();
+        final int enchantCost = config.getTransactionEnchantCost();
 
-        Starter starter = plugin.getStarter();
+        this.resultItem = mainItem.clone();
 
-        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-
-        CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
-        CEBook subBook = enchantmentBookSettings.getCEBook(subItem);
+        final CEBook mainBook = this.instance.getBook(mainItem);
+        final CEBook subBook = this.instance.getBook(subItem);
 
         if (mainBook != null && subBook != null) {
+            final int level = mainBook.getLevel();
+            final int subLevel = subBook.getLevel();
+
             // Books are the same enchantment.
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
             // Books have to be the same level.
-            mainBook.getLevel() == subBook.getLevel() &&
+            level == subLevel &&
             // Makes sure level doesn't go past max.
-            mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
-                this.resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
-                this.cost += BlackSmithManager.getBookUpgrade();
+            level + 1 <= mainBook.getEnchantment().getMaxLevel()) {
+                this.resultItem = mainBook.setLevel(level + 1).buildBook();
+                this.cost += bookUpgrade;
             }
         } else {
             if (mainItem.getType() == subItem.getType()) {
                 CEItem mainCE = new CEItem(this.resultItem);
                 CEItem subCE = new CEItem(subItem);
+
                 BlackSmithCompare compare = new BlackSmithCompare(mainCE, subCE);
 
                 // Checking for duplicate enchantments.
@@ -59,10 +71,12 @@ public class BlackSmithResult {
                     if (enchantment.canEnchantItem(subItem) && subCE.hasVanillaEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.addVanillaEnchantment(enchantment, level + 1);
-                            this.cost += BlackSmithManager.getLevelUp();
+
+                            this.cost += powerUp;
                         } else if (level < subLevel) {
                             mainCE.addVanillaEnchantment(enchantment, subLevel);
-                            this.cost += BlackSmithManager.getLevelUp();
+
+                            this.cost += powerUp;
                         }
                     }
                 }
@@ -76,10 +90,10 @@ public class BlackSmithResult {
                     if (enchantment.canEnchantItem(subItem) && subCE.hasCEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.addCEnchantment(enchantment, level + 1);
-                            this.cost += BlackSmithManager.getLevelUp();
+                            this.cost += powerUp;
                         } else if (level < subLevel) {
                             mainCE.addCEnchantment(enchantment, subLevel);
-                            this.cost += BlackSmithManager.getLevelUp();
+                            this.cost += powerUp;
                         }
                     }
                 }
@@ -90,7 +104,8 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && mainCE.canAddEnchantment(player) && !hasConflictingEnchant(mainCE.getVanillaEnchantments().keySet(), enchantment)) {
                         mainCE.addVanillaEnchantment(enchantment, entry.getValue());
-                        this.cost += BlackSmithManager.getAddEnchantment();
+
+                        this.cost += enchantCost;
                     }
                 }
 
@@ -99,7 +114,8 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(mainItem) && mainCE.canAddEnchantment(player) && !hasConflictingCEEnchant(mainCE.getCEnchantments().keySet(), enchantment)) {
                         mainCE.addCEnchantment(enchantment, entry.getValue());
-                        this.cost += BlackSmithManager.getAddEnchantment();
+
+                        this.cost += enchantCost;
                     }
                 }
 
@@ -115,8 +131,7 @@ public class BlackSmithResult {
      * @param enchantment The enchant to check the others against.
      * @return True if there is a conflict.
      */
-    private boolean hasConflictingEnchant(Set<Enchantment> vanillaEnchantments, Enchantment enchantment) {
-
+    private boolean hasConflictingEnchant(@NotNull final Set<Enchantment> vanillaEnchantments, @NotNull final Enchantment enchantment) {
         for (Enchantment enchant : vanillaEnchantments) {
             if (enchantment.conflictsWith(enchant)) return true;
         }
@@ -130,8 +145,7 @@ public class BlackSmithResult {
      * @param cEnchantment The ceEnchant to check the others against.
      * @return True if there is a conflict.
      */
-    private boolean hasConflictingCEEnchant(Set<CEnchantment> ceEnchantments, CEnchantment cEnchantment) {
-
+    private boolean hasConflictingCEEnchant(@NotNull final Set<CEnchantment> ceEnchantments, @NotNull final CEnchantment cEnchantment) {
         for (CEnchantment enchant : ceEnchantments) {
             if (cEnchantment.conflictsWith(enchant)) return true;
         }
@@ -139,11 +153,11 @@ public class BlackSmithResult {
         return false;
     }
 
-    public int getCost() {
-        return this.cost;
-    }
-    
     public ItemStack getResultItem() {
         return this.resultItem;
+    }
+
+    public int getCost() {
+        return this.cost;
     }
 }
