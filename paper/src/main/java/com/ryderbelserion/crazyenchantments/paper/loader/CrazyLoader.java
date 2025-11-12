@@ -3,7 +3,6 @@ package com.ryderbelserion.crazyenchantments.paper.loader;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
-import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -34,9 +33,7 @@ public class CrazyLoader implements PluginBootstrap {
     public void bootstrap(@NotNull BootstrapContext context) {
         final Path path = context.getDataDirectory();
 
-        this.paper = new FusionPaper(context.getLogger(), path);
-
-        final ILogger logger = this.paper.getLogger();
+        this.paper = new FusionPaper(context);
 
         this.enchantmentRegistry = new EnchantmentRegistry(this.paper, path);
         this.enchantmentRegistry.init();
@@ -51,7 +48,7 @@ public class CrazyLoader implements PluginBootstrap {
             for (final ICustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
-                logger.safe("Registering item tag {} for {}", enchant.getTagForSupportedItems().key(), enchant.getKey());
+                this.paper.log("info", "Registering item tag {} for {}", enchant.getTagForSupportedItems().key(), enchant.getKey());
 
                 registry.addToTag(ItemTypeTagKeys.create(enchant.getTagForSupportedItems().key()), enchant.getSupportedItems());
             }
@@ -64,9 +61,9 @@ public class CrazyLoader implements PluginBootstrap {
                 if (!enchant.isEnabled()) continue;
 
                 if (enchant.isCurse()) {
-                    logger.safe("Registering curse {}", enchant.getKey());
+                    this.paper.log("info", "Registering curse {}", enchant.getKey());
                 } else {
-                    logger.safe("Registering enchantment {}", enchant.getKey());
+                    this.paper.log("info", "Registering enchantment {}", enchant.getKey());
                 }
 
                 registry.register(TypedKey.create(RegistryKey.ENCHANTMENT, enchant.getKey()), enchantment -> {
@@ -89,7 +86,7 @@ public class CrazyLoader implements PluginBootstrap {
                 if (!enchant.isEnabled()) continue;
 
                 enchant.getEnchantTagKeys().forEach(enchantmentTagKey -> {
-                    logger.safe("Registering the enchantment tag {} for {}", enchantmentTagKey.key(), enchant.getKey());
+                    this.paper.log("info", "Registering the enchantment tag {} for {}", enchantmentTagKey.key(), enchant.getKey());
 
                     registry.addToTag(enchantmentTagKey, Set.of(enchant.getTagEntry()));
                 });

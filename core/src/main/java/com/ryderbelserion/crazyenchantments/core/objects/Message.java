@@ -6,9 +6,9 @@ import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.core.enums.Files;
 import com.ryderbelserion.fusion.core.FusionProvider;
-import com.ryderbelserion.fusion.core.api.FusionCore;
-import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
-import com.ryderbelserion.fusion.core.api.utils.StringUtils;
+import com.ryderbelserion.fusion.core.exceptions.FusionException;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
+import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -20,9 +20,9 @@ import java.util.Map;
 
 public class Message implements IMessage {
 
-    private final FusionCore fusion = FusionProvider.get();
+    private final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
 
-    private final CrazyEnchantments chatManager = (CrazyEnchantments) CrazyEnchantmentsProvider.getInstance();
+    private final CrazyEnchantments plugin = (CrazyEnchantments) CrazyEnchantmentsProvider.getInstance();
     private final CommentedConfigurationNode config = Files.config.getConfig();
     private final CommentedConfigurationNode messages = Files.messages.getConfig();
 
@@ -45,7 +45,7 @@ public class Message implements IMessage {
 
         if (component.equals(Component.empty())) return;
 
-        this.chatManager.broadcast(component);
+        this.plugin.broadcast(component);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Message implements IMessage {
 
     @Override
     public Component getComponent(@NotNull final Audience audience, @NotNull final Map<String, String> placeholders) {
-        if (this.chatManager.isConsoleSender(audience)) {
+        if (this.plugin.isConsoleSender(audience)) {
             final CommentedConfigurationNode config = this.messages.node(this.path);
 
             return parse(config.isList() ? StringUtils.toString(getStringList(config)) : config.getString(this.defaultValue), audience, placeholders);
@@ -91,9 +91,9 @@ public class Message implements IMessage {
     }
 
     private @NotNull Component parse(@NotNull final String message, @NotNull final Audience audience, @NotNull final Map<String, String> placeholders) {
-        placeholders.putIfAbsent("{prefix}", this.config.node("root", "prefix").getString("<blue>[<gold>ChatManager<blue>] <reset>"));
+        placeholders.putIfAbsent("{prefix}", this.config.node("root", "prefix").getString("<blue>[<gold>CrazyEnchantments<blue>] <reset>"));
 
-        return this.fusion.color(audience, message, placeholders);
+        return this.fusion.parse(audience, message, placeholders);
     }
 
     private @NotNull List<String> getStringList(@NotNull final CommentedConfigurationNode node) {
@@ -101,7 +101,7 @@ public class Message implements IMessage {
             final List<String> list = node.getList(String.class);
 
             return list != null ? list : List.of(this.defaultValue);
-        } catch (SerializationException exception) {
+        } catch (final SerializationException exception) {
             throw new FusionException(String.format("Failed to serialize %s!", node.path()), exception);
         }
     }

@@ -3,9 +3,7 @@ package com.ryderbelserion.crazyenchantments.paper;
 import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
-import com.ryderbelserion.crazyenchantments.paper.commands.brigadier.BaseCommand;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
-import com.ryderbelserion.fusion.core.api.enums.Support;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -19,18 +17,18 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
 
     private final CrazyEnchantmentsPlugin plugin;
     private final EnchantmentRegistry enchantmentRegistry;
-    private boolean isYardWatchEnabled = false;
+    private final boolean isYardWatchEnabled = false;
     private final FusionPaper fusion;
     private final Server server;
 
     public CrazyEnchantmentsPlatform(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final FusionPaper fusion) {
-        super(fusion.getPath(), fusion.getFileManager());
+        super(fusion.getDataPath(), fusion.getFileManager());
 
         this.fusion = fusion;
 
         this.plugin = plugin;
 
-        fusion.enable(this.plugin);
+        //fusion.enable(this.plugin);
 
         this.enchantmentRegistry = plugin.getEnchantmentRegistry();
 
@@ -44,7 +42,7 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
         final PluginManager pluginManager = this.server.getPluginManager();
         final UserRegistry userRegistry = this.getUserRegistry();
 
-        this.isYardWatchEnabled = Support.yard_watch.isEnabled();
+        //this.isYardWatchEnabled = Support.yard_watch.isEnabled();
 
         this.enchantmentRegistry.getEnchantments().forEach((key, customEnchantment) -> {
             customEnchantment.init(this.plugin); // registers listeners, or things not meant for the bootstrap loader
@@ -54,7 +52,7 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
                 new CacheListener(userRegistry)
         ).forEach(listener -> pluginManager.registerEvents(listener, this.plugin));
 
-        this.fusion.getCommandManager().enable(new BaseCommand(this), "You like my crazy enchants?", List.of("ce"));
+        //this.fusion.getCommandManager().enable(new BaseCommand(this), "You like my crazy enchants?", List.of("ce"));
     }
 
     @Override

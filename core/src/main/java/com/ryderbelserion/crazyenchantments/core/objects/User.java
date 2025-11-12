@@ -3,25 +3,24 @@ package com.ryderbelserion.crazyenchantments.core.objects;
 import com.ryderbelserion.crazyenchantments.api.interfaces.IUser;
 import com.ryderbelserion.crazyenchantments.core.enums.Files;
 import com.ryderbelserion.fusion.core.FusionProvider;
-import com.ryderbelserion.fusion.core.api.FusionCore;
-import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
-import com.ryderbelserion.fusion.core.files.FileManager;
-import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
+import com.ryderbelserion.fusion.files.FileManager;
+import com.ryderbelserion.fusion.files.interfaces.ICustomFile;
+import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
+import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Optional;
 
 public class User implements IUser {
 
-    private final FusionCore fusion = FusionProvider.get();
+    private final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
 
     private final FileManager fileManager = this.fusion.getFileManager();
 
-    private final ILogger logger = this.fusion.getLogger();
-
-    private final Path path = this.fusion.getPath();
+    private final Path path = this.fusion.getDataPath();
 
     private final Audience audience;
 
@@ -31,13 +30,10 @@ public class User implements IUser {
 
     @Override
     public CommentedConfigurationNode locale() {
-        final YamlCustomFile customFile = this.fileManager.getYamlFile(this.path.resolve(String.format("%s.yml", getLocale())));
+        @NotNull final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(this.path.resolve(String.format("%s.yml", getLocale())));
 
-        if (customFile == null) {
-            return Files.messages.getConfig();
-        }
+        return customFile.map(ICustomFile::getConfiguration).orElseGet(Files.messages::getConfig);
 
-        return customFile.getConfiguration();
     }
 
     private String locale = "en-US";
@@ -49,7 +45,7 @@ public class User implements IUser {
 
         this.locale = String.format("%s-%s", language, country);
 
-        this.logger.warn("Locale Debug: Country: {}, Language: {}", country, language);
+        this.fusion.log("warn", "Locale Debug: Country: {}, Language: {}", country, language);
     }
 
     @Override

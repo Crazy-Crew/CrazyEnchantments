@@ -2,9 +2,9 @@ package com.ryderbelserion.crazyenchantments.paper.api.registry;
 
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.VeinMinerEnchant;
-import com.ryderbelserion.fusion.core.api.enums.FileType;
-import com.ryderbelserion.fusion.core.api.interfaces.ILogger;
-import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.files.FileManager;
+import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
@@ -27,20 +27,13 @@ public class EnchantmentRegistry {
 
     private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
 
-    private final FileManager fileManager;
-    private final FusionPaper fusion;
-    private final ILogger logger;
-    private final Path path;
+    private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
 
-    public EnchantmentRegistry(@NotNull final FusionPaper fusion, @NotNull final Path path) {
-        this.fusion = fusion;
-        this.fileManager = this.fusion.getFileManager();
-        this.logger = this.fusion.getLogger();
-        this.path = path;
-    }
+    private final FileManager fileManager = this.fusion.getFileManager();
+    private final Path path = this.fusion.getDataPath();
 
     public void init() { // runs on startup
-        this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML, new ArrayList<>(), null).addFolder(this.path.resolve("enchants"), FileType.YAML, new ArrayList<>(), null);
+        //this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML, new ArrayList<>(), null).addFolder(this.path.resolve("enchants"), FileType.YAML, new ArrayList<>(), null);
 
         this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fusion, this.fileManager, this.path));
     }
@@ -94,7 +87,7 @@ public class EnchantmentRegistry {
 
                     supportedItemTags.add(tagEntry);
                 } catch (final IllegalArgumentException exception) {
-                    this.logger.error("<red>Failed to create a tag entry for <gold>{}", itemTag);
+                    this.fusion.log("error", "<red>Failed to create a tag entry for <gold>{}", itemTag);
                 }
 
                 continue;
@@ -109,7 +102,7 @@ public class EnchantmentRegistry {
 
                 supportedItemTags.add(tagEntry);
             } catch (final IllegalArgumentException | NullPointerException exception) {
-                this.logger.error("<red>Failed to create the tag entry for <gold>{}", itemTag);
+                this.fusion.log("error", "<red>Failed to create the tag entry for <gold>{}", itemTag);
             }
         }
 

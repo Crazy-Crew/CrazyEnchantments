@@ -4,8 +4,8 @@ import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
 import com.ryderbelserion.crazyenchantments.api.interfaces.platform.ICrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.core.registry.MessageRegistry;
 import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
-import com.ryderbelserion.fusion.core.api.enums.FileType;
-import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.files.FileManager;
+import com.ryderbelserion.fusion.files.enums.FileType;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -27,9 +27,9 @@ public abstract class CrazyEnchantments implements ICrazyEnchantments {
     public void start() {
         CrazyEnchantmentsProvider.register(this);
 
-        this.fileManager.addFolder(this.path.resolve("locale"), FileType.YAML, new ArrayList<>(), null)
+        /*this.fileManager.addFolder(this.path.resolve("locale"), FileType.YAML, new ArrayList<>(), null)
                 .addFile(this.path.resolve("messages.yml"), new ArrayList<>(), null)
-                .addFile(this.path.resolve("config.yml"), new ArrayList<>(), null);
+                .addFile(this.path.resolve("config.yml"), new ArrayList<>(), null);*/
 
         this.messageRegistry = new MessageRegistry(this.userRegistry = new UserRegistry());
         this.messageRegistry.init();

@@ -1,6 +1,6 @@
 package com.ryderbelserion.crazyenchantments.core.utils;
 
-import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
+import com.ryderbelserion.fusion.core.exceptions.FusionException;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;

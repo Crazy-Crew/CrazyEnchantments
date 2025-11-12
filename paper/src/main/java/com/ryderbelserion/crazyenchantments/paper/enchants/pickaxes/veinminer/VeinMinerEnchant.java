@@ -4,11 +4,7 @@ import com.ryderbelserion.crazyenchantments.core.utils.ConfigUtils;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
-import com.ryderbelserion.fusion.core.api.enums.FileAction;
-import com.ryderbelserion.fusion.core.api.utils.StringUtils;
-import com.ryderbelserion.fusion.core.files.FileManager;
-import com.ryderbelserion.fusion.core.files.types.JsonCustomFile;
-import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
+import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
@@ -65,7 +61,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public void build() { // used for /ce reload
-        this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
+        /*this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
             add(FileAction.EXTRACT_FILE);
         }}, null);
 
@@ -99,7 +95,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
                 this.enchantTagKeys.add(EnchantmentTagKeys.IN_ENCHANTING_TABLE);
             }
 
-            final JsonCustomFile ores = (JsonCustomFile) this.fileManager.getCustomFile(this.path.resolve("cache").resolve("ores.json"));
+            /*final JsonCustomFile ores = (JsonCustomFile) this.fileManager.getCustomFile(this.path.resolve("cache").resolve("ores.json"));
 
             if (ores != null) {
                 this.ores = ores.getStringList("blocks");
@@ -107,7 +103,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
             // re-bind the config node just in case we need it.
             this.config = config;
-        }
+        }*/
     }
 
     @Override
@@ -122,7 +118,8 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public final Component getDescription() {
-        return this.fusion.color(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
+        return Component.empty();
+        //return this.fusion.color(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
     }
 
     @Override

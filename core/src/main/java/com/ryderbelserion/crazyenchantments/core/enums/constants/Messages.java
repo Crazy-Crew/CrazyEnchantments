@@ -1,8 +1,8 @@
-package com.ryderbelserion.crazyenchantments.core.constants;
+package com.ryderbelserion.crazyenchantments.core.enums.constants;
 
 import net.kyori.adventure.key.Key;
 
-public class MessageKeys {
+public class Messages {
 
     private static final String namespace = "crazyenchantments";
     

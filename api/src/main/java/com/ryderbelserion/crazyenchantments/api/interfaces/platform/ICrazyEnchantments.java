@@ -2,7 +2,7 @@ package com.ryderbelserion.crazyenchantments.api.interfaces.platform;
 
 import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IMessageRegistry;
 import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IUserRegistry;
-import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.files.FileManager;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
