@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Optional;
+import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Command(value = "blacksmith", alias = {"bsmith", "bs"})
+@Syntax("/blacksmith [player]")
 public class BlackSmithCommand {
 
     @Command
