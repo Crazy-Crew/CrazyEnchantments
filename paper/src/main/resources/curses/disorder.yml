@@ -1,0 +1,40 @@
+# Curse related settings.
+curse:
+  # Should this enchant be enabled?
+  enabled: true
+  # The cosmetic look of the enchantment.
+  display:
+    # This currently only works as a cosmetic function for our internal menus as Mojang provides no way to change the display name of the enchantment book when given through vanilla means.
+    # The functionality of /ce when giving enchants randomly the same functionality as if it were an enchantment table. We do not handle anything internally.
+    name: "<red>Disorder"
+    # The description of the enchantment that appears on the enchantment book.
+    description:
+      - "<yellow>Chance to shuffle the player's inventory you attack when in combat."
+  # The max level.
+  max-level: 3
+  # The weight.
+  weight: 10
+  # What items will the enchantments work on? You can use materials like diamond_sword or item tags.
+  # A list of item tags: https://jd.papermc.io/paper/1.21.5/io/papermc/paper/registry/keys/tags/ItemTypeTagKeys.html
+  supported-items:
+    - "#minecraft:enchantable/sword"
+  # Should this be in the enchantment table?
+  enchantment-table: false
+  # The cost to apply/repair an item with this enchant in the anvil.
+  anvil-cost: 1
+  # The minimum cost settings.
+  minimum-cost:
+    # The extra cost per level.
+    extra-per-level: 1
+    # The minimum base cost.
+    base: 15
+  # The maximum cost settings.
+  maximum-cost:
+    # The extra cost per level.
+    extra-per-level: 1
+    # The maximum base cost.
+    base: 65
+  # Enchant specific settings.
+  settings:
+    # Each level increases the chance to activate by this much.
+    chance-to-activate-per-level: 0.025

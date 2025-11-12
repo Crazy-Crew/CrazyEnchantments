@@ -33,3 +33,8 @@ jobs:
         run: ./gradlew release-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
+      - name: Build Failure
+        if: failure()
+        run: ./gradlew failed-build --stacktrace
+        env:
+          BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}

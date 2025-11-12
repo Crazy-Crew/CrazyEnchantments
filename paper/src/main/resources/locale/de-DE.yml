@@ -1,0 +1,32 @@
+# The message section which powers the entire plugin's translation system!
+#
+# Colors: black, dark_blue, dark_green, dark_aqua, dark_red, dark_purple, gold, gray, dark_gray, blue, green, aqua, red, light_purple, yellow, or white
+# Hex Colors: <color:#e91e63>text</color> or <#e91e63>text</>
+# Gradients: <gradient:#e91e63:red>text</gradient> or <#e91e63:red>text</>
+messages:
+  # Available placeholders: {prefix}
+  reload-plugin: "{prefix}<green>Das Plugin wurde neu geladen."
+  # Available placeholders: {prefix}
+  feature-disabled: "{prefix}<red>Diese Funktion ist deaktiviert."
+  # All messages related to players.
+  player:
+    # A set of requirement messages.
+    requirements:
+      # Available placeholders: {prefix}
+      must-be-player: "{prefix}<red>Du musst ein Spieler sein, um diesen Befehl zu benutzen."
+      # Available placeholders: {prefix}
+      must-be-console-sender: "{prefix}<red>Sie müssen die Konsole benutzen, um diesen Befehl zu verwenden."
+    # Available placeholders: {prefix}, {player}
+    target-not-online: "{prefix}<red>{player} <gray>ist nicht online."
+    # Available placeholders: {prefix}
+    target-same-player: "{prefix}<red>Sie können diesen Befehl nicht auf sich selbst anwenden."
+    # Available placeholders: {prefix}
+    no-permission: "{prefix}<red>Sie haben nicht die Erlaubnis, diesen Befehl zu benutzen!"
+    # Available placeholders: {prefix}
+    inventory-not-empty: "{prefix}<red>Das Inventar ist nicht leer, bitte räumen Sie etwas Raum."
+  # All messages related to errors.
+  errors:
+    # Available placeholders: {prefix}
+    internal-error: "{prefix}<red>Ein interner Fehler ist aufgetreten. Bitte prüfen Sie die Konsole für den vollständigen Fehler."
+    # Available placeholders: {prefix}
+    message-empty: "{prefix}<red>Die Nachricht kann nicht leer sein."

@@ -1,0 +1,24 @@
+name: '${name}'
+main: '${group}.CrazyEnchantmentsPlugin'
+bootstrapper: '${group}.loader.CrazyLoader'
+
+version: '${version}'
+api-version: '${minecraft}'
+description: '${description}'
+
+folia-supported: true
+
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    YardWatch:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    HeadDatabase:
+      load: BEFORE
+      required: false
+      join-classpath: true

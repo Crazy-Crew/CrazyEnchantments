@@ -1,67 +1,60 @@
 [versions]
-crazyenchantments = "2.6.3"
-
-# Minecraft
-minecraft = "1.21.10"
-
-## JetBrains
-annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
-
-## Other
-triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-
-# Plugins
-placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
-worldguard = "7.0.13"            # https://dev.bukkit.org/projects/worldguard/files
-worldedit = "7.3.11"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
-vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
-griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
-towny = "0.101.0.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
-factions = "1.6.9.5-U0.6.40"     # https://www.spigotmc.org/resources/factionsuuid.1035/
-lands = "7.15.4"                 # https://github.com/Angeschossen/LandsAPI/wiki
-skyblock = "2025.1"              # https://bg-software.com/superiorskyblock/
-plotsquared = "7.5.2"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
-mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
-kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
-bStats = "3.1.0" # https://github.com/Bastian/bStats
-
-## Paper
 paperweight = "2.0.0-beta.19" # https://github.com/PaperMC/paperweight
 paper = "1.21.10-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
+## JetBrains
+annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
+kotlin = "2.1.20" # https://github.com/JetBrains/kotlin
+
+## Kyori
+adventure = "4.22.0" # https://github.com/KyoriPowered/adventure
+
+## Minecraft
+minecraft = "1.21.10" # https://minecraft.net
+
+## Plugin API
+headdatabaseapi = "1.3.1" # https://github.com/Arcaniax-Development/HeadDatabase-API
+placeholderapi = "2.11.6" # https://github.com/placeholderapi
+itemsadder = "4.0.10" # https://github.com/ItemsAdder
+nexo = "1.6.0" # https://github.com/Nexo-MC
+
+## Other
+yardwatch = "2.0.0" # https://github.com/YouHaveTrouble/YardWatchAPI
+fusion = "3.0.0" # https://github.com/ryderbelserion/Fusion
+
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "2.3.1" # https://github.com/jpenilla/run-task
-minotaur = "2.8.7" # https://github.com/modrinth/minotaur
+run-paper = "3.0.0" # https://github.com/jpenilla/run-task
+minotaur = "2.8.10" # https://github.com/modrinth/minotaur
 feather = "0.4.0" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.3" # https://github.com/HangarMC/hangar-publish-plugin
 shadow = "9.2.2" # https://github.com/GradleUp/shadow
 
-fusion = "2.4.3" # https://github.com/ryderbelserion/Fusion
-
 [plugins]
+# https://github.com/mfnalex/gradle-fix-javadoc-plugin
+fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
 # https://github.com/ryderbelserion/Feather
 feather = { id = "com.ryderbelserion.feather.core", version.ref = "feather" }
 # https://github.com/HangarMC/hangar-publish-plugin
 hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
 # https://github.com/modrinth/minotaur
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
-# https://github.com/mfnalex/gradle-fix-javadoc-plugin
-fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
 
 [libraries]
-placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
-
-worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
-worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
-
-vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
-
-# https://github.com/JetBrains/java-annotations
-annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
-
 # https://github.com/PaperMC/paperweight
 paperweight = { module = "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin", version.ref = "paperweight" }
+
+# https://github.com/ryderbelserion/Feather
+feather = { module = "com.ryderbelserion.feather.core:com.ryderbelserion.feather.core.gradle.plugin", version.ref = "feather" }
+
+# https://github.com/HangarMC/hangar-publish-plugin
+hangar = { module = "io.papermc.hangar-publish-plugin:io.papermc.hangar-publish-plugin.gradle.plugin", version.ref = "hangar" }
+
+# https://github.com/modrinth/minotaur
+minotaur = { module = "com.modrinth.minotaur:com.modrinth.minotaur.gradle.plugin", version.ref = "minotaur" }
+
+# https://github.com/JetBrains/kotlin
+kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # https://github.com/GradleUp/shadow
 shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
@@ -69,31 +62,48 @@ shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "s
 # https://github.com/jpenilla/run-task
 run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
 
-# https://github.com/TriumphTeam/triumph-cmds
-triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
+# https://github.com/JetBrains/java-annotations
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
+# https://github.com/YouHaveTrouble/YardWatchAPI
+yardwatch = { module = "com.github.YouHaveTrouble:YardWatchAPI", version.ref = "yardwatch" }
+
+# https://github.com/Arcaniax-Development/HeadDatabase-API
+headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabaseapi" }
+# https://github.com/placeholderapi
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+# https://github.com/ItemsAdder
+itemsadder = { module = "dev.lone:api-itemsadder", version.ref = "itemsadder" }
+# https://github.com/Nexo-MC
+nexo = { module = "com.nexomc:nexo", version.ref = "nexo" }
+
+# https://github.com/KyoriPowered/adventure
+kyori-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
+kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
+# https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
 fusion-core = { module = "com.ryderbelserion.fusion:fusion-core", version.ref = "fusion" }
 
-griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
-towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
-factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
-lands = { module = "com.github.Angeschossen:LandsAPI", version.ref = "lands" }
-
-skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
-plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
-mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
-
-kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
-
-informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" } #https://central.sonatype.com/artifact/com.intellectualsites.informative-annotations/informative-annotations
-paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" } #https://mvnrepository.com/artifact/com.intellectualsites.paster
-
-# https://github.com/Bastian/bStats
-metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
-
 [bundles]
+adventure = [
+    "kyori-legacy",
+    "kyori-text",
+    "kyori-api"
+]
+
+shared = [
+    "headdatabaseapi",
+    "placeholderapi",
+    "itemsadder",
+    "nexo"
+]
+
 build = [
+    "minotaur",
+    "feather",
+    "hangar",
     "shadow"
 ]
 

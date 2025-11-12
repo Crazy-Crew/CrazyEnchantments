@@ -1,0 +1,58 @@
+# Enchant related settings.
+enchant:
+  # Should this enchant be enabled?
+  enabled: true
+  # The cosmetic look of the enchantment.
+  display:
+    # This currently only works as a cosmetic function for our internal menus as Mojang provides no way to change the display name of the enchantment book when given through vanilla means.
+    # The functionality of /ce when giving enchants randomly the same functionality as if it were an enchantment table. We do not handle anything internally.
+    name: "<gold>Veinminer"
+    # The description of the enchantment that appears on the enchantment book.
+    description:
+      - "<yellow>Mines all blocks connected to a vein."
+  # The max level.
+  max-level: 1
+  # The weight.
+  weight: 1
+  # What items will the enchantments work on? You can use materials like diamond_sword or item tags.
+  # A list of item tags: https://jd.papermc.io/paper/1.21.5/io/papermc/paper/registry/keys/tags/ItemTypeTagKeys.html
+  supported-items:
+    - "#minecraft:enchantable/mining"
+  # Should this be in the enchantment table?
+  enchantment-table: true
+  # The cost to apply/repair an item with this enchant in the anvil.
+  anvil-cost: 12
+  # The minimum cost settings.
+  minimum-cost:
+    # The extra cost per level.
+    extra-per-level: 1
+    # The minimum base cost.
+    base: 30
+  # The maximum cost settings.
+  maximum-cost:
+    # The extra cost per level.
+    extra-per-level: 1
+    # The maximum base cost.
+    base: 80
+  # Enchant specific settings.
+  settings:
+    # Should the correct tool be required?
+    need-correct-tool: false
+    # Should the item be damaged when mining?
+    damage-item: true
+    # Settings related to how many blocks break.
+    chain:
+      # Should the max chain scale up based on level?
+      scale: false
+      # The max chain of ores to break, This is the default value.
+      # If the level is 1, 10 multiplied by 1 is 10.
+      max: 10
+    # Settings related to the search radius.
+    search:
+      # Should the search radius scale up based on level?
+      scale: false
+      # The radius to search around blocks, This will scale up based on the level.
+      # If the level is 1, 1 multiplied by 1 is 1.
+      max: 1
+    # The delay to mimic an animation of blocks breaking.
+    delay: 0
