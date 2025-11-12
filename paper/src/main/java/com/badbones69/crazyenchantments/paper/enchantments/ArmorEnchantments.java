@@ -109,13 +109,15 @@ public class ArmorEnchantments implements Listener {
         final NamespacedKey key = DataKeys.enchantments.getNamespacedKey();
 
         event.getEquipmentChanges().forEach((slot, action) -> {
+            if (slot.isHand()) return;
+
             final ItemStack newItem = action.newItem();
             final ItemStack oldItem = action.oldItem();
 
             final PersistentDataContainerView newView = newItem.getPersistentDataContainer();
             final PersistentDataContainerView oldView = oldItem.getPersistentDataContainer();
 
-            if (!newView.has(key) && oldView.has(key)) return;
+            if (!newView.has(key) && !oldView.has(key)) return;
 
             if (Objects.equals(newView.get(key, PersistentDataType.STRING), oldView.get(key, PersistentDataType.STRING))) return;
 
