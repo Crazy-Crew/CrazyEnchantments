@@ -42,9 +42,9 @@ public interface ICustomEnchantment {
 
     Iterable<EquipmentSlotGroup> getActiveSlots();
 
-    Set<TagEntry<ItemType>> getSupportedItems();
+    Set<TagEntry<@NotNull ItemType>> getSupportedItems();
 
-    Set<TagKey<Enchantment>> getEnchantTagKeys();
+    Set<TagKey<@NotNull Enchantment>> getEnchantTagKeys();
 
     default void init(@NotNull final CrazyEnchantmentsPlugin plugin) {
 
@@ -63,11 +63,11 @@ public interface ICustomEnchantment {
         return false;
     }
 
-    default TagKey<ItemType> getTagForSupportedItems() {
+    default TagKey<@NotNull ItemType> getTagForSupportedItems() {
         return TagKey.create(RegistryKey.ITEM, Key.key( getKey().asString() + "_enchantable"));
     }
 
-    default TagEntry<Enchantment> getTagEntry() {
+    default TagEntry<@NotNull Enchantment> getTagEntry() {
         return TagEntry.valueEntry(TypedKey.create(RegistryKey.ENCHANTMENT, getKey()));
     }
 

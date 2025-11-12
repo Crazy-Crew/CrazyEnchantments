@@ -1,10 +1,11 @@
 package com.ryderbelserion.crazyenchantments.core.enums.constants;
 
 import net.kyori.adventure.key.Key;
+import static com.ryderbelserion.crazyenchantments.core.CrazyEnchantments.namespace;
 
 public class Messages {
 
-    private static final String namespace = "crazyenchantments";
+    public static final Key default_locale = Key.key(namespace, "default");
     
     public static final Key reload_plugin = Key.key(namespace, "reload_plugin");
     public static final Key feature_disabled = Key.key(namespace, "feature_disabled");

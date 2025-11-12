@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,17 +24,17 @@ import java.util.Set;
 
 public class EnchantmentRegistry {
 
-    private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
-
     private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
 
     private final FileManager fileManager = this.fusion.getFileManager();
     private final Path path = this.fusion.getDataPath();
 
-    public void init() { // runs on startup
-        //this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML, new ArrayList<>(), null).addFolder(this.path.resolve("enchants"), FileType.YAML, new ArrayList<>(), null);
+    private final Map<Key, ICustomEnchantment> enchantments = new HashMap<>();
 
-        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fusion, this.fileManager, this.path));
+    public void init() { // runs on startup
+        this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML).addFolder(this.path.resolve("enchants"), FileType.YAML);
+
+        this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this));
     }
 
     public void reload() { // runs on reload in case they deleted a static file.
@@ -69,8 +68,8 @@ public class EnchantmentRegistry {
         this.enchantments.clear();
     }
 
-    public @NotNull final Set<TagEntry<ItemType>> getTagsFromList(@NotNull final List<String> tags) {
-        final Set<TagEntry<ItemType>> supportedItemTags = new HashSet<>();
+    public @NotNull final Set<TagEntry<@NotNull ItemType>> getTagsFromList(@NotNull final List<String> tags) {
+        final Set<TagEntry<@NotNull ItemType>> supportedItemTags = new HashSet<>();
 
         for (String itemTag : tags) {
             if (itemTag == null) continue;
@@ -81,9 +80,9 @@ public class EnchantmentRegistry {
                 try {
                     Key key = Key.key(itemTag);
 
-                    TagKey<ItemType> tagKey = ItemTypeTagKeys.create(key);
+                    TagKey<@NotNull ItemType> tagKey = ItemTypeTagKeys.create(key);
 
-                    TagEntry<ItemType> tagEntry = TagEntry.tagEntry(tagKey);
+                    TagEntry<@NotNull ItemType> tagEntry = TagEntry.tagEntry(tagKey);
 
                     supportedItemTags.add(tagEntry);
                 } catch (final IllegalArgumentException exception) {
@@ -96,9 +95,9 @@ public class EnchantmentRegistry {
             try {
                 Key key = Key.key(itemTag);
 
-                TypedKey<ItemType> typedKey = TypedKey.create(RegistryKey.ITEM, key);
+                TypedKey<@NotNull ItemType> typedKey = TypedKey.create(RegistryKey.ITEM, key);
 
-                TagEntry<ItemType> tagEntry = TagEntry.valueEntry(typedKey);
+                TagEntry<@NotNull ItemType> tagEntry = TagEntry.valueEntry(typedKey);
 
                 supportedItemTags.add(tagEntry);
             } catch (final IllegalArgumentException | NullPointerException exception) {

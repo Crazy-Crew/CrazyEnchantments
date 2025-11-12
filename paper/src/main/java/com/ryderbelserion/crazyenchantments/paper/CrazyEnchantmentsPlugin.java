@@ -21,7 +21,7 @@ public class CrazyEnchantmentsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.platform = new CrazyEnchantmentsPlatform(this, this.paper);
-        this.platform.start();
+        this.platform.start(getServer().getConsoleSender());
     }
 
     @Override

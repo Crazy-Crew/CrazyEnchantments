@@ -4,7 +4,12 @@ import com.ryderbelserion.crazyenchantments.core.utils.ConfigUtils;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
+import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.files.FileManager;
+import com.ryderbelserion.fusion.files.enums.FileType;
+import com.ryderbelserion.fusion.files.types.configurate.JsonCustomFile;
+import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
@@ -20,33 +25,29 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class VeinMinerEnchant implements ICustomEnchantment {
+
+    private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
+
+    private final FileManager fileManager = this.fusion.getFileManager();
+    private final Path path = this.fusion.getDataPath();
 
     public static final Key veinminer_key = Key.key("crazyenchantments:veinminer");
 
     private final EnchantmentRegistry registry;
-    private final FileManager fileManager;
-    private final FusionPaper fusion;
-    private final Path path;
 
-    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry, @NotNull final FusionPaper fusion, @NotNull final FileManager fileManager, @NotNull final Path path) {
-        this.fileManager = fileManager;
+    public VeinMinerEnchant(@NotNull final EnchantmentRegistry registry) {
         this.registry = registry;
-        this.fusion = fusion;
-        this.path = path;
 
         build();
     }
 
-    private final Set<TagKey<Enchantment>> enchantTagKeys = new HashSet<>();
+    private final Set<TagKey<@NotNull Enchantment>> enchantTagKeys = new HashSet<>();
     private EnchantmentRegistryEntry.EnchantmentCost minimumCost;
     private EnchantmentRegistryEntry.EnchantmentCost maximumCost;
-    private Set<TagEntry<ItemType>> supportedItemTags;
+    private Set<TagEntry<@NotNull ItemType>> supportedItemTags;
     private CommentedConfigurationNode config;
     private int anvilCost, maxLevel, weight;
     private List<String> ores;
@@ -61,20 +62,18 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public void build() { // used for /ce reload
-        /*this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), new ArrayList<>() {{
-            add(FileAction.EXTRACT_FILE);
-        }}, null);
+        this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), FileType.JSON);
 
-        final YamlCustomFile customFile = this.fileManager.getYamlFile(getPath());
+        @NotNull final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(getPath());
 
-        if (customFile != null) {
+        customFile.ifPresentOrElse(file -> {
             if (!Files.exists(getPath())) {
-                customFile.save(); // save to the system
+                file.save(); // save to the system
             }
 
-            customFile.load(); // load into memory.
+            file.load();
 
-            final CommentedConfigurationNode config = customFile.getConfiguration(); // get the node
+            final CommentedConfigurationNode config = file.getConfiguration(); // get the node
 
             // update the values
             this.isEnabled = config.node("enchant", "enabled").getBoolean(false);
@@ -87,7 +86,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
             this.maximumCost = EnchantmentRegistryEntry.EnchantmentCost.of(config.node("enchant", "maximum-cost", "base").getInt(1),
                     config.node("enchant", "maximum-cost", "extra-per-level").getInt(1));
 
-            final List<String> tags = customFile.getStringList("enchant", "supported-items");
+            final List<String> tags = file.getStringList("enchant", "supported-items");
 
             this.supportedItemTags = this.registry.getTagsFromList(tags.isEmpty() ? List.of("#minecraft:enchantable/mining") : tags);
 
@@ -95,15 +94,17 @@ public class VeinMinerEnchant implements ICustomEnchantment {
                 this.enchantTagKeys.add(EnchantmentTagKeys.IN_ENCHANTING_TABLE);
             }
 
-            /*final JsonCustomFile ores = (JsonCustomFile) this.fileManager.getCustomFile(this.path.resolve("cache").resolve("ores.json"));
+            @NotNull final Optional<JsonCustomFile> ores = this.fileManager.getJsonFile(this.path.resolve("cache").resolve("ores.json"));
 
-            if (ores != null) {
-                this.ores = ores.getStringList("blocks");
-            }
+            ores.ifPresentOrElse(jsonFile -> this.ores = jsonFile.getStringList("blocks"), () -> {
+                this.fusion.log("warn", "Could not find ores.json in the cache folder.");
+
+                this.ores = new ArrayList<>();
+            });
 
             // re-bind the config node just in case we need it.
             this.config = config;
-        }*/
+        }, () -> this.fusion.log("warn", "Could not find veinminer.yml in the enchants folder."));
     }
 
     @Override
@@ -118,8 +119,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public final Component getDescription() {
-        return Component.empty();
-        //return this.fusion.color(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
+        return this.fusion.parse(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
     }
 
     @Override
@@ -158,12 +158,12 @@ public class VeinMinerEnchant implements ICustomEnchantment {
     }
 
     @Override
-    public final Set<TagEntry<ItemType>> getSupportedItems() {
+    public final Set<TagEntry<@NotNull ItemType>> getSupportedItems() {
         return this.supportedItemTags;
     }
 
     @Override
-    public final Set<TagKey<Enchantment>> getEnchantTagKeys() {
+    public final Set<TagKey<@NotNull Enchantment>> getEnchantTagKeys() {
         return this.enchantTagKeys;
     }
 

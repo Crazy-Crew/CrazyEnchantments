@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.crazyenchantments.core.commands.BaseCommand;
 import com.ryderbelserion.crazyenchantments.core.commands.player.ISource;
 import com.ryderbelserion.crazyenchantments.core.enums.Mode;
+import com.ryderbelserion.crazyenchantments.core.enums.constants.Messages;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
@@ -15,11 +16,11 @@ public class ReloadCommand<S> extends BaseCommand<S> {
 
     @Override
     protected int execute(@NotNull CommandContext<S> context) {
-        //final ISource source = getSource(context);
+        final ISource source = getSource(context);
 
-        //this.plugin.reload();
+        this.plugin.reload();
 
-        //this.userRegistry.getUser(source.getAudience()).sendMessage(Messages.reload_plugin);
+        this.userRegistry.getUser(source.getAudience()).sendMessage(Messages.reload_plugin);
 
         return 1;
     }

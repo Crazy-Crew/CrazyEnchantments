@@ -20,7 +20,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
 
@@ -31,11 +30,9 @@ public class CrazyLoader implements PluginBootstrap {
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
-        final Path path = context.getDataDirectory();
-
         this.paper = new FusionPaper(context);
 
-        this.enchantmentRegistry = new EnchantmentRegistry(this.paper, path);
+        this.enchantmentRegistry = new EnchantmentRegistry();
         this.enchantmentRegistry.init();
 
         final Collection<ICustomEnchantment> enchants = this.enchantmentRegistry.getEnchantments().values();
@@ -55,7 +52,7 @@ public class CrazyLoader implements PluginBootstrap {
         }));
 
         lifeCycleManager.registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
-            final WritableRegistry<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> registry = event.registry();
+            final WritableRegistry<@NotNull Enchantment, EnchantmentRegistryEntry.@NotNull Builder> registry = event.registry();
 
             for (final ICustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;

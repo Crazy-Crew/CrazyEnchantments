@@ -1,18 +1,19 @@
 package com.ryderbelserion.crazyenchantments.api.interfaces.registry;
 
+import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.UUID;
 
-public interface IUserRegistry<P, U> {
+public interface IUserRegistry<U> {
 
-    void addUser(@NotNull final P audience);
+    void addUser(@NotNull final Audience audience);
 
-    void removeUser(@NotNull final P audience);
+    void removeUser(@NotNull final Audience audience);
 
     boolean hasUser(@NotNull final UUID uuid);
 
-    @NotNull U getUser(@NotNull final P audience);
+    @NotNull U getUser(@NotNull final Audience audience);
 
     @NotNull Map<UUID, U> getUsers();
 

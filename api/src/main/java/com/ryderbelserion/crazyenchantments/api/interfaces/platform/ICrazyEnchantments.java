@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ICrazyEnchantments {
 
-    @NotNull <P, U> IUserRegistry<P, U> getUserRegistry();
+    @NotNull <U> IUserRegistry<U> getUserRegistry();
 
     @NotNull IMessageRegistry getMessageRegistry();
 
@@ -19,11 +19,15 @@ public interface ICrazyEnchantments {
 
     void broadcast(@NotNull final Component component, @NotNull final String permission);
 
-    void broadcast(@NotNull final Component component);
+    default void broadcast(@NotNull Component component) {
+        broadcast(component, "");
+    }
 
-    void start();
+    void registerCommands();
 
     void reload();
+
+    void start(@NotNull final Audience audience);
 
     void stop();
 

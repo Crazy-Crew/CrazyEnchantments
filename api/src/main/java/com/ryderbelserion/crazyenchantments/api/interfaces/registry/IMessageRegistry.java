@@ -7,9 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IMessageRegistry {
 
-    void addMessage(@NotNull final Key key, @NotNull final IMessage message);
+    void addMessage(@NotNull final Key locale, @NotNull final Key key, @NotNull final IMessage message);
 
     void removeMessage(@NotNull final Key key);
+
+    IMessage getMessage(@NotNull final Key locale, @NotNull final Key key);
 
     IMessage getMessage(@NotNull final Key key);
 
