@@ -162,7 +162,12 @@ modrinth {
 
     projectId = rootProject.name
 
-    versionName = "${rootProject.name} ${rootProject.version}"
+    versionName = if (isSnapshot) {
+        "${rootProject.version}"
+    } else {
+        "${rootProject.name} ${rootProject.version}"
+    }
+
     versionNumber = "${rootProject.version}"
     versionType = if (isSnapshot) "beta" else "release"
 
