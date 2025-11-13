@@ -39,11 +39,8 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
     public CrazyEnchantmentsPlatform(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final FusionPaper fusion) {
         super(fusion.getDataPath(), fusion.getFileManager());
 
-        this.fusion = fusion;
-
         this.plugin = plugin;
-
-        //fusion.enable(this.plugin);
+        this.fusion = fusion;
 
         this.enchantmentRegistry = plugin.getEnchantmentRegistry();
 

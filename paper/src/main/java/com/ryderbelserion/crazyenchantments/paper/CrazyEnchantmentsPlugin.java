@@ -8,25 +8,26 @@ import org.jetbrains.annotations.NotNull;
 public class CrazyEnchantmentsPlugin extends JavaPlugin {
 
     private final EnchantmentRegistry enchantmentRegistry;
-    private final FusionPaper paper;
+    private final FusionPaper fusion;
 
-    public CrazyEnchantmentsPlugin(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper paper) {
+    public CrazyEnchantmentsPlugin(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper fusion) {
         this.enchantmentRegistry = enchantmentRegistry;
-
-        this.paper = paper;
+        this.fusion = fusion;
     }
 
     private CrazyEnchantmentsPlatform platform;
 
     @Override
     public void onEnable() {
-        this.platform = new CrazyEnchantmentsPlatform(this, this.paper);
+        this.platform = new CrazyEnchantmentsPlatform(this, this.fusion.setPlugin(this).init());
         this.platform.start(getServer().getConsoleSender());
     }
 
     @Override
     public void onDisable() {
-        this.platform.stop();
+        if (this.platform != null) {
+            this.platform.stop();
+        }
     }
 
     public @NotNull final EnchantmentRegistry getEnchantmentRegistry() {
@@ -38,6 +39,6 @@ public class CrazyEnchantmentsPlugin extends JavaPlugin {
     }
 
     public @NotNull final FusionPaper getPaper() {
-        return this.paper;
+        return this.fusion;
     }
 }
