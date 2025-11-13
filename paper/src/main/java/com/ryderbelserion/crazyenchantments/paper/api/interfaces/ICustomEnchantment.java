@@ -30,6 +30,8 @@ public interface ICustomEnchantment {
 
     Component getDescription();
 
+    Component getName();
+
     int getAnvilCost();
 
     int getMaxLevel();

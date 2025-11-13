@@ -64,7 +64,7 @@ public class CrazyLoader implements PluginBootstrap {
                 }
 
                 registry.register(TypedKey.create(RegistryKey.ENCHANTMENT, enchant.getKey()), enchantment -> {
-                    enchantment.description(enchant.getDescription());
+                    enchantment.description(enchant.getName());
                     enchantment.anvilCost(enchant.getAnvilCost());
                     enchantment.maxLevel(enchant.getMaxLevel());
                     enchantment.weight(enchant.getWeight());

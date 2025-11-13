@@ -126,6 +126,11 @@ public class VeinMinerEnchant implements ICustomEnchantment {
     }
 
     @Override
+    public final Component getName() {
+        return this.fusion.parse(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "name")));
+    }
+
+    @Override
     public final int getAnvilCost() {
         return this.anvilCost;
     }
