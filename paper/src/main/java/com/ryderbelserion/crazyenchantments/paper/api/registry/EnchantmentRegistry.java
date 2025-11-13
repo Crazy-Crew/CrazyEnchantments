@@ -38,12 +38,16 @@ public class EnchantmentRegistry {
     }
 
     public void init() { // runs on startup
+        this.fileManager.extractFolder("cache", this.path);
+
         this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML).addFolder(this.path.resolve("enchants"), FileType.YAML);
 
         this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fusion));
     }
 
     public void reload() { // runs on reload in case they deleted a static file.
+        this.fileManager.extractFolder("cache", this.path); // extract again if deleted
+
         this.enchantments.forEach((key, enchantment) -> {
             enchantment.build(); // this ensures that the files are always present, and refreshes config options.
         });

@@ -4,7 +4,6 @@ import com.ryderbelserion.crazyenchantments.core.utils.ConfigUtils;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
-import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.files.enums.FileType;
