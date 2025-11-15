@@ -195,15 +195,15 @@ public class HoeEnchantments implements Listener {
         return false;
     }
 
-    private final HashMap<Material, Material> planterSeeds = new HashMap<>(){{
-        put(Material.WHEAT_SEEDS, Material.WHEAT);
-        put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
-        put(Material.POTATO, Material.POTATOES);
-        put(Material.CARROT, Material.CARROTS);
-        put(Material.NETHER_WART, Material.NETHER_WART);
-        put(Material.MELON_SEEDS, Material.MELON_STEM);
-        put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
-    }};
+    private final Map<Material, Material> planterSeeds = Map.of(
+            Material.WHEAT_SEEDS, Material.WHEAT,
+            Material.BEETROOT_SEEDS, Material.BEETROOTS,
+            Material.POTATO, Material.POTATOES,
+            Material.CARROT, Material.CARROTS,
+            Material.NETHER_WART, Material.NETHER_WART,
+            Material.MELON_SEEDS, Material.MELON_STEM,
+            Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM
+    );
 
     public Material getPlanterSeed(ItemStack item) {
         if (item == null) return null;

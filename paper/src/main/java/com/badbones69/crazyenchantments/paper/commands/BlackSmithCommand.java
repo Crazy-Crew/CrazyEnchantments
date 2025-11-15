@@ -1,41 +1,38 @@
 package com.badbones69.crazyenchantments.paper.commands;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.annotations.Command;
+import dev.triumphteam.cmd.core.annotations.Optional;
+import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class BlackSmithCommand implements CommandExecutor {
+@Command(value = "blacksmith", alias = {"bsmith", "bs"})
+@Syntax("/blacksmith [player]")
+public class BlackSmithCommand {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    @Command
+    @Permission(value = "crazyenchantments.blacksmith", def = PermissionDefault.TRUE)
+    public void blacksmith(@NotNull final CommandSender sender, @Optional @Nullable final Player target) {
+        if (target == null) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+                return;
+            }
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-    
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-            return true;
+            MenuManager.openBlackSmithMenu(player);
+
+            return;
         }
 
-        if (hasPermission(player)) MenuManager.openBlackSmithMenu(player);
-
-        return true;
-    }
-    
-    private boolean hasPermission(CommandSender sender) {
-        return this.methods.hasPermission(sender, "blacksmith", true);
+        if (sender.hasPermission("crazyenchantments.blacksmith.others")) {
+            MenuManager.openBlackSmithMenu(target);
+        }
     }
 }

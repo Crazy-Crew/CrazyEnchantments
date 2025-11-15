@@ -7,6 +7,9 @@ minecraft = "1.21.10"
 ## JetBrains
 annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
 
+## Other
+triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
+
 # Plugins
 placeholderapi = "2.11.6"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
 worldguard = "7.0.13"            # https://dev.bukkit.org/projects/worldguard/files
@@ -65,6 +68,9 @@ shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "s
 
 # https://github.com/jpenilla/run-task
 run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
+
+# https://github.com/TriumphTeam/triumph-cmds
+triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
 
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
 fusion-core = { module = "com.ryderbelserion.fusion:fusion-core", version.ref = "fusion" }

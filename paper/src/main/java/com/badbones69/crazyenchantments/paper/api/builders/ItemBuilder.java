@@ -68,6 +68,7 @@ public class ItemBuilder {
     private Component itemName;
     private final List<Component> itemLore;
     private int itemAmount;
+    private NamespacedKey itemModel;
 
     // Player
     private String player;
@@ -433,6 +434,10 @@ public class ItemBuilder {
 
             addGlow(item);
 
+            if (this.itemModel != null) {
+                item.setData(DataComponentTypes.ITEM_MODEL, this.itemModel);
+            }
+
             return item;
         }
 
@@ -508,6 +513,10 @@ public class ItemBuilder {
             ((SpawnEggMeta) itemMeta).setCustomSpawnedType(this.entityType);
         }
 
+        if (this.itemModel != null) {
+            item.setData(DataComponentTypes.ITEM_MODEL, this.itemModel);
+        }
+
         return item;
     }
 
@@ -551,6 +560,22 @@ public class ItemBuilder {
         itemStack.editPersistentDataContainer(container -> {
             container.set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(enchantData));
         });
+    }
+
+    public ItemBuilder setItemModel(@NotNull final String namespace, @NotNull final String itemModel) {
+        if (namespace.isEmpty() || itemModel.isEmpty()) return this;
+
+        this.itemModel = new NamespacedKey(namespace, itemModel);
+
+        return this;
+    }
+
+    public ItemBuilder setItemModel(@NotNull final String itemModel) {
+        if (itemModel.isEmpty()) return this;
+
+        this.itemModel = NamespacedKey.minecraft(itemModel);
+
+        return this;
     }
 
     /**
@@ -1057,6 +1082,13 @@ public class ItemBuilder {
                 switch (option.toLowerCase()) {
                     case "item" -> itemBuilder.setMaterial(value);
                     case "name" -> itemBuilder.setName(value);
+                    case "item-model" -> {
+                        final String[] splitter = value.split("!");
+                        final String namespace = splitter[0];
+                        final String key = splitter[1];
+
+                        itemBuilder.setItemModel(namespace, key);
+                    }
                     case "amount" -> {
                         try {
                             itemBuilder.setAmount(Integer.parseInt(value));

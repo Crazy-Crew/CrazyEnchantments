@@ -34,6 +34,7 @@ public class EnchantmentType {
         this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
         this.displayItem = new ItemBuilder()
         .setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
+        .setItemModel(file.getString(path + ".Display-Item.Model.Namespace", ""), file.getString(path + ".Display-Item.Model.Key", ""))
         .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
         .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
 

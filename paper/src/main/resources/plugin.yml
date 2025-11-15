@@ -34,9 +34,6 @@ commands:
   tinkerer:
     description: Opens the Tinker GUI.
     aliases: tinker
-  blacksmith:
-    description: Opens the Black Smith GUI.
-    aliases: [ bsmith, blacks, bs ]
   gkit:
     description: Opens the GKitz GUI.
     aliases: [ gkitz, gkits ]
@@ -44,6 +41,9 @@ commands:
 permissions:
   crazyenchantments.tinker:
     default: true
+
+  crazyenchantments.blacksmith.others:
+    default: op
 
   crazyenchantments.blacksmith:
     default: true
@@ -80,6 +80,7 @@ permissions:
   crazyenchantments.admin.*:
     default: false
     children:
+      crazyenchantments.blacksmith.others: true
       crazyenchantments.bypass.limit: true
       crazyenchantments.bypass.aura: true
       crazyenchantments.bypass.wings: true

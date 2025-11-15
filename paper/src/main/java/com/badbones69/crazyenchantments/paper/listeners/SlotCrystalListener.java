@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SlotCrystalListener implements Listener {
 
@@ -36,6 +37,7 @@ public class SlotCrystalListener implements Listener {
         slot_crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
                 .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
+                .setItemModel(config.getString("Settings.Slot_Crystal.Model.Namespace", ""), config.getString("Settings.Slot_Crystal.Model.Key", ""))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
                 .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
     }
@@ -68,12 +70,14 @@ public class SlotCrystalListener implements Listener {
         event.getCursor().setAmount(crystalItem.getAmount());
         event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
-        player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(new HashMap<>(4) {{
-            put("%slot%", String.valueOf(-(limiter - 1)));
-            put("%maxEnchants%", String.valueOf(maxEnchants));
-            put("%enchantAmount%", String.valueOf(enchAmount));
-            put("baseEnchants", String.valueOf(baseEnchants));
-        }}));
+        final Map<String, String> placeholders = new HashMap<>();
+
+        placeholders.put("%slot%", String.valueOf(-(limiter - 1)));
+        placeholders.put("%maxEnchants%", String.valueOf(maxEnchants));
+        placeholders.put("%enchantAmount%", String.valueOf(enchAmount));
+        placeholders.put("baseEnchants", String.valueOf(baseEnchants));
+
+        player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(placeholders));
     }
 
     private boolean isSlotCrystal(ItemStack crystalItem) {

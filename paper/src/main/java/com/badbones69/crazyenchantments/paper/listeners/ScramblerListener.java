@@ -58,11 +58,13 @@ public class ScramblerListener implements Listener {
         FileConfiguration config = Files.CONFIG.getFile();
         this.scramblerItem = new ItemBuilder()
         .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
+        .setItemModel(config.getString("Settings.Scrambler.Item.Model.Namespace", ""), config.getString("Settings.Scrambler.Item.Model.Key", ""))
         .setName(config.getString("Settings.Scrambler.Name", "Error getting name."))
         .setLore(config.getStringList("Settings.Scrambler.Lore"))
         .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false));
         this.pointer = new ItemBuilder()
         .setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH"))
+        .setItemModel(config.getString("Settings.Scrambler.GUI.Pointer.Item.Model.Namespace", ""), config.getString("Settings.Scrambler.GUI.Pointer.Item.Model.Key", ""))
         .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name", "Error getting name."))
         .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
         this.animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle", true);

@@ -6,12 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.Blac
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
-import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
-import com.badbones69.crazyenchantments.paper.commands.CECommand;
-import com.badbones69.crazyenchantments.paper.commands.CETab;
-import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
-import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
-import com.badbones69.crazyenchantments.paper.commands.TinkerCommand;
+import com.badbones69.crazyenchantments.paper.commands.*;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
@@ -139,9 +134,10 @@ public class CrazyEnchantments extends JavaPlugin {
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
 
         registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
-        registerCommand(getCommand("blacksmith"), null, new BlackSmithCommand());
 
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
+
+        CommandManager.load();
 
         FileUtils.loadFiles();
     }

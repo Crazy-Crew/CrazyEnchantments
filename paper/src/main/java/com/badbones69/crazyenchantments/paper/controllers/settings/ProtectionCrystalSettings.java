@@ -45,6 +45,7 @@ public class ProtectionCrystalSettings {
 
         this.crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
+                .setItemModel(config.getString("Settings.ProtectionCrystal.Model.Namespace", ""), config.getString("Settings.ProtectionCrystal.Model.Key", ""))
                 .setName(config.getString("Settings.ProtectionCrystal.Name", "Error getting name."))
                 .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
                 .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false));

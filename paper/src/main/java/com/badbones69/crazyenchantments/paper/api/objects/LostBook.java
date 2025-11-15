@@ -91,6 +91,7 @@ public class LostBook {
         placeholders.put("%Category%", category.getDisplayItem().getName());
         return new ItemBuilder()
         .setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
+        .setItemModel(file.getString("Settings.LostBook.Model.Namespace", ""), file.getString("Settings.LostBook.Model.Key", ""))
         .setAmount(amount)
         .setName(file.getString("Settings.LostBook.Name", "Error getting name."))
         .setNamePlaceholders(placeholders)

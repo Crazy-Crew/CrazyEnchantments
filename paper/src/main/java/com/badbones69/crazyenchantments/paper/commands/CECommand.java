@@ -877,12 +877,14 @@ public class CECommand implements CommandExecutor {
             String main = Messages.MAIN_UPDATE_ENCHANTS.getMessageNoPrefix();
             main = main.replace("%item%", item.getType().toString());
 
-            enchantmentBookSettings.getEnchantments(item).forEach((enchantment, level) -> enchantmentsString.append(Messages.BASE_UPDATE_ENCHANTS.getMessageNoPrefix(
-                    new HashMap<>() {{
-                        put("%enchant%", enchantment.getName());
-                        put("%level%", String.valueOf(level));
-                    }})
-            ));
+            enchantmentBookSettings.getEnchantments(item).forEach((enchantment, level) -> {
+                final Map<String, String> placeholders = new HashMap<>();
+
+                placeholders.put("%enchant%", enchantment.getName());
+                placeholders.put("%level%", String.valueOf(level));
+
+                enchantmentsString.append(Messages.BASE_UPDATE_ENCHANTS.getMessageNoPrefix(placeholders));
+            });
 
             main = main.replace("%itemEnchants%", enchantmentsString.toString());
 

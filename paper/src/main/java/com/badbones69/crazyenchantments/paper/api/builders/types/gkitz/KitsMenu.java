@@ -147,7 +147,9 @@ public class KitsMenu extends InventoryBuilder {
                 return;
             }
 
-            final Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
+            final Map<String, String> placeholders = new HashMap<>(1);
+
+            placeholders.put("%Kit%", kit.getName());
 
             if (cePlayer.hasGkitPermission(kit)) {
                 if (cePlayer.canUseGKit(kit)) {

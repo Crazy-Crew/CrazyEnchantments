@@ -74,16 +74,15 @@ public class TinkererManager {
      * @return XP Bottle with custom amount of xp stored in it.
      */
     public static ItemStack getXPBottle(String amount, FileConfiguration config) {
-        String id = config.getString("Settings.BottleOptions.Item");
-        String name = config.getString("Settings.BottleOptions.Name");
+        String id = config.getString("Settings.BottleOptions.Item", "EXPERIENCE_BOTTLE");
+        String name = config.getString("Settings.BottleOptions.Name", "");
         List<String> lore = new ArrayList<>();
 
         for (String l : config.getStringList("Settings.BottleOptions.Lore")) {
             lore.add(l.replace("%Total%", amount).replace("%total%", amount));
         }
 
-        assert id != null;
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build();
+        return new ItemBuilder().setMaterial(id).setName(name).setItemModel(config.getString("Settings.BottleOptions.Model.Namespace", ""), config.getString("Settings.BottleOptions.Model.Key", "")).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
     public static int getTotalXP(ItemStack item, FileConfiguration config) {
@@ -190,30 +189,32 @@ public class TinkererManager {
     }
 
     public static Map<Integer, Integer> getSlots() {
-        return new HashMap<>(23) {{
-            put(1, 5);
-            put(2, 6);
-            put(3, 7);
-            put(9, 14);
-            put(10, 15);
-            put(11, 16);
-            put(12, 17);
-            put(18, 23);
-            put(19, 24);
-            put(20, 25);
-            put(21, 26);
-            put(27, 32);
-            put(28, 33);
-            put(29, 34);
-            put(30, 35);
-            put(36, 41);
-            put(37, 42);
-            put(38, 43);
-            put(39, 44);
-            put(45, 50);
-            put(46, 51);
-            put(47, 52);
-            put(48, 53);
-        }};
+        final Map<Integer, Integer> slots = new HashMap<>(23);
+
+        slots.put(1, 5);
+        slots.put(2, 6);
+        slots.put(3, 7);
+        slots.put(9, 14);
+        slots.put(10, 15);
+        slots.put(11, 16);
+        slots.put(12, 17);
+        slots.put(18, 23);
+        slots.put(19, 24);
+        slots.put(20, 25);
+        slots.put(21, 26);
+        slots.put(27, 32);
+        slots.put(28, 33);
+        slots.put(29, 34);
+        slots.put(30, 35);
+        slots.put(36, 41);
+        slots.put(37, 42);
+        slots.put(38, 43);
+        slots.put(39, 44);
+        slots.put(45, 50);
+        slots.put(46, 51);
+        slots.put(47, 52);
+        slots.put(48, 53);
+
+        return slots;
     }
 }

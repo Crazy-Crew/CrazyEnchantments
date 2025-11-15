@@ -5,16 +5,34 @@ Info-GUI-Settings:
   Back-Item:
     Right:
       Item: 'NETHER_STAR'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&7&l<<&b&lBack'
       Lore: [ ]
     Left:
       Item: 'NETHER_STAR'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&b&lBack&7&l>>'
       Lore: [ ]
 Types:
   Helmet:
     Display-Item:
       Item: 'GOLDEN_HELMET'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 1
       Name: '&e&lHelmet Enchantments'
       Lore:
@@ -37,6 +55,12 @@ Types:
   Boots:
     Display-Item:
       Item: 'GOLDEN_BOOTS'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 2
       Name: '&e&lBoot Enchantments'
       Lore:
@@ -57,6 +81,12 @@ Types:
   Armor:
     Display-Item:
       Item: 'GOLDEN_CHESTPLATE'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 3
       Name: '&e&lArmor Enchantments'
       Lore:
@@ -96,6 +126,12 @@ Types:
   Bow:
     Display-Item:
       Item: 'BOW'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 4
       Name: '&e&lBow Enchantments'
       Lore:
@@ -106,6 +142,12 @@ Types:
   Sword:
     Display-Item:
       Item: 'GOLDEN_SWORD'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 5
       Name: '&e&lSword Enchantments'
       Lore:
@@ -127,6 +169,12 @@ Types:
     Display-Item:
       Slot: 6
       Item: 'GOLDEN_AXE'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&e&lAxe Enchantments'
       Lore:
         - '&7Enchantable Items:'
@@ -146,6 +194,12 @@ Types:
   Hoe:
     Display-Item:
       Item: 'GOLDEN_HOE'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 7
       Name: '&e&lHoe Enchantments'
       Lore:
@@ -166,6 +220,12 @@ Types:
   Pickaxe:
     Display-Item:
       Item: 'GOLDEN_PICKAXE'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 8
       Name: '&e&lPickaxe Enchantments'
       Lore:
@@ -186,6 +246,12 @@ Types:
   Tool:
     Display-Item:
       Item: 'GOLDEN_SHOVEL'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 9
       Name: '&e&lTool Enchantments'
       Lore:
@@ -224,6 +290,12 @@ Types:
   Damaged-Items:
     Display-Item:
       Item: 'DAMAGED_ANVIL'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Slot: 14
       Name: '&e&lDamaged Item Enchantments'
       Lore:
