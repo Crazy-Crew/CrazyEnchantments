@@ -2123,6 +2123,9 @@ Enchantments:
     Name: '&7Maneuver'
     MaxPower: 3
     Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lManeuver &7(&bI-&bIII&7)'
       Description:
@@ -2163,6 +2166,9 @@ Enchantments:
     Name: '&7Shockwave'
     MaxPower: 3
     Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lShockwave &7(&bI-&bIII&7)'
       Description:
@@ -2182,6 +2188,9 @@ Enchantments:
     Name: '&7SystemReboot'
     MaxPower: 3
     Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lSystemReboot &7(&bI-&bIII&7)'
       Description:
