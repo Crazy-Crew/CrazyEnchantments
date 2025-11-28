@@ -35,4 +35,4 @@ jobs:
         if: success()
         run: ./gradlew dev-build --stacktrace
         env:
-          CC_WEBHOOK: ${{ secrets.CE_WEBHOOK }}
+          BUILD_WEBHOOK: ${{ secrets.CE_WEBHOOK }}

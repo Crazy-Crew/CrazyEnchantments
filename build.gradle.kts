@@ -30,8 +30,8 @@ feather {
             group(rootProject.name.lowercase())
             task("dev-build")
 
-            if (System.getenv("CE_WEBHOOK") != null) {
-                post(System.getenv("CE_WEBHOOK"))
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
             }
 
             username("Ryder Belserion")
