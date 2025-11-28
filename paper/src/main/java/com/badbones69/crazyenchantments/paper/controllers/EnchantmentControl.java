@@ -100,7 +100,7 @@ public class EnchantmentControl implements Listener {
                     placeholders.put("%Enchantment%", enchantment.getCustomName());
                     placeholders.put("%Level%", String.valueOf(ceBook.getLevel()));
 
-                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders);
+                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
 
                     player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
                     // ToDo potentially add pitch and volume options.
