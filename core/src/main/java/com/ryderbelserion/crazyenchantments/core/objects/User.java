@@ -42,8 +42,7 @@ public class User extends IUser {
 
     @Override
     public final boolean hasPermission(@NotNull final String permission) {
-        //return this.plugin.hasPermission(getAudience(), permission);
-        return true;
+        return this.plugin.hasPermission(getAudience(), permission);
     }
 
     @Override

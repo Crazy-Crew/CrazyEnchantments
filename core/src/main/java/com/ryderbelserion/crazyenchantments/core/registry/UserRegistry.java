@@ -4,8 +4,6 @@ import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
 import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IUserRegistry;
 import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
 import com.ryderbelserion.crazyenchantments.core.objects.User;
-import com.ryderbelserion.fusion.core.FusionProvider;
-import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +12,6 @@ import java.util.*;
 public class UserRegistry implements IUserRegistry<User> {
 
     private final CrazyEnchantments plugin = (CrazyEnchantments) CrazyEnchantmentsProvider.getInstance();
-    private final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
 
     private final Map<UUID, User> users = new HashMap<>();
 
