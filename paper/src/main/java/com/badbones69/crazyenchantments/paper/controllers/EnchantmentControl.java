@@ -95,10 +95,12 @@ public class EnchantmentControl implements Listener {
 
                     player.setItemOnCursor(null);
 
-                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(new HashMap<>(){{
-                        put("%Enchantment%", enchantment.getCustomName());
-                        put("%Level%", String.valueOf(ceBook.getLevel()));
-                    }}));
+                    final Map<String, String> placeholders = new HashMap<>();
+
+                    placeholders.put("%Enchantment%", enchantment.getCustomName());
+                    placeholders.put("%Level%", String.valueOf(ceBook.getLevel()));
+
+                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
 
                     player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
                     // ToDo potentially add pitch and volume options.

@@ -56,6 +56,7 @@ public enum Dust {
             Dust.itemBuilderDust.put(dust, new ItemBuilder()
             .setName(config.getString(path + "Name", "Error getting name."))
             .setLore(config.getStringList(path + "Lore"))
+            .setItemModel(config.getString(path + "Model.Namespace", ""), config.getString(path + "Model.Key", ""))
             .setMaterial(config.getString(path + "Item", "GLOWSTONE_DUST")));
         }
     }

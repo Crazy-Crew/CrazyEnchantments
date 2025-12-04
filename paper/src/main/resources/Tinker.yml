@@ -3,10 +3,23 @@ Settings:
   GUIName: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Tinker GUI
   Currency: XP_Total #The currency you wish to use.
   TradeButton: '&eClick to accept the trade' #The Red Buttons in the Tinkerer
+  TradeButton-Type: "RED_STAINED_GLASS_PANE"
   TradeButton-Lore: #Lore on the trade buttons.
     - ''
+  # Item model settings
+  TradeButton-Model:
+    # minecraft, or nexo, or oraxen
+    Namespace: ""
+    # diamond_helmet
+    Key: ""
   BottleOptions:
     Item: 'EXPERIENCE_BOTTLE' #Item the XP bottles are
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Name: '&aRecycled XP' #Name of the Bottle
     Lore: #Lore of the Bottle
       - '&a&lRecycled &6%total%XP'

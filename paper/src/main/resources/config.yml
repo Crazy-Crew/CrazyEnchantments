@@ -25,6 +25,12 @@ Settings:
     - '&a%success_rate%% Success Chance'
   LostBook: #Lost book options.
     Item: 'BOOK' #The item the lost books are.
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Name: '&8&l&nA Lost %category%&8&l&n Book' #The name of the lost books.
     Lore: #The lore of the lost books.
       - '&7This book has been lost for centuries'
@@ -33,6 +39,12 @@ Settings:
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
   Scrambler:
     Item: 'SUNFLOWER' #The item it will be.
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true #If it has a glowing effect.
     Name: '&e&lThe Grand Scrambler' #The name of the item.
     Lore: #The lore of the item.
@@ -45,6 +57,12 @@ Settings:
       Toggle: true #If the GUI will show. Warning>> This may cause lag if a lot of players are using it all the time.
       Pointer: #The pointer in the middle of the GUI.
         Item: 'REDSTONE_TORCH' #The item the pointer is.
+        # Item model settings
+        Model:
+          # minecraft, or nexo, or oraxen
+          Namespace: ""
+          # diamond_helmet
+          Key: ""
         Name: '&c&lPointer' #The name of the pointer.
         Lore: #The lore on the pointer.
           - '&7Whatever percents the item lands on'
@@ -63,6 +81,12 @@ Settings:
     InGUI: false #If it's in the GUI.
     Slot: 14 #Slot it is in
     Item: 'EMERALD' #Item it is
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true #If it has a glowing effect.
     Name: '&5&lSlot &b&lCrystal' #Name of the item
     Lore: #Lore of the item
@@ -91,6 +115,12 @@ Settings:
     InGUI: false #If it's in the GUI.
     Slot: 1 #Slot it is in
     Item: 'EMERALD' #Item it is
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true #If it has a glowing effect.
     Protected: '&6Ancient Protection' #The lore that goes on the item that is protected.
     Lose-Protection-On-Death: true #If true then when the player dies they get the item but it loses its protection.
@@ -115,12 +145,27 @@ Settings:
     InGUI: true #In the GUI.
     Slot: 24 #Slot it is in.
     Item: 'ANVIL' #Item that shows in the GUI
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: false #If it has a glowing effect.
     Name: '&7&lThe &b&lBlack &9&lSmith' #Name of the Item in the GUI
     Lore: #Lore on the item.
       - '&b>>&7&nClick to open&b<<'
     GUIName: '&8&lThe Black Smith' #Name of the Black Smith's GUI
     Results:
+      # Item customization
+      Item:
+        Type: "BARRIER"
+        # Item model settings
+        Model:
+          # minecraft, or nexo, or oraxen
+          Namespace: ""
+          # diamond_helmet
+          Key: ""
       None: '&c&lNo Results' #Name of the item when there are no results in the Black Smith
       Not-Found-Lore:
         - '&7No results could be found.'
@@ -139,6 +184,12 @@ Settings:
     InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 22 #Slot it is in
     Item: 'NETHER_STAR' #Item it is
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: false #If it has a glowing effect.
     Name: '&7&lThe &b&lCrazy &9&lTinkerer' #Name of the Item
     Lore: #Lore of the item
@@ -147,6 +198,12 @@ Settings:
     InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 23 #Slot it is in
     Item: 'COMPASS' #Item it is
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true #If it has a glowing effect.
     Name: '&eInfo on the Enchantments' #Name of the Item
     Lore: #Lore of the item
@@ -154,6 +211,12 @@ Settings:
   Dust: #Settings for the Magical Dust
     MysteryDust:
       Item: 'GUNPOWDER' #Item mystery dust is
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&7Mystery Dust' #Name of the dust
       Lore: #Use %percent% to set the percent
         - '&a1-%percent%% &7will be on a'
@@ -178,6 +241,12 @@ Settings:
         - '&7up your &aSuccess Rate&7.'
       Slot: 25 #Slot number it is on
       Item: 'SUGAR' #Item the dust is
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&aMagical Angel Dust' #Name of the dust
       Lore: #Lore for the dust
         - '&a+%percent%% Success Rate'
@@ -195,6 +264,12 @@ Settings:
         - '&7down your &4Destroy Rate&7.'
       Slot: 34 #Slot number it is on
       Item: 'REDSTONE' #Item the dust is
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&eMagical Fixing Dust' #Name of the dust
       Lore: #Lore for the dust
         - '&c-%percent%% Destroy Rate'
@@ -205,6 +280,12 @@ Settings:
         Min: 2 #Minimum percent
     FailedDust:
       Item: 'GUNPOWDER' #Item the dust is
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Name: '&7Failed Dust' #Name of the dust
       Lore: #Lore for the dust
         - '&7This dust has failed.'
@@ -212,6 +293,12 @@ Settings:
         - '&7needed to make TNT or a throwable potion.'
   BlackScroll: #Settings for the black scrolls
     Item: 'INK_SAC' #The item the black scroll can be
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Name: '&8&l&nBlack Scroll' #The name of the black scroll
     Item-Lore: #The lore that will be on the black scroll.
       - '&7Have a custom enchantment you don''t want?'
@@ -236,6 +323,12 @@ Settings:
       Min: 5 #The Minimum percent
   WhiteScroll:
     Item: 'PAPER' #The item the white scroll is.
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Name: '&e&lWhite Scroll' #The name of the white scrolls.
     Item-Lore: #The lore that will be on the white scroll.
       - '&7Want to protect an item from a book''s destroy rate?'
@@ -252,6 +345,12 @@ Settings:
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
   TransmogScroll:
     Item: 'QUARTZ' #The item the scroll is.
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Name: '&d&lTransmog Scroll' #The name of the scroll.
     Item-Lore: #The lore that will be on the scroll.
       - '&7This scroll allows you to organize'
@@ -349,55 +448,6 @@ Settings:
     Slot_Crystal:
       Cost: 500
       Currency: Vault
-  SignOptions: #Options for the Signs.
-    CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
-      Line1: '&b&lCrazy Enchant' #Line 1 of the sign
-      Line2: '&b&lShop:' #Line 2 of the sign
-      Line3: '&2&l%category%' #Line 3 of the sign
-      Line4: '&c&lCost: &6&l%cost%XP' #Line 4 of the sign
-      Buy-Message: '&7You have just bought an enchantment book, and it is %bookname%&7 from the %category%&7 tier.'
-    ProtectionCrystalStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&5&lProtection &b&lCrystal'
-      Line4: '&c&lCost: &a&l$500'
-      Buy-Message: '&7You have just bought a &5&lProtection &b&lCrystal.' #Message when buying an item.
-    ScramblerStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&e&lScrambler'
-      Line4: '&c&lCost: &a&l$800'
-      Buy-Message: '&7You have just bought a &e&lThe Grand Scrambler&7.' #Message when buying an item.
-    SuccessDustStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&e&lMagical Angel Dust'
-      Line4: '&c&lCost: &a&l$500'
-      Buy-Message: '&7You have just bought a &aMagical Angel Dust&7.'
-    DestroyDustStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&e&lMagical Fixing Dust'
-      Line4: '&c&lCost: &a&l$500'
-      Buy-Message: '&7You have just bought a &eMagical Fixing Dust&7.'
-    BlackScrollStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&4&lBlack &8&lScrolls'
-      Line4: '&c&lCost: &a&l$1000'
-      Buy-Message: '&7You have just bought a &8&l&nBlack Scroll&7.'
-    WhiteScrollStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&f&lWhite &b&lScrolls'
-      Line4: '&c&lCost: &a&l$2000'
-      Buy-Message: '&7You have just bought a &e&lWhite Scroll&7.'
-    TransmogScrollStyle:
-      Line1: '&b&lCrazy Enchant'
-      Line2: '&b&lShop:'
-      Line3: '&d&lTransmog &b&lScrolls'
-      Line4: '&c&lCost: &a&l$200'
-      Buy-Message: '&7You have just bought a &d&lTransmog Scroll&7.'
   #####################
   # Slot:<Slot> - The slot the item will go in.
   # Item:<Item Name> - The item that it will be. You can use meta data for the items. List of names: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
@@ -459,6 +509,12 @@ Categories: #You can make as many different categories as you want
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
     Item: 'LIME_STAINED_GLASS_PANE' #The id for the item
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true #If it has a glowing effect.
     Cost: 20 #How much each book will cost to buy.
     Currency: XP_Level #The currency you wish to use.
@@ -467,6 +523,12 @@ Categories: #You can make as many different categories as you want
       InGUI: false #If it shows in the /CE Gui
       Slot: 31 #Slot it will be in
       Item: 'BOOK' #The item that is shown in the GUI
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: false #Is it enchanted
       Name: '&8&l&nLost&c&l Tier1 &8&l&nBooks' #Name of the item
       Lore: #Lore on the item
@@ -500,6 +562,12 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l40 &6XP Levels'
     Item: 'BLUE_STAINED_GLASS_PANE'
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true
     Cost: 40
     Currency: XP_Level
@@ -508,6 +576,12 @@ Categories: #You can make as many different categories as you want
       InGUI: false
       Slot: 32
       Item: 'BOOK'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: false
       Name: '&8&l&nLost&c&l Tier2 &8&l&nBooks'
       Lore:
@@ -541,6 +615,12 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l60 &6XP Levels'
     Item: 'RED_STAINED_GLASS_PANE'
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true
     Cost: 60
     Currency: XP_Level
@@ -549,6 +629,12 @@ Categories: #You can make as many different categories as you want
       InGUI: false
       Slot: 33
       Item: 'BOOK'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: false
       Name: '&8&l&nLost&c&l Tier3 &8&l&nBooks'
       Lore:
@@ -582,6 +668,12 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l120 &6XP Levels'
     Item: 'AMETHYST_CLUSTER'
+    # Item model settings
+    Model:
+      # minecraft, or nexo, or oraxen
+      Namespace: ""
+      # diamond_helmet
+      Key: ""
     Glowing: true
     Cost: 120
     Currency: XP_Level
@@ -590,6 +682,12 @@ Categories: #You can make as many different categories as you want
       InGUI: false
       Slot: 41
       Item: 'BOOK'
+      # Item model settings
+      Model:
+        # minecraft, or nexo, or oraxen
+        Namespace: ""
+        # diamond_helmet
+        Key: ""
       Glowing: false
       Name: '&8&l&nLost&c&l Tier 10 &8&l&nBooks'
       Lore:

@@ -44,6 +44,7 @@ public enum Scrolls {
             itemBuilderScrolls.put(scroll, new ItemBuilder()
             .setName(config.getString(path + "Name", "Error getting name."))
             .setLore(config.getStringList(path + "Item-Lore"))
+            .setItemModel(config.getString(path + "Model.Namespace", ""), config.getString(path + "Model.Key", ""))
             .setMaterial(config.getString(path + "Item", "BOOK"))
             .setGlow(config.getBoolean(path + "Glowing", false)));
         }

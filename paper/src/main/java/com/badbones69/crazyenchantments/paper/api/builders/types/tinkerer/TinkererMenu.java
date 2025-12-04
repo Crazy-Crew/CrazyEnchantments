@@ -40,9 +40,10 @@ public class TinkererMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        final ItemStack button = new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE)
+        final ItemStack button = new ItemBuilder().setMaterial(this.configuration.getString("Settings.TradeButton-Type", "RED_STAINED_GLASS_PANE"))
                 .setName(this.configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
                 .setLore(this.configuration.getStringList("Settings.TradeButton-Lore"))
+                .setItemModel(this.configuration.getString("Settings.TradeButton-Model.Namespace", ""), this.configuration.getString("Settings.TradeButton-Model.Key", ""))
                 .addKey(DataKeys.trade_button.getNamespacedKey(), "").build();
 
         getInventory().setItem(0, button);

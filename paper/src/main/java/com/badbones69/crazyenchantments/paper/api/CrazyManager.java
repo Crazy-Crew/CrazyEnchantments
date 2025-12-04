@@ -276,6 +276,7 @@ public class CrazyManager {
                     boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
 
                     ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
+                            .setItemModel(gkit.getString(path + "Display.Model.Namespace", ""), gkit.getString(path + "Display.Model.Key", ""))
                             .setName(gkit.getString(path + "Display.Name", "Error getting name."))
                             .setLore(gkit.getStringList(path + "Display.Lore"))
                             .setGlow(gkit.getBoolean(path + "Display.Glowing", false))

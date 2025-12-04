@@ -30,8 +30,8 @@ feather {
             group(rootProject.name.lowercase())
             task("dev-build")
 
-            if (System.getenv("CE_WEBHOOK") != null) {
-                post(System.getenv("CE_WEBHOOK"))
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
             }
 
             username("Ryder Belserion")
@@ -162,7 +162,12 @@ modrinth {
 
     projectId = rootProject.name
 
-    versionName = "${rootProject.name} ${rootProject.version}"
+    versionName = if (isSnapshot) {
+        "${rootProject.version}"
+    } else {
+        "${rootProject.name} ${rootProject.version}"
+    }
+
     versionNumber = "${rootProject.version}"
     versionType = if (isSnapshot) "beta" else "release"
 
