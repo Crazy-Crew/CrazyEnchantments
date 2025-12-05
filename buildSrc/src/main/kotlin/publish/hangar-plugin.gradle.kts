@@ -27,31 +27,19 @@ hangarPublish {
                 platformVersions.set(rootProject.property("project_versions").toString().split(",").map { it.trim() })
 
                 dependencies {
+                    hangar("GriefPrevention") {
+                        required = false
+                    }
+
                     hangar("PlaceholderAPI") {
                         required = false
                     }
 
-                    hangar("FancyHolograms") {
+                    hangar("WorldEdit") {
                         required = false
                     }
 
-                    url("CMI", "https://www.spigotmc.org/resources/cmi-300-commands-insane-kits-portals-essentials-economy-mysql-sqlite-much-more.3742/") {
-                        required = false
-                    }
-
-                    url("DecentHolograms", "https://modrinth.com/plugin/decentholograms") {
-                        required = false
-                    }
-
-                    url("ItemsAdder", "https://polymart.org/product/1851/itemsadder") {
-                        required = false
-                    }
-
-                    url("Oraxen", "https://polymart.org/product/629/oraxen") {
-                        required = false
-                    }
-
-                    url("Nexo", "https://polymart.org/resource/nexo.6901") {
+                    hangar("Towny") {
                         required = false
                     }
                 }

@@ -27,8 +27,11 @@ modrinth {
     detectLoaders = false
 
     dependencies {
-        optional.project("DecentHolograms")
-        optional.project("FancyHolograms")
-        optional.project("PlaceholderAPI")
+        optional.project("GriefPrevention")
+
+        optional.project("WorldGuard")
+        optional.project("WorldEdit")
+
+        optional.project("Towny")
     }
 }
