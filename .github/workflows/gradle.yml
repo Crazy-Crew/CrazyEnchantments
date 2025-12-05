@@ -1,0 +1,12 @@
+name: Gradle
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: Crazy-Crew/.github/.github/workflows/gradle.yml@main
+    secrets: inherit
