@@ -1,16 +1,17 @@
-name: Release Build
+name: Snapshot Build
 
 on:
   workflow_dispatch:
 
-  release:
-    types: [ published ]
+  push:
+    branches:
+      - dev
 
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/build.yml@main
 
     with:
-      webhook: ${{ secrets.BUILD_WEBHOOK }}
+      webhook: ${{ secrets.CE_WEBHOOK }}
 
     secrets: inherit

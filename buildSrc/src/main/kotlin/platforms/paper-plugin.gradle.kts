@@ -1,13 +1,16 @@
 plugins {
     id("io.papermc.paperweight.userdev")
     id("xyz.jpenilla.run-paper")
-    id("config-java")
+
+    id("shadow-plugin")
 }
 
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
+
+    maven("https://repo.extendedclip.com/releases/")
 }
 
 dependencies {

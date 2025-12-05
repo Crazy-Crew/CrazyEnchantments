@@ -1,5 +1,5 @@
 plugins {
-    `config-paper`
+    `paper-plugin`
 }
 
 project.group = "${rootProject.group}.paper"
@@ -17,8 +17,6 @@ repositories {
 }
 
 dependencies {
-    //implementation(project(":common"))
-
     implementation(libs.triumph.cmds)
 
     implementation(libs.fusion.paper)

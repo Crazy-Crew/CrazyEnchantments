@@ -1,128 +1,14 @@
-plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.feather)
-    alias(libs.plugins.hangar)
+import utils.convertList
+import utils.updateMarkdown
 
-    `config-java`
+plugins {
+    id("modrinth-plugin")
+    id("hangar-plugin")
+
+    `java-plugin`
 }
 
 val git = feather.getGit()
-
-val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
-val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
-val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Crew/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
-val minecraft = libs.versions.minecraft.get()
-val versions = listOf(minecraft)
-
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyenchantments.get()
-rootProject.description = "Adds over 80 unique enchantments to your server and more!"
-rootProject.group = "com.badbones69.crazyenchantments"
-
-feather {
-    rootDirectory = rootProject.rootDir.toPath()
-
-    val data = git.getGithubCommit("Crazy-Crew/${rootProject.name}")
-
-    val user = data.user
-
-    discord {
-        webhook {
-            group(rootProject.name.lowercase())
-            task("dev-build")
-
-            if (System.getenv("BUILD_WEBHOOK") != null) {
-                post(System.getenv("BUILD_WEBHOOK"))
-            }
-
-            username("Ryder Belserion")
-
-            avatar("https://github.com/ryderbelserion.png")
-
-            embeds {
-                embed {
-                    color("#ffa347")
-
-                    title("A new dev version of ${rootProject.name} is ready!")
-
-                    fields {
-                        field(
-                            "Version ${rootProject.version}",
-                            listOf(
-                                "*Click below to download!*",
-                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
-                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/CrazyCrew/${rootProject.name.lowercase()}/versions/${rootProject.version})"
-                            ).convertList()
-                        )
-
-                        field(
-                            ":bug: Report Bugs",
-                            "https://github.com/Crazy-Crew/${rootProject.name}/issues"
-                        )
-
-                        field(
-                            ":hammer: Changelog",
-                            content
-                        )
-                    }
-                }
-            }
-        }
-
-        webhook {
-            group(rootProject.name.lowercase())
-            task("release-build")
-
-            if (System.getenv("BUILD_WEBHOOK") != null) {
-                post(System.getenv("BUILD_WEBHOOK"))
-            }
-
-            username(user.getName())
-
-            avatar(user.avatar)
-
-            content("<@&929463452232192063>")
-
-            embeds {
-                embed {
-                    color("#1bd96a")
-
-                    title("A new release version of ${rootProject.name} is ready!")
-
-                    fields {
-                        field(
-                            "Version ${rootProject.version}",
-                            listOf(
-                                "*Click below to download!*",
-                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
-                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/CrazyCrew/${rootProject.name.lowercase()}/versions/${rootProject.version})"
-                            ).convertList()
-                        )
-
-                        field(
-                            ":bug: Report Bugs",
-                            "https://github.com/Crazy-Crew/${rootProject.name}/issues"
-                        )
-
-                        field(
-                            ":hammer: Changelog",
-                            "[Click](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})"
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun List<String>.convertList(): String {
-    val builder = StringBuilder(size)
-
-    forEach {
-        builder.append(it).append("\n")
-    }
-
-    return builder.toString()
-}
 
 allprojects {
     apply(plugin = "java-library")
@@ -157,76 +43,97 @@ tasks {
     }
 }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
+val releaseType = rootProject.ext.get("release_type").toString()
+val color = rootProject.property("${releaseType.lowercase()}_color").toString()
+val isRelease = releaseType.equals("release", true)
+val isAlpha = releaseType.equals("alpha", true)
 
-    projectId = rootProject.name
+feather {
+    rootDirectory = rootProject.rootDir.toPath()
 
-    versionName = if (isSnapshot) {
-        "${rootProject.version}"
-    } else {
-        "${rootProject.name} ${rootProject.version}"
-    }
+    val data = git.getGithubCommit("${rootProject.property("repository_owner")}/${rootProject.name}")
 
-    versionNumber = "${rootProject.version}"
-    versionType = if (isSnapshot) "beta" else "release"
+    val user = data.user
 
-    changelog = content
+    discord {
+        webhook {
+            group(rootProject.name.lowercase())
+            task("release-build")
 
-    gameVersions.addAll(versions)
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
 
-    uploadFile = tasks.jar.get().archiveFile.get()
+            if (isRelease) {
+                username(user.getName())
 
-    loaders.addAll(listOf("paper", "folia", "purpur"))
+                avatar(user.avatar)
+            } else {
+                username(rootProject.property("author_name").toString())
 
-    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
+                avatar(rootProject.property("author_avatar").toString())
+            }
 
-    autoAddDependsOn = false
-    detectLoaders = false
+            embeds {
+                embed {
+                    color(color)
 
-    dependencies {
-        optional.project("GriefPrevention")
+                    title("A new $releaseType version of ${rootProject.name} is ready!")
 
-        optional.project("WorldGuard")
-        optional.project("WorldEdit")
-
-        optional.project("Towny")
-    }
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        apiKey.set(System.getenv("HANGAR_KEY"))
-
-        id.set(rootProject.name)
-
-        version.set("${rootProject.version}")
-
-        channel.set(if (isSnapshot) "Beta" else "Release")
-
-        changelog.set(content)
-
-        platforms {
-            paper {
-                jar = tasks.jar.flatMap { it.archiveFile }
-
-                platformVersions.set(versions)
-
-                dependencies {
-                    hangar("GriefPrevention") {
-                        required = false
+                    if (isRelease) {
+                        content("<@&${rootProject.property("discord_role_id").toString()}>")
                     }
 
-                    hangar("PlaceholderAPI") {
-                        required = false
-                    }
+                    fields {
+                        field(
+                            "Version ${rootProject.version}",
+                            listOf(
+                                "*Click below to download!*",
+                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/${rootProject.property("repository_owner").toString().replace("-", "")}/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList()
+                        )
 
-                    hangar("WorldEdit") {
-                        required = false
-                    }
+                        field(
+                            ":bug: Report Bugs",
+                            "https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}/issues"
+                        )
 
-                    hangar("Towny") {
-                        required = false
+                        field(
+                            ":hammer: Changelog",
+                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                        )
+                    }
+                }
+            }
+        }
+
+        webhook {
+            group(rootProject.name.lowercase())
+            task("failed-build")
+
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
+
+            username(rootProject.property("mascot_name").toString())
+
+            avatar(rootProject.property("mascot_avatar").toString())
+
+            embeds {
+                embed {
+                    color(rootProject.property("failed_color").toString())
+
+                    title("Oh no! It failed!")
+
+                    thumbnail("https://raw.githubusercontent.com/ryderbelserion/Branding/refs/heads/main/booze.jpg")
+
+                    fields {
+                        field(
+                            "The build versioned ${rootProject.version} for project ${rootProject.name} failed.",
+                            "The developer is likely already aware, he is just getting drunk.",
+                            inline = true
+                        )
                     }
                 }
             }
