@@ -45,7 +45,7 @@ tasks {
 
 val releaseType = rootProject.ext.get("release_type").toString()
 val color = rootProject.property("${releaseType.lowercase()}_color").toString()
-val isRelease = releaseType.equals("release", true)
+val isRelease = false
 val isAlpha = releaseType.equals("alpha", true)
 
 feather {
