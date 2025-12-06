@@ -10,7 +10,8 @@ jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/notify.yml@main
 
-    with:
-      webhook: ${{ secrets.BUILD_WEBHOOK }}
+    #with:
+    #  webhook: ${{ secrets.BUILD_WEBHOOK }}
 
-    secrets: inherit
+    secrets:
+      webhook: ${{ secrets.BUILD_WEBHOOK }}
