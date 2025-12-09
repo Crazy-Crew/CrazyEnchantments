@@ -173,7 +173,7 @@ public class CrazyManager {
             new FoliaScheduler(this.plugin, Scheduler.global_scheduler, TimeUnit.MINUTES) {
                 @Override
                 public void run() {
-                    getCEPlayers().forEach(player -> backupCEPlayer(player.getPlayer()));
+                    backupCEPlayer(player);
                 }
             }.runAtFixedRate(5, 5);
         });

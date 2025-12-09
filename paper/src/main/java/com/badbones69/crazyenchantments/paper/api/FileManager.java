@@ -1,6 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -230,11 +232,16 @@ public class FileManager {
      * Saves the file from the loaded state to the file system.
      */
     public void saveFile(Files file) {
-        try {
-            this.configurations.get(file).save(this.files.get(file));
-        } catch (IOException exception) {
-            this.plugin.getLogger().log(Level.SEVERE, "Could not save " + file.getFileName() + "!", exception);
-        }
+        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+            @Override
+            public void run() {
+                try {
+                    configurations.get(file).save(files.get(file));
+                } catch (IOException exception) {
+                    plugin.getLogger().log(Level.SEVERE, "Could not save " + file.getFileName() + "!", exception);
+                }
+            }
+        }.runNow();
     }
 
     /**
