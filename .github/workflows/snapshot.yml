@@ -11,7 +11,5 @@ jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/build.yml@main
 
-    with:
+    secrets:
       webhook: ${{ secrets.CE_WEBHOOK }}
-
-    secrets: inherit
