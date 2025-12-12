@@ -11,4 +11,4 @@ jobs:
     uses: Crazy-Crew/.github/.github/workflows/notify.yml@main
 
     secrets:
-      webhook: ${{ secrets.CE_WEBHOOK }}
+      webhook: ${{ secrets.BUILD_WEBHOOK }}
