@@ -1,10 +1,10 @@
 [versions]
 ## Paper
 paperweight = "2.0.0-beta.19" # https://github.com/PaperMC/paperweight
-paper = "1.21.10-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
+paper = "1.21.11-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
 ## Minecraft
-minecraft = "1.21.10"
+minecraft = "1.21.11" # https://minecraft.net
 
 ## JetBrains
 annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
