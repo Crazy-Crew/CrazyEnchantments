@@ -14,7 +14,7 @@ allprojects {
     apply(plugin = "java-library")
 }
 
-/*tasks {
+tasks {
     withType<Jar> {
         subprojects {
             dependsOn(project.tasks.build)
@@ -41,7 +41,7 @@ allprojects {
             }
         }
     }
-}*/
+}
 
 val releaseType = rootProject.ext.get("release_type").toString()
 val color = rootProject.property("${releaseType.lowercase()}_color").toString()
