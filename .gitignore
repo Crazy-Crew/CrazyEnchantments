@@ -9,11 +9,6 @@ build/
 
 ### Servers
 run/
-!paper/run/config
-!paper/run/bukkit.yml
-!paper/run/eula.txt
-!paper/run/server.properties
-!paper/run/spigot.yml
 
 ### Output
 jars/
