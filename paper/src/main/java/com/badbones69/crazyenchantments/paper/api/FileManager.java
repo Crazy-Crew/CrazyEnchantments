@@ -232,16 +232,11 @@ public class FileManager {
      * Saves the file from the loaded state to the file system.
      */
     public void saveFile(Files file) {
-        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
-            @Override
-            public void run() {
-                try {
-                    configurations.get(file).save(files.get(file));
-                } catch (IOException exception) {
-                    plugin.getLogger().log(Level.SEVERE, "Could not save " + file.getFileName() + "!", exception);
-                }
-            }
-        }.runNow();
+        try {
+            configurations.get(file).save(files.get(file));
+        } catch (IOException exception) {
+            plugin.getLogger().log(Level.SEVERE, "Could not save " + file.getFileName() + "!", exception);
+        }
     }
 
     /**

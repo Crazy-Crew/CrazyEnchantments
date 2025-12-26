@@ -181,6 +181,10 @@ public class CrazyEnchantments extends JavaPlugin {
         return bossBarController;
     }
 
+    public ArmorEnchantments getArmorEnchantments() {
+        return this.armorEnchantments;
+    }
+
     public boolean isLogging() {
         return true;
     }

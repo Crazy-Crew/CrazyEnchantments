@@ -17,7 +17,6 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
-import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Location;
@@ -25,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
@@ -81,6 +81,14 @@ public class ArmorEnchantments implements Listener {
 
     private final List<UUID> fallenPlayers = new ArrayList<>();
 
+    private final UUID HEALTH_MODIFIER_UUID = UUID.fromString("439c7897-8c83-4528-ad54-251099622807");
+    private final UUID SPEED_MODIFIER_UUID = UUID.fromString("1f49ea04-8aac-4a37-a927-08f2dc9afa19");
+    private final UUID DAMAGE_MODIFIER_UUID = UUID.fromString("2263841f-1bb6-4cfa-947f-1b07c6e651d2");
+
+    private final String HEALTH_MODIFIER_KEY = "ce_health_boost";
+    private final String SPEED_MODIFIER_KEY = "ce_speed_boost";
+    private final String DAMAGE_MODIFIER_KEY = "ce_damage_boost";
+
     public ArmorEnchantments() {
         armorProcessor.start();
     }
@@ -92,14 +100,9 @@ public class ArmorEnchantments implements Listener {
     @EventHandler
     public void onDeath(EntityResurrectEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        ItemStack air = new ItemStack(Material.AIR);
-
-        new FoliaScheduler(this.plugin, null, player) {
-            @Override
-            public void run() {
-                updateEffects(player, air, air);
-            }
-        }.runDelayed(10);
+        player.getScheduler().runDelayed(this.plugin, (task) -> {
+            updateAllEffects(player);
+        }, null, 10);
     }
 
     @EventHandler
@@ -123,6 +126,17 @@ public class ArmorEnchantments implements Listener {
 
             updateEffects(player, newItem, oldItem);
         });
+    }
+
+    /**
+     * Force update all effects for a player.
+     */
+    public void updateAllEffects(@NotNull Player player) {
+        final Map<CEnchantment, Integer> topEnchants = getUpperEnchants(player);
+        for (final Map.Entry<PotionEffectType, Integer> effect : getTopPotionEffects(topEnchants).entrySet()) {
+            player.addPotionEffect(new PotionEffect(effect.getKey(), PotionEffect.INFINITE_DURATION, effect.getValue() - 1));
+        }
+        updateAttributes(player, topEnchants);
     }
 
     /**
@@ -157,7 +171,88 @@ public class ArmorEnchantments implements Listener {
                 break;
             }
 
-            player.addPotionEffect(new PotionEffect(effect.getKey(), -1, effect.getValue() - 1));
+            player.addPotionEffect(new PotionEffect(effect.getKey(), PotionEffect.INFINITE_DURATION, effect.getValue() - 1));
+        }
+
+        updateAttributes(player, topEnchants);
+    }
+
+    private void updateAttributes(Player player, Map<CEnchantment, Integer> enchants) {
+        double healthValue = 0;
+        if (enchants.containsKey(CEnchantments.OVERLOAD.getEnchantment())) {
+            healthValue += enchants.get(CEnchantments.OVERLOAD.getEnchantment()) * 4.0;
+        }
+        if (enchants.containsKey(CEnchantments.NINJA.getEnchantment())) {
+            healthValue += enchants.get(CEnchantments.NINJA.getEnchantment()) * 4.0;
+        }
+        applyCrossVersionModifier(player, getHealthAttribute(), HEALTH_MODIFIER_KEY, HEALTH_MODIFIER_UUID, healthValue);
+
+        double speedValue = 0;
+        if (enchants.containsKey(CEnchantments.GEARS.getEnchantment())) {
+            speedValue += enchants.get(CEnchantments.GEARS.getEnchantment()) * 0.02;
+        }
+        if (enchants.containsKey(CEnchantments.NINJA.getEnchantment())) {
+            speedValue += enchants.get(CEnchantments.NINJA.getEnchantment()) * 0.02;
+        }
+        if (enchants.containsKey(CEnchantments.CYBORG.getEnchantment())) {
+            speedValue += 0.02;
+        }
+        applyCrossVersionModifier(player, getSpeedAttribute(), SPEED_MODIFIER_KEY, SPEED_MODIFIER_UUID, speedValue);
+
+        double damageValue = 0;
+        if (enchants.containsKey(CEnchantments.HULK.getEnchantment())) {
+            damageValue += enchants.get(CEnchantments.HULK.getEnchantment()) * 3.0;
+        }
+        if (enchants.containsKey(CEnchantments.DRUNK.getEnchantment())) {
+            damageValue += enchants.get(CEnchantments.DRUNK.getEnchantment()) * 3.0;
+        }
+        if (enchants.containsKey(CEnchantments.CYBORG.getEnchantment())) {
+            damageValue += 3.0;
+        }
+        applyCrossVersionModifier(player, getDamageAttribute(), DAMAGE_MODIFIER_KEY, DAMAGE_MODIFIER_UUID, damageValue);
+
+        double maxHP = player.getAttribute(getHealthAttribute()).getValue();
+        if (player.getHealth() > maxHP) {
+            player.setHealth(maxHP);
+        }
+    }
+
+    private Attribute getHealthAttribute() {
+        try { return Attribute.valueOf("MAX_HEALTH"); } catch (Exception e) { return Attribute.valueOf("GENERIC_MAX_HEALTH"); }
+    }
+
+    private Attribute getSpeedAttribute() {
+        try { return Attribute.valueOf("MOVEMENT_SPEED"); } catch (Exception e) { return Attribute.valueOf("GENERIC_MOVEMENT_SPEED"); }
+    }
+
+    private Attribute getDamageAttribute() {
+        try { return Attribute.valueOf("ATTACK_DAMAGE"); } catch (Exception e) { return Attribute.valueOf("GENERIC_ATTACK_DAMAGE"); }
+    }
+
+    private void applyCrossVersionModifier(Player player, Attribute attribute, String keyName, UUID legacyUuid, double value) {
+        var attributeInstance = player.getAttribute(attribute);
+        if (attributeInstance == null) return;
+
+        attributeInstance.getModifiers().forEach(modifier -> {
+            try {
+                if (modifier.getKey().getKey().equals(keyName)) {
+                    attributeInstance.removeModifier(modifier);
+                }
+            } catch (NoSuchMethodError e) {
+                if (modifier.getUniqueId().equals(legacyUuid) || modifier.getName().equals(keyName)) {
+                    attributeInstance.removeModifier(modifier);
+                }
+            }
+        });
+
+        if (value > 0) {
+            AttributeModifier modifier;
+            try {
+                modifier = new AttributeModifier(new NamespacedKey(plugin, keyName), value, AttributeModifier.Operation.ADD_NUMBER);
+            } catch (NoClassDefFoundError | NoSuchMethodError e) {
+                modifier = new AttributeModifier(legacyUuid, keyName, value, AttributeModifier.Operation.ADD_NUMBER);
+            }
+            attributeInstance.addModifier(modifier);
         }
     }
 
@@ -193,7 +288,7 @@ public class ArmorEnchantments implements Listener {
         if (!newItem.isEmpty()) {
             this.enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
                     .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
-                    .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase()), newItem))
+                    .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase().replace("-", "_")), newItem))
                     .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
         }
 
@@ -210,11 +305,11 @@ public class ArmorEnchantments implements Listener {
         HashMap<CEnchantment, Integer> topEnchants = new HashMap<>();
 
         Arrays.stream(player.getEquipment().getArmorContents())
+                .filter(Objects::nonNull)
                 .map(this.enchantmentBookSettings::getEnchantments)
                 .forEach(enchantments -> enchantments.entrySet().stream()
                         .filter(ench -> !topEnchants.containsKey(ench.getKey()) || topEnchants.get(ench.getKey()) <= ench.getValue())
                         .forEach(ench -> topEnchants.put(ench.getKey(), ench.getValue())));
-
         return topEnchants;
     }
 
@@ -263,7 +358,7 @@ public class ArmorEnchantments implements Listener {
             }
 
             if (player.getHealth() <= event.getFinalDamage() && EnchantUtils.isEventActive(CEnchantments.SYSTEMREBOOT, player, armor, enchants)) {
-                player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
+                player.setHealth(player.getAttribute(getHealthAttribute()).getValue());
                 event.setCancelled(true);
 
                 return;
@@ -274,31 +369,22 @@ public class ArmorEnchantments implements Listener {
             }
 
             if (player.getHealth() <= 8 && EnchantUtils.isEventActive(CEnchantments.ROCKET, player, armor, enchants)) {
-                // Anti cheat support here with AAC or any others.
-                new FoliaScheduler(this.plugin, null, player) {
-                    @Override
-                    public void run() {
-                        player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1));
-                    }
-                }.runDelayed(1);
+                player.getScheduler().runDelayed(this.plugin, (task) -> {
+                    player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1));
+                }, null, 1);
 
                 this.fallenPlayers.add(player.getUniqueId());
 
-                //todo() is this EXPLOSION_HUGE?
                 player.getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation(), 1);
 
-                new FoliaScheduler(this.plugin, null, player) {
-                    @Override
-                    public void run() {
-                        fallenPlayers.remove(player.getUniqueId());
-                    }
-                }.runDelayed(8 * 20);
+                player.getScheduler().runDelayed(this.plugin, (task) -> {
+                    fallenPlayers.remove(player.getUniqueId());
+                }, null, 8 * 20);
             }
 
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
                 double heal = enchants.get(CEnchantments.ENLIGHTENED.getEnchantment());
-                // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+                double maxHealth = player.getAttribute(getHealthAttribute()).getValue();
 
                 if (player.getHealth() + heal < maxHealth) player.setHealth(player.getHealth() + heal);
 
@@ -332,10 +418,10 @@ public class ArmorEnchantments implements Listener {
             if (!enchants.containsKey(CEnchantments.LEADERSHIP.getEnchantment())) continue;
 
             int radius = 4 + enchants.get(CEnchantments.LEADERSHIP.getEnchantment());
-            int players = (int) damager.getNearbyEntities(radius, radius, radius).stream().filter(entity -> entity instanceof Player && this.pluginSupport.isFriendly(damager, entity)).count();
+            int playersCount = (int) damager.getNearbyEntities(radius, radius, radius).stream().filter(entity -> entity instanceof Player && this.pluginSupport.isFriendly(damager, entity)).count();
 
-            if (players > 0 && EnchantUtils.isEventActive(CEnchantments.LEADERSHIP, player, armor, enchants)) {
-                event.setDamage(event.getDamage() + (players / 2d));
+            if (playersCount > 0 && EnchantUtils.isEventActive(CEnchantments.LEADERSHIP, player, armor, enchants)) {
+                event.setDamage(event.getDamage() + (playersCount / 2d));
             }
         }
     }

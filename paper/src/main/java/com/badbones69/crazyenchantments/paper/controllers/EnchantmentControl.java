@@ -14,7 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import com.badbones69.crazyenchantments.paper.enchantments.ArmorEnchantments;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -224,12 +224,10 @@ public class EnchantmentControl implements Listener {
         Player player = event.getPlayer();
 
         if (event.getItem().getType() != Material.MILK_BUCKET) return;
-
-        new FoliaScheduler(this.plugin, null, player) {
-            @Override
-            public void run() {
-                crazyManager.updatePlayerEffects(player);
+        player.getScheduler().runDelayed(this.plugin, (task) -> {
+            if (plugin.getArmorEnchantments() != null) {
+                plugin.getArmorEnchantments().updateAllEffects(player);
             }
-        }.runDelayed(5);
+        }, null, 1);
     }
 }
