@@ -3,9 +3,6 @@ name: Notify Release
 on:
   workflow_dispatch:
 
-  release:
-    types: [ published ]
-
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/notify.yml@main
