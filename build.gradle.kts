@@ -80,9 +80,9 @@ feather {
 
                     title("A new $releaseType version of ${rootProject.name} is ready!")
 
-                    if (isRelease) {
-                        content("<@&${rootProject.property("discord_role_id").toString()}>")
-                    }
+                    //if (isRelease) {
+                    //    content("<@&${rootProject.property("discord_role_id").toString()}>")
+                    //}
 
                     fields {
                         field(
