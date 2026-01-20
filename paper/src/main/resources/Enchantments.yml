@@ -47,7 +47,7 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-    # List of cEnchants that can't be added to the item if this one is on it.
+    # List of Enchants that can't be added to the item if this one is on it.
     Conflicts: []
   #Do not change this line.
   BurnShield:
