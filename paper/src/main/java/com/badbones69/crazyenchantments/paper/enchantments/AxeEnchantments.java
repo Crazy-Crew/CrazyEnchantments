@@ -110,8 +110,8 @@ public class AxeEnchantments implements Listener {
 
                         String neighborType = neighbor.getType().toString();
 
-                        if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES"))) {
-                            if (neighborType.endsWith("LOG")) tree.add(neighbor);
+                        if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES") || neighborType.endsWith("WOOD") || neighborType.endsWith("STEM") || neighborType.endsWith("HYPHAE"))) {
+                            if (neighborType.endsWith("LOG") || neighborType.endsWith("WOOD") || neighborType.endsWith("STEM") || neighborType.endsWith("HYPHAE")) tree.add(neighbor);
                             checkedBlocks.add(neighbor);
                             queue.add(neighbor);
                         }
