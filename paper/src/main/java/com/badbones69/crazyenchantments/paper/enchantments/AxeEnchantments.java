@@ -91,9 +91,13 @@ public class AxeEnchantments implements Listener {
     private Set<Block> getTree(Block startBlock, int maxBlocks) {
         Set<Block> checkedBlocks = new HashSet<>(), tree = new HashSet<>();
         Queue<Block> queue = new LinkedList<>();
-        queue.add(startBlock);
+        
         checkedBlocks.add(startBlock);
         int startX = startBlock.getX(), startZ = startBlock.getZ();
+        
+        String startMaterial = startBlock.getType().toString();
+
+        if ((startMaterial.endsWith("LOG") || startMaterial.endsWith("WOOD") || startMaterial.endsWith("STEM") || startMaterial.endsWith("HYPHAE"))) queue.add(startBlock);
 
         while (!queue.isEmpty()) {
             Block currentBlock = queue.poll();
@@ -108,10 +112,10 @@ public class AxeEnchantments implements Listener {
                         if (neighbor.isEmpty() || checkedBlocks.contains(neighbor)) continue;
                         if (notInRange(startX, neighbor.getX()) || notInRange(startZ, neighbor.getZ())) continue;
 
-                        String neighborType = neighbor.getType().toString();
+                        String neighborMaterial = neighbor.getType().toString();
 
-                        if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES") || neighborType.endsWith("WOOD") || neighborType.endsWith("STEM") || neighborType.endsWith("HYPHAE"))) {
-                            if (neighborType.endsWith("LOG") || neighborType.endsWith("WOOD") || neighborType.endsWith("STEM") || neighborType.endsWith("HYPHAE")) tree.add(neighbor);
+                        if (startMaterial == neighborMaterial) {
+                            tree.add(neighbor);
                             checkedBlocks.add(neighbor);
                             queue.add(neighbor);
                         }
