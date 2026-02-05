@@ -73,7 +73,7 @@ public class AxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
-        Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
+        Set<Block> blockList = getTree(event.getBlock(), 20 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
         boolean damage = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
 
         if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
@@ -97,7 +97,7 @@ public class AxeEnchantments implements Listener {
         
         String startMaterial = startBlock.getType().toString();
 
-        if ((startMaterial.endsWith("LOG") || startMaterial.endsWith("WOOD") || startMaterial.endsWith("STEM") || startMaterial.endsWith("HYPHAE"))) queue.add(startBlock);
+        if ((startMaterial.endsWith("LOG") || startMaterial.endsWith("WOOD") || startMaterial.endsWith("STEM") || startMaterial.endsWith("HYPHAE")) && !startMaterial.startsWith("STRIPPED")) queue.add(startBlock);
 
         while (!queue.isEmpty()) {
             Block currentBlock = queue.poll();
@@ -114,7 +114,7 @@ public class AxeEnchantments implements Listener {
 
                         String neighborMaterial = neighbor.getType().toString();
 
-                        if (startMaterial == neighborMaterial) {
+                        if (startMaterial == neighborMaterial || isLeaf(neighborMaterial, startMaterial)) {
                             tree.add(neighbor);
                             checkedBlocks.add(neighbor);
                             queue.add(neighbor);
@@ -124,6 +124,18 @@ public class AxeEnchantments implements Listener {
             }
         }
         return tree;
+    }
+
+    private boolean isLeaf(String target, String current) {
+        String[] cSplit = current.split("_");
+        String[] tSplit = target.split("_");
+
+        boolean isTreeLeaf = (target.endsWith("LEAVES") && (cSplit[0].equalsIgnoreCase(tSplit[0])));
+
+        boolean isNetherLeaf = (target.endsWith("WART_BLOCK") && ( (cSplit[0].equalsIgnoreCase(tSplit[0])) ||
+                (tSplit[0].equalsIgnoreCase("nether") && cSplit[0].equalsIgnoreCase("crimson")) ) );
+
+        return ( isTreeLeaf || isNetherLeaf );
     }
 
     private boolean notInRange(int startPos, int pos2) {
