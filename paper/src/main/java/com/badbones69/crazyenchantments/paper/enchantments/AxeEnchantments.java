@@ -98,8 +98,7 @@ public class AxeEnchantments implements Listener {
         // Check whether the starting block is a valid start.
         // If yes, add it to the queue and start the process.
         String startMaterial = startBlock.getType().toString();
-
-        if ((startMaterial.endsWith("LOG") || startMaterial.endsWith("WOOD") || startMaterial.endsWith("STEM") || startMaterial.endsWith("HYPHAE")) && !startMaterial.startsWith("STRIPPED")) queue.add(startBlock);
+        if (isTrunkBlock(startMaterial)) queue.add(startBlock);
 
         while (!queue.isEmpty()) {
             Block currentBlock = queue.poll();
@@ -118,7 +117,7 @@ public class AxeEnchantments implements Listener {
                         String neighborMaterial = neighbor.getType().toString();
                         boolean isLeaf = isLeafBlock(neighborMaterial, startMaterial);
 
-                        if (startMaterial == neighborMaterial || isLeaf ) {
+                        if ((startMaterial == neighborMaterial) || isLeaf ) {
                             tree.add(neighbor);
                             checkedBlocks.add(neighbor);
                             queue.add(neighbor);
@@ -128,6 +127,12 @@ public class AxeEnchantments implements Listener {
             }
         }
         return tree;
+    }
+    private boolean isTrunkBlock(String startMaterial) { //Checks whether the block is a tree trunk
+        boolean isTrunk = false;
+        if ((startMaterial.endsWith("LOG") || startMaterial.endsWith("WOOD") || startMaterial.endsWith("STEM") || startMaterial.endsWith("HYPHAE"))
+            && !startMaterial.startsWith("STRIPPED")) isTrunk = true;
+        return (isTrunk);
     }
 
     private boolean isLeafBlock(String targetMaterial, String currentMaterial) { //Checks whether the Targeted block is a 'leaf' of the current block.
