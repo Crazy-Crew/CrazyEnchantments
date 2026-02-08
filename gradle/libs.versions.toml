@@ -1,40 +1,40 @@
 [versions]
 ## Paper
-paperweight = "2.0.0-beta.19" # https://github.com/PaperMC/paperweight
+paperweight = "2.0.0-beta.19"   # https://github.com/PaperMC/paperweight
 paper = "1.21.11-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
 ## Minecraft
 minecraft = "1.21.11" # https://minecraft.net
 
 ## JetBrains
-annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
+annotations = "26.0.2-1" # https://github.com/JetBrains/java-annotations
 
 # Plugin API
-placeholderapi = "2.11.7" # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
-worldguard = "7.0.13" # https://dev.bukkit.org/projects/worldguard/files
-worldedit = "7.3.11"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
+placeholderapi = "2.12.2"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
+worldguard = "7.0.15"            # https://dev.bukkit.org/projects/worldguard/files
+worldedit = "7.4.0"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
 vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
-griefprevention = "17.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
-towny = "0.101.0.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
+griefprevention = "18.0.0"       # https://jitpack.io/#GriefPrevention/GriefPrevention
+towny = "0.102.0.0"              # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
 factions = "1.6.9.5-U0.6.40"     # https://www.spigotmc.org/resources/factionsuuid.1035/
-lands = "7.15.4"                 # https://github.com/Angeschossen/LandsAPI/wiki
+lands = "7.23.1"                 # https://github.com/Angeschossen/LandsAPI/wiki
 skyblock = "2025.1"              # https://bg-software.com/superiorskyblock/
-plotsquared = "7.5.2"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
-mcmmo = "2.1.227"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
+plotsquared = "7.5.11"           # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
+mcmmo = "2.2.049"                # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
 kingdoms = "1.16.20.5"           # https://www.spigotmc.org/resources/kingdomsx.77670/
 
 ## Other
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-fusion = "2.9.14" # https://github.com/ryderbelserion/Fusion
-bStats = "3.1.0" # https://github.com/Bastian/bStats
+fusion = "2.9.14"             # https://github.com/ryderbelserion/Fusion
+bStats = "3.1.0"              # https://github.com/Bastian/bStats
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "3.0.2" # https://github.com/jpenilla/run-task
-minotaur = "2.8.10" # https://github.com/modrinth/minotaur
-feather = "0.4.0" # https://github.com/ryderbelserion/Feather
-hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
-shadow = "9.3.0" # https://github.com/GradleUp/shadow
+run-paper = "3.0.2"  # https://github.com/jpenilla/run-task
+minotaur = "2.8.10"  # https://github.com/modrinth/minotaur
+feather = "0.4.0"    # https://github.com/ryderbelserion/Feather
+hangar = "0.1.4"     # https://github.com/HangarMC/hangar-publish-plugin
+shadow = "9.3.1"     # https://github.com/GradleUp/shadow
 
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
