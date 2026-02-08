@@ -73,7 +73,7 @@ public class AxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
-        Set<Block> blockList = getTree(event.getBlock(), 20 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
+        Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
         boolean damage = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
 
         if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
@@ -95,6 +95,8 @@ public class AxeEnchantments implements Listener {
         checkedBlocks.add(startBlock);
         int startX = startBlock.getX(), startZ = startBlock.getZ();
         
+        // Check whether the starting block is a valid start.
+        // If yes, add it to the queue and start the process.
         String startMaterial = startBlock.getType().toString();
 
         if ((startMaterial.endsWith("LOG") || startMaterial.endsWith("WOOD") || startMaterial.endsWith("STEM") || startMaterial.endsWith("HYPHAE")) && !startMaterial.startsWith("STRIPPED")) queue.add(startBlock);
@@ -112,9 +114,11 @@ public class AxeEnchantments implements Listener {
                         if (neighbor.isEmpty() || checkedBlocks.contains(neighbor)) continue;
                         if (notInRange(startX, neighbor.getX()) || notInRange(startZ, neighbor.getZ())) continue;
 
+                        // Add neighbor to the tree only if it's either the same kind of log or its leaf.
                         String neighborMaterial = neighbor.getType().toString();
+                        boolean isLeaf = isLeafBlock(neighborMaterial, startMaterial);
 
-                        if (startMaterial == neighborMaterial || isLeaf(neighborMaterial, startMaterial)) {
+                        if (startMaterial == neighborMaterial || isLeaf ) {
                             tree.add(neighbor);
                             checkedBlocks.add(neighbor);
                             queue.add(neighbor);
@@ -126,14 +130,16 @@ public class AxeEnchantments implements Listener {
         return tree;
     }
 
-    private boolean isLeaf(String target, String current) {
-        String[] cSplit = current.split("_");
-        String[] tSplit = target.split("_");
+    private boolean isLeafBlock(String targetMaterial, String currentMaterial) { //Checks whether the Targeted block is a 'leaf' of the current block.
 
-        boolean isTreeLeaf = (target.endsWith("LEAVES") && (cSplit[0].equalsIgnoreCase(tSplit[0])));
-
-        boolean isNetherLeaf = (target.endsWith("WART_BLOCK") && ( (cSplit[0].equalsIgnoreCase(tSplit[0])) ||
-                (tSplit[0].equalsIgnoreCase("nether") && cSplit[0].equalsIgnoreCase("crimson")) ) );
+        String[] cSplit = currentMaterial.split("_");
+        String[] tSplit = targetMaterial.split("_");
+        
+        // Check for overworld trees
+        boolean isTreeLeaf = (targetMaterial.endsWith("LEAVES") && (cSplit[0].equalsIgnoreCase(tSplit[0])));
+        // Check for nether trees
+        boolean isNetherLeaf = (targetMaterial.endsWith("WART_BLOCK") && ( (cSplit[0].equalsIgnoreCase(tSplit[0])) ||
+                (tSplit[0].equalsIgnoreCase("NETHER") && cSplit[0].equalsIgnoreCase("CRIMSON")) ) );
 
         return ( isTreeLeaf || isNetherLeaf );
     }
