@@ -3,10 +3,13 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +18,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SlotCrystalListener implements Listener {
@@ -47,6 +53,7 @@ public class SlotCrystalListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack crystalItem = event.getCursor();
         ItemStack item = event.getCurrentItem();
+        List<Material> enchantableMaterials = new ArrayList<>();
 
         if (item == null || item.isEmpty() || !isSlotCrystal(crystalItem) || isSlotCrystal(item)) return;
 
@@ -65,6 +72,11 @@ public class SlotCrystalListener implements Listener {
             player.sendMessage(Messages.MAX_SLOTS_UNLOCKED.getMessage());
             return;
         }
+
+        for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
+            enchantableMaterials.addAll(enchantmentType.getEnchantableMaterials());
+        }
+        if (!enchantableMaterials.contains(item.getType())) return;
 
         crystalItem.setAmount(crystalItem.getAmount() - 1);
         event.getCursor().setAmount(crystalItem.getAmount());
