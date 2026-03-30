@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -114,7 +114,7 @@ public class BowEnchantments implements Listener {
 
             Entity lightning = location.getWorld().strikeLightningEffect(location);
 
-            int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+            int lightningSoundRange = FileKeys.CONFIG.getConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
             try {
                 location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);

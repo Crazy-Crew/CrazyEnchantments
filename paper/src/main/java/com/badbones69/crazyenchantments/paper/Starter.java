@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
@@ -31,7 +30,6 @@ public class Starter {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private FileManager fileManager;
     private CrazyManager crazyManager;
     private Methods methods;
     private SkullCreator skullCreator;
@@ -65,9 +63,6 @@ public class Starter {
 
 
     public void run() {
-        this.fileManager = new FileManager();
-        this.fileManager.setup();
-
         // Plugin Support.
         this.pluginSupport = new PluginSupport();
         this.pluginSupport.initializeWorldGuard();
@@ -110,10 +105,6 @@ public class Starter {
         this.bowUtils = new BowUtils();
 
         this.plugin.pluginManager.registerEvents(new EnchantmentControl(), this.plugin);
-    }
-
-    public FileManager getFileManager() {
-        return this.fileManager;
     }
 
     public Methods getMethods() {

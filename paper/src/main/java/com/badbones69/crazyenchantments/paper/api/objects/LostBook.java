@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import org.bukkit.Color;
@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LostBook {
 
@@ -86,11 +87,12 @@ public class LostBook {
     }
 
     public ItemBuilder getLostBook(Category category, int amount) {
-        FileConfiguration file = Files.CONFIG.getFile();
-        HashMap<String, String> placeholders = new HashMap<>();
+        final FileConfiguration file = FileKeys.CONFIG.getConfiguration();
+        Map<String, String> placeholders = new HashMap<>();
+
         placeholders.put("%Category%", category.getDisplayItem().getName());
-        return new ItemBuilder()
-        .setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
+
+        return new ItemBuilder().setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
         .setItemModel(file.getString("Settings.LostBook.Model.Namespace", ""), file.getString("Settings.LostBook.Model.Key", ""))
         .setAmount(amount)
         .setName(file.getString("Settings.LostBook.Name", "Error getting name."))

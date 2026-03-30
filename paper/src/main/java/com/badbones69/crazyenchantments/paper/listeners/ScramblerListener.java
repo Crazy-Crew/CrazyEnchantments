@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -55,20 +55,21 @@ public class ScramblerListener implements Listener {
     private String guiName;
 
     public void loadScrambler() {
-        FileConfiguration config = Files.CONFIG.getFile();
-        this.scramblerItem = new ItemBuilder()
-        .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+
+        this.scramblerItem = new ItemBuilder().setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
         .setItemModel(config.getString("Settings.Scrambler.Item.Model.Namespace", ""), config.getString("Settings.Scrambler.Item.Model.Key", ""))
         .setName(config.getString("Settings.Scrambler.Name", "Error getting name."))
         .setLore(config.getStringList("Settings.Scrambler.Lore"))
         .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false));
-        this.pointer = new ItemBuilder()
-        .setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH"))
+
+        this.pointer = new ItemBuilder().setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH"))
         .setItemModel(config.getString("Settings.Scrambler.GUI.Pointer.Item.Model.Namespace", ""), config.getString("Settings.Scrambler.GUI.Pointer.Item.Model.Key", ""))
         .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name", "Error getting name."))
         .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
-        this.animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle", true);
-        this.guiName = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name", "Error getting name."));
+
+        this.animationToggle = config.getBoolean("Settings.Scrambler.GUI.Toggle", true);
+        this.guiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "Error getting name."));
     }
 
     /**

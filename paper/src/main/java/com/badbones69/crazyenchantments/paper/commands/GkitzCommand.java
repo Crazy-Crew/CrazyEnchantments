@@ -4,9 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -52,9 +52,9 @@ public class GkitzCommand implements CommandExecutor {
                 if (this.crazyManager.getCEPlayer(player) == null) this.crazyManager.loadCEPlayer(player);
 
                 if (hasPermission(sender, "gkitz")) {
-                    FileConfiguration gkitz = FileManager.Files.GKITZ.getFile();
+                    final FileConfiguration gkitz = FileKeys.GKITZ.getConfiguration();
 
-                    player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size"), gkitz.getString("Settings.Inventory-Name")).build().getInventory());
+                    player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
                 }
 
             } else {

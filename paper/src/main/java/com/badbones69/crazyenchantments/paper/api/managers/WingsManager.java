@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -26,11 +26,11 @@ public class WingsManager {
     
     public void load() {
         this.isWingsEnabled = CEnchantments.WINGS.isActivated();
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
         String path = "Settings.EnchantmentOptions.Wings.";
-        this.isCloudsEnabled = config.getBoolean(path + "Clouds");
-        this.isEnemyCheckEnabled = config.getBoolean(path + "Enemy-Toggle");
-        this.enemyRadius = config.getInt(path + "Distance", 10);
+        this.isCloudsEnabled = config.getBoolean(path + "Clouds", true);
+        this.isEnemyCheckEnabled = config.getBoolean(path + "Enemy-Toggle", true);
+        this.enemyRadius = config.getInt(path + "Distance", 25);
         this.whitelistWorlds.clear();
         config.getStringList(path + "Worlds.Whitelisted").forEach(world -> this.whitelistWorlds.add(world.toLowerCase()));
         this.blacklistWorlds.clear();

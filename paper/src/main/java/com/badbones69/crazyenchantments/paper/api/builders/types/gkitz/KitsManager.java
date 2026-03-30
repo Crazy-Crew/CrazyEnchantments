@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
@@ -16,7 +16,7 @@ public class KitsManager {
     private static ItemStack backRight, backLeft;
 
     public static void load() {
-        FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
+        final FileConfiguration file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
 
         String path = "Info-GUI-Settings";
 

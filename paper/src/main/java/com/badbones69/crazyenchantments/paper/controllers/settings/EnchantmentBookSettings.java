@@ -2,8 +2,8 @@ package com.badbones69.crazyenchantments.paper.controllers.settings;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
@@ -15,7 +15,6 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -52,9 +51,9 @@ public class EnchantmentBookSettings {
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
 
-        return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
+        return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
     }
 
     /**
@@ -228,7 +227,7 @@ public class EnchantmentBookSettings {
      * Loads in all config options.
      */
     public void populateMaps() {
-        final FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
 
         final ConfigurationSection section = config.getConfigurationSection("Categories");
 
@@ -242,8 +241,8 @@ public class EnchantmentBookSettings {
             String path = "Categories." + category;
 
             LostBook lostBook = new LostBook(
-                    config.getInt(path + ".LostBook.Slot"),
-                    config.getBoolean(path + ".LostBook.InGUI"),
+                    config.getInt(path + ".LostBook.Slot", -1),
+                    config.getBoolean(path + ".LostBook.InGUI", false),
                     new ItemBuilder()
                             .setMaterial(config.getString(path + ".LostBook.Item", "BOOK"))
                             .setItemModel(config.getString(path + ".LostBook.Model.Namespace", ""), config.getString(path + ".LostBook.Model.Key", ""))

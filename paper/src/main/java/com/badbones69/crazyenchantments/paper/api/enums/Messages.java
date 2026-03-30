@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public enum Messages {
     "&b/ce help - &9Shows all crazy enchantment commands.",
     "&b/ce debug - &9Does a small debug for some errors.",
     "&b/ce info [enchantment] - &9Shows info on all enchantments.",
-    "&b/ce reload - &9Reloads all of the configuration files.",
+    "&b/ce reload - &9Reloads all of the configuration FileKeys.",
     "&b/ce remove <enchantment> - &9Removes an enchantment from the item in your hand.",
     "&b/ce add <enchantment> [level] - &9Adds an enchantment to the item in your hand.",
     "&b/ce scroll <black/white/transmog> [amount] [player] - &9Gives a player a scroll item.",
@@ -139,7 +139,8 @@ public enum Messages {
     }
     
     public static void addMissingMessages() {
-        FileConfiguration messages = Files.MESSAGES.getFile();
+        final FileConfiguration messages = FileKeys.MESSAGES.getConfiguration();
+
         boolean saveFile = false;
 
         for (Messages message : values()) {
@@ -154,7 +155,7 @@ public enum Messages {
             }
         }
 
-        if (saveFile) Files.MESSAGES.saveFile();
+        if (saveFile) FileKeys.MESSAGES.save();
     }
     
     public static String replacePlaceholders(String placeholder, String replacement, String message) {
@@ -231,7 +232,7 @@ public enum Messages {
         boolean isList = isList();
         boolean exists = exists();
 
-        FileConfiguration config = Files.MESSAGES.getFile();
+        final FileConfiguration config = FileKeys.MESSAGES.getConfiguration();
 
         if (isList) {
             if (exists) {
@@ -240,11 +241,7 @@ public enum Messages {
                 message = ColorUtils.color(convertList(getDefaultListMessage()));
             }
         } else {
-            if (exists) {
-                message = ColorUtils.color(config.getString("Messages." + path));
-            } else {
-                message = ColorUtils.color(getDefaultMessage());
-            }
+            message = ColorUtils.color(config.getString("Messages." + path, getDefaultMessage()));
         }
 
         for (Entry<String, String> placeholder : placeholders.entrySet()) {
@@ -264,11 +261,11 @@ public enum Messages {
     }
     
     private boolean exists() {
-        return Files.MESSAGES.getFile().contains("Messages." + path);
+        return FileKeys.MESSAGES.getConfiguration().contains("Messages." + path);
     }
     
     private boolean isList() {
-        FileConfiguration config = Files.MESSAGES.getFile();
+        FileConfiguration config = FileKeys.MESSAGES.getConfiguration();
 
         if (config.contains("Messages." + this.path)) {
             return !config.getStringList("Messages." + this.path).isEmpty();

@@ -2,8 +2,8 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -37,10 +37,10 @@ public class ShopManager {
     public void load() {
         this.customizerItems.clear();
         this.shopItems.clear();
-        FileConfiguration config = Files.CONFIG.getFile();
-        this.inventoryName = ColorUtils.color(config.getString("Settings.InvName"));
-        this.inventorySize = config.getInt("Settings.GUISize");
-        this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        this.inventoryName = ColorUtils.color(config.getString("Settings.InvName", "&4&l&nCrazy Enchanter"));
+        this.inventorySize = config.getInt("Settings.GUISize", 54);
+        this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table", false);
 
         for (String customItemString : config.getStringList("Settings.GUICustomization")) {
             int slot = 0;

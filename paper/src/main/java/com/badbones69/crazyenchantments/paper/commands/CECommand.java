@@ -4,8 +4,6 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.ShopMenu;
@@ -16,8 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -31,8 +28,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.google.gson.Gson;
-import net.kyori.adventure.text.Component;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -40,6 +36,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -54,7 +51,7 @@ public class CECommand implements CommandExecutor {
 
     private final Starter starter = this.plugin.getStarter();
 
-    private final FileManager fileManager = this.starter.getFileManager();
+    private final PaperFileManager fileManager = this.plugin.getFileManager();
 
     private final Methods methods = this.starter.getMethods();
 
@@ -118,7 +115,7 @@ public class CECommand implements CommandExecutor {
                 if (hasPermission(sender, "convert")) {
                     sender.sendMessage(ColorUtils.color("""
                             \n&8&m=======================================================
-                            &eTrying to update config files.
+                            &eTrying to update config FileKeys.
                             &eIf you have any issues, Please contact Discord Support.
                             &f&nhttps://discord.gg/crazycrew&r
                             &eMake sure to check console for more information.
@@ -139,7 +136,7 @@ public class CECommand implements CommandExecutor {
                 if (hasPermission(sender, "reload")) {
                     this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
 
-                    this.fileManager.setup();
+                    this.fileManager.refresh(false);
 
                     MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
 
@@ -193,8 +190,10 @@ public class CECommand implements CommandExecutor {
                     List<String> brokenEnchantments = new ArrayList<>();
                     List<String> brokenEnchantmentTypes = new ArrayList<>();
 
+                    final YamlConfiguration configuration = FileKeys.ENCHANTMENTS.getConfiguration();
+
                     for (CEnchantments enchantment : CEnchantments.values()) {
-                        if (!Files.ENCHANTMENTS.getFile().contains("Enchantments." + enchantment.getName()))
+                        if (!configuration.contains("Enchantments." + enchantment.getName()))
                             brokenEnchantments.add(enchantment.getName());
 
                         if (enchantment.getType() == null) brokenEnchantmentTypes.add(enchantment.getName());
@@ -242,7 +241,7 @@ public class CECommand implements CommandExecutor {
             case "fix" -> { // /ce fix
                 if (hasPermission(sender, "fix")) {
                     List<CEnchantments> brokenEnchantments = new ArrayList<>();
-                    FileConfiguration file = Files.ENCHANTMENTS.getFile();
+                    final FileConfiguration file = FileKeys.ENCHANTMENTS.getConfiguration();
 
                     for (CEnchantments enchantment : CEnchantments.values()) {
                         if (!file.contains("Enchantments." + enchantment.getName()))
@@ -264,7 +263,7 @@ public class CECommand implements CommandExecutor {
                         List<String> categories = new ArrayList<>();
                         this.enchantmentBookSettings.getCategories().forEach(category -> categories.add(category.getName()));
                         file.set(path + ".Categories", categories);
-                        Files.ENCHANTMENTS.saveFile();
+                        FileKeys.ENCHANTMENTS.save();
                     }
                 }
 
@@ -416,7 +415,7 @@ public class CECommand implements CommandExecutor {
                 if (!checkInt(sender, args[2])) return true;
 
                 Player target = this.methods.getPlayer(args[1]);
-                ItemStack item = TinkererManager.getXPBottle(args[2], Files.TINKER.getFile());
+                ItemStack item = TinkererManager.getXPBottle(args[2], FileKeys.TINKER.getConfiguration());
                 int amount = args.length == 4 && NumberUtils.isInt(args[3]) ? Integer.parseInt(args[3]) : 1;
                 item.setAmount(amount);
 

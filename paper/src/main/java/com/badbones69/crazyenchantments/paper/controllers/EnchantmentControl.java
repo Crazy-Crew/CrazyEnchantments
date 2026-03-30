@@ -4,9 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.paper.api.events.BookFailEvent;
@@ -52,7 +52,8 @@ public class EnchantmentControl implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void useEnchantedBook(InventoryClickEvent event) {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
         ItemStack book = event.getCursor();
@@ -79,7 +80,7 @@ public class EnchantmentControl implements Listener {
         if (methods.isEventCancelled(preApplyEvent)) return;
 
         if (hasEnchantment) {
-            if (!config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle")
+            if (!config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle", true)
                || !(enchantments.get(enchantment) < ceBook.getLevel())
             ) return;
 
@@ -109,7 +110,7 @@ public class EnchantmentControl implements Listener {
                 return;
             } else if (preApplyEvent.getDestroyed()) {
                 if (!methods.isEventCancelled(new BookDestroyEvent(player, item, ceBook))) {
-                    if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
+                    if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break", true)) {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                             player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
@@ -200,7 +201,8 @@ public class EnchantmentControl implements Listener {
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.useInteractedBlock().equals(Event.Result.ALLOW)) return;
 
-        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) &&
+                FileKeys.CONFIG.getConfiguration().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description", true)) {
             ItemStack item = methods.getItemInHand(event.getPlayer());
 
             CEBook book = enchantmentBookSettings.getCEBook(item);

@@ -4,8 +4,8 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -74,7 +74,7 @@ public class AxeEnchantments implements Listener {
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
-        boolean damage = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
+        boolean damage = FileKeys.CONFIG.getConfiguration().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
 
         if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
 

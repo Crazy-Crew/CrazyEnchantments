@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.controllers.settings;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -17,10 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 
 public class ProtectionCrystalSettings {
 
@@ -33,15 +31,15 @@ public class ProtectionCrystalSettings {
     @NotNull
     private final Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final String protectionString = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
+    private final Map<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
-    private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
-
+    private String protectionString;
     private ItemBuilder crystal;
 
     public void loadProtectionCrystal() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+
+        this.protectionString = config.getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection");
 
         this.crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
@@ -102,7 +100,7 @@ public class ProtectionCrystalSettings {
     /**
      * @return The hash map.
      */
-    public HashMap<UUID, List<ItemStack>> getCrystalItems() {
+    public Map<UUID, List<ItemStack>> getCrystalItems() {
         return this.crystalItems;
     }
 
@@ -113,7 +111,7 @@ public class ProtectionCrystalSettings {
     public boolean isProtectionSuccessful(Player player) {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
 
         if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return this.methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
 

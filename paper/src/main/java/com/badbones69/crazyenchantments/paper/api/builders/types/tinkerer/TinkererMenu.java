@@ -1,12 +1,12 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -36,7 +36,7 @@ public class TinkererMenu extends InventoryBuilder {
         super(player, size, title);
     }
 
-    private final FileConfiguration configuration = Files.TINKER.getFile();
+    private final FileConfiguration configuration = FileKeys.TINKER.getConfiguration();
 
     @Override
     public InventoryBuilder build() {
@@ -58,7 +58,7 @@ public class TinkererMenu extends InventoryBuilder {
 
     public static class TinkererListener implements Listener {
 
-        private final FileConfiguration configuration = Files.TINKER.getFile();
+        private final FileConfiguration configuration = FileKeys.TINKER.getConfiguration();
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);

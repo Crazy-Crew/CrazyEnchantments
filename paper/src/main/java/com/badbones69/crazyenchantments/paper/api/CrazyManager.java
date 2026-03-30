@@ -3,11 +3,11 @@ package com.badbones69.crazyenchantments.paper.api;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -141,12 +141,12 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
-        FileConfiguration gkit = Files.GKITZ.getFile();
-        FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final FileConfiguration gkit = FileKeys.GKITZ.getConfiguration();
+        final FileConfiguration enchants = FileKeys.ENCHANTMENTS.getConfiguration();
 
-        FileConfiguration blocks = Files.BLOCKLIST.getFile();
-        FileConfiguration heads = Files.HEADMAP.getFile();
+        final FileConfiguration blocks = FileKeys.BLOCKLIST.getConfiguration();
+        final FileConfiguration heads = FileKeys.HEADMAP.getConfiguration();
 
         this.blockList.clear();
         this.headMap.clear();
@@ -340,7 +340,7 @@ public class CrazyManager {
      * @param player The player you wish to load.
      */
     public void loadCEPlayer(Player player) {
-        FileConfiguration data = Files.DATA.getFile();
+        final FileConfiguration data = FileKeys.DATA.getConfiguration();
         String uuid = player.getUniqueId().toString();
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
@@ -362,8 +362,10 @@ public class CrazyManager {
      * @param player Player you wish to remove.
      */
     public void unloadCEPlayer(Player player) {
-        FileConfiguration data = Files.DATA.getFile();
+        final FileConfiguration data = FileKeys.DATA.getConfiguration();
+
         String uuid = player.getUniqueId().toString();
+
         CEPlayer cePlayer = getCEPlayer(player);
 
         if (cePlayer != null) {
@@ -371,7 +373,7 @@ public class CrazyManager {
                 data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
             }
 
-            Files.DATA.saveFile();
+            FileKeys.DATA.save();
         }
 
         removeCEPlayer(cePlayer);
@@ -390,14 +392,14 @@ public class CrazyManager {
      * @param cePlayer The player you wish to back up.
      */
     private void backupCEPlayer(CEPlayer cePlayer) {
-        FileConfiguration data = Files.DATA.getFile();
+        final FileConfiguration data = FileKeys.DATA.getConfiguration();
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
 
         for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
             data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
         }
 
-        Files.DATA.saveFile();
+        FileKeys.DATA.save();
     }
 
     /**

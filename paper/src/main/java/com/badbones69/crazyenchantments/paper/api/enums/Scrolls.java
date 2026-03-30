@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -36,7 +36,8 @@ public enum Scrolls {
     }
     
     public static void loadScrolls() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+
         itemBuilderScrolls.clear();
 
         for (Scrolls scroll : values()) {
@@ -109,9 +110,9 @@ public enum Scrolls {
     public static String getWhiteScrollProtectionName() {
         String protectNamed;
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
 
-        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED"));
 
         return protectNamed;
     }

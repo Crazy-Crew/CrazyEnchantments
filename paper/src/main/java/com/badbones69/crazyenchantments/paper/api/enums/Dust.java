@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -41,14 +41,15 @@ public enum Dust {
         this.knownNames = knowNames;
         this.configName = configName;
         
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
         
         this.max = config.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
         this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
     }
     
     public static void loadDust() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+
         itemBuilderDust.clear();
 
         for (Dust dust : values()) {

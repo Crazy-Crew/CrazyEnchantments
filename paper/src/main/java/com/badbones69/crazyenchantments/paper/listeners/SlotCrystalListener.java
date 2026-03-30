@@ -2,9 +2,9 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -38,7 +38,7 @@ public class SlotCrystalListener implements Listener {
     private static ItemStack slot_crystal;
 
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
 
         slot_crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))

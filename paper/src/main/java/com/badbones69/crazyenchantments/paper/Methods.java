@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
@@ -453,7 +453,7 @@ public class Methods {
         Location loc = entity.getLocation();
         Entity lightning = null;
         if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
-        int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+        int lightningSoundRange = FileKeys.CONFIG.getConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);

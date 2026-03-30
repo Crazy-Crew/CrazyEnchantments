@@ -3,10 +3,10 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
@@ -43,7 +43,7 @@ public class KitsMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        final FileConfiguration configuration = Files.GKITZ.getFile();
+        final FileConfiguration configuration = FileKeys.GKITZ.getConfiguration();
 
         for (String value : configuration.getStringList("Settings.GUI-Customization")) {
             int slot = 0;

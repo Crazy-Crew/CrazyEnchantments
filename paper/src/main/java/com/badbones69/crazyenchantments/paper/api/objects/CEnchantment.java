@@ -87,16 +87,17 @@ public class CEnchantment {
     public Sound getSound() {
         return this.sound;
     }
+
     public CEnchantment setSound(String soundString) {
         if (soundString == null || soundString.isBlank()) {
             this.sound = Sound.ENTITY_PLAYER_LEVELUP;
+
             return this;
         }
 
         try {
             this.sound = Sound.valueOf(soundString);
         } catch (IllegalArgumentException e) {
-            //plugin.getLogger().warning(name + " has an invalid sound set.");
             this.sound = Sound.ENTITY_PLAYER_LEVELUP;
         }
 

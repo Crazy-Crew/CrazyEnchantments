@@ -92,7 +92,7 @@ Messages:
     - '&b/ce help - &9Shows all crazy enchantment commands.'
     - '&b/ce debug - &9Does a small debug for some errors.'
     - '&b/ce info [enchantment] - &9Shows info on all enchantments.'
-    - '&b/ce reload - &9Reloads all of the configuration files.'
+    - '&b/ce reload - &9Reloads all of the configuration FileKeys.'
     - '&b/ce remove <enchantment> - &9Removes an enchantment from the item in your hand.'
     - '&b/ce add <enchantment> [level] - &9Adds an enchantment to the item in your hand.'
     - '&b/ce scroll <black/white/transmog> [amount] [player] - &9Gives a player a scroll item.'

@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.commands.*;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
@@ -26,7 +26,9 @@ import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListene
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -34,6 +36,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
 public class CrazyEnchantments extends JavaPlugin {
 
@@ -47,48 +50,63 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private final BossBarController bossBarController = new BossBarController(this);
 
+    private PaperFileManager fileManager;
     private FusionPaper fusion;
 
     @Override
     public void onEnable() {
         this.fusion = new FusionPaper(this);
 
+        this.fileManager = this.fusion.getFileManager();
+
+        List.of(
+                FileKeys.CONFIG,
+                FileKeys.BLOCKLIST,
+                FileKeys.HEADMAP,
+                FileKeys.DATA,
+                FileKeys.ENCHANTMENTS,
+                FileKeys.GKITZ,
+                FileKeys.MESSAGES,
+                FileKeys.ENCHANTMENT_TYPES,
+                FileKeys.TINKER
+        ).forEach(FileKeys::addFile);
+
         this.starter = new Starter();
         this.starter.run();
 
         this.starter.getCurrencyAPI().loadCurrency();
 
-        FileConfiguration config = Files.CONFIG.getFile();
-        FileConfiguration tinker = Files.TINKER.getFile();
+        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final FileConfiguration tinker = FileKeys.TINKER.getConfiguration();
 
         if (!config.contains("Settings.CESuccessOverride")) {
             config.set("Settings.CESuccessOverride", "-1");
 
-            Files.CONFIG.saveFile();
+            FileKeys.CONFIG.save();
         }
 
         if (!config.contains("Settings.CESuccessOverride")) {
             config.set("Settings.CEFailureOverride", "-1");
 
-            Files.CONFIG.saveFile();
+            FileKeys.CONFIG.save();
         }
 
         if (!config.contains("Settings.Toggle-Metrics")) {
             config.set("Settings.Toggle-Metrics", false);
 
-            Files.CONFIG.saveFile();
+            FileKeys.CONFIG.save();
         }
 
         if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
             config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
             
-            Files.CONFIG.saveFile();
+            FileKeys.CONFIG.save();
         }
 
         if (!tinker.contains("Settings.Tinker-Version")) {
             tinker.set("Settings.Tinker-Version", 1.0);
 
-            Files.TINKER.saveFile();
+            FileKeys.TINKER.save();
         }
 
         if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
@@ -144,10 +162,12 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
+        final Server server = getServer();
 
-        getServer().getGlobalRegionScheduler().cancelTasks(this);
-        getServer().getAsyncScheduler().cancelTasks(this);
+        server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
+
+        server.getGlobalRegionScheduler().cancelTasks(this);
+        server.getAsyncScheduler().cancelTasks(this);
 
         this.bossBarController.removeAllBossBars();
 
@@ -182,7 +202,11 @@ public class CrazyEnchantments extends JavaPlugin {
     }
 
     public boolean isLogging() {
-        return true;
+        return this.fusion.isVerbose();
+    }
+
+    public @NotNull final PaperFileManager getFileManager() {
+        return this.fileManager;
     }
 
     public @NotNull final FusionPaper getFusion() {

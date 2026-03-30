@@ -2,8 +2,8 @@ package com.badbones69.crazyenchantments.paper.api.objects.enchants;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,7 +28,7 @@ public class EnchantmentType {
     private final List<Material> enchantableMaterials = new ArrayList<>();
 
     public EnchantmentType(String name) {
-        FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
+        final FileConfiguration file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
         String path = "Types." + name;
         this.displayName = name;
         this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
