@@ -1,16 +1,15 @@
 [versions]
 ## Paper
-paperweight = "2.0.0-beta.19"   # https://github.com/PaperMC/paperweight
+paperweight = "2.0.0-beta.21" # https://github.com/PaperMC/paperweight
 paper = "1.21.11-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
 ## Minecraft
 minecraft = "1.21.11" # https://minecraft.net
 
-## JetBrains
-annotations = "26.0.2-1" # https://github.com/JetBrains/java-annotations
+jetbrains = "26.1.0" # https://github.com/JetBrains/java-annotations
 
 # Plugin API
-placeholderapi = "2.12.2"        # https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Hook-into-PlaceholderAPI
+placeholderapi = "2.12.2" # https://github.com/placeholderapi
 worldguard = "7.0.15"            # https://dev.bukkit.org/projects/worldguard/files
 worldedit = "7.4.0"              # https://modrinth.com/plugin/worldedit/versions?l=bukkit
 vault = "1.7.1"                  # Never Updates: https://github.com/milkbowl/Vault
@@ -30,11 +29,11 @@ bStats = "3.1.0"              # https://github.com/Bastian/bStats
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "3.0.2"  # https://github.com/jpenilla/run-task
-minotaur = "2.8.10"  # https://github.com/modrinth/minotaur
-feather = "0.4.0"    # https://github.com/ryderbelserion/Feather
-hangar = "0.1.4"     # https://github.com/HangarMC/hangar-publish-plugin
-shadow = "9.3.1"     # https://github.com/GradleUp/shadow
+run-paper = "3.0.2" # https://github.com/jpenilla/run-task
+minotaur = "2.9.0" # https://github.com/modrinth/minotaur
+feather = "0.4.0" # https://github.com/ryderbelserion/Feather
+hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
+shadow = "9.4.1" # https://github.com/GradleUp/shadow
 
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
@@ -67,7 +66,7 @@ placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholder
 vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 
 # https://github.com/JetBrains/java-annotations
-annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
 
 # https://github.com/TriumphTeam/triumph-cmds
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
