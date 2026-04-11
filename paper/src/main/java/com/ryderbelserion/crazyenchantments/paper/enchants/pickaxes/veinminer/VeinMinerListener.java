@@ -5,7 +5,7 @@ import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.objects.types.CEBlock;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.events.VeinMinerEvent;
-import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.key.Key;
@@ -109,7 +109,9 @@ public class VeinMinerListener implements Listener {
             final Material material = block.getType();
 
             if (material.isAir() || !ores.contains(material.getKey().asString())) continue; // if is air, and ores do not contain the material string, continue.
+
             if (processed.size() >= maxChain || requiresCorrectTool && tool.isEmpty()) break; // if the processed size is greater than max chain, break... or if the tool is empty, break...
+
             if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, block)) { // prevent blocks player can't break
                 processed.add(block); // add to processed, because the player can't break the block.
 

@@ -1,12 +1,12 @@
-package com.ryderbelserion.crazyenchantments.core.objects;
+package com.ryderbelserion.crazyenchantments.common.objects;
 
 import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
 import com.ryderbelserion.crazyenchantments.api.interfaces.IUser;
-import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.enums.constants.Messages;
-import com.ryderbelserion.crazyenchantments.core.registry.MessageRegistry;
-import com.ryderbelserion.fusion.core.FusionCore;
-import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.enums.constants.Messages;
+import com.ryderbelserion.crazyenchantments.common.registry.MessageRegistry;
+import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -56,7 +56,7 @@ public class User extends IUser {
             this.locale = Key.key(CrazyEnchantments.namespace, value);
         }
 
-        this.fusion.log("warn", "Locale Debug: Country: {}, Language: {}", country, language);
+        this.fusion.log(Level.WARNING, "Locale Debug: Country: %s, Language: %s", country, language);
     }
 
     @Override

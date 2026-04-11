@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.core.commands.player;
+package com.ryderbelserion.crazyenchantments.common.commands.player;
 
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;

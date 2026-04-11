@@ -1,6 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.commands;
 
-import com.ryderbelserion.crazyenchantments.core.commands.player.ISource;
+import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

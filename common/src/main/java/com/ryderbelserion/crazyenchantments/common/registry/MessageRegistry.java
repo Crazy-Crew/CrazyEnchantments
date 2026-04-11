@@ -1,11 +1,12 @@
-package com.ryderbelserion.crazyenchantments.core.registry;
+package com.ryderbelserion.crazyenchantments.common.registry;
 
 import com.ryderbelserion.crazyenchantments.api.interfaces.IMessage;
-import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.enums.constants.Messages;
-import com.ryderbelserion.crazyenchantments.core.objects.Message;
+import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.enums.constants.Messages;
+import com.ryderbelserion.crazyenchantments.common.objects.Message;
 import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IMessageRegistry;
-import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.key.Key;
@@ -26,7 +27,7 @@ public class MessageRegistry implements IMessageRegistry {
 
     @Override
     public void addMessage(@NotNull final Key locale, @NotNull final Key key, @NotNull final IMessage message) {
-        this.fusion.log("info", "Registering the message @ {} for {}", locale.asString(), key.asString());
+        this.fusion.log(Level.INFO, "Registering the message @ %s for %s", locale.asString(), key.asString());
 
         final Map<Key, IMessage> keys = this.messages.getOrDefault(locale, new HashMap<>());
 
@@ -38,12 +39,12 @@ public class MessageRegistry implements IMessageRegistry {
     @Override
     public void removeMessage(@NotNull final Key key) {
         if (!this.messages.containsKey(key)) {
-            this.fusion.log("warn", "No message with key {}", key.asString());
+            this.fusion.log(Level.WARNING, "No message with key %s", key.asString());
 
             return;
         }
 
-        this.fusion.log("info", "Unregistering the message {}", key.asString());
+        this.fusion.log(Level.INFO, "Unregistering the message %s", key.asString());
 
         this.messages.remove(key);
     }
@@ -66,7 +67,7 @@ public class MessageRegistry implements IMessageRegistry {
     public void init() {
         this.messages.clear();
 
-        final List<Path> paths = this.fusion.getFiles(this.path.resolve("locale"), ".yml", 1);
+        final List<Path> paths = this.fusion.getFilesByPath(this.path.resolve("locale"), ".yml");
 
         paths.add(this.path.resolve("messages.yml")); // add to list
 
@@ -84,7 +85,7 @@ public class MessageRegistry implements IMessageRegistry {
                 addMessage(key, Messages.must_be_player, new Message(configuration, "{prefix}<red>You must be a player to use this command.", "messages", "player", "requirements", "must-be-player"));
                 addMessage(key, Messages.target_not_online, new Message(configuration, "{prefix}<red>This feature is disabled.", "messages", "player", "target-not-online"));
                 addMessage(key, Messages.no_permission, new Message(configuration, "{prefix}<red>You do not have permission to use that command!", "messages", "player", "no-permission"));
-            }, () -> this.fusion.log("warn", "Path %s not found in cache.".formatted(path)));
+            }, () -> this.fusion.log(Level.WARNING, "Path %s not found in cache.", path));
         }
     }
 }

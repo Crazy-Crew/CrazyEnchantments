@@ -5,7 +5,7 @@ plugins {
 project.group = "${rootProject.group}.paper"
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":common"))
 
     implementation(libs.fusion.paper)
 

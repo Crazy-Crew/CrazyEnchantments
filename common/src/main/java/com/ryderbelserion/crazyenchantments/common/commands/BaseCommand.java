@@ -1,12 +1,12 @@
-package com.ryderbelserion.crazyenchantments.core.commands;
+package com.ryderbelserion.crazyenchantments.common.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
-import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.commands.player.ISource;
-import com.ryderbelserion.crazyenchantments.core.enums.Mode;
-import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
+import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
+import com.ryderbelserion.crazyenchantments.common.enums.Mode;
+import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;

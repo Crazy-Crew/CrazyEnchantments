@@ -1,14 +1,13 @@
-package com.ryderbelserion.crazyenchantments.core;
+package com.ryderbelserion.crazyenchantments.common;
 
 import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
 import com.ryderbelserion.crazyenchantments.api.interfaces.platform.ICrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.enums.Mode;
-import com.ryderbelserion.crazyenchantments.core.registry.MessageRegistry;
-import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
-import com.ryderbelserion.fusion.core.FusionCore;
-import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.crazyenchantments.common.enums.Mode;
+import com.ryderbelserion.crazyenchantments.common.registry.MessageRegistry;
+import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.files.enums.FileType;
+import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -18,7 +17,7 @@ import java.util.UUID;
 
 public abstract class CrazyEnchantments implements ICrazyEnchantments {
 
-    private final FusionCore fusion = FusionProvider.getInstance();
+    private final FusionKyori<Audience> fusion;
 
     public static final UUID console = UUID.fromString("00000000-0000-0000-0000-000000000000");
     public static final String namespace = "crazyenchantments";
@@ -26,9 +25,10 @@ public abstract class CrazyEnchantments implements ICrazyEnchantments {
     private final FileManager fileManager;
     private final Path path;
 
-    public CrazyEnchantments(@NotNull final Path path, @NotNull final FileManager fileManager) {
-        this.fileManager = fileManager;
-        this.path = path;
+    public CrazyEnchantments(@NotNull final FusionKyori<Audience> fusion) {
+        this.fusion = fusion;
+        this.fileManager = this.fusion.getFileManager();
+        this.path = this.fusion.getDataPath();
     }
 
     private MessageRegistry messageRegistry;
@@ -86,5 +86,9 @@ public abstract class CrazyEnchantments implements ICrazyEnchantments {
     @Override
     public @NotNull final MessageRegistry getMessageRegistry() {
         return this.messageRegistry;
+    }
+
+    public @NotNull FusionKyori<Audience> getFusion() {
+        return this.fusion;
     }
 }

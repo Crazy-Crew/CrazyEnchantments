@@ -1,6 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.listeners;
 
-import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
+import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

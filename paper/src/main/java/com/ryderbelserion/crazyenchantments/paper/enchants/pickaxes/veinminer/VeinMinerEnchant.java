@@ -1,9 +1,10 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
-import com.ryderbelserion.crazyenchantments.core.utils.ConfigUtils;
+import com.ryderbelserion.crazyenchantments.common.utils.ConfigUtils;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.files.enums.FileType;
@@ -99,14 +100,14 @@ public class VeinMinerEnchant implements ICustomEnchantment {
             @NotNull final Optional<JsonCustomFile> ores = this.fileManager.getJsonFile(this.path.resolve("cache").resolve("ores.json"));
 
             ores.ifPresentOrElse(jsonFile -> this.ores = jsonFile.getStringList("blocks"), () -> {
-                this.fusion.log("warn", "Could not find ores.json in the cache folder.");
+                this.fusion.log(Level.WARNING, "Could not find ores.json in the cache folder.");
 
                 this.ores = new ArrayList<>();
             });
 
             // re-bind the config node just in case we need it.
             this.config = config;
-        }, () -> this.fusion.log("warn", "Could not find veinminer.yml in the enchants folder."));
+        }, () -> this.fusion.log(Level.WARNING, "Could not find veinminer.yml in the enchants folder."));
     }
 
     @Override
@@ -121,12 +122,12 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public final Component getDescription() {
-        return this.fusion.parse(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
+        return this.fusion.asComponent(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "description")));
     }
 
     @Override
     public final Component getName() {
-        return this.fusion.parse(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "name")));
+        return this.fusion.asComponent(StringUtils.toString(ConfigUtils.getStringList(this.config, List.of("<yellow>Mines all blocks connected to a vein."), "enchant", "display", "name")));
     }
 
     @Override

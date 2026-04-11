@@ -1,7 +1,7 @@
-package com.ryderbelserion.crazyenchantments.core.enums.constants;
+package com.ryderbelserion.crazyenchantments.common.enums.constants;
 
 import net.kyori.adventure.key.Key;
-import static com.ryderbelserion.crazyenchantments.core.CrazyEnchantments.namespace;
+import static com.ryderbelserion.crazyenchantments.common.CrazyEnchantments.namespace;
 
 public class Messages {
 

@@ -3,6 +3,7 @@ package com.ryderbelserion.crazyenchantments.paper.loader;
 import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -45,7 +46,7 @@ public class CrazyLoader implements PluginBootstrap {
             for (final ICustomEnchantment enchant : enchants) {
                 if (!enchant.isEnabled()) continue;
 
-                this.fusion.log("info", "Registering item tag {} for {}", enchant.getTagForSupportedItems().key(), enchant.getKey());
+                this.fusion.log(Level.INFO, "Registering item tag %s for %s", enchant.getTagForSupportedItems().key(), enchant.getKey());
 
                 registry.addToTag(ItemTypeTagKeys.create(enchant.getTagForSupportedItems().key()), enchant.getSupportedItems());
             }
@@ -58,9 +59,9 @@ public class CrazyLoader implements PluginBootstrap {
                 if (!enchant.isEnabled()) continue;
 
                 if (enchant.isCurse()) {
-                    this.fusion.log("info", "Registering curse {}", enchant.getKey());
+                    this.fusion.log(Level.INFO, "Registering curse %s", enchant.getKey());
                 } else {
-                    this.fusion.log("info", "Registering enchantment {}", enchant.getKey());
+                    this.fusion.log(Level.INFO, "Registering enchantment %s", enchant.getKey());
                 }
 
                 registry.register(TypedKey.create(RegistryKey.ENCHANTMENT, enchant.getKey()), enchantment -> {
@@ -83,7 +84,7 @@ public class CrazyLoader implements PluginBootstrap {
                 if (!enchant.isEnabled()) continue;
 
                 enchant.getEnchantTagKeys().forEach(enchantmentTagKey -> {
-                    this.fusion.log("info", "Registering the enchantment tag {} for {}", enchantmentTagKey.key(), enchant.getKey());
+                    this.fusion.log(Level.INFO, "Registering the enchantment tag %s for %s", enchantmentTagKey.key(), enchant.getKey());
 
                     registry.addToTag(enchantmentTagKey, Set.of(enchant.getTagEntry()));
                 });

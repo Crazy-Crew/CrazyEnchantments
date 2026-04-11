@@ -1,11 +1,10 @@
-package com.ryderbelserion.crazyenchantments.core.objects;
+package com.ryderbelserion.crazyenchantments.common.objects;
 
 import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
-import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.enums.Files;
+import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.enums.Files;
 import com.ryderbelserion.crazyenchantments.api.interfaces.IMessage;
-import com.ryderbelserion.fusion.core.FusionProvider;
-import com.ryderbelserion.fusion.core.exceptions.FusionException;
+import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
@@ -21,7 +20,7 @@ import java.util.Map;
 public class Message implements IMessage {
 
     private final CrazyEnchantments plugin = (CrazyEnchantments) CrazyEnchantmentsProvider.getInstance();
-    private final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
+    private final FusionKyori fusion = this.plugin.getFusion();
 
     private final String defaultValue;
     private final String value;
@@ -79,7 +78,7 @@ public class Message implements IMessage {
             placeholders.putIfAbsent("{prefix}", prefix);
         }
 
-        return this.fusion.parse(audience, message, placeholders);
+        return this.fusion.asComponent(audience, message, placeholders);
     }
 
     private @NotNull List<String> getStringList(@NotNull final CommentedConfigurationNode node) {

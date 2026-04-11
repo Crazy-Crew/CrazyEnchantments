@@ -1,14 +1,14 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
-import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.commands.player.ISource;
-import com.ryderbelserion.crazyenchantments.core.commands.subs.CoreCommand;
-import com.ryderbelserion.crazyenchantments.core.enums.Mode;
-import com.ryderbelserion.crazyenchantments.core.registry.UserRegistry;
+import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
+import com.ryderbelserion.crazyenchantments.common.commands.subs.CoreCommand;
+import com.ryderbelserion.crazyenchantments.common.enums.Mode;
+import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.PaperSource;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
-import com.ryderbelserion.fusion.kyori.mods.ModSupport;
+import com.ryderbelserion.fusion.core.api.constants.ModSupport;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -37,7 +37,7 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
     private final Server server;
 
     public CrazyEnchantmentsPlatform(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final FusionPaper fusion) {
-        super(fusion.getDataPath(), fusion.getFileManager());
+        super(fusion);
 
         this.plugin = plugin;
         this.fusion = fusion;

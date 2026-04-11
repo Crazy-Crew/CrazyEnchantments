@@ -1,9 +1,9 @@
-package com.ryderbelserion.crazyenchantments.core.registry;
+package com.ryderbelserion.crazyenchantments.common.registry;
 
 import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
 import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IUserRegistry;
-import com.ryderbelserion.crazyenchantments.core.CrazyEnchantments;
-import com.ryderbelserion.crazyenchantments.core.objects.User;
+import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.objects.User;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import org.jetbrains.annotations.NotNull;

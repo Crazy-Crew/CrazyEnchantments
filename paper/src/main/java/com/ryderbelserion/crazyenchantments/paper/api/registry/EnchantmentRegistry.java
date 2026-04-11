@@ -2,7 +2,7 @@ package com.ryderbelserion.crazyenchantments.paper.api.registry;
 
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.VeinMinerEnchant;
-import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -96,7 +96,7 @@ public class EnchantmentRegistry {
 
                     supportedItemTags.add(tagEntry);
                 } catch (final IllegalArgumentException exception) {
-                    this.fusion.log("error", "<red>Failed to create a tag entry for <gold>{}", itemTag);
+                    this.fusion.log(Level.ERROR, "<red>Failed to create a tag entry for <gold>%s", itemTag);
                 }
 
                 continue;
@@ -111,7 +111,7 @@ public class EnchantmentRegistry {
 
                 supportedItemTags.add(tagEntry);
             } catch (final IllegalArgumentException | NullPointerException exception) {
-                this.fusion.log("error", "<red>Failed to create the tag entry for <gold>{}", itemTag);
+                this.fusion.log(Level.ERROR, "<red>Failed to create the tag entry for <gold>%s", itemTag);
             }
         }
 
