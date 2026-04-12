@@ -41,8 +41,8 @@ public class VeinMinerListener implements Listener {
     private final Enchantment veinminer = this.registry.get(this.key);
 
     private final EnchantmentRegistry enchantmentRegistry;
-    private final CrazyPlugin plugin;
     private final boolean isYardWatchEnabled;
+    private final CrazyPlugin plugin;
 
     public VeinMinerListener(@NotNull final CrazyPlugin plugin, @NotNull final EnchantmentRegistry enchantmentRegistry) {
         this.enchantmentRegistry = enchantmentRegistry;
