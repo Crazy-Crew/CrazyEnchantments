@@ -1,6 +1,7 @@
 package com.ryderbelserion.crazyenchantments.paper.api.registry.enchants;
 
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
+import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.furnace.FurnaceEnchant;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.VeinMinerEnchant;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.files.FileManager;
@@ -43,6 +44,7 @@ public class EnchantmentRegistry {
         this.fileManager.addFolder(this.path.resolve("curses"), FileType.YAML).addFolder(this.path.resolve("enchants"), FileType.YAML);
 
         this.enchantments.put(VeinMinerEnchant.veinminer_key, new VeinMinerEnchant(this, this.fusion));
+        this.enchantments.put(FurnaceEnchant.furnace_key, new FurnaceEnchant(this, this.fusion));
     }
 
     public void reload() { // runs on reload in case they deleted a static file.
