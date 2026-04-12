@@ -54,6 +54,8 @@ public class FurnaceEnchant implements ICustomEnchantment {
 
     @Override
     public void init(@NotNull final CrazyPlugin plugin) {
+        if (!this.isEnabled) return;
+
         final Server server = plugin.getServer();
 
         server.getPluginManager().registerEvents(new FurnaceListener(plugin, this.registry), plugin);
