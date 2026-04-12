@@ -1,9 +1,9 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlatform;
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
+import com.ryderbelserion.crazyenchantments.paper.api.CrazyEnchantmentsPaper;
+import com.ryderbelserion.crazyenchantments.paper.CrazyPlugin;
 import com.ryderbelserion.crazyenchantments.paper.api.objects.types.CEBlock;
-import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.events.VeinMinerEvent;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.registry.RegistryAccess;
@@ -41,13 +41,13 @@ public class VeinMinerListener implements Listener {
     private final Enchantment veinminer = this.registry.get(this.key);
 
     private final EnchantmentRegistry enchantmentRegistry;
-    private final CrazyEnchantmentsPlugin plugin;
+    private final CrazyPlugin plugin;
     private final boolean isYardWatchEnabled;
 
-    public VeinMinerListener(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final EnchantmentRegistry enchantmentRegistry) {
+    public VeinMinerListener(@NotNull final CrazyPlugin plugin, @NotNull final EnchantmentRegistry enchantmentRegistry) {
         this.enchantmentRegistry = enchantmentRegistry;
 
-        final CrazyEnchantmentsPlatform platform = plugin.getPlatform();
+        final CrazyEnchantmentsPaper platform = plugin.getPlatform();
 
         this.isYardWatchEnabled = platform.isYardWatchEnabled();
         this.plugin = plugin;

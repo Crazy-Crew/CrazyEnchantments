@@ -1,6 +1,6 @@
 package com.ryderbelserion.crazyenchantments.paper.api.interfaces;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
+import com.ryderbelserion.crazyenchantments.paper.CrazyPlugin;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
@@ -48,7 +48,7 @@ public interface ICustomEnchantment {
 
     Set<TagKey<@NotNull Enchantment>> getEnchantTagKeys();
 
-    default void init(@NotNull final CrazyEnchantmentsPlugin plugin) {
+    default void init(@NotNull final CrazyPlugin plugin) {
 
     }
 

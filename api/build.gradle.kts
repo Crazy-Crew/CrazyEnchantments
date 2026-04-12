@@ -13,7 +13,7 @@ val projectVersion = "0.1.0"
 dependencies {
     compileOnly(libs.bundles.adventure)
 
-    compileOnly(libs.fusion.core)
+    compileOnly(libs.fusion.kyori)
 }
 
 java {

@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.paper.api.registry;
+package com.ryderbelserion.crazyenchantments.paper.api.registry.enchants;
 
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer.VeinMinerEnchant;
@@ -48,7 +48,7 @@ public class EnchantmentRegistry {
     public void reload() { // runs on reload in case they deleted a static file.
         this.fileManager.extractFolder("cache", this.path); // extract again if deleted
 
-        this.enchantments.forEach((key, enchantment) -> {
+        this.enchantments.forEach((_, enchantment) -> {
             enchantment.build(); // this ensures that the files are always present, and refreshes config options.
         });
     }

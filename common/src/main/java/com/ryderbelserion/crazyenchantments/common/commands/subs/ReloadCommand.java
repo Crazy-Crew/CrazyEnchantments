@@ -1,10 +1,10 @@
 package com.ryderbelserion.crazyenchantments.common.commands.subs;
 
 import com.mojang.brigadier.context.CommandContext;
+import com.ryderbelserion.crazyenchantments.api.constants.Messages;
 import com.ryderbelserion.crazyenchantments.common.commands.BaseCommand;
 import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
-import com.ryderbelserion.crazyenchantments.common.enums.Mode;
-import com.ryderbelserion.crazyenchantments.common.enums.constants.Messages;
+import com.ryderbelserion.crazyenchantments.common.api.enums.Mode;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
@@ -20,7 +20,7 @@ public class ReloadCommand<S> extends BaseCommand<S> {
 
         this.plugin.reload();
 
-        this.userRegistry.getUser(source.getAudience()).sendMessage(Messages.reload_plugin);
+        this.adapter.sendMessage(source.getAudience(), Messages.reload_plugin);
 
         return 1;
     }

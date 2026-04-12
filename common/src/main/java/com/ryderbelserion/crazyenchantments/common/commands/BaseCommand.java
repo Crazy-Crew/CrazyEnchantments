@@ -2,11 +2,13 @@ package com.ryderbelserion.crazyenchantments.common.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.ryderbelserion.crazyenchantments.api.CrazyEnchantmentsProvider;
-import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.api.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IMessageRegistry;
+import com.ryderbelserion.crazyenchantments.api.interfaces.registry.IUserRegistry;
+import com.ryderbelserion.crazyenchantments.common.CEPlugin;
+import com.ryderbelserion.crazyenchantments.common.api.adapters.sender.ISenderAdapter;
 import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
-import com.ryderbelserion.crazyenchantments.common.enums.Mode;
-import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
+import com.ryderbelserion.crazyenchantments.common.api.enums.Mode;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +16,13 @@ import java.util.function.Function;
 
 public abstract class BaseCommand<S> extends LiteralArgumentBuilder<S> {
 
-    protected final CrazyEnchantments plugin = (CrazyEnchantments) CrazyEnchantmentsProvider.getInstance();
+    protected final CEPlugin plugin = (CEPlugin) CrazyEnchantments.Provider.getInstance();
 
-    protected final UserRegistry userRegistry = this.plugin.getUserRegistry();
+    protected final IUserRegistry userRegistry = this.plugin.getUserRegistry();
+
+    protected final IMessageRegistry messageRegistry = this.plugin.getMessageRegistry();
+
+    protected final ISenderAdapter adapter = this.plugin.getSenderAdapter();
 
     private final Function<S, ISource> function;
     private final String permission;

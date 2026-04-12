@@ -1,32 +1,33 @@
 package com.ryderbelserion.crazyenchantments.paper;
 
-import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.CrazyEnchantmentsPaper;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.enchants.EnchantmentRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class CrazyEnchantmentsPlugin extends JavaPlugin {
+public class CrazyPlugin extends JavaPlugin {
 
     private final EnchantmentRegistry enchantmentRegistry;
     private final FusionPaper fusion;
 
-    public CrazyEnchantmentsPlugin(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper fusion) {
+    public CrazyPlugin(@NotNull final EnchantmentRegistry enchantmentRegistry, @NotNull final FusionPaper fusion) {
         this.enchantmentRegistry = enchantmentRegistry;
         this.fusion = fusion;
     }
 
-    private CrazyEnchantmentsPlatform platform;
+    private CrazyEnchantmentsPaper platform;
 
     @Override
     public void onEnable() {
-        this.platform = new CrazyEnchantmentsPlatform(this, this.fusion.setPlugin(this).init());
-        this.platform.start(getServer().getConsoleSender());
+        this.platform = new CrazyEnchantmentsPaper(this, this.fusion);
+        this.platform.init();
     }
 
     @Override
     public void onDisable() {
         if (this.platform != null) {
-            this.platform.stop();
+            this.platform.shutdown();
         }
     }
 
@@ -34,7 +35,7 @@ public class CrazyEnchantmentsPlugin extends JavaPlugin {
         return this.enchantmentRegistry;
     }
 
-    public @NotNull final CrazyEnchantmentsPlatform getPlatform() {
+    public @NotNull final CrazyEnchantmentsPaper getPlatform() {
         return this.platform;
     }
 

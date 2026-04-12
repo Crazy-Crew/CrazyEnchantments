@@ -1,6 +1,7 @@
 package com.ryderbelserion.crazyenchantments.paper.listeners;
 
-import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.CrazyEnchantmentsPaper;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.PaperUserRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -10,19 +11,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class CacheListener implements Listener {
 
-    private final UserRegistry userRegistry;
+    private final PaperUserRegistry registry;
 
-    public CacheListener(@NotNull final UserRegistry userRegistry) {
-        this.userRegistry = userRegistry;
+    public CacheListener(@NotNull final CrazyEnchantmentsPaper platform) {
+        this.registry = platform.getUserRegistry();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        this.userRegistry.addUser(event.getPlayer());
+        this.registry.addUser(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.userRegistry.removeUser(event.getPlayer());
+        this.registry.removeUser(event.getPlayer().getUniqueId());
     }
 }

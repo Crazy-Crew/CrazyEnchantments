@@ -3,7 +3,7 @@ package com.ryderbelserion.crazyenchantments.common.commands.subs;
 import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.crazyenchantments.common.commands.BaseCommand;
 import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
-import com.ryderbelserion.crazyenchantments.common.enums.Mode;
+import com.ryderbelserion.crazyenchantments.common.api.enums.Mode;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 

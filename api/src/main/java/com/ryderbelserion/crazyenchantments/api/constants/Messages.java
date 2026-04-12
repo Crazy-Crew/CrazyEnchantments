@@ -1,12 +1,12 @@
-package com.ryderbelserion.crazyenchantments.common.enums.constants;
+package com.ryderbelserion.crazyenchantments.api.constants;
 
 import net.kyori.adventure.key.Key;
-import static com.ryderbelserion.crazyenchantments.common.CrazyEnchantments.namespace;
+import static com.ryderbelserion.crazyenchantments.api.CrazyEnchantments.namespace;
 
 public class Messages {
 
     public static final Key default_locale = Key.key(namespace, "default");
-    
+
     public static final Key reload_plugin = Key.key(namespace, "reload_plugin");
     public static final Key feature_disabled = Key.key(namespace, "feature_disabled");
     public static final Key must_be_player = Key.key(namespace, "must_be_player");
@@ -17,5 +17,5 @@ public class Messages {
     public static final Key inventory_not_empty = Key.key(namespace, "inventory_not_empty");
     public static final Key internal_error = Key.key(namespace, "internal_error");
     public static final Key message_empty = Key.key(namespace, "message_empty");
-    
+
 }

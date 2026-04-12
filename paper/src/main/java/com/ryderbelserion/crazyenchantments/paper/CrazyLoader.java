@@ -1,7 +1,6 @@
-package com.ryderbelserion.crazyenchantments.paper.loader;
+package com.ryderbelserion.crazyenchantments.paper;
 
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
-import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -94,6 +93,6 @@ public class CrazyLoader implements PluginBootstrap {
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
-        return new CrazyEnchantmentsPlugin(this.enchantmentRegistry, this.fusion);
+        return new CrazyPlugin(this.enchantmentRegistry, this.fusion);
     }
 }

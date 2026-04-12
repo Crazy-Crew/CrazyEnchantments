@@ -1,6 +1,6 @@
 name: '${name}'
-main: '${group}.CrazyEnchantmentsPlugin'
-bootstrapper: '${group}.loader.CrazyLoader'
+main: '${group}.CrazyPlugin'
+bootstrapper: '${group}.CrazyLoader'
 
 version: '${version}'
 api-version: '${minecraft}'

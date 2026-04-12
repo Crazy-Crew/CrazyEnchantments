@@ -1,4 +1,4 @@
-package com.ryderbelserion.crazyenchantments.common.enums;
+package com.ryderbelserion.crazyenchantments.common.api.enums;
 
 public enum Mode {
 

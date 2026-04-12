@@ -1,11 +1,15 @@
-package com.ryderbelserion.crazyenchantments.paper;
+package com.ryderbelserion.crazyenchantments.paper.api;
 
-import com.ryderbelserion.crazyenchantments.common.CrazyEnchantments;
+import com.ryderbelserion.crazyenchantments.common.CEPlugin;
+import com.ryderbelserion.crazyenchantments.common.api.enums.Mode;
 import com.ryderbelserion.crazyenchantments.common.commands.player.ISource;
 import com.ryderbelserion.crazyenchantments.common.commands.subs.CoreCommand;
-import com.ryderbelserion.crazyenchantments.common.enums.Mode;
-import com.ryderbelserion.crazyenchantments.common.registry.UserRegistry;
-import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.CrazyPlugin;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.PaperContextRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.PaperMessageRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.PaperUserRegistry;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.adapters.PaperSenderAdapter;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.commands.PaperSource;
 import com.ryderbelserion.crazyenchantments.paper.listeners.CacheListener;
 import com.ryderbelserion.fusion.core.api.constants.ModSupport;
@@ -18,57 +22,70 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
+public class CrazyEnchantmentsPaper extends CEPlugin<CommandSender> {
 
-    private final CrazyEnchantmentsPlugin plugin;
     private final EnchantmentRegistry enchantmentRegistry;
-    private final FusionPaper fusion;
+    private final CrazyPlugin plugin;
     private final Server server;
 
-    public CrazyEnchantmentsPlatform(@NotNull final CrazyEnchantmentsPlugin plugin, @NotNull final FusionPaper fusion) {
-        super(fusion);
-
-        this.plugin = plugin;
-        this.fusion = fusion;
+    public CrazyEnchantmentsPaper(@NotNull final CrazyPlugin plugin, @NotNull final FusionPaper fusion) {
+        super(fusion.setPlugin(plugin));
 
         this.enchantmentRegistry = plugin.getEnchantmentRegistry();
-
         this.server = plugin.getServer();
+        this.plugin = plugin;
     }
+
+    private PaperMessageRegistry messageRegistry;
+    private PaperContextRegistry contextRegistry;
+    private PaperSenderAdapter userAdapter;
+    private PaperUserRegistry userRegistry;
 
     private boolean isYardWatchEnabled = false;
 
     @Override
-    public void start(@NotNull final Audience audience) {
-        super.start(audience);
-
-        final PluginManager pluginManager = this.server.getPluginManager();
-        final UserRegistry userRegistry = this.getUserRegistry();
+    public void init() {
+        super.init();
 
         this.isYardWatchEnabled = this.fusion.isModReady(ModSupport.yard_watch);
 
-        this.enchantmentRegistry.getEnchantments().forEach((key, customEnchantment) -> {
+        this.contextRegistry = new PaperContextRegistry();
+
+        this.userRegistry = new PaperUserRegistry();
+        this.userRegistry.init();
+
+        this.messageRegistry = new PaperMessageRegistry();
+        this.messageRegistry.init();
+
+        this.userAdapter = new PaperSenderAdapter(this);
+
+        post();
+    }
+
+    @Override
+    public void post() {
+        super.post();
+
+        final PluginManager pluginManager = this.server.getPluginManager();
+
+        this.enchantmentRegistry.getEnchantments().forEach((_, customEnchantment) -> {
             customEnchantment.init(this.plugin); // registers listeners, or things not meant for the bootstrap loader
         });
 
         List.of(
-                new CacheListener(userRegistry)
+                new CacheListener(this)
         ).forEach(listener -> pluginManager.registerEvents(listener, this.plugin));
-    }
-
-    public Function<CommandSourceStack, ISource> function() {
-        return stack -> new PaperSource(stack.getSender());
     }
 
     @Override
@@ -79,16 +96,24 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
     }
 
     @Override
-    public void stop() {
-        super.stop();
+    public void shutdown() {
+        super.shutdown();
 
         this.server.getGlobalRegionScheduler().cancelTasks(this.plugin);
         this.server.getAsyncScheduler().cancelTasks(this.plugin);
     }
 
     @Override
-    public final boolean isConsoleSender(@NotNull final Audience audience) {
-        return audience instanceof ConsoleCommandSender;
+    public void registerCommands() {
+        final LifecycleEventManager<@NotNull Plugin> manager = this.plugin.getLifecycleManager();
+
+        manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final Commands registry = event.registrar();
+
+            registry.register(new CoreCommand<>("crazyenchantments.access", "crazyenchantments", function()).build(),
+                    "The base command for CrazyEnchantments!",
+                    Collections.singletonList("ce"));
+        });
     }
 
     @Override
@@ -135,24 +160,27 @@ public class CrazyEnchantmentsPlatform extends CrazyEnchantments {
     }
 
     @Override
-    public void registerCommands() {
-        final LifecycleEventManager<@NotNull Plugin> manager = this.plugin.getLifecycleManager();
-
-        manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final Commands registry = event.registrar();
-
-            registry.register(new CoreCommand<>("crazyenchantments.access", "crazyenchantments", function()).build(),
-                    "The base command for CrazyEnchantments!",
-                    Collections.singletonList("ce"));
-        });
+    public @NotNull final PaperContextRegistry getContextRegistry() {
+        return this.contextRegistry;
     }
 
-    public @NotNull final CrazyEnchantmentsPlugin getPlugin() {
-        return this.plugin;
+    @Override
+    public @NotNull final PaperMessageRegistry getMessageRegistry() {
+        return this.messageRegistry;
     }
 
-    public @NotNull final FusionPaper getFusion() {
-        return this.fusion;
+    @Override
+    public @NotNull final PaperSenderAdapter getSenderAdapter() {
+        return this.userAdapter;
+    }
+
+    @Override
+    public @NotNull final PaperUserRegistry getUserRegistry() {
+        return this.userRegistry;
+    }
+
+    public @NotNull final Function<CommandSourceStack, ISource> function() {
+        return stack -> new PaperSource(stack.getSender());
     }
 
     public final boolean isYardWatchEnabled() {

@@ -1,8 +1,8 @@
 package com.ryderbelserion.crazyenchantments.paper.enchants.pickaxes.veinminer;
 
 import com.ryderbelserion.crazyenchantments.common.utils.ConfigUtils;
-import com.ryderbelserion.crazyenchantments.paper.CrazyEnchantmentsPlugin;
-import com.ryderbelserion.crazyenchantments.paper.api.registry.EnchantmentRegistry;
+import com.ryderbelserion.crazyenchantments.paper.CrazyPlugin;
+import com.ryderbelserion.crazyenchantments.paper.api.registry.enchants.EnchantmentRegistry;
 import com.ryderbelserion.crazyenchantments.paper.api.interfaces.ICustomEnchantment;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
@@ -57,7 +57,7 @@ public class VeinMinerEnchant implements ICustomEnchantment {
     private boolean isEnabled;
 
     @Override
-    public void init(@NotNull final CrazyEnchantmentsPlugin plugin) {
+    public void init(@NotNull final CrazyPlugin plugin) {
         final Server server = plugin.getServer();
 
         server.getPluginManager().registerEvents(new VeinMinerListener(plugin, this.registry), plugin);
