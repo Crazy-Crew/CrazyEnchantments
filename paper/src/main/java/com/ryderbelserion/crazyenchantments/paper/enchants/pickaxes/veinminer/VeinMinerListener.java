@@ -59,7 +59,7 @@ public class VeinMinerListener implements Listener {
 
         if (!event.isDropItems() || player.getGameMode() == GameMode.CREATIVE || this.veinminer == null) return;
 
-        final ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
+        final ItemStack tool = player.getInventory().getItemInMainHand();
 
         if (!tool.containsEnchantment(this.veinminer) || player.isSneaking()) return;
 
