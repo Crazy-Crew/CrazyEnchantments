@@ -21,18 +21,20 @@ enchant:
   # Should this be in the enchantment table?
   enchantment-table: true
   # The cost to apply/repair an item with this enchant in the anvil.
-  anvil-cost: 12
+  # If using an enchantment book to apply to an item, the cost is halved.
+  # The cost scales with the level of the enchantment.
+  anvil-cost: 20
   # The minimum cost settings.
   minimum-cost:
     # The extra cost per level.
     extra-per-level: 1
-    # The minimum base cost.
+    # The minimum base cost, no matter the level.
     base: 30
   # The maximum cost settings.
   maximum-cost:
     # The extra cost per level.
     extra-per-level: 1
-    # The maximum base cost.
+    # The maximum base cost, not directly related to the consumed experience.
     base: 80
   # Enchant specific settings.
   settings:
