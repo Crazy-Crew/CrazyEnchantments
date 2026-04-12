@@ -49,19 +49,11 @@ public class FurnaceListener implements Listener {
         final Player player = event.getPlayer();
         final ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (this.furnace == null) {
-            return;
-        }
-
-        if (!tool.containsEnchantment(this.furnace)) {
-            return;
-        }
+        if (this.furnace == null || !tool.containsEnchantment(this.furnace)) return;
 
         final FurnaceEnchant enchant = (FurnaceEnchant) this.enchantmentRegistry.getEnchantment(this.key);
 
-        if (!enchant.isEnabled()) {
-            return;
-        }
+        if (!enchant.isEnabled()) return;
 
         final int size = drops.size();
 
