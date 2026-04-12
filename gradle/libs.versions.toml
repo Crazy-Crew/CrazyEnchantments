@@ -21,7 +21,7 @@ nexo = "1.21.0" # https://github.com/Nexo-MC
 
 ## Other
 yardwatch = "2.0.0" # https://github.com/YouHaveTrouble/YardWatchAPI
-fusion = "4.12.3" # https://github.com/ryderbelserion/Fusion
+fusion = "4.12.4" # https://github.com/ryderbelserion/Fusion
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
