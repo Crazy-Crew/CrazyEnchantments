@@ -66,6 +66,12 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     @Override
     public void build() { // used for /ce reload
+        final Path path = getPath();
+
+        if (!Files.exists(path)) {
+            this.fileManager.addFile(path, FileType.YAML);
+        }
+
         this.fileManager.addFile(this.path.resolve("cache").resolve("ores.json"), FileType.JSON);
 
         @NotNull final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(getPath());

@@ -7,6 +7,7 @@ import com.ryderbelserion.crazyenchantments.paper.api.registry.enchants.Enchantm
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.files.FileManager;
+import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
@@ -63,6 +64,12 @@ public class FurnaceEnchant implements ICustomEnchantment {
 
     @Override
     public void build() { // used for /ce reload
+        final Path path = getPath();
+
+        if (!Files.exists(path)) {
+            this.fileManager.addFile(path, FileType.YAML);
+        }
+
         @NotNull final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(getPath());
 
         customFile.ifPresentOrElse(file -> {
