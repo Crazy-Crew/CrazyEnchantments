@@ -142,7 +142,7 @@ public class VeinMinerListener implements Listener {
             final ItemStack itemStack = player.damageItemStack(tool, 1);
 
             if (itemStack.isEmpty()) {
-                player.playSound(player, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, ThreadLocalRandom.current().nextFloat(0.8F, 1.2F));
+                player.playSound(player, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.8F, ThreadLocalRandom.current().nextFloat(0.8F, 1.2F));
             }
         }
     }
