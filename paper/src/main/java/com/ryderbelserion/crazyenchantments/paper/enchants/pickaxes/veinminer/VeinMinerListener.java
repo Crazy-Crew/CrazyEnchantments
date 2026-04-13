@@ -71,7 +71,9 @@ public class VeinMinerListener implements Listener {
 
         final Queue<CEBlock> queue = new LinkedList<>();
 
-        final CEBlock initial = new CEBlock(index, 0);
+        final CEBlock initial = new CEBlock(index, 0).setExperience(getExperience(index, tool));
+
+        final String type = initial.getType();
 
         queue.add(initial);
 
@@ -84,11 +86,11 @@ public class VeinMinerListener implements Listener {
 
         while (!queue.isEmpty()) {
             final CEBlock block = queue.poll();
-            final Block output = block.getBlock();
+            final Block origin = block.getBlock();
 
             final UUID uuid = block.getUuid();
 
-            if (output.isEmpty() || !enchant.hasOre(output)) continue;
+            if (origin.isEmpty() || !enchant.hasOre(origin)) continue;
 
             if (valid.size() >= chain || enchant.isRequiresCorrectTool() && tool.isEmpty()) break;
 
@@ -100,7 +102,7 @@ public class VeinMinerListener implements Listener {
 
             if (valid.contains(uuid)) continue;
 
-            new FoliaScheduler(this.plugin, output.getLocation()) {
+            new FoliaScheduler(this.plugin, origin.getLocation()) {
                 @Override
                 public void run() {
                     destroy(player, tool, block, enchant.isDamageItem());
@@ -109,20 +111,22 @@ public class VeinMinerListener implements Listener {
 
             valid.add(uuid);
 
-            final World world = output.getWorld();
-
             for (int x = -radius; x <= radius; x++) {
                 for (int y = -radius; y <= radius; y++) {
                     for (int z = -radius; z <= radius; z++) {
-                        if (queue.size() >= chain) break; // break if queue size is greater than the max search
+                        if (queue.size() >= chain) break; // break if queue size is greater than the max search.
 
-                        if (x == 0 && y == 0 && z == 0) continue; // Skip initial block
+                        if (x == 0 && y == 0 && z == 0) continue; // Skip origin block.
 
-                        final Block worldBlock = world.getBlockAt(output.getX() + x, output.getY() + y, output.getZ() + z);
+                        final Block relative = origin.getRelative(x, y, z);
 
-                        if (initial.isSimilar(worldBlock)) continue; // do not add blocks if the types don't match.
+                        final CEBlock position = new CEBlock(relative, block.getDistance() + 1);
 
-                        queue.add(new CEBlock(worldBlock, block.getDistance() + 1).setExperience(getExperience(worldBlock, tool)));
+                        if (!position.getType().equals(type)) continue; // do not add blocks if the types don't match.
+
+                        position.setExperience(getExperience(relative, tool));
+
+                        queue.add(position);
                     }
                 }
             }
