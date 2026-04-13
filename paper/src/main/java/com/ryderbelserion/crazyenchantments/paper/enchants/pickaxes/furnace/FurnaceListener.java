@@ -40,6 +40,30 @@ public class FurnaceListener implements Listener {
         this.server = plugin.getServer();
     }
 
+    /*@EventHandler(ignoreCancelled = true)
+    public void onVeinMine(@NotNull final VeinMinerEvent event) {
+        final ItemStack itemStack = event.getItemStack();
+
+        if (itemStack.isEmpty()) return;
+
+        if (this.furnace == null || !itemStack.containsEnchantment(this.furnace)) return;
+
+        final FurnaceEnchant enchant = (FurnaceEnchant) this.enchantmentRegistry.getEnchantment(this.key);
+
+        if (!enchant.isEnabled()) return;
+
+        final Block block = event.getBlock();
+
+        final BlockDropItemEvent itemEvent = new BlockDropItemEvent(
+                block,
+                block.getState(false),
+                event.getPlayer(),
+                event.getDrops()
+        );
+
+        itemEvent.callEvent();
+    }*/
+
     @EventHandler(ignoreCancelled = true)
     public void onBlockDrop(@NotNull final BlockDropItemEvent event) {
         final List<Item> drops = event.getItems();
