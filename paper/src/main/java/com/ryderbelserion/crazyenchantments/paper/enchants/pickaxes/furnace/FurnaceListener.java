@@ -75,7 +75,7 @@ public class FurnaceListener implements Listener {
 
         if (this.furnace == null || !tool.containsEnchantment(this.furnace)) return;
 
-        final FurnaceEnchant enchant = (FurnaceEnchant) this.enchantmentRegistry.getEnchantment(this.key);
+        if (!(this.enchantmentRegistry.getEnchantment(this.key) instanceof FurnaceEnchant enchant)) return;
 
         if (!enchant.isEnabled()) return;
 

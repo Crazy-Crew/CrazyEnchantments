@@ -57,7 +57,7 @@ public class VeinMinerListener implements Listener {
 
         if (!tool.containsEnchantment(this.enchantment)) return;
 
-        final VeinMinerEnchant enchant = (VeinMinerEnchant) this.enchantmentRegistry.getEnchantment(this.key);
+        if (!(this.enchantmentRegistry.getEnchantment(this.key) instanceof VeinMinerEnchant enchant)) return;
 
         if (!enchant.isEnabled()) return;
 
