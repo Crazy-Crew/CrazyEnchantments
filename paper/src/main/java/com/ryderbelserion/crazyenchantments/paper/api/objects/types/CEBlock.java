@@ -20,10 +20,6 @@ public class CEBlock {
 
     private int experience = 0;
 
-    public final boolean isSimilar(@NotNull final Block block) {
-        return block.getType().getKey().asString().equals(this.type);
-    }
-
     public final CEBlock setExperience(final int experience) {
         this.experience = experience;
 
