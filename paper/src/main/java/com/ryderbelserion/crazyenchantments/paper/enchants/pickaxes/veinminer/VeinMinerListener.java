@@ -10,12 +10,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.key.Key;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Registry;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -26,19 +21,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class VeinMinerListener implements Listener {
 
     private final Registry<@NotNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
     private final Key key = VeinMinerEnchant.veinminer_key;
-    private final Enchantment veinminer = this.registry.get(this.key);
+    private final Enchantment enchantment = this.registry.get(this.key);
 
     private final EnchantmentRegistry enchantmentRegistry;
     private final boolean isYardWatchEnabled;
@@ -55,94 +45,84 @@ public class VeinMinerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (this.enchantment == null || !event.isDropItems()) return;
+
         final Player player = event.getPlayer();
 
-        if (!event.isDropItems() || player.getGameMode() == GameMode.CREATIVE || this.veinminer == null) return;
+        if (player.getGameMode() == GameMode.CREATIVE || player.isSneaking()) return;
 
         final ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (!tool.containsEnchantment(this.veinminer) || player.isSneaking()) return;
+        if (tool.isEmpty()) return;
+
+        if (!tool.containsEnchantment(this.enchantment)) return;
 
         final VeinMinerEnchant enchant = (VeinMinerEnchant) this.enchantmentRegistry.getEnchantment(this.key);
 
         if (!enchant.isEnabled()) return;
 
+        final Block index = event.getBlock();
+
+        if (index.isEmpty()) return;
+
+        if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, index) || !enchant.hasOre(index)) return;
+
         if (event instanceof VeinMinerEvent) return;
 
-        final Block initialBlock = event.getBlock();
-
-        if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, initialBlock)) return;
-
-        final String blockType = initialBlock.getType().getKey().asString();
-
-        final List<String> ores = enchant.getOres();
-
-        if (!ores.contains(blockType)) return;
-
-        final CommentedConfigurationNode config = enchant.getConfig();
-
         final Queue<CEBlock> queue = new LinkedList<>();
-        queue.add(new CEBlock(initialBlock, 0).setExperience(getExperience(initialBlock, tool)));
 
-        final Set<Block> processed = new HashSet<>();
+        final CEBlock initial = new CEBlock(index, 0);
 
-        final int currentLevel = tool.getEnchantmentLevel(this.veinminer);
+        queue.add(initial);
 
-        final boolean isScalingChain = config.node("enchant", "settings", "chain", "scale").getBoolean(false);
-        final int scalingChain = config.node("enchant", "settings", "chain", "max").getInt(10);
-        final int maxChain = isScalingChain ? scalingChain * currentLevel : scalingChain;
+        final Set<UUID> valid = new HashSet<>();
 
-        final boolean isScalingRadius = config.node("enchant", "settings", "search", "scale").getBoolean(false);
-        final int radius = config.node("enchant", "settings", "search", "max").getInt(10);
-        final int searchRadius = isScalingRadius ? radius * currentLevel : radius;
+        final int level = tool.getEnchantmentLevel(this.enchantment);
 
-        final boolean damageItem = config.node("enchant", "settings", "damage-item").getBoolean(false);
-
-        final boolean requiresCorrectTool = config.node("enchant", "settings", "need-correct-tool").getBoolean(false);
-
-        final int delay = config.node("enchant", "settings", "delay").getInt(0);
+        final int chain = enchant.isScalingChain() ? enchant.getScalingChain() * level : enchant.getScalingChain();
+        final int radius = enchant.isScalingRadius() ? enchant.getScaleRadius() * level : enchant.getScaleRadius();
 
         while (!queue.isEmpty()) {
-            final CEBlock ceBlock = queue.poll();
-            final Block block = ceBlock.getBlock();
+            final CEBlock block = queue.poll();
+            final Block output = block.getBlock();
 
-            final Material material = block.getType();
+            final UUID uuid = block.getUuid();
 
-            if (material.isAir() || !ores.contains(material.getKey().asString())) continue; // if is air, and ores do not contain the material string, continue.
+            if (output.isEmpty() || !enchant.hasOre(output)) continue;
 
-            if (processed.size() >= maxChain || requiresCorrectTool && tool.isEmpty()) break; // if the processed size is greater than max chain, break... or if the tool is empty, break...
+            if (valid.size() >= chain || enchant.isRequiresCorrectTool() && tool.isEmpty()) break;
 
-            if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, block)) { // prevent blocks player can't break
-                processed.add(block); // add to processed, because the player can't break the block.
+            if (!enchant.canBreakBlock(this.isYardWatchEnabled, player, index)) {
+                valid.add(uuid);
 
                 continue;
             }
 
-            if (processed.contains(block)) continue; // if processed continue
+            if (valid.contains(uuid)) continue;
 
-            new FoliaScheduler(this.plugin, block.getLocation()) {
+            new FoliaScheduler(this.plugin, output.getLocation()) {
                 @Override
                 public void run() {
-                    destroy(player, tool, ceBlock, damageItem);
+                    destroy(player, tool, block, enchant.isDamageItem());
                 }
-            }.runDelayed((long) delay * ceBlock.getDistance());
+            }.runDelayed((long) enchant.getDelay() * block.getDistance());
 
-            processed.add(block);
+            valid.add(uuid);
 
-            final World world = block.getWorld();
+            final World world = output.getWorld();
 
-            for (int x = -searchRadius; x <= searchRadius; x++) {
-                for (int y = -searchRadius; y <= searchRadius; y++) {
-                    for (int z = -searchRadius; z <= searchRadius; z++) {
-                        if (queue.size() >= maxChain) break; // break if queue size is greater than the max search
+            for (int x = -radius; x <= radius; x++) {
+                for (int y = -radius; y <= radius; y++) {
+                    for (int z = -radius; z <= radius; z++) {
+                        if (queue.size() >= chain) break; // break if queue size is greater than the max search
+
                         if (x == 0 && y == 0 && z == 0) continue; // Skip initial block
 
-                        final Block worldBlock = world.getBlockAt(block.getX() + x, block.getY() + y, block.getZ() + z);
-                        final String worldBlockType = worldBlock.getType().getKey().asString();
+                        final Block worldBlock = world.getBlockAt(output.getX() + x, output.getY() + y, output.getZ() + z);
 
-                        if (!worldBlockType.equals(blockType)) continue; // do not add blocks if the types don't match.
+                        if (initial.isSimilar(worldBlock)) continue; // do not add blocks if the types don't match.
 
-                        queue.add(new CEBlock(worldBlock, ceBlock.getDistance() + 1).setExperience(getExperience(worldBlock, tool)));
+                        queue.add(new CEBlock(worldBlock, block.getDistance() + 1).setExperience(getExperience(worldBlock, tool)));
                     }
                 }
             }

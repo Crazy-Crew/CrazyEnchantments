@@ -18,6 +18,7 @@ import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
@@ -64,6 +65,17 @@ public class VeinMinerEnchant implements ICustomEnchantment {
         server.getPluginManager().registerEvents(new VeinMinerListener(plugin, this.registry), plugin);
     }
 
+    private boolean isScalingChain;
+    private int scalingChain;
+
+    private boolean isScalingRadius;
+    private int scaleRadius;
+
+    private boolean isDamageItem;
+    private boolean requiresCorrectTool;
+
+    private int delay;
+
     @Override
     public void build() { // used for /ce reload
         final Path path = getPath();
@@ -103,6 +115,18 @@ public class VeinMinerEnchant implements ICustomEnchantment {
             if (config.node("enchant", "enchantment-table").getBoolean(false)) {
                 this.enchantTagKeys.add(EnchantmentTagKeys.IN_ENCHANTING_TABLE);
             }
+
+            this.isScalingChain = config.node("enchant", "settings", "chain", "scale").getBoolean(false);
+            this.scalingChain = config.node("enchant", "settings", "chain", "max").getInt(10);
+
+            this.isScalingRadius = config.node("enchant", "settings", "search", "scale").getBoolean(false);
+            this.scaleRadius = config.node("enchant", "settings", "search", "max").getInt(10);
+
+            this.isDamageItem = config.node("enchant", "settings", "damage-item").getBoolean(false);
+
+            this.requiresCorrectTool = config.node("enchant", "settings", "need-correct-tool").getBoolean(false);
+
+            this.delay = config.node("enchant", "settings", "delay").getInt(0);
 
             @NotNull final Optional<JsonCustomFile> ores = this.fileManager.getJsonFile(this.path.resolve("cache").resolve("ores.json"));
 
@@ -184,6 +208,38 @@ public class VeinMinerEnchant implements ICustomEnchantment {
 
     public final CommentedConfigurationNode getConfig() {
         return this.config;
+    }
+
+    public final boolean isRequiresCorrectTool() {
+        return this.requiresCorrectTool;
+    }
+
+    public final boolean isScalingChain() {
+        return this.isScalingChain;
+    }
+
+    public final boolean isScalingRadius() {
+        return this.isScalingRadius;
+    }
+
+    public final boolean isDamageItem() {
+        return this.isDamageItem;
+    }
+
+    public final int getScalingChain() {
+        return this.scalingChain;
+    }
+
+    public final int getScaleRadius() {
+        return this.scaleRadius;
+    }
+
+    public final int getDelay() {
+        return this.delay;
+    }
+
+    public final boolean hasOre(@NotNull final Block block) {
+        return getOres().contains(block.getType().getKey().asString());
     }
 
     public final List<String> getOres() {
