@@ -576,9 +576,9 @@ public class Methods {
     private int getXPThroughNMS(@NotNull Block block, @NotNull ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
         CraftBlock cb = (CraftBlock) block;
 
-        net.minecraft.world.level.block.state.BlockState iWorldblockdata = cb.getNMS();
+        net.minecraft.world.level.block.state.BlockState iWorldblockdata = cb.getBlockState();
         net.minecraft.world.level.block.Block worldBlock = iWorldblockdata.getBlock();
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-        return worldBlock.getExpDrop(iWorldblockdata, cb.getHandle().getMinecraftWorld(), cb.getPosition(), nmsItem, true);
+        return worldBlock.getExpDrop(iWorldblockdata, cb.getLevel().getMinecraftWorld(), cb.getPosition(), nmsItem, true);
     }
 }
