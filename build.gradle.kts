@@ -10,37 +10,24 @@ plugins {
 
 val git = feather.getGit()
 
-allprojects {
-    apply(plugin = "java-library")
+val mergedJar by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = false
 }
 
-tasks {
-    withType<Jar> {
-        subprojects {
-            dependsOn(project.tasks.build)
-        }
+dependencies {
+    mergedJar(project(":paper"))
+}
 
-        // get subproject's built jars
-        val jars = subprojects.map { zipTree(it.tasks.jar.get().archiveFile.get().asFile) }
+tasks.withType<Jar> {
+    dependsOn(mergedJar)
 
-        // merge them into main jar (except their manifests)
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    val jars = mergedJar.map { zipTree(it) }
 
-        from(jars) {
-            exclude("META-INF/MANIFEST.MF")
-        }
+    // merge them into main jar (except their manifests)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        // put behind an action because files don't exist at configuration time
-        doFirst {
-            // merge all subproject's manifests into main manifest
-            jars.forEach { jar ->
-                jar.matching { include("META-INF/MANIFEST.MF") }
-                    .files.forEach { file ->
-                        manifest.from(file)
-                    }
-            }
-        }
-    }
+    from(jars)
 }
 
 val releaseType = rootProject.ext.get("release_type").toString()
