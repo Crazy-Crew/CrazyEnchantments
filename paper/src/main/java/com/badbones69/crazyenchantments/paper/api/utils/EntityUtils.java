@@ -14,6 +14,7 @@ public class EntityUtils {
             case PIGLIN -> Material.PIGLIN_HEAD;
             case WITHER_SKELETON -> Material.WITHER_SKELETON_SKULL;
             case ENDER_DRAGON -> Material.DRAGON_HEAD;
+            case PLAYER -> Material.PLAYER_HEAD;
             default -> null;
         };
     }
