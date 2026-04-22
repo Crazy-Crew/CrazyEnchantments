@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.google.common.collect.Lists;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -232,7 +233,7 @@ public class EnchantmentBookSettings {
         final ConfigurationSection section = config.getConfigurationSection("Categories");
 
         if (section == null) {
-            this.fusion.log("warn", "The categories section cannot be found in config.yml, It's possible the file is badly formatted!");
+            this.fusion.log(Level.WARNING, "The categories section cannot be found in config.yml, It's possible the file is badly formatted!");
 
             return;
         }

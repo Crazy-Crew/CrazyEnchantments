@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,7 +37,7 @@ public class MenuManager {
         final ConfigurationSection section = file.getConfigurationSection("Types");
 
         if (section == null) {
-            fusion.log("warn", "The types section cannot be found in enchantment-types.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.WARNING, "The types section cannot be found in enchantment-types.yml, It's possible the file is badly formatted!");
 
             return;
         }

@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.enums.keys;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
-import com.ryderbelserion.fusion.core.files.enums.FileType;
+import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,15 +13,15 @@ import java.util.Optional;
 
 public enum FileKeys {
 
-    CONFIG(FileType.PAPER, "config.yml"),
-    BLOCKLIST(FileType.PAPER, "BlockList.yml"),
-    HEADMAP(FileType.PAPER, "HeadMap.yml"),
-    DATA(FileType.PAPER, "Data.yml"),
-    ENCHANTMENTS(FileType.PAPER, "Enchantments.yml"),
-    GKITZ(FileType.PAPER, "GKitz.yml"),
-    MESSAGES(FileType.PAPER, "Messages.yml"),
-    ENCHANTMENT_TYPES(FileType.PAPER, "Enchantment-Types.yml"),
-    TINKER(FileType.PAPER, "Tinker.yml");
+    CONFIG(FileType.PAPER_YAML, "config.yml"),
+    BLOCKLIST(FileType.PAPER_YAML, "BlockList.yml"),
+    HEADMAP(FileType.PAPER_YAML, "HeadMap.yml"),
+    DATA(FileType.PAPER_YAML, "Data.yml"),
+    ENCHANTMENTS(FileType.PAPER_YAML, "Enchantments.yml"),
+    GKITZ(FileType.PAPER_YAML, "GKitz.yml"),
+    MESSAGES(FileType.PAPER_YAML, "Messages.yml"),
+    ENCHANTMENT_TYPES(FileType.PAPER_YAML, "Enchantment-Types.yml"),
+    TINKER(FileType.PAPER_YAML, "Tinker.yml");
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final PaperFileManager fileManager = this.plugin.getFileManager();

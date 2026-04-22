@@ -32,9 +32,10 @@ import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
-import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
-import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -191,7 +192,7 @@ public class CrazyManager {
         ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
 
         if (headSec == null) {
-            this.fusion.log("warn", "HeadOdds could not be found in HeadMap.yml!");
+            this.fusion.log(Level.WARNING, "HeadOdds could not be found in HeadMap.yml!");
         } else {
             headSec.getKeys(false).forEach(id -> {
                 try {
@@ -266,7 +267,7 @@ public class CrazyManager {
             final ConfigurationSection section = gkit.getConfigurationSection("GKitz");
 
             if (section == null) {
-                this.fusion.log("warn", "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
+                this.fusion.log(Level.WARNING, "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
             } else {
                 for (final String kit : section.getKeys(false)) {
                     String path = "GKitz." + kit + ".";

@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -137,7 +138,7 @@ public class BlackSmithManager {
 
         // If section is null, do nothing.
         if (section == null) {
-            fusion.log("warn", "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.WARNING, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
 
             return;
         }

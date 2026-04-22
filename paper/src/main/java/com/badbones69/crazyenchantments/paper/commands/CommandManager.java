@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.commands.relations.ArgumentRelations;
-import com.ryderbelserion.fusion.paper.builders.PlayerBuilder;
+import com.ryderbelserion.fusion.paper.builders.items.PlayerBuilder;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import org.bukkit.Server;
@@ -51,7 +51,7 @@ public class CommandManager {
             return numbers;
         });
 
-        commandManager.registerArgument(PlayerBuilder.class, (sender, context) -> new PlayerBuilder(plugin, context));
+        commandManager.registerArgument(PlayerBuilder.class, (sender, context) -> new PlayerBuilder(context));
 
         List.of(
                 new BlackSmithCommand()
