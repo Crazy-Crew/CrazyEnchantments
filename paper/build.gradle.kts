@@ -17,9 +17,10 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.triumph.cmds)
-
     implementation(libs.fusion.paper)
+
+    compileOnly(libs.strokk.commands)
+    annotationProcessor(libs.strokk.processor)
 
     implementation(libs.metrics)
 

@@ -13,8 +13,8 @@
 
 <big>**Quick Links**</big><br>
 [Request Features](https://github.com/Crazy-Crew/CrazyEnchantments/issues)<br>
-[Documentation](https://docs.crazycrew.us/docs/category/crazyenchantments)<br>
-[Developer API](https://docs.crazycrew.us/docs/plugins/crazyenchantments/guides/api/intro)<br>
+[Documentation](https://docs.crazycrew.us/docs/mods/crazyenchantments)<br>
+[Developer API](https://docs.crazycrew.us/mods/crazyenchantments/guides/api/intro/)<br>
 [Report Bugs](https://github.com/Crazy-Crew/CrazyEnchantments/issues)<br>
 [Trello Board](https://trello.com/b/AJvEmcbL/crazyenchantments)
 

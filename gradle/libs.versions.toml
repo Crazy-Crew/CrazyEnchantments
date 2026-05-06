@@ -28,8 +28,8 @@ plotsquared = "7.5.11" # https://intellectualsites.gitbook.io/plotsquared/api/ap
 kingdoms = "1.16.20.5" # https://www.spigotmc.org/resources/kingdomsx.77670/
 
 ## Other
-triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-fusion = "4.17.0" # https://github.com/ryderbelserion/Fusion
+fusion = "4.21.0" # https://github.com/ryderbelserion/Fusion
+strokk = "2.1.1" # https://commands.strokkur.net/
 bStats = "3.1.0" # https://github.com/Bastian/bStats
 
 ## Gradle Plugins
@@ -84,8 +84,9 @@ kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref =
 kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 
-# https://github.com/TriumphTeam/triumph-cmds
-triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
+# https://commands.strokkur.net/
+strokk-processor = { module = "net.strokkur.commands:processor-paper", version.ref = "strokk" }
+strokk-commands = { module = "net.strokkur.commands:annotations-paper", version.ref = "strokk" }
 
 # https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
@@ -102,7 +103,7 @@ mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
 
 kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
 
-informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" } #https://central.sonatype.com/artifact/com.intellectualsites.informative-annotations/informative-annotations
+informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" }
 paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" }
 
 # https://github.com/Bastian/bStats

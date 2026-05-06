@@ -9,9 +9,8 @@ val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("lib
 repositories {
     maven("https://repo.codemc.io/repository/maven-public/")
 
-    maven("https://repo.triumphteam.dev/snapshots/")
+    maven("https://eldonexus.de/repository/maven-public/")
 
-    maven("https://repo.crazycrew.us/libraries/")
     maven("https://repo.crazycrew.us/releases/")
 
     maven("https://jitpack.io/")
@@ -44,7 +43,7 @@ tasks {
         )
 
         with(copySpec {
-            include("*paper-plugin.yml")
+            include("*plugin.yml")
 
             from("src/main/resources") {
                 expand(inputs.properties)
