@@ -1,6 +1,8 @@
 name: Sync Page Description
 
 on:
+  workflow_dispatch:
+
   push:
     paths:
       - 'description.md'   # Triggers for changes to this specific file
