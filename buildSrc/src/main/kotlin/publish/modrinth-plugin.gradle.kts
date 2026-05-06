@@ -21,7 +21,7 @@ modrinth {
 
     loaders.addAll(rootProject.property("project_platforms").toString().split(",").map { it.trim() })
 
-    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
+    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
 
     autoAddDependsOn = false
     detectLoaders = false
