@@ -1,0 +1,13 @@
+name: Sync
+
+on:
+  push:
+    paths:
+      - 'description.md'   # Triggers for changes to this specific file
+
+jobs:
+  sync:
+    uses: Crazy-Crew/.github/.github/workflows/sync.yml@main
+
+    secrets:
+      modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
