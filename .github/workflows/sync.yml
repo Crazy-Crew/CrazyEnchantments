@@ -5,7 +5,7 @@ on:
 
   push:
     paths:
-      - 'description.md'   # Triggers for changes to this specific file
+      - 'README.md'   # Triggers for changes to this specific file
 
 jobs:
   sync:
