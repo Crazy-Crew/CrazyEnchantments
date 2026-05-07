@@ -75,7 +75,7 @@ Send any console errors or files you have through https://mclo.gs/ - (We don't o
 ![CrazyEnchantments Statistics](https://bstats.org/signatures/bukkit/CrazyEnchantments.svg)
 </center>
 
-[contributors-shield]: https://img.shields.io/github/contributors/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
+[contributors-shield]: https://img.shields.io/github/contributors-anon/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [contributors-url]: https://github.com/Crazy-Crew/CrazyEnchantments/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [forks-url]: https://github.com/Crazy-Crew/CrazyEnchantments/network/members
