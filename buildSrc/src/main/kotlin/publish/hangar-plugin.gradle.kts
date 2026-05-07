@@ -18,7 +18,7 @@ hangarPublish {
 
         changelog.set(rootProject.ext.get("mc_changelog").toString())
 
-                channel.set(rootProject.ext.get("release_type").toString().uppercaseFirstChar())
+        channel.set(rootProject.ext.get("release_type").toString().uppercaseFirstChar())
 
         pages.resourcePage(rootProject.file("README.md").readText(Charsets.UTF_8))
 
