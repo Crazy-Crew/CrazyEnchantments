@@ -1,4 +1,3 @@
-import gradle.kotlin.dsl.accessors._bc702d41505d332776c95ae061891e6e.ext
 import io.papermc.hangarpublishplugin.model.Platforms
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 

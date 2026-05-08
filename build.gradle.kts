@@ -8,26 +8,41 @@ plugins {
     `java-plugin`
 }
 
-val git = feather.getGit()
+val git = feather.getBuilder()
 
-val mergedJar by configurations.creating {
-    isCanBeResolved = true
-    isCanBeConsumed = false
-}
+// https://github.com/granny/Pl3xMap/blob/0547bbba3f0b7468db17983412e95bf59a1a0b7d/build.gradle.kts#L10
+tasks {
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-dependencies {
-    mergedJar(project(":paper"))
-}
+        subprojects {
+            dependsOn(project.tasks.build)
+        }
 
-tasks.withType<Jar> {
-    dependsOn(mergedJar)
+        archiveClassifier = ""
 
-    val jars = mergedJar.map { zipTree(it) }
+        val files = subprojects.filter { it.name != "common" && it.name != "api" }.mapNotNull {
+            val file = it.tasks.jar.get().archiveFile
 
-    // merge them into main jar (except their manifests)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            if (file.isPresent) {
+                zipTree(file.get().asFile)
+            } else {
+                null
+            }
+        }
 
-    from(jars)
+        from(files) {
+            exclude("META-INF/MANIFEST.MF")
+        }
+
+        doFirst {
+            files.forEach { file ->
+                file.matching { include("META-INF/MANIFEST.MF") }.files.forEach {
+                    manifest.from(it)
+                }
+            }
+        }
+    }
 }
 
 val releaseType = rootProject.ext.get("release_type").toString()
@@ -36,11 +51,9 @@ val isRelease = releaseType.equals("release", true)
 val isAlpha = releaseType.equals("alpha", true)
 
 feather {
-    rootDirectory = rootProject.rootDir.toPath()
+    workingDirectory = rootProject.rootDir.toPath()
 
-    val data = git.getGithubCommit("${rootProject.property("repository_owner")}/${rootProject.name}")
-
-    val user = data.user
+    val origin = git.getNewestCommit(rootProject.property("repository_owner").toString(),rootProject.name, git.utils.getRemoteCommitHash())
 
     discord {
         webhook {
@@ -52,9 +65,10 @@ feather {
             }
 
             if (isRelease) {
-                username(user.getName())
+                val user = origin?.user
 
-                avatar(user.avatar)
+                username(user?.name ?: "N/A")
+                avatar(user?.getAvatar() ?: "N/A")
             } else {
                 username(rootProject.property("author_name").toString())
 
@@ -67,9 +81,9 @@ feather {
 
                     title("A new $releaseType version of ${rootProject.name} is ready!")
 
-                    //if (isRelease) {
-                    //    content("<@&${rootProject.property("discord_role_id").toString()}>")
-                    //}
+                    if (isRelease) {
+                        content("<@&${rootProject.property("discord_role_id").toString()}>")
+                    }
 
                     fields {
                         field(
@@ -89,6 +103,39 @@ feather {
                         field(
                             ":hammer: Changelog",
                             rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                        )
+                    }
+                }
+            }
+        }
+
+        webhook {
+            group(rootProject.name.lowercase())
+            task("jenkins-build")
+
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
+
+            username(rootProject.property("mascot_name").toString())
+
+            avatar(rootProject.property("mascot_avatar").toString())
+
+            embeds {
+                embed {
+                    color(color)
+
+                    title("A new $releaseType version of ${rootProject.name} is ready!")
+
+                    fields {
+                        field(
+                            ":hammer: Changelog",
+                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                        )
+
+                        field(
+                            ":link: Build Link",
+                            System.getenv("BUILD_URL") ?: "N/A",
                         )
                     }
                 }
@@ -118,8 +165,7 @@ feather {
                     fields {
                         field(
                             "The build versioned ${rootProject.version} for project ${rootProject.name} failed.",
-                            "The developer is likely already aware, he is just getting drunk.",
-                            inline = true
+                            "The developer is likely already aware, he is just getting drunk."
                         )
                     }
                 }

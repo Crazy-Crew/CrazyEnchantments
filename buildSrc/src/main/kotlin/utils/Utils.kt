@@ -9,9 +9,9 @@ fun String.updateMarkdown(): String {
         if (it.contains("##")) {
             val text = it.replace("## ", "")
 
-            builder.append("**${text}**")
+            builder.append("**${text}**").append("\n")
         } else {
-            builder.append(it)
+            builder.append(it).append("\n")
         }
     }
 

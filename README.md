@@ -2,12 +2,12 @@
 
 ![CrazyEnchantments](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/crazyenchantments/banner/webp/banner.webp)
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![CodeFactor](https://www.codefactor.io/repository/github/crazy-crew/crazyenchantments/badge)](https://www.codefactor.io/repository/github/crazy-crew/crazyenchantments)
+[![][jenkins-shield]][jenkins-url]
+[![][contributors-shield]][contributors-url]
+[![][forks-shield]][forks-url]
+[![][stars-shield]][stars-url]
+[![][issues-shield]][issues-url]
+[![][license-shield]][license-url]
 
 <big>**Adds over 80 unique enchantments to your server and more!**</big>
 
@@ -74,6 +74,9 @@ Send any console errors or files you have through https://mclo.gs/ - (We don't o
 
 ![CrazyEnchantments Statistics](https://bstats.org/signatures/bukkit/CrazyEnchantments.svg)
 </center>
+
+[jenkins-shield]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fci.crazycrew.us%2Fjob%2FCrazyEnchantments%2F&style=flat&logo=jenkins
+[jenkins-url]: https://ci.crazycrew.us/job/CrazyEnchantments/
 
 [contributors-shield]: https://img.shields.io/github/contributors-anon/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [contributors-url]: https://github.com/Crazy-Crew/CrazyEnchantments/graphs/contributors
