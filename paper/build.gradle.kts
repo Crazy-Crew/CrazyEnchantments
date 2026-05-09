@@ -13,14 +13,14 @@ repositories {
 
     maven("https://repo.bg-software.com/repository/api/")
 
+    maven("https://repo.triumphteam.dev/snapshots/")
+
     maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
+    implementation(libs.triumph.cmds)
     implementation(libs.fusion.paper)
-
-    compileOnly(libs.strokk.commands)
-    annotationProcessor(libs.strokk.processor)
 
     implementation(libs.metrics)
 

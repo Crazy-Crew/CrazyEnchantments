@@ -7,7 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.Tinker
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.commands.*;
-import com.badbones69.crazyenchantments.paper.commands.simple.BlackSmithCommand;
+import com.badbones69.crazyenchantments.paper.commands.api.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
@@ -26,20 +26,14 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.Commands;
-import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -157,22 +151,13 @@ public class CrazyEnchantments extends JavaPlugin {
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
 
-        final LifecycleEventManager<Plugin> eventManager = getLifecycleManager();
-
-        // Register commands.
-        eventManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final Commands registry = event.registrar();
-
-            List.of(
-                    new BlackSmithCommand()
-            ).forEach(command -> registry.register(command.registerPermissions().literal().createBuilder().build(), command.getDescription(), command.getAliases()));
-        });
-
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
 
         registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
 
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
+
+        CommandManager.load();
 
         FileUtils.loadFiles();
     }
