@@ -1,5 +1,4 @@
 import utils.convertList
-import kotlin.text.get
 
 plugins {
     id("com.ryderbelserion.feather.core")
@@ -18,7 +17,8 @@ val commit = utils.getRemoteCommitMessage(hash, "%B")
 
 val isBeta: Boolean = branch == rootProject.property("beta_branch").toString()
 val isAlpha: Boolean = branch == rootProject.property("alpha_branch").toString()
-val isJenkins: Boolean = System.getenv("BUILD_NUMBER") != null
+val buildNumber: String = System.getenv("BUILD_NUMBER") ?: "N/A"
+val isJenkins: Boolean = buildNumber != "N/A"
 
 val commitHash: String = hash.subSequence(0, 7).toString()
 val content: String = if (isBeta || isJenkins) {
@@ -37,6 +37,7 @@ rootProject.ext {
 
     set("current_commit", commitHash)
     set("previous_commit", System.getenv("GIT_PREVIOUS_SUCCESSFUL_COMMIT") ?: "N/A")
+    set("build_number", buildNumber)
 
     set("mc_changelog", content.lines().convertList())
 }

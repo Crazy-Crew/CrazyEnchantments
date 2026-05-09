@@ -125,7 +125,7 @@ feather {
                 embed {
                     color(color)
 
-                    title("A new $releaseType version of ${rootProject.name} is ready!")
+                    title("${rootProject.name} (#${rootProject.ext.get("build_number")})")
 
                     fields {
                         field(
