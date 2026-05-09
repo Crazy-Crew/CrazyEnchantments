@@ -14,3 +14,4 @@ jobs:
       webhook: ${{ secrets.BUILD_WEBHOOK }}
       modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
       hangar_token: ${{ secrets.HANGAR_KEY }}
+      branch: main
