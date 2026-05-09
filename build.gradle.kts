@@ -125,7 +125,7 @@ feather {
                 embed {
                     color(color)
 
-                    title("${rootProject.name} (#${rootProject.ext.get("build_number")})")
+                    title("${rootProject.name} (Build #${rootProject.ext.get("build_number")})")
 
                     fields {
                         field(
