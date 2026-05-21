@@ -26,6 +26,7 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bstats.bukkit.Metrics;
@@ -156,7 +157,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
         if (this.starter.getCrazyManager().isGkitzEnabled()) {
-            getLogger().info("G-Kitz support is now enabled.");
+            this.fusion.log(Level.WARNING, "G-Kitz Support is now enabled!");
 
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
