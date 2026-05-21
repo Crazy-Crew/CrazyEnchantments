@@ -173,16 +173,18 @@ public class CrazyEnchantments extends JavaPlugin {
     public void onDisable() {
         final Server server = getServer();
 
-        server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
-
         server.getGlobalRegionScheduler().cancelTasks(this);
         server.getAsyncScheduler().cancelTasks(this);
 
-        this.bossBarController.removeAllBossBars();
+        if (this.starter != null) {
+            server.getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
 
-        if (this.armorEnchantments != null) this.armorEnchantments.stop();
+            this.bossBarController.removeAllBossBars();
 
-        if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
+            if (this.armorEnchantments != null) this.armorEnchantments.stop();
+
+            if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
+        }
     }
 
     private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
