@@ -85,34 +85,40 @@ public class CrazyEnchantments extends JavaPlugin {
         final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
         final FileConfiguration tinker = FileKeys.TINKER.getConfiguration();
 
+        boolean isSave = false;
+
         if (!config.contains("Settings.CESuccessOverride")) {
             config.set("Settings.CESuccessOverride", "-1");
 
-            FileKeys.CONFIG.save();
+            isSave = true;
         }
 
         if (!config.contains("Settings.CESuccessOverride")) {
             config.set("Settings.CEFailureOverride", "-1");
 
-            FileKeys.CONFIG.save();
+            isSave = true;
         }
 
         if (!config.contains("Settings.Toggle-Metrics")) {
             config.set("Settings.Toggle-Metrics", false);
 
-            FileKeys.CONFIG.save();
+            isSave = true;
         }
 
         if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
             config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
-            
-            FileKeys.CONFIG.save();
+
+            isSave = true;
         }
 
         if (!tinker.contains("Settings.Tinker-Version")) {
             tinker.set("Settings.Tinker-Version", 1.0);
 
-            FileKeys.TINKER.save();
+            isSave = true;
+        }
+
+        if (isSave) {
+            FileKeys.CONFIG.save();
         }
 
         if (config.getBoolean("Settings.Toggle-Metrics", false)) new Metrics(this, 4494);
