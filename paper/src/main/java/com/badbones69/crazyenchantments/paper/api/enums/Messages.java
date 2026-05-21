@@ -11,6 +11,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public enum Messages {
+
+    CORRECT_USAGE("Correct-Usage", "&cThe correct usage for this command is &e%usage%."),
+
+    MUST_BE_CONSOLE_SENDER("Must-Be-Console-Sender", "&cYou must be console sender to run this command."),
+
+    COMMAND_NOT_FOUND("Command-Not-Found", "&c%command% is not a known command."),
     
     CONFIG_RELOAD("Config-Reload", "&7You have reloaded the Config.yml"),
     NEED_TO_UNSTACK_ITEM("Need-To-UnStack-Item", "&cYou need to unstack that item before you can use it."),

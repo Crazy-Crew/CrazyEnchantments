@@ -26,14 +26,55 @@ public class CommandManager {
     public static void load() {
         new ArgumentRelations().build();
 
-        commandManager.registerSuggestion(SuggestionKey.of("players"), (context) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
+        commandManager.registerSuggestion(SuggestionKey.of("players"), (_) -> server.getOnlinePlayers().stream().map(Player::getName).toList());
 
-        commandManager.registerSuggestion(SuggestionKey.of("numbers"), (context) -> {
+        commandManager.registerSuggestion(SuggestionKey.of("numbers"), (_) -> {
             final List<String> numbers = new ArrayList<>();
 
-            for (int i = 1; i <= 100; i++) numbers.add(String.valueOf(i));
+            for (int i = 1; i <= 16; i++) numbers.add(String.valueOf(i));
+
+            numbers.sort(Comparator.comparingInt(Integer::parseInt));
 
             return numbers;
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of("categories"), (context) -> {
+            final List<String> enchantments = new ArrayList<>();
+
+            for (final Category category : book.getCategories()) {
+                enchantments.add(category.getName());
+            }
+
+            return enchantments;
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of("player_enchantments"), (context) -> {
+            final List<String> enchantments = new ArrayList<>();
+
+            final CommandSender sender = context.getSender();
+
+            if (sender instanceof Player player) {
+                final PlayerInventory inventory = player.getInventory();
+                final ItemStack itemStack = inventory.getItemInMainHand();
+
+                book.getEnchantments(itemStack).forEach((enchantment, _) -> enchantments.add(ColorUtils.stripStringColour(enchantment.getCustomName())));
+            }
+
+            return enchantments;
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of("enchantments"), (context) -> {
+            final List<String> enchantments = new ArrayList<>();
+
+            for (final CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+                enchantments.add(enchantment.getCustomName().replace(" ", "_"));
+            }
+
+            final RegistryAccess access = RegistryAccess.registryAccess();
+
+            access.getRegistry(RegistryKey.ENCHANTMENT).forEach(enchantment -> enchantments.add(enchantment.getKey().getKey()));
+
+            return enchantments;
         });
 
         commandManager.registerSuggestion(SuggestionKey.of("doubles"), (context) -> {
