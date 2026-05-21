@@ -31,9 +31,6 @@ commands:
   crazyenchantments:
     description: Opens the Enchanter GUI.
     aliases: [ ce, enchanter ]
-  tinkerer:
-    description: Opens the Tinker GUI.
-    aliases: tinker
   gkit:
     description: Opens the GKitz GUI.
     aliases: [ gkitz, gkits ]

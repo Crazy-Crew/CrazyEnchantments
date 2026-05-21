@@ -164,8 +164,6 @@ public class CrazyEnchantments extends JavaPlugin {
 
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
 
-        registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
-
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
 
         CommandManager.load();
