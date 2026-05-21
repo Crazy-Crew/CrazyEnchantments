@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import org.bukkit.entity.Entity;
@@ -12,11 +14,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class EnchantUtils {
 
     @NotNull
     private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final static CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     /**
      * Get the highest category rarity the enchantment is in.
@@ -81,7 +86,11 @@ public class EnchantUtils {
     }
 
     public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
+        final Optional<CEPlayer> cePlayer = crazyManager.getCEPlayer(player.getUniqueId());
+
+        if (cePlayer.isPresent() && cePlayer.get().onEnchantCooldown(enchant, 20*3)) {
+            return false;
+        }
 
         return isActive(player, enchant, enchants);
     }
@@ -97,6 +106,8 @@ public class EnchantUtils {
     public static boolean isMoveEventActive(CEnchantments enchant, Player player, Map<CEnchantment, Integer> enchants) {
         if (!isActive(player, enchant, enchants)) return false;
 
-        return !plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);
+        final Optional<CEPlayer> cePlayer = crazyManager.getCEPlayer(player.getUniqueId());
+
+        return cePlayer.filter(value -> !value.onEnchantCooldown(enchant, 20)).isPresent();
     }
 }

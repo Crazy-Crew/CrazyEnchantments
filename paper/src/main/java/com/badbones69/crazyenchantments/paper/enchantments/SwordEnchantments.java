@@ -81,9 +81,7 @@ public class SwordEnchantments implements Listener {
         if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (this.crazyManager.isBreakRageOnDamageOn() && event.getEntity() instanceof Player player) {
-            CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
-
-            if (cePlayer != null) {
+            this.crazyManager.getCEPlayer(player).ifPresent(cePlayer -> {
                 RageBreakEvent rageBreakEvent = new RageBreakEvent(player, event.getDamager(), this.methods.getItemInHand(player));
                 this.plugin.getServer().getPluginManager().callEvent(rageBreakEvent);
 
@@ -95,13 +93,12 @@ public class SwordEnchantments implements Listener {
 
                     rageInformPlayer(player, Messages.RAGE_DAMAGED, 0f);
                 }
-            }
+            });
         }
 
         if (!(event.getEntity() instanceof LivingEntity en)) return;
         if (!(event.getDamager() instanceof final Player damager)) return;
 
-        CEPlayer cePlayer = this.crazyManager.getCEPlayer(damager);
         ItemStack item = this.methods.getItemInHand(damager);
 
         if (event.getEntity().isDead()) return;
@@ -135,7 +132,6 @@ public class SwordEnchantments implements Listener {
         }
 
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISORDER, damager, item, enchantments)) {
-
             Player player = (Player) event.getEntity();
             Inventory inventory = player.getInventory();
             List<ItemStack> items = new ArrayList<>();
@@ -162,42 +158,43 @@ public class SwordEnchantments implements Listener {
             if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
         }
 
-        // Check if CEPlayer is null as plugins like citizen use Player objects.
-        if (cePlayer != null && EnchantUtils.isEventActive(CEnchantments.RAGE, damager, item, enchantments)) {
+        this.crazyManager.getCEPlayer(damager).ifPresent(cePlayer -> {
+            // Check if CEPlayer is null as plugins like citizen use Player objects.
+            if (EnchantUtils.isEventActive(CEnchantments.RAGE, damager, item, enchantments)) {
+                if (cePlayer.hasRage()) {
+                    cePlayer.getRageTask().cancel();
 
-            if (cePlayer.hasRage()) {
-                cePlayer.getRageTask().cancel();
+                    if (cePlayer.getRageMultiplier() <= this.crazyManager.getRageMaxLevel())
+                        cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * crazyManager.getRageIncrement()));
 
-                if (cePlayer.getRageMultiplier() <= this.crazyManager.getRageMaxLevel())
-                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * crazyManager.getRageIncrement()));
+                    int rageUp = cePlayer.getRageLevel() + 1;
 
-                int rageUp = cePlayer.getRageLevel() + 1;
+                    if (cePlayer.getRageMultiplier().intValue() >= rageUp) {
+                        rageInformPlayer(damager, Messages.RAGE_RAGE_UP, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
+                        cePlayer.setRageLevel(rageUp);
+                    }
 
-                if (cePlayer.getRageMultiplier().intValue() >= rageUp) {
-                    rageInformPlayer(damager, Messages.RAGE_RAGE_UP, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
-                    cePlayer.setRageLevel(rageUp);
+                    event.setDamage(event.getDamage() * cePlayer.getRageMultiplier());
+                } else {
+                    cePlayer.setRageMultiplier(1.0);
+                    cePlayer.setRage(true);
+                    cePlayer.setRageLevel(1);
+
+                    rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.crazyManager.getRageMaxLevel()));
                 }
 
-                event.setDamage(event.getDamage() * cePlayer.getRageMultiplier());
-            } else {
-                cePlayer.setRageMultiplier(1.0);
-                cePlayer.setRage(true);
-                cePlayer.setRageLevel(1);
+                cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, damager) {
+                    @Override
+                    public void run() {
+                        cePlayer.setRageMultiplier(0.0);
+                        cePlayer.setRage(false);
+                        cePlayer.setRageLevel(0);
 
-                rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.crazyManager.getRageMaxLevel()));
+                        rageInformPlayer(damager, Messages.RAGE_COOLED_DOWN, 0f);
+                    }
+                }.runDelayed(80));
             }
-
-            cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, cePlayer.getPlayer()) {
-                @Override
-                public void run() {
-                    cePlayer.setRageMultiplier(0.0);
-                    cePlayer.setRage(false);
-                    cePlayer.setRageLevel(0);
-
-                    rageInformPlayer(damager, Messages.RAGE_COOLED_DOWN, 0f);
-                }
-            }.runDelayed(80));
-        }
+        });
 
         if (en instanceof Player player && EnchantUtils.isEventActive(CEnchantments.SKILLSWIPE, damager, item, enchantments)) {
             int amount = 4 + enchantments.get(CEnchantments.SKILLSWIPE.getEnchantment());

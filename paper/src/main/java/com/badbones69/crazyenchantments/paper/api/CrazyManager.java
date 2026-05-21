@@ -60,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -113,7 +114,7 @@ public class CrazyManager {
 
     // Arrays.
     private final List<GKitz> gkitz = new ArrayList<>();
-    private final List<CEPlayer> players = new ArrayList<>();
+    private final Map<UUID, CEPlayer> players = new HashMap<>();
     private final List<Material> blockList = new ArrayList<>();
     private final Map<Material, Double> headMap = new HashMap<>();
 
@@ -342,19 +343,20 @@ public class CrazyManager {
      */
     public void loadCEPlayer(Player player) {
         final FileConfiguration data = FileKeys.DATA.getConfiguration();
-        String uuid = player.getUniqueId().toString();
+        final UUID uuid = player.getUniqueId();
+        final String asString = uuid.toString();
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
 
         for (GKitz kit : getGKitz()) {
-            if (data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
+            if (data.contains("Players." + asString + ".GKitz." + kit.getName())) {
                 Calendar coolDown = Calendar.getInstance();
-                coolDown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
+                coolDown.setTimeInMillis(data.getLong("Players." + asString + ".GKitz." + kit.getName()));
                 gkitCoolDowns.add(new GkitCoolDown(kit, coolDown));
             }
         }
 
-        addCEPlayer(new CEPlayer(player, gkitCoolDowns));
+        addCEPlayer(uuid, new CEPlayer(uuid, gkitCoolDowns));
     }
 
     /**
@@ -365,19 +367,17 @@ public class CrazyManager {
     public void unloadCEPlayer(Player player) {
         final FileConfiguration data = FileKeys.DATA.getConfiguration();
 
-        String uuid = player.getUniqueId().toString();
+        final UUID uuid = player.getUniqueId();
 
-        CEPlayer cePlayer = getCEPlayer(player);
-
-        if (cePlayer != null) {
+        getCEPlayer(uuid).ifPresent(cePlayer -> {
             for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
                 data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
             }
 
             FileKeys.DATA.save();
-        }
 
-        removeCEPlayer(cePlayer);
+            removeCEPlayer(uuid);
+        });
     }
 
     /**
@@ -385,7 +385,7 @@ public class CrazyManager {
      * @param player The player you wish to back up.
      */
     public void backupCEPlayer(Player player) {
-        backupCEPlayer(getCEPlayer(player));
+        getCEPlayer(player).ifPresent(this::backupCEPlayer);
     }
 
     /**
@@ -394,7 +394,7 @@ public class CrazyManager {
      */
     private void backupCEPlayer(CEPlayer cePlayer) {
         final FileConfiguration data = FileKeys.DATA.getConfiguration();
-        String uuid = cePlayer.getPlayer().getUniqueId().toString();
+        String uuid = cePlayer.getUuid().toString();
 
         for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
             data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
@@ -448,20 +448,12 @@ public class CrazyManager {
      * @param player The player you want to get as a CEPlayer.
      * @return The player but as a CEPlayer. Will return null if not found.
      */
-    public CEPlayer getCEPlayer(Player player) {
-        for (CEPlayer cePlayer : getCEPlayers()) {
-            if (cePlayer.getPlayer() == player) return cePlayer;
-        }
-
-        return null;
+    public Optional<CEPlayer> getCEPlayer(Player player) {
+        return Optional.ofNullable(this.players.get(player.getUniqueId()));
     }
 
-    public CEPlayer getCEPlayer(UUID uuid) {
-        for (CEPlayer cePlayer : getCEPlayers()) {
-            if (cePlayer.getPlayer().getUniqueId().equals(uuid)) return cePlayer;
-        }
-
-        return null;
+    public Optional<CEPlayer> getCEPlayer(UUID uuid) {
+        return Optional.ofNullable(this.players.get(uuid));
     }
 
     /**
@@ -469,7 +461,7 @@ public class CrazyManager {
      * @return All CEPlayer's that are loading and in a list.
      */
     public List<CEPlayer> getCEPlayers() {
-        return this.players;
+        return this.players.values().stream().toList();
     }
     
     public CEBook getRandomEnchantmentBook(Category category) {
@@ -905,12 +897,12 @@ public class CrazyManager {
         return this.rageIncrement;
     }
 
-    private void addCEPlayer(CEPlayer player) {
-        this.players.add(player);
+    private void addCEPlayer(UUID uuid, CEPlayer player) {
+        this.players.put(uuid, player);
     }
 
-    private void removeCEPlayer(CEPlayer player) {
-        this.players.remove(player);
+    private void removeCEPlayer(UUID uuid) {
+        this.players.remove(uuid);
     }
 
     private List<ItemStack> getInfoGKit(List<String> itemStrings) {

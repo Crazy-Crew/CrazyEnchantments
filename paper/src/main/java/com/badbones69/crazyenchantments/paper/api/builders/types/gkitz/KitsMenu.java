@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -61,28 +60,28 @@ public class KitsMenu extends InventoryBuilder {
             getInventory().setItem(slot, ItemBuilder.convertString(value).build());
         }
 
-        final CEPlayer cePlayer = this.crazyManager.getCEPlayer(getPlayer().getUniqueId());
+        this.crazyManager.getCEPlayer(getPlayer()).ifPresent(cePlayer -> {
+            for (final GKitz kit : this.crazyManager.getGKitz()) {
+                final ItemStack displayItem = kit.getDisplayItem().clone();
+                final List<Component> lore = new ArrayList<>();
+                final GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
 
-        for (final GKitz kit : this.crazyManager.getGKitz()) {
-            final ItemStack displayItem = kit.getDisplayItem().clone();
-            final List<Component> lore = new ArrayList<>();
-            final GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
 
+                final List<Component> currentLore = displayItem.lore();
 
-            final List<Component> currentLore = displayItem.lore();
-
-            if (currentLore != null) {
-                for (Component line : currentLore) {
-                    String legacyLoreLine = ColorUtils.toLegacy(line);
-                    if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
-                    lore.add(line);
+                if (currentLore != null) {
+                    for (Component line : currentLore) {
+                        String legacyLoreLine = ColorUtils.toLegacy(line);
+                        if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
+                        lore.add(line);
+                    }
                 }
+
+                displayItem.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
+
+                getInventory().setItem(kit.getSlot() - 1, displayItem);
             }
-
-            displayItem.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(lore).build());
-
-            getInventory().setItem(kit.getSlot() - 1, displayItem);
-        }
+        });
 
         return this;
     }
@@ -124,47 +123,47 @@ public class KitsMenu extends InventoryBuilder {
 
             if (itemStack == null || itemStack.isEmpty()) return;
 
-            final CEPlayer cePlayer = this.crazyManager.getCEPlayer(player.getUniqueId());
+            this.crazyManager.getCEPlayer(player.getUniqueId()).ifPresent(cePlayer -> {
+                if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
 
-            if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
+                final PersistentDataContainerView container = itemStack.getPersistentDataContainer();
 
-            final PersistentDataContainerView container = itemStack.getPersistentDataContainer();
+                if (!container.has(DataKeys.gkit_type.getNamespacedKey())) return;
 
-            if (!container.has(DataKeys.gkit_type.getNamespacedKey())) return;
+                final String kitName = container.get(DataKeys.gkit_type.getNamespacedKey(), PersistentDataType.STRING);
 
-            final String kitName = container.get(DataKeys.gkit_type.getNamespacedKey(), PersistentDataType.STRING);
+                if (kitName == null) return;
 
-            if (kitName == null) return;
+                final GKitz kit = this.crazyManager.getGKitFromName(kitName);
 
-            final GKitz kit = this.crazyManager.getGKitFromName(kitName);
+                if (event.getAction() == InventoryAction.PICKUP_HALF) {
+                    final int amountOfItems = kit.getPreviewItems().size() + 1; // Add 1 to account for the back button.
+                    final int slots = Math.min(((amountOfItems / 9) + (amountOfItems % 9 > 0 ? 1 : 0)) * 9, 54);
 
-            if (event.getAction() == InventoryAction.PICKUP_HALF) {
-                final int amountOfItems = kit.getPreviewItems().size() + 1; // Add 1 to account for the back button.
-                final int slots = Math.min(((amountOfItems / 9) + (amountOfItems % 9 > 0 ? 1 : 0)) * 9, 54);
+                    MenuManager.openKitsPreviewMenu(player, slots, kit);
 
-                MenuManager.openKitsPreviewMenu(player, slots, kit);
-
-                return;
-            }
-
-            final Map<String, String> placeholders = new HashMap<>(1);
-
-            placeholders.put("%Kit%", kit.getName());
-
-            if (cePlayer.hasGkitPermission(kit)) {
-                if (cePlayer.canUseGKit(kit)) {
-                    cePlayer.giveGKit(kit);
-                    cePlayer.addCoolDown(kit);
-
-                    player.updateInventory();
-
-                    player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
-                } else {
-                    player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                    return;
                 }
-            } else {
-                player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
-            }
+
+                final Map<String, String> placeholders = new HashMap<>(1);
+
+                placeholders.put("%Kit%", kit.getName());
+
+                if (cePlayer.hasGkitPermission(kit)) {
+                    if (cePlayer.canUseGKit(kit)) {
+                        cePlayer.giveGKit(kit);
+                        cePlayer.addCoolDown(kit);
+
+                        player.updateInventory();
+
+                        player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                    } else {
+                        player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                    }
+                } else {
+                    player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                }
+            });
         }
     }
 }

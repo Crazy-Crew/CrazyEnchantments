@@ -11,6 +11,7 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 //todo() register gkit permissions
@@ -32,7 +35,7 @@ public class CEPlayer {
     @NotNull
     private final Methods methods = this.plugin.getStarter().getMethods();
 
-    private final Player player;
+    private final UUID uuid;
     private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
     private boolean hasRage;
@@ -42,72 +45,89 @@ public class CEPlayer {
     
     /**
      * Used to make a new CEPlayer.
-     * @param player The player.
+     * @param uuid The player uuid.
      * @param gkitCoolDowns The cool-downs the player has.
      */
-    public CEPlayer(Player player, List<GkitCoolDown> gkitCoolDowns) {
-        this.player = player;
+    public CEPlayer(UUID uuid, List<GkitCoolDown> gkitCoolDowns) {
         this.gkitCoolDowns = gkitCoolDowns;
         this.hasRage = false;
         this.rageLevel = 0;
         this.rageMultiplier = 0.0;
         this.rageTask = null;
+        this.uuid = uuid;
     }
     
     /**
      * Get the player from the CEPlayer.
      * @return Player from the CEPlayer.
      */
-    public Player getPlayer() {
-        return this.player;
+    public Optional<Player> getPlayer() {
+        return Optional.ofNullable(this.server.getPlayer(this.uuid));
     }
-    
+
+    public UUID getUuid() {
+        return this.uuid;
+    }
+
     /**
      * Give a player a gkit.
      * @param kit The gkit you wish to give them.
      */
     public void giveGKit(GKitz kit) {
-        for (ItemStack item : kit.getKitItems()) {
-            if (kit.canAutoEquip()) {
-                switch (item.getType().toString().contains("_") ? item.getType().toString().toLowerCase().split("_")[1] : "No") {
-                    case "helmet" -> {
-                        if (this.player.getEquipment().getHelmet() != null) break;
-                        this.player.getEquipment().setHelmet(item);
-                        continue;
+        getPlayer().ifPresent(player -> {
+            final EntityEquipment equipment = player.getEquipment();
+
+            for (ItemStack item : kit.getKitItems()) {
+                if (kit.canAutoEquip()) {
+                    switch (item.getType().toString().contains("_") ? item.getType().toString().toLowerCase().split("_")[1] : "No") {
+                        case "helmet" -> {
+                            if (equipment.getHelmet().isEmpty()) break;
+
+                            equipment.setHelmet(item);
+
+                            continue;
+                        }
+                        case "chestplate" -> {
+                            if (equipment.getChestplate().isEmpty()) break;
+
+                            equipment.setChestplate(item);
+
+                            continue;
+                        }
+                        case "leggings" -> {
+                            if (equipment.getLeggings().isEmpty()) break;
+
+                            equipment.setLeggings(item);
+
+                            continue;
+                        }
+                        case "boots" -> {
+                            if (equipment.getBoots().isEmpty()) break;
+
+                            equipment.setBoots(item);
+
+                            continue;
+                        }
                     }
-                    case "chestplate" -> {
-                        if (this.player.getEquipment().getChestplate() != null) break;
-                        this.player.getEquipment().setChestplate(item);
-                        continue;
-                    }
-                    case "leggings" -> {
-                        if (this.player.getEquipment().getLeggings() != null) break;
-                        this.player.getEquipment().setLeggings(item);
-                        continue;
-                    }
-                    case "boots" -> {
-                        if (this.player.getEquipment().getBoots() != null) break;
-                        this.player.getEquipment().setBoots(item);
-                        continue;
-                    }
+
                 }
 
+                this.methods.addItemToInventory(player, item);
             }
 
-            this.methods.addItemToInventory(this.player, item);
-        }
+            new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+                @Override
+                public void run() {
+                    final String name = player.getName();
 
-        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
-            @Override
-            public void run() {
-                final String name = player.getName();
-                final ConsoleCommandSender sender = server.getConsoleSender();
+                    final ConsoleCommandSender sender = server.getConsoleSender();
 
-                for (final String cmd : kit.getCommands()) {
-                    server.dispatchCommand(sender, cmd.replace("%Player%", name).replace("%player%", name));
+                    for (final String cmd : kit.getCommands()) {
+                        server.dispatchCommand(sender, cmd.replace("%Player%", name).replace("%player%", name));
+                    }
                 }
-            }
-        }.runNow();
+            }.runNow();
+        });
     }
     
     /**
@@ -116,7 +136,15 @@ public class CEPlayer {
      * @return True if they can use it and false if they can't.
      */
     public boolean hasGkitPermission(GKitz kit) {
-        return this.player.hasPermission("crazyenchantments.bypass.gkitz") || this.player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase());
+        final Optional<Player> optional = getPlayer();
+
+        if (optional.isEmpty()) {
+            return true;
+        }
+
+        final Player player = optional.get();
+
+        return player.hasPermission("crazyenchantments.bypass.gkitz") || player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase());
     }
     
     /**
@@ -125,10 +153,18 @@ public class CEPlayer {
      * @return True if they don't have a cool-down, and they have permission.
      */
     public boolean canUseGKit(GKitz kit) {
-        if (this.player.hasPermission("crazyenchantments.bypass.gkitz")) {
+        final Optional<Player> optional = getPlayer();
+
+        if (optional.isEmpty()) {
+            return true;
+        }
+
+        final Player player = optional.get();
+
+        if (player.hasPermission("crazyenchantments.bypass.gkitz")) {
             return true;
         } else {
-            if (this.player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase())) {
+            if (player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase())) {
                 for (GkitCoolDown gkitCooldown : getCoolDowns()) {
                     if (gkitCooldown.getGKitz() == kit) return gkitCooldown.isCoolDownOver();
                 }

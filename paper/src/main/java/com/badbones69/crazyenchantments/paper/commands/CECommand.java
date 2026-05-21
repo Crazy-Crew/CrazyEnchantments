@@ -31,6 +31,7 @@ import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -134,7 +135,11 @@ public class CECommand implements CommandExecutor {
             }
             case "reload" -> { // /ce reload
                 if (hasPermission(sender, "reload")) {
-                    this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
+                    final Server server = this.plugin.getServer();
+
+                    for (final Player player : server.getOnlinePlayers()) {
+                        this.crazyManager.backupCEPlayer(player);
+                    }
 
                     this.fileManager.refresh(false);
 

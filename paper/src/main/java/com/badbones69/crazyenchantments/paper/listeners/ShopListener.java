@@ -100,15 +100,20 @@ public class ShopListener implements Listener {
                 CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
                 if (book != null) {
-                    BuyBookEvent buyBookEvent = new BuyBookEvent(this.crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                    this.plugin.getServer().getPluginManager().callEvent(buyBookEvent);
-                    player.getInventory().addItem(book.buildBook());
+                    this.crazyManager.getCEPlayer(player).ifPresent(cePlayer -> {
+                        BuyBookEvent buyBookEvent = new BuyBookEvent(cePlayer, category.getCurrency(), category.getCost(), book);
+
+                        this.plugin.getServer().getPluginManager().callEvent(buyBookEvent);
+
+                        player.getInventory().addItem(book.buildBook());
+                    });
                 } else {
                     player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                 }
 
                 return;
             }
+
             LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {

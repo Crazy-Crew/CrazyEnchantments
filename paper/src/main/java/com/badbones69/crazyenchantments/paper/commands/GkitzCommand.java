@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.command.Command;
@@ -17,8 +16,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
+import java.util.Map;
 
 public class GkitzCommand implements CommandExecutor {
 
@@ -40,16 +39,11 @@ public class GkitzCommand implements CommandExecutor {
 
         if (crazyManager.isGkitzEnabled()) {
             if (args.length == 0) {
-
-                if (!isPlayer) {
+                if (!(sender instanceof Player player)) {
                     sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+
                     return true;
                 }
-
-                Player player = (Player) sender;
-
-                // Load it because if they are ever null.
-                if (this.crazyManager.getCEPlayer(player) == null) this.crazyManager.loadCEPlayer(player);
 
                 if (hasPermission(sender, "gkitz")) {
                     final FileConfiguration gkitz = FileKeys.GKITZ.getConfiguration();
@@ -61,8 +55,10 @@ public class GkitzCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("reset")) { // /gkitz reset <kit> [player]
                     if (hasPermission(sender, "reset")) {
                         Player player;
+
                         if (args.length < 2) {
                             sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/GKitz Reset <Kit> [Player]"));
+
                             return true;
                         }
 
@@ -91,14 +87,23 @@ public class GkitzCommand implements CommandExecutor {
                             }
                         }
 
-                        this.crazyManager.getCEPlayer(player).removeCoolDown(kit);
-                        HashMap<String, String> placeholders = new HashMap<>();
+                        if (player == null) {
+                            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 
-                        placeholders.put("%Player%", player.getName());
-                        placeholders.put("%Gkit%", kit.getName());
-                        placeholders.put("%Kit%", kit.getName());
-                        sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
+                            return true;
+                        }
 
+                        this.crazyManager.getCEPlayer(player.getUniqueId()).ifPresent(cePlayer -> {
+                            cePlayer.removeCoolDown(kit);
+
+                            Map<String, String> placeholders = new HashMap<>();
+
+                            placeholders.put("%Player%", player.getName());
+                            placeholders.put("%Gkit%", kit.getName());
+                            placeholders.put("%Kit%", kit.getName());
+
+                            sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
+                        });
                     }
                 } else {
                     if (hasPermission(sender, "gkitz")) {
@@ -107,19 +112,24 @@ public class GkitzCommand implements CommandExecutor {
                         Player player;
 
                         if (kit == null) {
-                            HashMap<String, String> placeholders = new HashMap<>();
+                            Map<String, String> placeholders = new HashMap<>();
+
                             placeholders.put("%Kit%", args[0]);
                             placeholders.put("%Gkit%", args[0]);
+
                             sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
+
                             return true;
                         }
 
                         if (args.length >= 2) {
                             if (!this.methods.isPlayerOnline(args[1], sender)) {
+
                                 return true;
                             } else {
                                 if (hasPermission(sender, "crazyenchantments.gkitz.give")) {
                                     player = this.methods.getPlayer(args[1]); // Targeting a player.
+
                                     adminGive = true;
                                 } else {
                                     return true;
@@ -128,36 +138,46 @@ public class GkitzCommand implements CommandExecutor {
                         } else {
                             if (!isPlayer) {
                                 sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+
                                 return true;
                             } else {
                                 player = (Player) sender; // The player is the sender.
                             }
                         }
 
-                        CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
-                        HashMap<String, String> placeholders = new HashMap<>();
-                        placeholders.put("%Player%", player.getName());
-                        placeholders.put("%Gkit%", kit.getName());
-                        placeholders.put("%Kit%", kit.getName());
+                        if (player == null) {
+                            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 
-                        if (cePlayer.hasGkitPermission(kit) || adminGive) {
-                            if (cePlayer.canUseGKit(kit) || adminGive) {
-                                cePlayer.giveGKit(kit);
-                                player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
-
-                                if (adminGive) {
-                                    sender.sendMessage(Messages.GIVEN_GKIT.getMessage(placeholders));
-                                } else {
-                                    cePlayer.addCoolDown(kit);
-                                }
-                            } else {
-                                sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
-                                return true;
-                            }
-                        } else {
-                            sender.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
                             return true;
                         }
+
+                        final boolean isAdminGive = adminGive;
+
+                        this.crazyManager.getCEPlayer(player).ifPresent(cePlayer -> {
+                            Map<String, String> placeholders = new HashMap<>();
+
+                            placeholders.put("%Player%", player.getName());
+                            placeholders.put("%Gkit%", kit.getName());
+                            placeholders.put("%Kit%", kit.getName());
+
+                            if (cePlayer.hasGkitPermission(kit) || isAdminGive) {
+                                if (cePlayer.canUseGKit(kit) || isAdminGive) {
+                                    cePlayer.giveGKit(kit);
+
+                                    player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+
+                                    if (isAdminGive) {
+                                        sender.sendMessage(Messages.GIVEN_GKIT.getMessage(placeholders));
+                                    } else {
+                                        cePlayer.addCoolDown(kit);
+                                    }
+                                } else {
+                                    sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                                }
+                            } else {
+                                sender.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                            }
+                        });
                     }
                 }
             }
