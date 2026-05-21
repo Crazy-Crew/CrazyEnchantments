@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.paper;
 
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.commands.*;
 import com.badbones69.crazyenchantments.paper.commands.api.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
@@ -52,12 +52,16 @@ public class CrazyEnchantments extends JavaPlugin {
     private final BossBarController bossBarController = new BossBarController(this);
 
     private PaperFileManager fileManager;
+    private CrazyPlatform platform;
     private FusionPaper fusion;
 
     @Override
     public void onEnable() {
         this.fusion = new FusionPaper(this);
         this.fusion.init();
+
+        this.platform = new CrazyPlatform();
+        this.platform.init();
 
         this.fileManager = this.fusion.getFileManager();
 
@@ -158,8 +162,6 @@ public class CrazyEnchantments extends JavaPlugin {
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
 
         CommandManager.load();
-
-        FileUtils.loadFiles();
     }
 
     @Override
@@ -203,8 +205,8 @@ public class CrazyEnchantments extends JavaPlugin {
         return bossBarController;
     }
 
-    public boolean isLogging() {
-        return this.fusion.isVerbose();
+    public @NotNull final CrazyPlatform getPlatform() {
+        return this.platform;
     }
 
     public @NotNull final PaperFileManager getFileManager() {

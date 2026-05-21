@@ -29,7 +29,7 @@ kingdoms = "1.16.20.5" # https://www.spigotmc.org/resources/kingdomsx.77670/
 
 ## Other
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-fusion = "4.21.3" # https://github.com/ryderbelserion/Fusion
+fusion = "4.22.0" # https://github.com/ryderbelserion/Fusion
 bStats = "3.2.1" # https://github.com/Bastian/bStats
 
 ## Gradle Plugins

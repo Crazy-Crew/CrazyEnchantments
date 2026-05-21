@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.ShopMenu;
@@ -22,7 +23,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
@@ -50,6 +50,8 @@ public class CECommand implements CommandExecutor {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
     private final Starter starter = this.plugin.getStarter();
 
     private final PaperFileManager fileManager = this.plugin.getFileManager();
@@ -61,9 +63,6 @@ public class CECommand implements CommandExecutor {
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Support.
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     // Listeners
     private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
@@ -141,6 +140,8 @@ public class CECommand implements CommandExecutor {
                         this.crazyManager.backupCEPlayer(player);
                     }
 
+                    this.platform.init();
+
                     this.fileManager.refresh(false);
 
                     MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
@@ -152,12 +153,11 @@ public class CECommand implements CommandExecutor {
                     KitsManager.load();
 
                     sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
-
-                    FileUtils.loadFiles();
                 }
 
                 return true;
             }
+
             case "limit" -> {
                 if (hasPermission(sender, "limit")) {
                     HashMap<String, String> placeholders = new HashMap<>();
