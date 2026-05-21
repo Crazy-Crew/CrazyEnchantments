@@ -47,8 +47,14 @@ public class CrazyPlatform {
                     }
                 });
             } catch (final Exception exception) {
-                this.fusion.log(Level.WARNING, "Failed to delete %s.", exception, exception);
+                this.fusion.log(Level.WARNING, "Failed to delete %s.", exception, examples);
             }
+        }
+
+        try {
+            Files.createDirectory(examples);
+        } catch (IOException exception) {
+            this.fusion.log(Level.WARNING, "Failed to create directory %s.", exception, examples);
         }
 
         List.of(
