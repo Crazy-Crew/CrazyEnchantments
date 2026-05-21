@@ -111,7 +111,7 @@ public class CrazyEnchantments extends JavaPlugin {
             FileKeys.TINKER.save();
         }
 
-        if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
+        if (config.getBoolean("Settings.Toggle-Metrics", false)) new Metrics(this, 4494);
 
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(new ShopListener(), this);
