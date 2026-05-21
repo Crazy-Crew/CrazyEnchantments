@@ -58,10 +58,8 @@ public class FileUtils {
         File dir = directory.toFile();
 
         if (!dir.exists()) {
-            if (dir.mkdirs()) {
-                // Temp Fix to remove pointless logging.
-                // if (plugin.isLogging()) plugin.getLogger().warning("Created " + dir.getName() + " because we couldn't find it.");
-            }
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
         }
 
         ClassLoader loader = plugin.getClass().getClassLoader();
