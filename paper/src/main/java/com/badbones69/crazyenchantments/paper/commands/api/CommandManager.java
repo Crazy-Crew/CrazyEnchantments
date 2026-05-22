@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.commands.api.relations.ArgumentRelations;
+import com.badbones69.crazyenchantments.paper.commands.types.KitCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.BookCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.BottleCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.DustCommand;
@@ -124,6 +125,14 @@ public class CommandManager {
             }
 
             Collections.sort(completions);
+
+            return completions;
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of("kits"), (context) -> {
+            final List<String> completions = new ArrayList<>();
+
+            crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
 
             return completions;
         });
@@ -272,7 +281,9 @@ public class CommandManager {
                 new EnchantCommand(),
 
                 new LimitCommand(),
-                new HelpCommand()
+                new HelpCommand(),
+
+                new KitCommand()
         ).forEach(commandManager::registerCommand);
     }
 
