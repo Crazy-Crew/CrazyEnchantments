@@ -27,41 +27,12 @@ softdepend:
   - Oraxen
   - MCMMO
 
-commands:
-  crazyenchantments:
-    description: Opens the Enchanter GUI.
-    aliases: [ ce, enchanter ]
-  gkit:
-    description: Opens the GKitz GUI.
-    aliases: [ gkitz, gkits ]
-
 permissions:
-  crazyenchantments.tinker:
-    default: true
-
   crazyenchantments.blacksmith.others:
     default: op
 
-  crazyenchantments.blacksmith:
-    default: true
-
   crazyenchantments.gkitz:
     default: true
-
-  crazyenchantments.gui:
-    default: true
-
-  crazyenchantments.limit:
-    default: true
-
-  crazyenchantments.sign:
-    default: false
-
-  crazyenchantments.updateenchants:
-    default: false
-
-  crazyenchantments.checkenchants:
-    default: false
 
   crazyenchantments.player.*:
     default: false
@@ -72,7 +43,6 @@ permissions:
       crazyenchantments.gui: true
       crazyenchantments.limit: true
       crazyenchantments.info: true
-      crazyenchantments.sign: true
 
   crazyenchantments.admin.*:
     default: false
@@ -110,37 +80,4 @@ permissions:
     default: op
 
   crazyenchantments.access:
-    default: op
-
-  crazyenchantments.reload:
-    default: op
-
-  crazyenchantments.remove:
-    default: op
-
-  crazyenchantments.add:
-    default: op
-
-  crazyenchantments.spawn:
-    default: op
-
-  crazyenchantments.scroll:
-    default: op
-
-  crazyenchantments.crystal:
-    default: op
-  
-  crazyenchantments.slotcrystal:
-    default: op
-
-  crazyenchantments.scrambler:
-    default: op
-
-  crazyenchantments.dust:
-    default: op
-
-  crazyenchantments.book:
-    default: op
-
-  crazyenchantments.lostbook:
     default: op

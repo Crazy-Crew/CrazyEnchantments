@@ -31,9 +31,6 @@ import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -162,10 +159,6 @@ public class CrazyEnchantments extends JavaPlugin {
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
 
-        registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
-
-        registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
-
         CommandManager.load();
     }
 
@@ -184,14 +177,6 @@ public class CrazyEnchantments extends JavaPlugin {
             if (this.armorEnchantments != null) this.armorEnchantments.stop();
 
             if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
-        }
-    }
-
-    private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(commandExecutor);
-
-            if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
         }
     }
 

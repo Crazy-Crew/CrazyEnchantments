@@ -98,7 +98,15 @@ public class SlotCrystalListener implements Listener {
         return crystalItem.getPersistentDataContainer().has(DataKeys.slot_crystal.getNamespacedKey());
     }
 
+    public ItemStack getSlotCrystal(final int amount) {
+        final ItemStack itemStack = slot_crystal.clone();
+
+        itemStack.setAmount(amount);
+
+        return itemStack;
+    }
+
     public ItemStack getSlotCrystal() {
-        return slot_crystal.clone();
+        return getSlotCrystal(1);
     }
 }

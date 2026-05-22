@@ -56,9 +56,7 @@ public class ProtectionCrystalSettings {
     public final ItemStack getCrystal(final int amount) {
         final ItemStack item = this.crystal.setAmount(amount).build();
 
-        item.editPersistentDataContainer(container -> {
-            container.set(DataKeys.protection_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-        });
+        item.editPersistentDataContainer(container -> container.set(DataKeys.protection_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true));
 
         return item;
     }

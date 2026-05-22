@@ -1061,7 +1061,7 @@ public class ItemBuilder {
      * @return The String as an ItemBuilder.
      */
     public static ItemBuilder convertString(final String itemString) {
-        return convertString(itemString, null);
+        return convertString(itemString, true, null);
     }
 
     /**
@@ -1071,11 +1071,11 @@ public class ItemBuilder {
      * @param placeHolder The placeholder to use if there is an error.
      * @return The String as an ItemBuilder.
      */
-    public static ItemBuilder convertString(String itemString, final String placeHolder) {
+    public static ItemBuilder convertString(String itemString, final boolean splitSpace, final String placeHolder) {
         ItemBuilder itemBuilder = new ItemBuilder();
         itemString = itemString.strip();
         try {
-            for (String optionString : itemString.split(", ")) {
+            for (String optionString : splitSpace ? itemString.split(", ") : itemString.split(",")) {
                 String option = optionString.split(":")[0];
                 String value = optionString.replace(option + ":", "").replace(option, "");
 
@@ -1183,7 +1183,7 @@ public class ItemBuilder {
      * @return The list of ItemBuilders.
      */
     public static List<ItemBuilder> convertStringList(List<String> itemStrings, String placeholder) {
-        return itemStrings.stream().map(itemString -> convertString(itemString, placeholder)).collect(Collectors.toList());
+        return itemStrings.stream().map(itemString -> convertString(itemString, false, placeholder)).collect(Collectors.toList());
     }
 
     /**
