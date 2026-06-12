@@ -20,8 +20,8 @@ public class DebugCommand extends EnchantCommand {
     @Permission(value = "crazyenchantments.debug", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments debug")
     public void execute(final CommandSender sender) {
-        List<String> brokenEnchantments = new ArrayList<>();
-        List<String> brokenEnchantmentTypes = new ArrayList<>();
+        final List<String> brokenEnchantments = new ArrayList<>();
+        final List<String> brokenEnchantmentTypes = new ArrayList<>();
 
         final YamlConfiguration configuration = FileKeys.ENCHANTMENTS.getConfiguration();
 

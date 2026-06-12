@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -10,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.PermissionDefault;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class ScrollCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
@@ -21,7 +24,7 @@ public class ScrollCommand extends com.badbones69.crazyenchantments.paper.comman
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage("Inventory must be empty.");
+            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
             return;
         }
@@ -30,22 +33,31 @@ public class ScrollCommand extends com.badbones69.crazyenchantments.paper.comman
             final ItemStack itemStack = scroll.getScroll(amount);
 
             if (itemStack.isEmpty()) {
-                player.sendMessage("Item can't be empty.");
+                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                        "%command%",
+                        "scroll"
+                )));
 
                 return;
             }
             
             inventory.addItem(itemStack);
 
-            //todo() send message
-        }, () -> {
-            //todo() send message
+            final Map<String, String> placeholders = new HashMap<>();
 
-            //HashMap<String, String> placeholders = new HashMap<>();
+            placeholders.putIfAbsent("%type%", scroll.getName());
+
+            player.sendMessage(Messages.GET_SCROLL.getMessage(placeholders));
+
+            placeholders.putIfAbsent("%player%", player.getName());
+
+            sender.sendMessage(Messages.GIVE_SCROLL.getMessage(placeholders));
+        }, () -> {
+            final Map<String, String> placeholders = new HashMap<>();
             
-            //placeholders.put("%Category%", name);
+            placeholders.put("%Category%", name);
             
-            //sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
         });
     }
 }

@@ -26,7 +26,7 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage("Inventory must be empty.");
+            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
             return;
         }
@@ -35,12 +35,15 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
             final ItemStack itemStack = dust.getDust(percent, amount); //todo() random support
 
             if (itemStack.isEmpty()) {
-                player.sendMessage("Item can't be empty.");
+                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                        "%command%",
+                        "dust"
+                )));
 
                 return;
             }
 
-            Map<String, String> placeholders = new HashMap<>();
+            final Map<String, String> placeholders = new HashMap<>();
 
             placeholders.put("%Amount%", String.valueOf(amount));
             placeholders.put("%Player%", player.getName());
@@ -64,13 +67,11 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
                 }
             }
         }, () -> {
-            //todo() send message
+            final Map<String, String> placeholders = new HashMap<>();
 
-            //HashMap<String, String> placeholders = new HashMap<>();
+            placeholders.put("%Category%", name);
 
-            //placeholders.put("%Category%", name);
-
-            //sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
         });
     }
 }

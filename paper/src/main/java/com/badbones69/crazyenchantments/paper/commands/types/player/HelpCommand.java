@@ -17,7 +17,7 @@ public class HelpCommand extends EnchantCommand {
     @Permission(value = "crazyenchantments.gui", def = PermissionDefault.TRUE)
     @Syntax("/crazyenchantments")
     public void gui(final Player player) {
-        ShopManager shopManager = this.starter.getShopManager();
+        final ShopManager shopManager = this.starter.getShopManager();
 
         player.openInventory(new ShopMenu(player, shopManager.getInventorySize(), shopManager.getInventoryName()).build().getInventory());
     }

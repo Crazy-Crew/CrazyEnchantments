@@ -21,12 +21,12 @@ public class CheckCommand extends EnchantCommand {
     @Syntax("/crazyenchantments check [player]")
     public void execute(final CommandSender sender, @Suggestion("players") final Player player) {
         Arrays.stream(player.getEquipment().getArmorContents()).filter(Objects::nonNull).forEach(item -> {
-            StringBuilder enchantmentsString = new StringBuilder();
+            final StringBuilder enchantmentsString = new StringBuilder();
 
             String main = Messages.MAIN_UPDATE_ENCHANTS.getMessageNoPrefix();
             main = main.replace("%item%", item.getType().toString());
 
-            bookSettings.getEnchantments(item).forEach((enchantment, level) -> {
+            this.bookSettings.getEnchantments(item).forEach((enchantment, level) -> {
                 final Map<String, String> placeholders = new HashMap<>();
 
                 placeholders.put("%enchant%", enchantment.getName());

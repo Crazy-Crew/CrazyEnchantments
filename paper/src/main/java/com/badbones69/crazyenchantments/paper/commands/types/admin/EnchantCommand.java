@@ -192,7 +192,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
             return;
         }
 
-        Map<String, String> placeholders = new HashMap<>();
+        final Map<String, String> placeholders = new HashMap<>();
 
         Optional.ofNullable(this.crazyManager.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
             if (this.bookSettings.getEnchantments(itemStack).containsKey(context)) {

@@ -30,7 +30,7 @@ public class FixCommand extends EnchantCommand {
         sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
 
         for (CEnchantments enchantment : brokenEnchantments) {
-            String path = "Enchantments." + enchantment.getName();
+            final String path = "Enchantments." + enchantment.getName();
 
             file.set(path + ".Enabled", true);
             file.set(path + ".Name", enchantment.getName());

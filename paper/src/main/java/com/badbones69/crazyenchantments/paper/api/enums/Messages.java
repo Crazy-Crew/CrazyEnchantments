@@ -17,7 +17,19 @@ public enum Messages {
     MUST_BE_CONSOLE_SENDER("Must-Be-Console-Sender", "&cYou must be console sender to run this command."),
 
     COMMAND_NOT_FOUND("Command-Not-Found", "&c%command% is not a known command."),
-    
+
+    ITEM_CANNOT_BE_EMPTY("Item-Cannot-Be-Empty", "&7The item trying to be fetched using %command% cannot be empty!"),
+    ITEM_ADDED_TO_INVENTORY("Item-Added-To-Inventory", "&7An &6%type% &7item has been added to your inventory!"),
+
+    GIVE_SCROLL("Give-Scroll", "&7You have given &6%player% %type% &7scroll!"),
+    GET_SCROLL("Get-Scroll", "&7You have been given a &6%type% &7scroll!"),
+
+    GIVE_LOSTBOOK("Give-LostBook", "&7You have given &6%player% %category% &7lostbook!"),
+    GET_LOSTBOOK("Get-LostBook", "&7You have been given a &6%category% &7lostbook!"),
+
+    GIVE_BOTTLE("Give-Bottle", "&7You have given &6%player% %amount% &7exp bottle!"),
+    GET_BOTTLE("Get-Bottle", "&7You have been given a &6%amount% &7exp bottle!"),
+
     CONFIG_RELOAD("Config-Reload", "&7You have reloaded the Config.yml"),
     NEED_TO_UNSTACK_ITEM("Need-To-UnStack-Item", "&cYou need to unstack that item before you can use it."),
     NOT_AN_ENCHANTMENT("Not-An-Enchantment", "&cThat is not an enchantment."),

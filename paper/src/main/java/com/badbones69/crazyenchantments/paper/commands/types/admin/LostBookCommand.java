@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.PermissionDefault;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class LostBookCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
@@ -22,7 +23,7 @@ public class LostBookCommand extends com.badbones69.crazyenchantments.paper.comm
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage("Inventory must be empty.");
+            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
             return;
         }
@@ -31,16 +32,27 @@ public class LostBookCommand extends com.badbones69.crazyenchantments.paper.comm
             final ItemStack itemStack = category.getLostBook().getLostBook(category, amount).build();
 
             if (itemStack.isEmpty()) {
-                player.sendMessage("Item can't be empty.");
+                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                        "%command%",
+                        "lostbook"
+                )));
 
                 return;
             }
 
             inventory.addItem(itemStack);
 
-            //todo() send message
+            final Map<String, String> placeholders = new HashMap<>();
+
+            placeholders.putIfAbsent("%category%", category.getName());
+
+            player.sendMessage(Messages.GET_LOSTBOOK.getMessage(placeholders));
+
+            placeholders.putIfAbsent("%player%", player.getName());
+
+            sender.sendMessage(Messages.GIVE_LOSTBOOK.getMessage(placeholders));
         }, () -> {
-            HashMap<String, String> placeholders = new HashMap<>();
+            final Map<String, String> placeholders = new HashMap<>();
 
             placeholders.put("%Category%", name);
 

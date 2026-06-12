@@ -46,7 +46,7 @@ public class KitCommand {
             this.crazyManager.getCEPlayer(player.getUniqueId()).ifPresent(cePlayer -> {
                 cePlayer.removeCoolDown(gkit);
 
-                Map<String, String> placeholders = new HashMap<>();
+                final Map<String, String> placeholders = new HashMap<>();
 
                 placeholders.put("%Player%", player.getName());
                 placeholders.put("%Gkit%", gkit.getName());
@@ -55,7 +55,7 @@ public class KitCommand {
                 sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
             });
         }, () -> {
-            Map<String, String> placeholders = new HashMap<>();
+            final Map<String, String> placeholders = new HashMap<>();
 
             placeholders.put("%Kit%", kit);
             placeholders.put("%Gkit%", kit);
@@ -71,8 +71,6 @@ public class KitCommand {
         final Player safePlayer = target != null ? target : sender instanceof Player player ? player : null;
 
         if (safePlayer == null) {
-            //todo() send message
-
             return;
         }
 
@@ -80,7 +78,7 @@ public class KitCommand {
 
         Optional.ofNullable(this.crazyManager.getGKitFromName(kit)).ifPresentOrElse(gkit -> {
             this.crazyManager.getCEPlayer(safePlayer.getUniqueId()).ifPresent(cePlayer -> {
-                Map<String, String> placeholders = new HashMap<>();
+                final Map<String, String> placeholders = new HashMap<>();
 
                 placeholders.put("%Player%", safePlayer.getName());
                 placeholders.put("%Gkit%", gkit.getName());
@@ -105,7 +103,7 @@ public class KitCommand {
                 }
             });
         }, () -> {
-            Map<String, String> placeholders = new HashMap<>();
+            final Map<String, String> placeholders = new HashMap<>();
 
             placeholders.put("%Kit%", kit);
             placeholders.put("%Gkit%", kit);

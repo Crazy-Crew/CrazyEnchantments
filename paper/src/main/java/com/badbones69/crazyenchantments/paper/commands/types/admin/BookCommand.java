@@ -27,7 +27,7 @@ public class BookCommand extends com.badbones69.crazyenchantments.paper.commands
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage("Inventory must be empty.");
+            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
             return;
         }
@@ -36,26 +36,27 @@ public class BookCommand extends com.badbones69.crazyenchantments.paper.commands
             final ItemStack itemStack = new CEBook(book, level, amount).buildBook(); //todo() random support
 
             if (itemStack.isEmpty()) {
-                player.sendMessage("Item can't be empty.");
+                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                        "%command%",
+                        "book"
+                )));
 
                 return;
             }
             
             inventory.addItem(itemStack);
 
-            Map<String, String> placeholders = new HashMap<>();
+            final Map<String, String> placeholders = new HashMap<>();
 
             placeholders.put("%Player%", player.getName());
 
             sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
         }, () -> {
-            //todo() send message
+            final Map<String, String> placeholders = new HashMap<>();
 
-            //HashMap<String, String> placeholders = new HashMap<>();
-            
-            //placeholders.put("%Category%", name);
-            
-            //sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+            placeholders.put("%Category%", name);
+
+            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
         });
     }
 }

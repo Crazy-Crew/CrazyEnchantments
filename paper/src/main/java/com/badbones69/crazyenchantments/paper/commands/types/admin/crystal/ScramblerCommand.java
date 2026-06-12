@@ -23,7 +23,10 @@ public class ScramblerCommand extends EnchantCommand {
         final ItemStack itemStack = this.scrambler.getScramblers(amount);
 
         if (itemStack.isEmpty()) {
-            player.sendMessage("Item can't be empty.");
+            sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                    "%command%",
+                    "scrambler"
+            )));
 
             return;
         }
@@ -31,7 +34,7 @@ public class ScramblerCommand extends EnchantCommand {
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage("Inventory must be empty.");
+            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 
             return;
         }

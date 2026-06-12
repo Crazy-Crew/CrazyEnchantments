@@ -17,7 +17,7 @@ public class LimitCommand extends EnchantCommand {
     @Permission(value = "crazyenchantments.limit", def = PermissionDefault.TRUE)
     @Syntax("/crazyenchantments limit")
     public void execute(final Player player) {
-        Map<String, String> placeholders = new HashMap<>();
+        final Map<String, String> placeholders = new HashMap<>();
 
         placeholders.put("%bypass%", String.valueOf(player.hasPermission("crazyenchantments.bypass.limit")));
 
