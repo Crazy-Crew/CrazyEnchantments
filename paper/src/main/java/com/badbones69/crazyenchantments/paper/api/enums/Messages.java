@@ -19,7 +19,6 @@ public enum Messages {
     COMMAND_NOT_FOUND("Command-Not-Found", "&c%command% is not a known command."),
 
     ITEM_CANNOT_BE_EMPTY("Item-Cannot-Be-Empty", "&7The item trying to be fetched using %command% cannot be empty!"),
-    ITEM_ADDED_TO_INVENTORY("Item-Added-To-Inventory", "&7An &6%type% &7item has been added to your inventory!"),
 
     GIVE_SCROLL("Give-Scroll", "&7You have given &6%player% %type% &7scroll!"),
     GET_SCROLL("Get-Scroll", "&7You have been given a &6%type% &7scroll!"),
