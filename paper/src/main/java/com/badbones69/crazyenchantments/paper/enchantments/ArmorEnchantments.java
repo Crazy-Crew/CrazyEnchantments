@@ -144,7 +144,7 @@ public class ArmorEnchantments implements Listener {
         if (!oldItem.isEmpty()) {
             getTopPotionEffects(this.enchantmentBookSettings.getEnchantments(oldItem)
                     .entrySet().stream()
-                    .filter(enchant -> !topEnchants.containsKey(enchant.getKey()))
+                    //.filter(enchant -> !topEnchants.containsKey(enchant.getKey()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b)))
                     .keySet()
                     .forEach(player::removePotionEffect);
