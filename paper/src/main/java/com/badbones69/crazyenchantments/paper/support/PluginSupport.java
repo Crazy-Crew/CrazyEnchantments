@@ -4,10 +4,6 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WorldGuardUtils;
-import com.badbones69.crazyenchantments.paper.support.claims.GriefPreventionSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.LandsSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.TownySupport;
-import com.badbones69.crazyenchantments.paper.support.factions.FactionsUUIDSupport;
 import com.badbones69.crazyenchantments.paper.support.interfaces.claims.ClaimSupport;
 import com.gmail.nossr50.api.PartyAPI;
 import com.google.common.collect.Maps;
@@ -118,10 +114,10 @@ public class PluginSupport {
 
     public void updateClaimHooks(SupportedPlugins supportedPlugin) {
         switch (supportedPlugin) {
-            case GRIEF_PREVENTION -> this.claimPlugin = new GriefPreventionSupport();
-            case TOWNYADVANCED -> this.claimPlugin = new TownySupport();
-            case LANDS -> this.claimPlugin = new LandsSupport();
-            case FACTIONS_UUID -> this.claimPlugin = new FactionsUUIDSupport();
+            // GRIEF_PREVENTION -> this.claimPlugin = new GriefPreventionSupport();
+            //case TOWNYADVANCED -> this.claimPlugin = new TownySupport();
+            //case LANDS -> this.claimPlugin = new LandsSupport();
+            //case FACTIONS_UUID -> this.claimPlugin = new FactionsUUIDSupport();
         }
     }
 

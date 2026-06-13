@@ -13,6 +13,8 @@ repositories {
 
     maven("https://repo.bg-software.com/repository/api/")
 
+    maven("https://repo.incredibleplugins.com/releases/")
+
     maven("https://repo.triumphteam.dev/snapshots/")
 
     maven("https://maven.enginehub.org/repo/")

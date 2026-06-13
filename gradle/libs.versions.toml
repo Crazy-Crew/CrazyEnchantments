@@ -2,7 +2,7 @@
 ## Paper
 paperweight = "2.0.0-beta.21" # https://github.com/PaperMC/paperweight
 adventure = "5.0.0" # https://github.com/KyoriPowered/adventure
-paper = "26.1.2.build.5-alpha" # https://github.com/PaperMC/Paper
+paper = "26.1.2.build.+" # https://github.com/PaperMC/Paper
 
 ## Minecraft
 minecraft = "26.1.2" # https://minecraft.net
@@ -22,7 +22,7 @@ worldedit = "7.4.0" # https://modrinth.com/plugin/worldedit/versions?l=bukkit
 griefprevention = "18.0.0" # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.102.0.0" # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
 factions = "1.6.9.5-U0.6.40" # https://www.spigotmc.org/resources/factionsuuid.1035/
-lands = "7.23.1" # https://github.com/Angeschossen/LandsAPI/wiki
+lands = "7.25.14" # https://github.com/Angeschossen/LandsAPI/wiki
 skyblock = "2025.1" # https://bg-software.com/superiorskyblock/
 plotsquared = "7.5.11" # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
 kingdoms = "1.16.20.5" # https://www.spigotmc.org/resources/kingdomsx.77670/
@@ -94,7 +94,7 @@ fusion-kyori = { module = "com.ryderbelserion.fusion:fusion-kyori", version.ref 
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
-lands = { module = "com.github.Angeschossen:LandsAPI", version.ref = "lands" }
+lands = { module = "com.incredibleplugins:lands-api", version.ref = "lands" }
 factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
 
 skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
