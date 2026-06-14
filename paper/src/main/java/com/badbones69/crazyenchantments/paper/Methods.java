@@ -28,7 +28,9 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
@@ -42,6 +44,10 @@ import java.util.UUID;
 public class Methods {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    
+    private final Server server = this.plugin.getServer();
+
+    private final PluginManager pluginManager = this.server.getPluginManager();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
@@ -355,6 +361,7 @@ public class Methods {
 
     public void explode(@NotNull final Player player) {
         final Location location = player.getLocation();
+        final Vector vector = location.toVector();
 
         spawnExplodeParticles(player.getWorld(), location);
 
@@ -381,21 +388,7 @@ public class Methods {
 
             livingEntity.damage(5D);
 
-            livingEntity.setVelocity();
-
-            /*if (this.pluginSupport.allowCombat(entity.getLocation())) {
-                if (entity.getType() == EntityType.ITEM) {
-                    entity.remove();
-                    continue;
-                }
-
-                if (!(entity instanceof LivingEntity en)) continue;
-                if (this.pluginSupport.isFriendly(player, en)) continue;
-                if (player.getName().equalsIgnoreCase(entity.getName())) continue;
-                en.damage(5D);
-
-                en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
-            }*/
+            livingEntity.setVelocity(livingEntity.getLocation().toVector().subtract(vector).normalize().multiply(1).setY(.5));
         }
     }
 
@@ -406,7 +399,6 @@ public class Methods {
     }
 
     private void spawnExplodeParticles(@NotNull World world, @NotNull Location location) {
-
         world.spawnParticle(Particle.FLAME, location, 200);
         world.spawnParticle(Particle.CLOUD, location, 30, .4F, .5F, .4F);
         world.spawnParticle(Particle.EXPLOSION, location, 2);
@@ -415,29 +407,35 @@ public class Methods {
     }
 
     public void explode(@NotNull Entity shooter, @NotNull Entity arrow) {
-        spawnExplodeParticles(shooter.getWorld(), arrow.getLocation());
+        final Location location = arrow.getLocation();
+        final Vector vector = location.toVector();
 
-        for (Entity value : getNearbyEntities(3D, arrow)) {
-            if (this.pluginSupport.allowCombat(value.getLocation())) {
-                if (value.getType() == EntityType.ITEM) {
-                    value.remove();
-                    continue;
-                }
+        spawnExplodeParticles(shooter.getWorld(), location);
 
-                if (!(value instanceof LivingEntity livingEntity)) continue;
-                if (this.pluginSupport.isFriendly(shooter, livingEntity)) continue;
-                if (shooter.getName().equalsIgnoreCase(value.getName())) continue;
+        for (final Entity entity : getNearbyEntities(3D, arrow)) {
+            final Location entityLocation = entity.getLocation();
 
-                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
+            if (!this.support.isCombatEnabled(entityLocation)) continue;
 
-                this.plugin.getServer().getPluginManager().callEvent(event);
-                if (event.isCancelled()) continue;
+            if (entity.getType() == EntityType.ITEM) { //todo() why?
+                entity.remove();
 
-                livingEntity.damage(5D);
-
-                livingEntity.setVelocity(livingEntity.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
-
+                continue;
             }
+
+            if (!(entity instanceof LivingEntity livingEntity)) continue;
+
+            if (this.support.isFriendly(shooter, livingEntity)) continue;
+
+            final EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
+
+            this.pluginManager.callEvent(event);
+
+            if (event.isCancelled()) continue;
+
+            livingEntity.damage(5D);
+
+            livingEntity.setVelocity(livingEntity.getLocation().toVector().subtract(vector).normalize().multiply(1).setY(.5));
         }
     }
 
@@ -465,9 +463,16 @@ public class Methods {
     public void entityEvent(@NotNull Player damager, @NotNull LivingEntity entity, @NotNull EntityDamageEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
-        this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        this.pluginManager.callEvent(damageByEntityEvent);
+
+        final boolean isCancelled = damageByEntityEvent.isCancelled();
+
+        final Location location = entity.getLocation();
+
+        if (!isCancelled && this.support.isCombatEnabled(location) && !this.support.isFriendly(damager, entity)) {
+            entity.damage(5D);
+        }
 
         EventUtils.removeIgnoredEvent(damageByEntityEvent);
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
@@ -475,8 +480,11 @@ public class Methods {
 
     public Entity lightning(@NotNull LivingEntity entity) {
         Location loc = entity.getLocation();
+
         Entity lightning = null;
+
         if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
+
         int lightningSoundRange = FileKeys.CONFIG.getConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
         try {

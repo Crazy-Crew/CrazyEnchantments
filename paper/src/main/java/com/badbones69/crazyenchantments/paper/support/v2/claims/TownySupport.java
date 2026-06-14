@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.v2.claims;
 
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -18,6 +19,11 @@ import org.jspecify.annotations.NonNull;
 public final class TownySupport extends TerritorySupport<Block, Location> {
 
     private final TownyAPI api = TownyAPI.getInstance();
+
+    @Override
+    public PluginType getPluginType() {
+        return PluginType.DEFAULT;
+    }
 
     @Override
     public String getPluginName() {
@@ -101,7 +107,7 @@ public final class TownySupport extends TerritorySupport<Block, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }

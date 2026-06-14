@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.v2.claims.skyblock;
 
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
@@ -11,6 +12,11 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 public final class SuperiorSkyBlockSupport extends TerritorySupport<Block, Location> {
+
+    @Override
+    public PluginType getPluginType() {
+        return PluginType.DEFAULT;
+    }
 
     @Override
     public String getPluginName() {
@@ -36,7 +42,7 @@ public final class SuperiorSkyBlockSupport extends TerritorySupport<Block, Locat
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }

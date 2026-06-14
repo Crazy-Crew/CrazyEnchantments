@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.v2.claims;
 
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -26,8 +27,42 @@ public class WorldGuardSupport extends TerritorySupport<Location, Location> {
     private final RegionContainer container = this.platform.getRegionContainer();
 
     @Override
+    public PluginType getPluginType() {
+        return PluginType.WORLDGUARD;
+    }
+
+    @Override
     public String getPluginName() {
         return "WorldGuard";
+    }
+
+    @Override
+    public boolean isTerritory(@NonNull final String region, @NonNull final Location container) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final BukkitWorld bukkitWorld = new BukkitWorld(container.getWorld());
+
+        final RegionManager regionManager = this.container.get(bukkitWorld);
+
+        if (regionManager == null) {
+            return true;
+        }
+
+        final BlockVector3 vector = BlockVector3.at(container.getX(), container.getY(), container.getZ());
+
+        boolean isRegion = false;
+
+        for (final ProtectedRegion key : regionManager.getApplicableRegions(vector)) {
+            if (region.equals(key.getId())) {
+                isRegion = true;
+
+                break;
+            }
+        }
+
+        return isRegion;
     }
 
     @Override

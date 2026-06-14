@@ -2,9 +2,11 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.GameMode;
@@ -14,6 +16,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -23,18 +26,18 @@ import java.util.concurrent.TimeUnit;
 
 public class WingsUtils {
 
-    @NotNull
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private static final Server server = plugin.getServer();
+
+    private static final CrazyPlatform platform = plugin.getPlatform();
+
+    private static final SupportUtils support = platform.getSupport();
 
     @NotNull
     private static final Starter starter = plugin.getStarter();
 
     private static final EnchantmentBookSettings settings = starter.getEnchantmentBookSettings();
-
-    @NotNull
-    private static final PluginSupport pluginSupport = starter.getPluginSupport();
 
     @NotNull
     private static final WingsManager wingsManager = starter.getWingsManager();
@@ -82,32 +85,28 @@ public class WingsUtils {
     }
 
     private static boolean inWingsRegion(Player player) {
-        if (!SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
-
-        WorldGuardVersion worldGuardVersion = starter.getPluginSupport().getWorldGuardUtils().getWorldGuardSupport();
-
-        for (String region : wingsManager.getRegions()) {
-            if (worldGuardVersion.inRegion(region, player.getLocation())) {
+        for (final String region : wingsManager.getRegions()) {
+            if (support.isTerritory(region, player.getLocation())) {
                 return true;
-            } else {
-                if (wingsManager.canOwnersFly() && worldGuardVersion.isOwner(player)) return true;
-
-                if (wingsManager.canMembersFly() && worldGuardVersion.isMember(player)) return true;
             }
+
+            if (wingsManager.canOwnersFly() && support.isOwner(player)) return true;
+
+            if (wingsManager.canMembersFly() && support.isMember(player)) return true;
         }
 
         return false;
     }
 
     public static boolean checkRegion(Player player) {
-        return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (pluginSupport.inTerritory(player) || inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
+        return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (support.isTerritory(player) || inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
     }
 
     public static boolean isEnemiesNearby(Player player) {
         if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
-            for (Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
+            for (final Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
                 //todo() update this
-                if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer))) return true;
+                if (!(player.hasPermission("crazyenchantments.bypass.wings") && support.isFriendly(player, otherPlayer))) return true;
             }
         }
 

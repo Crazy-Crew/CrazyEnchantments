@@ -3,10 +3,12 @@ package com.badbones69.crazyenchantments.paper.tasks.processors;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -22,11 +24,13 @@ public class ArmorProcessor extends PoolProcessor {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final SupportUtils support = this.platform.getSupport();
+
     private final Starter starter = this.plugin.getStarter();
 
     private final Methods methods = this.starter.getMethods();
-
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
@@ -59,10 +63,7 @@ public class ArmorProcessor extends PoolProcessor {
 
             checkCommander(armor, player, enchantments);
 
-            if (PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-                final int radius = 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment());
-                checkAngel(armor, player, enchantments, radius);
-            }
+            checkAngel(armor, player, enchantments, 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment()));
 
             useHellForge(player, armor, enchantments);
         }
@@ -88,7 +89,7 @@ public class ArmorProcessor extends PoolProcessor {
                         new FoliaScheduler(plugin, null, entity) {
                             @Override
                             public void run() {
-                                if (entity instanceof Player otherPlayer && pluginSupport.isFriendly(player, otherPlayer)) {
+                                if (entity instanceof Player otherPlayer && support.isFriendly(player, otherPlayer)) {
                                     otherPlayer.addPotionEffect(fastDigging);
                                 }
                             }
@@ -114,7 +115,7 @@ public class ArmorProcessor extends PoolProcessor {
                     new FoliaScheduler(plugin, null, entity) {
                         @Override
                         public void run() {
-                            if (entity instanceof Player otherPlayer && pluginSupport.isFriendly(player, otherPlayer)) {
+                            if (entity instanceof Player otherPlayer && support.isFriendly(player, otherPlayer)) {
                                 players.add(otherPlayer);
                             }
                         }

@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.support.v2.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,11 +27,9 @@ public abstract class TerritorySupport<B, L> {
 
     protected boolean isEnabled = false;
 
-    public abstract String getPluginName();
+    public abstract PluginType getPluginType();
 
-    public boolean isFactions() {
-        return false;
-    }
+    public abstract String getPluginName();
 
     public boolean canBreakBlock(@NonNull final Player player, @NonNull final B container) {
         return true;
@@ -48,6 +47,10 @@ public abstract class TerritorySupport<B, L> {
         return true;
     }
 
+    public boolean isTerritory(@NonNull final String region, @NonNull final L container) {
+        return true;
+    }
+
     public boolean isTerritory(@NonNull final Player player) {
         return true;
     }
@@ -56,7 +59,7 @@ public abstract class TerritorySupport<B, L> {
         return false;
     }
 
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         return false;
     }
 

@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
@@ -13,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,7 +34,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +44,11 @@ import java.util.LinkedList;
 
 public class AxeEnchantments implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final SupportUtils support = this.platform.getSupport();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -57,10 +61,6 @@ public class AxeEnchantments implements Listener {
 
     @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeFeller(BlockBreakEvent event) {
@@ -129,12 +129,13 @@ public class AxeEnchantments implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event)) return;
-        if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!(event.getDamager() instanceof Player damager)) return;
 
-        ItemStack item = this.methods.getItemInHand(damager);
+        if (this.support.isFriendly(damager, entity)) return;
+
+        final ItemStack item = this.methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
 
@@ -164,11 +165,11 @@ public class AxeEnchantments implements Listener {
             entity.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, (enchantments.get(CEnchantments.DIZZY.getEnchantment()) + 9) * 20, 0));
 
         if (EnchantUtils.isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
-            for (Entity nearbyEntity : damager.getNearbyEntities(3, 3, 3)) {
+            for (final Entity nearbyEntity : damager.getNearbyEntities(3, 3, 3)) {
                 new FoliaScheduler(this.plugin, null, entity) {
                     @Override
                     public void run() {
-                        if (!pluginSupport.isFriendly(damager, nearbyEntity)) {
+                        if (!support.isFriendly(damager, nearbyEntity)) {
                             Vector vector = damager.getLocation().toVector().normalize().setY(.5);
                             Vector vector1 = nearbyEntity.getLocation().toVector().subtract(vector);
 
@@ -198,7 +199,7 @@ public class AxeEnchantments implements Listener {
 
         if (player.getKiller() == null) return;
 
-        if (!this.pluginSupport.allowCombat(player.getLocation())) return;
+        if (!this.support.isCombatEnabled(player.getLocation())) return;
 
         Player damager = player.getKiller();
         ItemStack item = this.methods.getItemInHand(damager);

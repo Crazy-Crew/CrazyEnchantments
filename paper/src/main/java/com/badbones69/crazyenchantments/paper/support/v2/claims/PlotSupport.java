@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.v2.claims;
 
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
@@ -9,6 +10,11 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 public final class PlotSupport extends TerritorySupport<Location, Location> {
+
+    @Override
+    public PluginType getPluginType() {
+        return PluginType.DEFAULT;
+    }
 
     @Override
     public String getPluginName() {
@@ -56,7 +62,7 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }

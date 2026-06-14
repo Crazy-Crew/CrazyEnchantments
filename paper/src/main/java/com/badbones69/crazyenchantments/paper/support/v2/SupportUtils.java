@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.support.v2;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -20,7 +21,7 @@ public class SupportUtils {
 
     private final ServicesManager servicesManager = this.server.getServicesManager();
 
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -70,6 +71,26 @@ public class SupportUtils {
         return canBreakBlock(player, player.getLocation());
     }
 
+    public boolean isTerritory(@NonNull final String region, @NonNull final Location location) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (provider.getPluginType() != PluginType.WORLDGUARD) continue;
+
+            if (!provider.isTerritory(region, location)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isTerritory(@NonNull final String region, @NonNull final Player player) {
+        return isTerritory(region, player.getLocation());
+    }
+
     public boolean isTerritory(@NonNull final Player player, @NonNull final Location location) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
@@ -86,6 +107,34 @@ public class SupportUtils {
 
     public boolean isTerritory(@NonNull final Player player) {
         return isTerritory(player, player.getLocation());
+    }
+
+    public boolean isOwner(@NonNull final Player player) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.isOwner(player)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isMember(@NonNull final Player player) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.isMember(player)) continue;
+
+            return true;
+        }
+
+        return false;
     }
 
     public boolean isCombatEnabled(@NonNull final Location location) {

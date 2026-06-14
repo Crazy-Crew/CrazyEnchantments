@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.v2.interfaces.factions;
 
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
@@ -14,8 +15,8 @@ public abstract class FactionsSupport<FP, F> extends TerritorySupport<Object, Ob
     public abstract boolean isFactionMember(@NonNull final F faction, @NonNull final Player player);
 
     @Override
-    public boolean isFactions() {
-        return true;
+    public PluginType getPluginType() {
+        return PluginType.FACTIONS;
     }
 
     @Override

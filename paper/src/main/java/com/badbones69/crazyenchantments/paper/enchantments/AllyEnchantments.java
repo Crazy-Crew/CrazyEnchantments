@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
@@ -10,7 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.gmail.nossr50.api.PartyAPI;
+import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,7 +26,6 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +33,11 @@ import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final SupportUtils support = this.platform.getSupport();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -82,6 +85,7 @@ public class AllyEnchantments implements Listener {
     private void checkAndSpawn(Player player, LivingEntity enemy) {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             Map<CEnchantment, Integer> enchants = this.bookSettings.getEnchantments(armor);
+
             if (enchants.isEmpty()) continue;
 
             checkAllyType(enemy, player, enchants, armor);
@@ -89,7 +93,6 @@ public class AllyEnchantments implements Listener {
     }
 
     private void checkAllyType(LivingEntity enemy, Player player, Map<CEnchantment, Integer> enchants, ItemStack item) {
-
         if (EnchantUtils.isEventActive(CEnchantments.TAMER, player, item, enchants)) {
             int power = enchants.get(CEnchantments.TAMER.getEnchantment());
             spawnAllies(player, enemy, AllyType.WOLF, power);
@@ -119,24 +122,34 @@ public class AllyEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyTarget(EntityTargetEvent event) {
-        if (event.getTarget() == null) return; // For when the entity forgets.
-        AllyMob allyMob = this.allyManager.getAllyMob(event.getEntity());
-        AllyMob target = this.allyManager.getAllyMob(event.getTarget());
+        final Entity source = event.getTarget();
 
-        // Stop ally mob from attacking other mobs owned by the player.
-        if (allyMob != null && target != null && allyMob.getOwner().getUniqueId() == target.getOwner().getUniqueId()) {
-            event.setCancelled(true);
+        if (source == null) return; // For when the entity forgets.
+
+        final AllyMob allyMob = this.allyManager.getAllyMob(event.getEntity());
+        final AllyMob target = this.allyManager.getAllyMob(source);
+
+        if (allyMob == null || target == null) {
             return;
         }
 
-        // Stop ally from targeting party members.
-        if (allyMob != null && target instanceof Player && PluginSupport.SupportedPlugins.MCMMO.isPluginLoaded()) {
-            PartyAPI.inSameParty(allyMob.getOwner(), (Player) target);
+        // Stop mob from attacking other mobs owned by the player.
+        if (allyMob.getOwner().getUniqueId().equals(target.getOwner().getUniqueId())) {
+            event.setCancelled(true);
+
+            return;
+        }
+
+        // Stop mob from targeting party members.
+        if (target instanceof Player playerTarget && this.support.isFriendly(allyMob.getOwner(), playerTarget)) {
+            return;
         }
 
         // Stop your pets from targeting you.
-        if (event.getTarget() instanceof Player player && allyMob != null) {
-            if (player.getUniqueId() == allyMob.getOwner().getUniqueId()) event.setCancelled(true);
+        if (source instanceof Player player) {
+            if (player.getUniqueId().equals(allyMob.getOwner().getUniqueId())) {
+                event.setCancelled(true);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.v2.claims;
 
+import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import me.angeschossen.lands.api.LandsIntegration;
 import me.angeschossen.lands.api.flags.type.Flags;
@@ -16,6 +17,11 @@ import java.util.UUID;
 public final class LandsSupport extends TerritorySupport<Block, Location> {
 
     private final LandsIntegration api = LandsIntegration.of(this.plugin);
+
+    @Override
+    public PluginType getPluginType() {
+        return PluginType.DEFAULT;
+    }
 
     @Override
     public String getPluginName() {
@@ -71,7 +77,7 @@ public final class LandsSupport extends TerritorySupport<Block, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
