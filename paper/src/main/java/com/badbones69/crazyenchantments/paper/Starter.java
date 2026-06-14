@@ -18,10 +18,9 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class Starter {
 
@@ -39,8 +38,6 @@ public class Starter {
     private BowUtils bowUtils;
 
     // Plugin Support.
-    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
-    private PluginSupport pluginSupport;
     private VaultSupport vaultSupport;
 
     // Plugin Managers.
@@ -60,12 +57,6 @@ public class Starter {
 
 
     public void run() {
-        // Plugin Support.
-        this.pluginSupport = new PluginSupport();
-        this.pluginSupport.initializeWorldGuard();
-
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
-
         // Methods
         this.methods = new Methods();
 
@@ -119,25 +110,14 @@ public class Starter {
         return this.enchantmentBookSettings;
     }
 
-    // Plugin Support.
-    public PluginSupport getPluginSupport() {
-        return this.pluginSupport;
-    }
-
     public VaultSupport getVaultSupport() {
         return this.vaultSupport;
     }
 
-    public void setVaultSupport(VaultSupport vaultSupport) {
+    public void setVaultSupport(@NonNull final VaultSupport vaultSupport) {
         this.vaultSupport = vaultSupport;
 
         vaultSupport.loadVault();
-    }
-
-    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
-        if (this.superiorSkyBlockSupport == null) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
-
-        return this.superiorSkyBlockSupport;
     }
 
     // Economy Management.

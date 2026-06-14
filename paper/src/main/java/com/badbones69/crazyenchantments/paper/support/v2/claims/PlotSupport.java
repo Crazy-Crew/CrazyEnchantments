@@ -4,10 +4,16 @@ import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySup
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 public final class PlotSupport extends TerritorySupport<Location, Location> {
+
+    @Override
+    public String getPluginName() {
+        return "PlotSquared";
+    }
 
     @Override
     public boolean canBreakBlock(@NonNull final Player player, @NonNull final Location container) {
@@ -50,16 +56,11 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Player target) {
+    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
 
         return true;
-    }
-
-    @Override
-    public boolean isPluginReady() {
-        return this.pluginManager.isPluginEnabled("PlotSquared");
     }
 }

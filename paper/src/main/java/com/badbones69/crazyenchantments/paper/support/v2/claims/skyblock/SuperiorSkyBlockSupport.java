@@ -6,10 +6,16 @@ import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
-public final class SuperiorSupport extends TerritorySupport<Block, Location> {
+public final class SuperiorSkyBlockSupport extends TerritorySupport<Block, Location> {
+
+    @Override
+    public String getPluginName() {
+        return "SuperiorSkyblock2";
+    }
 
     @Override
     public boolean isTerritory(@NonNull final Player player, @NonNull final Location container) {
@@ -30,7 +36,7 @@ public final class SuperiorSupport extends TerritorySupport<Block, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Player target) {
+    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
@@ -54,10 +60,5 @@ public final class SuperiorSupport extends TerritorySupport<Block, Location> {
         }
 
         return island.isMember(other) || island.isVisitor(other, true);
-    }
-
-    @Override
-    public boolean isPluginReady() {
-        return this.pluginManager.isPluginEnabled("SuperiorSkyblock");
     }
 }

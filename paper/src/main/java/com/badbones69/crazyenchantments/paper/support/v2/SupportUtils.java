@@ -1,0 +1,108 @@
+package com.badbones69.crazyenchantments.paper.support.v2;
+
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jspecify.annotations.NonNull;
+import java.util.Collection;
+
+public class SupportUtils {
+
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final Server server = this.plugin.getServer();
+
+    private final ServicesManager servicesManager = this.server.getServicesManager();
+
+    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.isFriendly(player, target)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean canExplodeBlock(@NonNull final Location location) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.canExplodeBlock(location)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean canExplodeBlock(@NonNull final Player player) {
+        return canExplodeBlock(player.getLocation());
+    }
+
+    public boolean canBreakBlock(@NonNull final Player player, @NonNull final Location location) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.canBreakBlock(player, location)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean canBreakBlock(@NonNull final Player player) {
+        return canBreakBlock(player, player.getLocation());
+    }
+
+    public boolean isTerritory(@NonNull final Player player, @NonNull final Location location) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.isTerritory(player, location)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isTerritory(@NonNull final Player player) {
+        return isTerritory(player, player.getLocation());
+    }
+
+    public boolean isCombatEnabled(@NonNull final Location location) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (provider.isCombatEnabled(location)) continue;
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isCombatEnabled(@NonNull final Player player) {
+        return isCombatEnabled(player.getLocation());
+    }
+}

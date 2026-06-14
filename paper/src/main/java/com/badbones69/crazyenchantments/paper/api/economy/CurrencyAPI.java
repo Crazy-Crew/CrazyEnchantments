@@ -6,7 +6,8 @@ import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +17,12 @@ public class CurrencyAPI {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    private final FusionPaper fusion = this.plugin.getFusion();
+
     @NotNull
     private final Starter starter = plugin.getStarter();
+
+    private final VaultSupport vaultSupport =  this.starter.getVaultSupport();
 
     /**
      * Get the amount that a player has from a specific currency.
@@ -28,7 +33,7 @@ public class CurrencyAPI {
     public int getCurrency(Player player, Currency currency) {
         try {
             return switch (currency) {
-                case VAULT -> (int) starter.getVaultSupport().getVault().getBalance(player);
+                case VAULT -> (int) this.vaultSupport.getVault().getBalance(player);
                 case XP_LEVEL -> player.getLevel();
                 case XP_TOTAL -> getTotalExperience(player);
             };
@@ -72,7 +77,7 @@ public class CurrencyAPI {
     public void takeCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
+                case VAULT -> this.vaultSupport.getVault().withdrawPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
@@ -88,7 +93,7 @@ public class CurrencyAPI {
     public void giveCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> starter.getVaultSupport().getVault().depositPlayer(player, amount);
+                case VAULT -> this.vaultSupport.getVault().depositPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
@@ -181,17 +186,10 @@ public class CurrencyAPI {
      * Loads the currency if it is on the server.
      */
     public void loadCurrency() {
-        for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
-
-            if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
-                if (supportedPlugin == SupportedPlugins.VAULT) {
-                    starter.setVaultSupport(new VaultSupport());
-                }
-
-                return;
-            }
+        if (this.fusion.isPluginEnabled("Vault")) {
+            this.starter.setVaultSupport(new VaultSupport());
         }
 
-        plugin.getLogger().warning("No eco plugin found or the eco plugin didn't enable. Any economy based feature will not work.");
+        this.fusion.log(Level.WARNING, "No economy plugin was found, or the economy plugin did not enable. All economy based features will not work.");
     }
 }

@@ -1,6 +1,14 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.v2.claims.LandsSupport;
+import com.badbones69.crazyenchantments.paper.support.v2.claims.PlotSupport;
+import com.badbones69.crazyenchantments.paper.support.v2.claims.TownySupport;
+import com.badbones69.crazyenchantments.paper.support.v2.claims.WorldGuardSupport;
+import com.badbones69.crazyenchantments.paper.support.v2.claims.factions.FactionsUUIDSupport;
+import com.badbones69.crazyenchantments.paper.support.v2.claims.skyblock.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -28,8 +36,25 @@ public class CrazyPlatform {
 
     private final Path dataPath = this.plugin.getDataPath();
 
+    private SupportUtils support;
+
     public void init() {
         loadExamples();
+
+        List.of(
+            new WorldGuardSupport(),
+            new TownySupport(),
+            new LandsSupport(),
+            new PlotSupport(),
+
+            // skyblock
+            new SuperiorSkyBlockSupport(),
+
+            // factions
+            new FactionsUUIDSupport()
+        ).forEach(TerritorySupport::init);
+
+        this.support = new SupportUtils();
     }
 
     public void loadExamples() {
@@ -72,5 +97,9 @@ public class CrazyPlatform {
 
     public Optional<Player> getPlayer(@NonNull final String name) {
         return Optional.ofNullable(this.server.getPlayer(name));
+    }
+
+    public @NonNull final SupportUtils getSupport() {
+        return this.support;
     }
 }

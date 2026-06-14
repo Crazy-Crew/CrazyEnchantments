@@ -11,12 +11,18 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 public final class TownySupport extends TerritorySupport<Block, Location> {
 
     private final TownyAPI api = TownyAPI.getInstance();
+
+    @Override
+    public String getPluginName() {
+        return "Towny";
+    }
 
     @Override
     public boolean canBreakBlock(@NonNull final Player player, @NonNull final Block container) {
@@ -95,16 +101,11 @@ public final class TownySupport extends TerritorySupport<Block, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Player target) {
+    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
 
         return CombatUtil.isAlly(this.api.getResident(player.getUniqueId()), this.api.getResident(target.getUniqueId()));
-    }
-
-    @Override
-    public boolean isPluginReady() {
-        return this.pluginManager.isPluginEnabled("Towny");
     }
 }

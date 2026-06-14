@@ -8,6 +8,7 @@ import me.angeschossen.lands.api.land.Land;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import java.util.UUID;
@@ -15,6 +16,11 @@ import java.util.UUID;
 public final class LandsSupport extends TerritorySupport<Block, Location> {
 
     private final LandsIntegration api = LandsIntegration.of(this.plugin);
+
+    @Override
+    public String getPluginName() {
+        return "Lands";
+    }
 
     @Override
     public boolean canBreakBlock(@NonNull final Player player, @NonNull final Block container) {
@@ -65,7 +71,7 @@ public final class LandsSupport extends TerritorySupport<Block, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Player player, @NonNull final Player target) {
+    public boolean isFriendly(@NonNull final Player player, @NonNull final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
@@ -75,10 +81,5 @@ public final class LandsSupport extends TerritorySupport<Block, Location> {
         if (land == null) return false;
 
         return land.isTrusted(player.getUniqueId());
-    }
-
-    @Override
-    public boolean isPluginReady() {
-        return this.pluginManager.isPluginEnabled("PlotSquared");
     }
 }

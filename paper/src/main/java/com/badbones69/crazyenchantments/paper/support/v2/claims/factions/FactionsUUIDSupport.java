@@ -10,7 +10,12 @@ import org.jspecify.annotations.NonNull;
 
 public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction> {
 
-    private FPlayers instance = FPlayers.getInstance();
+    private final FPlayers instance = FPlayers.getInstance();
+
+    @Override
+    public String getPluginName() {
+        return "Factions";
+    }
 
     @Override
     public boolean isWildernessWithFaction(@NonNull final Faction faction) {
@@ -31,7 +36,7 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction>
     }
 
     @Override
-    public boolean isMember(@NonNull final Faction faction, @NonNull final Player player) {
+    public boolean isFactionMember(@NonNull final Faction faction, @NonNull final Player player) {
         final FPlayer fPlayer = this.instance.getByPlayer(player);
 
         if (fPlayer == null || !fPlayer.hasFaction()) return false;
@@ -48,10 +53,5 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction>
         if (fPlayer == null || !fPlayer.hasFaction()) return false;
 
         return fPlayer.getFaction().getDefaultRole().isAtLeast(Role.ADMIN);
-    }
-
-    @Override
-    public boolean isPluginReady() {
-        return this.pluginManager.isPluginEnabled("Factions");
     }
 }

@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper;
 
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -8,7 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentTy
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
 import com.google.gson.Gson;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -36,18 +37,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class Methods {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final SupportUtils support = this.platform.getSupport();
 
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
@@ -355,11 +353,37 @@ public class Methods {
         }
     }
 
-    public void explode(@NotNull Entity player) {
-        spawnExplodeParticles(player.getWorld(), player.getLocation());
+    public void explode(@NotNull final Player player) {
+        final Location location = player.getLocation();
 
-        for (Entity entity : getNearbyEntities(3D, player)) {
-            if (this.pluginSupport.allowCombat(entity.getLocation())) {
+        spawnExplodeParticles(player.getWorld(), location);
+
+        final UUID uuid = player.getUniqueId();
+
+        for (final Entity entity : getNearbyEntities(3D, player)) {
+            final Location entityLocation = entity.getLocation();
+
+            if (!this.support.isCombatEnabled(entityLocation)) continue;
+
+            if (entity.getType() == EntityType.ITEM) { //todo() why?
+                entity.remove();
+
+                continue;
+            }
+
+            if (!(entity instanceof LivingEntity livingEntity)) continue;
+
+            if (this.support.isFriendly(player, livingEntity)) continue;
+
+            final UUID entityUUID = entity.getUniqueId();
+
+            if (uuid.equals(entityUUID)) continue;
+
+            livingEntity.damage(5D);
+
+            livingEntity.setVelocity();
+
+            /*if (this.pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.ITEM) {
                     entity.remove();
                     continue;
@@ -371,7 +395,7 @@ public class Methods {
                 en.damage(5D);
 
                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
-            }
+            }*/
         }
     }
 
