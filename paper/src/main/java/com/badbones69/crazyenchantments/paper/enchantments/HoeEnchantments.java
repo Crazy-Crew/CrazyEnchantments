@@ -4,11 +4,14 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.interfaces.CropSupport;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,8 +39,13 @@ import java.util.UUID;
 
 public class HoeEnchantments implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final SupportUtils support = this.platform.getSupport();
+
+    private final CropSupport cropSupport = this.support.getCropSupport();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -73,7 +81,7 @@ public class HoeEnchantments implements Listener {
 
             // Crop is not fully grown.
             if (this.seedlings.contains(block.getType())
-                    && !this.crazyManager.getNMSSupport().isFullyGrown(block)
+                    && !this.cropSupport.isCropGrown(block.getState(false))
                     && EnchantUtils.isEventActive(CEnchantments.GREENTHUMB, player, hoe, enchantments)) {
                 fullyGrowPlant(block);
                 if (player.getGameMode() != GameMode.CREATIVE) this.methods.removeDurability(hoe, player);
@@ -90,7 +98,8 @@ public class HoeEnchantments implements Listener {
                         if (soil.getType() != Material.SOUL_SAND) {
                             for (Block water : getAreaBlocks(soil, 4)) {
                                 if (water.getType() == Material.WATER) {
-                                    this.crazyManager.getNMSSupport().hydrateSoil(soil);
+                                    this.cropSupport.hydrateCrop(soil.getState());
+
                                     break;
                                 }
                             }
@@ -134,17 +143,19 @@ public class HoeEnchantments implements Listener {
 
             if (!EnchantUtils.isEventActive(CEnchantments.HARVESTER, player, hoe, enchantments)) return;
 
-            BlockFace blockFace = this.blocks.get(player.getUniqueId()).get(plant);
+            final BlockFace blockFace = this.blocks.get(player.getUniqueId()).get(plant);
+
             this.blocks.remove(player.getUniqueId());
 
-            if (!this.crazyManager.getNMSSupport().isFullyGrown(plant)) return;
+            if (this.cropSupport.isCropGrown(plant.getState(false))) return;
 
             getAreaCrops(plant, blockFace).forEach(block -> this.methods.playerBreakBlock(player, block, hoe, true));
         }
     }
 
     private void fullyGrowPlant(Block block) {
-        this.crazyManager.getNMSSupport().fullyGrowPlant(block);
+        this.cropSupport.growCrop(block.getState());
+
         block.getLocation().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, block.getLocation(), 20, .25F, .25F, .25F);
     }
 
@@ -215,7 +226,7 @@ public class HoeEnchantments implements Listener {
         List<Block> blockList = new ArrayList<>();
 
         for (Block crop : getAreaBlocks(block, blockFace, 1)) { // Radius of 1 is 3x3
-            if (this.harvesterCrops.contains(crop.getType()) && this.crazyManager.getNMSSupport().isFullyGrown(crop)) {
+            if (this.harvesterCrops.contains(crop.getType()) && this.cropSupport.isCropGrown(block.getState(false))) {
                 blockList.add(crop);
             }
         }

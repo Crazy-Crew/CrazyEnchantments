@@ -30,8 +30,6 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
-import com.badbones69.crazyenchantments.paper.support.CropManager;
-import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
@@ -93,8 +91,6 @@ public class CrazyManager {
 
     @NotNull
     private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
-
-    private CropManagerVersion cropManagerVersion;
 
     @NotNull
     private final AllyManager allyManager = this.starter.getAllyManager();
@@ -305,8 +301,6 @@ public class CrazyManager {
         // Loads the Scroll Control settings.
         this.scrollListener.loadScrollControl();
 
-        this.cropManagerVersion = new CropManager();
-
         // Loads the scrolls.
         Scrolls.loadScrolls();
         // Loads the dust.
@@ -399,13 +393,6 @@ public class CrazyManager {
         }
 
         FileKeys.DATA.save();
-    }
-
-    /**
-     * @return NMS support class.
-     */
-    public CropManagerVersion getNMSSupport() {
-        return this.cropManagerVersion;
     }
 
     public boolean checkVanillaLimit() {

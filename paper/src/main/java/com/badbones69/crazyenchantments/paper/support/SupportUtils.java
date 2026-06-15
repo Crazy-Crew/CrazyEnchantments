@@ -1,7 +1,9 @@
 package com.badbones69.crazyenchantments.paper.support;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.support.crops.VanillaCropSupport;
 import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.interfaces.CropSupport;
 import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -20,6 +22,16 @@ public class SupportUtils {
     private final Server server = this.plugin.getServer();
 
     private final ServicesManager servicesManager = this.server.getServicesManager();
+
+    private CropSupport cropSupport;
+
+    public void init() {
+        this.cropSupport = new VanillaCropSupport();
+    }
+
+    public @NonNull final CropSupport getCropSupport() {
+        return this.cropSupport;
+    }
 
     public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);

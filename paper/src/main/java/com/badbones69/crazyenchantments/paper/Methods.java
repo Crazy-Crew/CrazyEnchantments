@@ -591,6 +591,7 @@ public class Methods {
         items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
 
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
+
         this.plugin.getServer().getPluginManager().callEvent(event);
 
         // If cancelled, removes the blocks as they should have never been there.

@@ -59,6 +59,7 @@ public class CrazyPlatform {
         ).forEach(TerritorySupport::init);
 
         this.support = new SupportUtils();
+        this.support.init();
     }
 
     public void loadExamples() {
