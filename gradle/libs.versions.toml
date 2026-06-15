@@ -21,7 +21,7 @@ worldguard = "7.0.15" # https://dev.bukkit.org/projects/worldguard/files
 worldedit = "7.4.0" # https://modrinth.com/plugin/worldedit/versions?l=bukkit
 griefprevention = "18.0.0" # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.102.0.0" # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
-factions = "1.6.9.5-U0.6.40" # https://www.spigotmc.org/resources/factionsuuid.1035/
+factions = "4.5.1" # https://www.spigotmc.org/resources/factionsuuid.1035/
 lands = "7.25.14" # https://github.com/Angeschossen/LandsAPI/wiki
 skyblock = "2025.1" # https://bg-software.com/superiorskyblock/
 plotsquared = "7.5.11" # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
@@ -95,7 +95,7 @@ griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", versi
 plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 lands = { module = "com.incredibleplugins:lands-api", version.ref = "lands" }
-factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
+factions = { module = "dev.kitteh:factions", version.ref = "factions" }
 
 skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
 mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }

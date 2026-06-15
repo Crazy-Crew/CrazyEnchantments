@@ -11,10 +11,11 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import java.util.List;
 import java.util.Optional;
 
+@NullMarked
 public abstract class TerritorySupport<B, L> {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -31,43 +32,59 @@ public abstract class TerritorySupport<B, L> {
 
     public abstract String getPluginName();
 
-    public boolean canBreakBlock(@NonNull final Player player, @NonNull final B container) {
+    public boolean canBreakBlock(final Player player, final B block) {
         return true;
     }
 
-    public boolean canExplodeBlock(@NonNull final L container) {
+    public boolean canPlaceBlock(final Player player, final B block) {
         return true;
     }
 
-    public boolean isCombatEnabled(@NonNull final L container) {
+    public boolean canInteract(final Player player, final B block) {
         return true;
     }
 
-    public boolean isTerritory(@NonNull final Player player, @NonNull final L container) {
+    public boolean canExplodeBlock(final Entity entity, final L location) {
         return true;
     }
 
-    public boolean isTerritory(@NonNull final String region, @NonNull final L container) {
+    public boolean canExplodeBlock(final L location) {
         return true;
     }
 
-    public boolean isTerritory(@NonNull final Player player) {
+    public boolean isCombatEnabled(final L location) {
         return true;
     }
 
-    public boolean isProtected(@NonNull final L container) {
+    public boolean isTerritory(final Player player, final L location) {
+        return true;
+    }
+
+    public boolean isTerritory(final String region, final L location) {
+        return true;
+    }
+
+    public boolean isTerritory(final Player player) {
+        return true;
+    }
+
+    public boolean isTerritory(final L location) {
+        return true;
+    }
+
+    public boolean isProtected(final L location) {
         return false;
     }
 
-    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
+    public boolean isFriendly(final Entity damager, final Entity target) {
         return false;
     }
 
-    public boolean isOwner(@NonNull final Player player) {
+    public boolean isOwner(final Player player) {
         return false;
     }
 
-    public boolean isMember(@NonNull final Player player) {
+    public boolean isMember(final Player player) {
         return false;
     }
 
@@ -75,7 +92,7 @@ public abstract class TerritorySupport<B, L> {
         return this.isEnabled;
     }
 
-    public boolean hasClass(@NonNull final Plugin plugin, @NonNull final Class<?> classObject) {
+    public boolean hasClass(final Plugin plugin, final Class<?> classObject) {
         boolean isRegistered = false;
 
         final List<RegisteredServiceProvider<?>> providers = this.servicesManager.getRegistrations(plugin);
@@ -93,7 +110,7 @@ public abstract class TerritorySupport<B, L> {
         return isRegistered;
     }
 
-    public @NonNull Optional<Plugin> getPlugin() {
+    public Optional<Plugin> getPlugin() {
         return Optional.ofNullable(this.pluginManager.getPlugin(getPluginName()));
     }
 

@@ -8,7 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class PlotSupport extends TerritorySupport<Location, Location> {
 
     @Override
@@ -22,7 +24,7 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean canBreakBlock(@NonNull final Player player, @NonNull final Location container) {
+    public boolean canBreakBlock(final Player player, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
@@ -31,7 +33,7 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean isCombatEnabled(@NonNull final Location container) {
+    public boolean isCombatEnabled(final Location location) {
         if (!isPluginReady()) {
             return true;
         }
@@ -40,12 +42,12 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean isTerritory(@NonNull final Player player, @NonNull final Location container) {
+    public boolean isTerritory(final Player player, final Location location) {
         return isTerritory(player);
     }
 
     @Override
-    public boolean isTerritory(@NonNull final Player player) {
+    public boolean isTerritory(final Player player) {
         if (!isPluginReady()) {
             return true;
         }
@@ -62,7 +64,7 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
+    public boolean isFriendly(final Entity player, final Entity target) {
         if (!isPluginReady()) {
             return false;
         }

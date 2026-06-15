@@ -8,13 +8,14 @@ import me.angeschossen.lands.api.land.Area;
 import me.angeschossen.lands.api.land.Land;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import java.util.UUID;
 
-public final class LandsSupport extends TerritorySupport<Block, Location> {
+@NullMarked
+public final class LandsSupport extends TerritorySupport<BlockState, Location> {
 
     private final LandsIntegration api = LandsIntegration.of(this.plugin);
 
@@ -29,63 +30,142 @@ public final class LandsSupport extends TerritorySupport<Block, Location> {
     }
 
     @Override
-    public boolean canBreakBlock(@NonNull final Player player, @NonNull final Block container) {
+    public boolean isProtected(final Location location) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        return this.api.getArea(location) != null;
+    }
+
+    @Override
+    public boolean canBreakBlock(final Player player, final BlockState blockState) {
         if (!isPluginReady()) {
             return true;
         }
 
-        final Location location = container.getLocation();
+        final Location location = blockState.getLocation();
 
         final Area area = this.api.getArea(location);
 
-        if (area == null) return true;
+        if (area == null) {
+            return true;
+        }
 
         return area.hasRoleFlag(player.getUniqueId(), Flags.BLOCK_BREAK);
     }
 
     @Override
-    public boolean isCombatEnabled(@NonNull final Location container) {
+    public boolean canPlaceBlock(final Player player, final BlockState blockState) {
         if (!isPluginReady()) {
             return true;
         }
 
-        return true;
+        final Location location = blockState.getLocation();
+
+        final Area area = this.api.getArea(location);
+
+        if (area == null) {
+            return true;
+        }
+
+        return area.hasRoleFlag(player.getUniqueId(), Flags.BLOCK_PLACE);
     }
 
     @Override
-    public boolean isTerritory(@NonNull final Player player, @NonNull final Location container) {
+    public boolean canExplodeBlock(final Entity entity, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
 
-        final UUID uuid = player.getUniqueId();
-        final Chunk chunk = container.getChunk();
+        final Area area = this.api.getArea(location);
 
-        final int x = chunk.getX();
-        final int z = chunk.getZ();
+        if (area == null) {
+            return true;
+        }
 
-        final Land land = this.api.getLandByChunk(chunk.getWorld(), x, z);
-
-        if (land == null) return false;
-
-        return land.getOwnerUID().equals(uuid) || land.isTrusted(uuid);
+        return area.hasRoleFlag(entity.getUniqueId(), Flags.BLOCK_IGNITE) || area.hasNaturalFlag(Flags.TNT_GRIEFING);
     }
 
     @Override
-    public boolean isTerritory(@NonNull final Player player) {
-        return isTerritory(player, player.getLocation());
+    public boolean canExplodeBlock(final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final Area area = this.api.getArea(location);
+
+        if (area == null) {
+            return true;
+        }
+
+        return area.hasNaturalFlag(Flags.TNT_GRIEFING);
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
+    public boolean canInteract(final Player player, final BlockState blockState) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final Location location = blockState.getLocation();
+
+        final Area area = this.api.getArea(location);
+
+        if (area == null) {
+            return true;
+        }
+
+        return area.hasRoleFlag(player.getUniqueId(), Flags.INTERACT_GENERAL);
+    }
+
+    @Override
+    public boolean isFriendly(final Entity player, final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
 
         final Land land = this.api.getLandPlayer(target.getUniqueId()).getOwningLand();
 
-        if (land == null) return false;
+        if (land == null) {
+            return false;
+        }
 
         return land.isTrusted(player.getUniqueId());
+    }
+
+    @Override
+    public boolean isTerritory(final Player player, final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final UUID uuid = player.getUniqueId();
+        final Chunk chunk = location.getChunk();
+
+        final int x = chunk.getX();
+        final int z = chunk.getZ();
+
+        final Land land = this.api.getLandByChunk(chunk.getWorld(), x, z);
+
+        if (land == null) {
+            return false;
+        }
+
+        return land.getOwnerUID().equals(uuid) || land.isTrusted(uuid);
+    }
+
+    @Override
+    public boolean isTerritory(final Player player) {
+        return isTerritory(player, player.getLocation());
+    }
+
+    @Override
+    public boolean isCombatEnabled(final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        return true;
     }
 }

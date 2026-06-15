@@ -4,14 +4,18 @@ import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
+import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
-public final class SuperiorSkyBlockSupport extends TerritorySupport<Block, Location> {
+import java.util.UUID;
+
+@NullMarked
+public final class SuperiorSkyBlockSupport extends TerritorySupport<BlockState, Location> {
 
     @Override
     public PluginType getPluginType() {
@@ -24,25 +28,61 @@ public final class SuperiorSkyBlockSupport extends TerritorySupport<Block, Locat
     }
 
     @Override
-    public boolean isTerritory(@NonNull final Player player, @NonNull final Location container) {
+    public boolean isProtected(final Location location) {
         if (!isPluginReady()) {
             return false;
         }
 
-        final SuperiorPlayer superior = SuperiorSkyblockAPI.getPlayer(player.getUniqueId());
-
-        if (superior == null) return false;
-
-        return superior.isInsideIsland();
+        return SuperiorSkyblockAPI.getIslandAt(location) != null;
     }
 
     @Override
-    public boolean isTerritory(@NonNull final Player player) {
-        return isTerritory(player, player.getLocation());
+    public boolean canBreakBlock(final Player player, final BlockState blockState) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final Island island = SuperiorSkyblockAPI.getIslandAt(blockState.getLocation());
+
+        if (island == null) {
+            return true;
+        }
+
+        return island.hasPermission(player, IslandPrivilege.getByName("BREAK"));
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
+    public boolean canPlaceBlock(final Player player, final BlockState blockState) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final Island island = SuperiorSkyblockAPI.getIslandAt(blockState.getLocation());
+
+        if (island == null) {
+            return true;
+        }
+
+        return island.hasPermission(player, IslandPrivilege.getByName("BUILD"));
+    }
+
+    @Override
+    public boolean canInteract(final Player player, final BlockState blockState) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final Island island = SuperiorSkyblockAPI.getIslandAt(blockState.getLocation());
+
+        if (island == null) {
+            return true;
+        }
+
+        return island.hasPermission(player, IslandPrivilege.getByName("INTERACT"));
+    }
+
+    @Override
+    public boolean isFriendly(final Entity player, final Entity target) {
         if (!isPluginReady()) {
             return false;
         }
@@ -65,6 +105,70 @@ public final class SuperiorSkyBlockSupport extends TerritorySupport<Block, Locat
             return false;
         }
 
-        return island.isMember(other) || island.isVisitor(other, true);
+        return island.isMember(other) || island.isCoop(other);
+    }
+
+    @Override
+    public boolean isTerritory(final Player player, final Location location) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final SuperiorPlayer superior = SuperiorSkyblockAPI.getPlayer(player.getUniqueId());
+
+        if (superior == null) {
+            return false;
+        }
+
+        return superior.isInsideIsland();
+    }
+
+    @Override
+    public boolean isTerritory(final Player player) {
+        return isTerritory(player, player.getLocation());
+    }
+
+    @Override
+    public boolean isMember(final Player player) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final SuperiorPlayer superior = SuperiorSkyblockAPI.getPlayer(player.getUniqueId());
+
+        if (superior == null) {
+            return false;
+        }
+
+        final Island island = SuperiorSkyblockAPI.getIslandAt(player.getLocation());
+
+        if (island == null) {
+            return false;
+        }
+
+        return island.isMember(superior);
+    }
+
+    @Override
+    public boolean isOwner(final Player player) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final UUID uuid = player.getUniqueId();
+
+        final SuperiorPlayer superior = SuperiorSkyblockAPI.getPlayer(uuid);
+
+        if (superior == null) {
+            return false;
+        }
+
+        final Island island = superior.getIsland();
+
+        if (island == null) {
+            return false;
+        }
+
+        return island.getOwner().getUniqueId().equals(uuid);
     }
 }

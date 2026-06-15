@@ -5,6 +5,16 @@ plugins {
 project.group = "${rootProject.group}.paper"
 
 repositories {
+    exclusiveContent {
+        forRepository {
+            maven("https://dependency.download/releases")
+        }
+
+        filter {
+            includeGroup("dev.kitteh")
+        }
+    }
+
     maven("https://repo.md-5.net/content/repositories/snapshots/")
 
     maven("https://ci.ender.zone/plugin/repository/everything/")

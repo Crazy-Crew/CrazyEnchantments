@@ -16,9 +16,10 @@ import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,34 +73,44 @@ public class WingsUtils {
         CEnchantments wings = CEnchantments.WINGS;
 
         if (newArmor) {
-            if (starter.getEnchantmentBookSettings().getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
+            if (settings.getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && canFly(player) && checkGameMode(player)) player.setAllowFlight(true);
 
             return;
         }
 
-        if (starter.getEnchantmentBookSettings().getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
+        if (settings.getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
     }
 
     public static boolean checkGameMode(Player player) {
         return player.getGameMode() == GameMode.SURVIVAL;
     }
 
-    private static boolean inWingsRegion(Player player) {
-        for (final String region : wingsManager.getRegions()) {
-            if (support.isTerritory(region, player.getLocation())) {
-                return true;
-            }
-
-            if (wingsManager.canOwnersFly() && support.isOwner(player)) return true;
-
-            if (wingsManager.canMembersFly() && support.isMember(player)) return true;
+    public static boolean canFly(@NonNull final Player player) {
+        if (wingsManager.inLimitlessFlightWorld(player) || wingsManager.inWhitelistedWorld(player)) {
+            return true; // they can fly
         }
 
-        return false;
-    }
+        if (wingsManager.inBlacklistedWorld(player)) {
+            return false; // they can't fly
+        }
 
-    public static boolean checkRegion(Player player) {
-        return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (support.isTerritory(player) || inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
+        final Location location = player.getLocation();
+
+        boolean isTerritory = false; // they can't fly
+
+        for (final String region : wingsManager.getRegions()) {
+            if (support.isTerritory(region, location)) {
+                isTerritory = true; // they can fly
+
+                break;
+            }
+        }
+
+        if (!isTerritory && support.isTerritory(player, location)) {
+            isTerritory = wingsManager.canOwnersFly() && support.isOwner(player) || wingsManager.canMembersFly() && support.isMember(player);
+        }
+
+        return isTerritory; // true, they can fly, false, they can't fly
     }
 
     public static boolean isEnemiesNearby(Player player) {
