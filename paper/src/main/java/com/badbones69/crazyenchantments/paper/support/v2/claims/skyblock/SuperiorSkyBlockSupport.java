@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
+import com.bgsoftware.superiorskyblock.api.island.IslandFlag;
 import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.Location;
@@ -11,7 +12,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
-
 import java.util.UUID;
 
 @NullMarked
@@ -82,6 +82,17 @@ public final class SuperiorSkyBlockSupport extends TerritorySupport<BlockState, 
     }
 
     @Override
+    public boolean canExplodeBlock(final Location location) {
+        final Island island = SuperiorSkyblockAPI.getIslandAt(location);
+
+        if (island == null) {
+            return true;
+        }
+
+        return island.hasSettingsEnabled(IslandFlag.getByName("TNT_EXPLOSION"));
+    }
+
+    @Override
     public boolean isFriendly(final Entity player, final Entity target) {
         if (!isPluginReady()) {
             return false;
@@ -126,6 +137,17 @@ public final class SuperiorSkyBlockSupport extends TerritorySupport<BlockState, 
     @Override
     public boolean isTerritory(final Player player) {
         return isTerritory(player, player.getLocation());
+    }
+
+    @Override
+    public boolean isCombatEnabled(final Location location) {
+        final Island island = SuperiorSkyblockAPI.getIslandAt(location);
+
+        if (island == null) {
+            return false;
+        }
+
+        return island.hasSettingsEnabled(IslandFlag.getByName("PVP"));
     }
 
     @Override

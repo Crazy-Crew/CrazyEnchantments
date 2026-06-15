@@ -7,7 +7,6 @@ import com.plotsquared.core.plot.Plot;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

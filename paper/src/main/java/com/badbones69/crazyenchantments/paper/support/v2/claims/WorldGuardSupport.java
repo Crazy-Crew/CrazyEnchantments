@@ -38,7 +38,7 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
     }
 
     @Override
-    public boolean isTerritory(final String region, final Location location) {
+    public boolean canBreakBlock(final Player player, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
@@ -53,21 +53,11 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
-        boolean isRegion = false;
-
-        for (final ProtectedRegion key : regionManager.getApplicableRegions(vector)) {
-            if (region.equals(key.getId())) {
-                isRegion = true;
-
-                break;
-            }
-        }
-
-        return isRegion;
+        return regionManager.getApplicableRegions(vector).queryState(null, Flags.BLOCK_BREAK) == StateFlag.State.ALLOW;
     }
 
     @Override
-    public boolean isCombatEnabled(final Location location) {
+    public boolean canPlaceBlock(final Player player, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
@@ -82,7 +72,26 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
-        return regionManager.getApplicableRegions(vector).queryState(null, Flags.PVP) == StateFlag.State.ALLOW;
+        return regionManager.getApplicableRegions(vector).queryState(null, Flags.BLOCK_PLACE) == StateFlag.State.ALLOW;
+    }
+
+    @Override
+    public boolean canInteract(final Player player, final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
+
+        final RegionManager regionManager = this.container.get(bukkitWorld);
+
+        if (regionManager == null) {
+            return true;
+        }
+
+        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
+
+        return regionManager.getApplicableRegions(vector).queryState(null, Flags.INTERACT) == StateFlag.State.ALLOW;
     }
 
     @Override
@@ -107,7 +116,7 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
     }
 
     @Override
-    public boolean canBreakBlock(final Player player, final Location location) {
+    public boolean isCombatEnabled(final Location location) {
         if (!isPluginReady()) {
             return true;
         }
@@ -122,7 +131,32 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
-        return regionManager.getApplicableRegions(vector).queryState(null, Flags.BLOCK_BREAK) == StateFlag.State.ALLOW;
+        return regionManager.getApplicableRegions(vector).queryState(null, Flags.PVP) == StateFlag.State.ALLOW;
+    }
+
+    @Override
+    public boolean isTerritory(final String region, final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
+
+        final RegionManager regionManager = this.container.get(bukkitWorld);
+
+        if (regionManager == null) {
+            return true;
+        }
+
+        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
+
+        for (final ProtectedRegion key : regionManager.getApplicableRegions(vector)) {
+            if (!region.equals(key.getId())) continue;
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -145,17 +179,13 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
 
         final LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
 
-        boolean isMember = false;
-
         for (final ProtectedRegion region : regionManager.getApplicableRegions(vector).getRegions()) {
-            if (region.isMember(localPlayer)) {
-                isMember = true;
+            if (!region.isMember(localPlayer)) continue;
 
-                break;
-            }
+            return true;
         }
 
-        return isMember;
+        return false;
     }
 
     @Override
@@ -178,16 +208,12 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
 
         final LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
 
-        boolean isOwner = false;
-
         for (final ProtectedRegion region : regionManager.getApplicableRegions(vector).getRegions()) {
-            if (region.isOwner(localPlayer)) {
-                isOwner = true;
+            if (!region.isOwner(localPlayer)) continue;
 
-                break;
-            }
+            return true;
         }
 
-        return isOwner;
+        return false;
     }
 }

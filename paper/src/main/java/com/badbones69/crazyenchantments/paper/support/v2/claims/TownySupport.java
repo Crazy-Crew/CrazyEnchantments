@@ -3,7 +3,9 @@ package com.badbones69.crazyenchantments.paper.support.v2.claims;
 import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -13,8 +15,9 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.UUID;
 
 @NullMarked
 public final class TownySupport extends TerritorySupport<BlockState, Location> {
@@ -29,6 +32,15 @@ public final class TownySupport extends TerritorySupport<BlockState, Location> {
     @Override
     public String getPluginName() {
         return "Towny";
+    }
+
+    @Override
+    public boolean isProtected(final Location location) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        return this.api.getTown(location) != null;
     }
 
     @Override
@@ -134,21 +146,6 @@ public final class TownySupport extends TerritorySupport<BlockState, Location> {
     }
 
     @Override
-    public boolean isCombatEnabled(final Location location) {
-        if (!isPluginReady()) {
-            return true;
-        }
-
-        final TownBlock town = this.api.getTownBlock(location);
-
-        if (town == null || !town.hasTown()) {
-            return true;
-        }
-
-        return !CombatUtil.preventPvP(town.getWorld(), town);
-    }
-
-    @Override
     public boolean isFriendly(final Entity player, final Entity target) {
         if (!isPluginReady()) {
             return false;
@@ -181,5 +178,65 @@ public final class TownySupport extends TerritorySupport<BlockState, Location> {
     @Override
     public boolean isTerritory(final Player player) {
         return isTerritory(player, player.getLocation());
+    }
+
+    @Override
+    public boolean isCombatEnabled(final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final TownBlock town = this.api.getTownBlock(location);
+
+        if (town == null || !town.hasTown()) {
+            return true;
+        }
+
+        return !CombatUtil.preventPvP(town.getWorld(), town);
+    }
+
+    @Override
+    public boolean isMember(final Player player) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final Location location = player.getLocation();
+
+        final Town town = this.api.getTown(location);
+
+        if (town == null) {
+            return false;
+        }
+
+        return town.hasResident(player.getUniqueId());
+    }
+
+    @Override
+    public boolean isOwner(final Player player) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final Location location = player.getLocation();
+        final UUID uuid = player.getUniqueId();
+
+        if (this.api.isNationZone(location)) {
+            final Nation nation = this.api.getNation(uuid);
+
+            if (nation != null && nation.hasKing()) {
+                return nation.getKing().getUUID().equals(uuid);
+            }
+
+            return false;
+        }
+
+        final Town town = this.api.getTown(location);
+
+        if (town == null) {
+            return false;
+        }
+
+        return town.getMayor().getUUID().equals(uuid);
     }
 }

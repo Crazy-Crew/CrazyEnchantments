@@ -64,7 +64,7 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
             return false;
         }
 
-        return this.instance.get(player.getUniqueId()).faction().id() == faction.id();
+        return !WorldUtil.isEnabled(player.getWorld()) || this.instance.get(player.getUniqueId()).faction().id() == faction.id();
     }
 
     // generic methods
@@ -74,7 +74,7 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
             return false;
         }
 
-        return WorldUtil.isEnabled(location) || !new FLocation(location).faction().isWilderness();
+        return WorldUtil.isEnabled(location) && !new FLocation(location).faction().isWilderness();
     }
 
     @Override
@@ -132,15 +132,11 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
 
     @Override
     public boolean isFriendly(final Entity damager, final Entity target) {
-        if (!isPluginReady()) {
-            return false;
-        }
-
-        if (!(damager instanceof Player player)) {
-            return false;
-        }
-
-        if (!(target instanceof Player receiver)) {
+        if (!isPluginReady() ||
+                !(damager instanceof Player player) ||
+                !(target instanceof Player receiver) ||
+                !WorldUtil.isEnabled(damager.getWorld())
+        ) {
             return false;
         }
 
@@ -165,7 +161,11 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
 
     @Override
     public boolean isTerritory(final Player player) {
-        return this.instance.get(player.getUniqueId()).isInOwnTerritory();
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        return !WorldUtil.isEnabled(player.getWorld()) || this.instance.get(player.getUniqueId()).isInOwnTerritory();
     }
 
     @Override
@@ -175,11 +175,7 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
 
     @Override
     public boolean isMember(final Player player) {
-        if (!isPluginReady()) {
-            return false;
-        }
-
-        if (!WorldUtil.isEnabled(player)) {
+        if (!isPluginReady() || !WorldUtil.isEnabled(player.getWorld())) {
             return false;
         }
 
@@ -194,11 +190,7 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
 
     @Override
     public boolean isOwner(final Player player) {
-        if (!isPluginReady()) {
-            return false;
-        }
-
-        if (!WorldUtil.isEnabled(player)) {
+        if (!isPluginReady() || !WorldUtil.isEnabled(player.getWorld())) {
             return false;
         }
 
