@@ -2,20 +2,23 @@ package com.badbones69.crazyenchantments.paper.support.v2.claims;
 
 import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.domains.Association;
 import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.association.Associables;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
@@ -39,22 +42,31 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
     }
 
     @Override
+    public boolean isProtected(final Location location) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final World world = location.getWorld();
+
+        if (world == null) {
+            return false;
+        }
+
+        return this.container
+                .createQuery()
+                .testBuild(BukkitAdapter.adapt(location), Associables.constant(Association.NON_MEMBER));
+    }
+
+    @Override
     public boolean canBreakBlock(final Player player, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
 
-        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
-
-        final RegionManager regionManager = this.container.get(bukkitWorld);
-
-        if (regionManager == null) {
-            return true;
-        }
-
-        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
-
-        return regionManager.getApplicableRegions(vector).queryState(null, Flags.BLOCK_BREAK) == StateFlag.State.ALLOW;
+        return this.container
+                .createQuery()
+                .testState(BukkitAdapter.adapt(location), WorldGuardPlugin.inst().wrapPlayer(player, true), Flags.BUILD);
     }
 
     @Override
@@ -63,17 +75,9 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
             return true;
         }
 
-        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
-
-        final RegionManager regionManager = this.container.get(bukkitWorld);
-
-        if (regionManager == null) {
-            return true;
-        }
-
-        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
-
-        return regionManager.getApplicableRegions(vector).queryState(null, Flags.BLOCK_PLACE) == StateFlag.State.ALLOW;
+        return this.container
+                .createQuery()
+                .testState(BukkitAdapter.adapt(location), WorldGuardPlugin.inst().wrapPlayer(player, true), Flags.BUILD);
     }
 
     @Override
@@ -82,17 +86,9 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
             return true;
         }
 
-        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
-
-        final RegionManager regionManager = this.container.get(bukkitWorld);
-
-        if (regionManager == null) {
-            return true;
-        }
-
-        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
-
-        return regionManager.getApplicableRegions(vector).queryState(null, Flags.INTERACT) == StateFlag.State.ALLOW;
+        return this.container
+                .createQuery()
+                .testState(BukkitAdapter.adapt(location), WorldGuardPlugin.inst().wrapPlayer(player, true), Flags.INTERACT);
     }
 
     @Override
@@ -106,19 +102,14 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
             return true;
         }
 
-        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
+        return this.container
+                .createQuery()
+                .testState(BukkitAdapter.adapt(location), Associables.constant(Association.NON_MEMBER), Flags.TNT);
+    }
 
-        final RegionManager regionManager = this.container.get(bukkitWorld);
-
-        if (regionManager == null) {
-            return true;
-        }
-
-        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
-
-        final ApplicableRegionSet region = regionManager.getApplicableRegions(vector);
-
-        return region.queryState(null, Flags.OTHER_EXPLOSION) == StateFlag.State.ALLOW || region.queryState(null, Flags.TNT) == StateFlag.State.ALLOW;
+    @Override
+    public boolean canExplodeBlock(final Entity entity, final Location location) {
+        return canExplodeBlock(entity.getLocation());
     }
 
     @Override
@@ -127,17 +118,9 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
             return true;
         }
 
-        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
-
-        final RegionManager regionManager = this.container.get(bukkitWorld);
-
-        if (regionManager == null) {
-            return true;
-        }
-
-        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
-
-        return regionManager.getApplicableRegions(vector).queryState(null, Flags.PVP) == StateFlag.State.ALLOW;
+        return this.container
+                .createQuery()
+                .testState(BukkitAdapter.adapt(location), Associables.constant(Association.NON_MEMBER), Flags.PVP);
     }
 
     @Override
