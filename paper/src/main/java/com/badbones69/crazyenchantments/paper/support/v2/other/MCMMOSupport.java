@@ -6,8 +6,9 @@ import com.gmail.nossr50.api.PartyAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class MCMMOSupport extends TerritorySupport<Location, Location> {
 
     @Override
@@ -21,12 +22,8 @@ public class MCMMOSupport extends TerritorySupport<Location, Location> {
     }
 
     @Override
-    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
-        if (!(player instanceof Player entityPlayer)) {
-            return false;
-        }
-
-        if (!(target instanceof Player entityTarget)) {
+    public boolean isFriendly(final Entity player, final Entity target) {
+        if (!(player instanceof Player entityPlayer) || !(target instanceof Player entityTarget)) {
             return false;
         }
 

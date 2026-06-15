@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.paper.support.v2.claims.WorldGuardSuppor
 import com.badbones69.crazyenchantments.paper.support.v2.claims.factions.FactionsUUIDSupport;
 import com.badbones69.crazyenchantments.paper.support.v2.claims.skyblock.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.v2.other.MCMMOSupport;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -46,6 +47,9 @@ public class CrazyPlatform {
             new TownySupport(),
             new LandsSupport(),
             new PlotSupport(),
+
+            // other
+            new MCMMOSupport(),
 
             // skyblock
             new SuperiorSkyBlockSupport(),
