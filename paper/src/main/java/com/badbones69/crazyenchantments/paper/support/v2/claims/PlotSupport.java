@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
+import java.util.UUID;
 
 @NullMarked
 public final class PlotSupport extends TerritorySupport<Location, Location> {
@@ -101,6 +102,42 @@ public final class PlotSupport extends TerritorySupport<Location, Location> {
     @Override
     public boolean isTerritory(final Player player, final Location location) {
         return isTerritory(player);
+    }
+
+    @Override
+    public boolean isMember(final Player player) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
+
+        final Plot plot = plotPlayer.getCurrentPlot();
+
+        if (plot == null) {
+            return false;
+        }
+
+        final UUID uuid = player.getUniqueId();
+
+        return plot.getMembers().contains(uuid) || plot.getTrusted().contains(uuid);
+    }
+
+    @Override
+    public boolean isOwner(final Player player) {
+        if (!isPluginReady()) {
+            return false;
+        }
+
+        final PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
+
+        final Plot plot = plotPlayer.getCurrentPlot();
+
+        if (plot == null) {
+            return false;
+        }
+
+        return plot.isOwner(player.getUniqueId());
     }
 
     private com.plotsquared.core.location.Location getLocation(final Location location) {

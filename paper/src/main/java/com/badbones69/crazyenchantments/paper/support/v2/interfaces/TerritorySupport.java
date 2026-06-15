@@ -74,10 +74,6 @@ public abstract class TerritorySupport<B, L> {
         return true;
     }
 
-    public boolean isTerritory(final L location) {
-        return true;
-    }
-
     public boolean isProtected(final L location) {
         return false;
     }
