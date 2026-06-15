@@ -146,7 +146,7 @@ public final class TownySupport extends TerritorySupport<BlockState, Location> {
 
     @Override
     public boolean canInteract(final Player player, final Location location) {
-        return canInteract(player, location.getBlock().getState(true));
+        return canInteract(player, location.getBlock().getState(false));
     }
 
     @Override

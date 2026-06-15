@@ -116,7 +116,7 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
         }
 
         final Block block = location.getBlock();
-        final BlockState blockState = block.getState(true);
+        final BlockState blockState = block.getState(false);
 
         return !WorldUtil.isEnabled(blockState.getWorld()) || !Protection.denyExplode(entity, new FLocation(blockState.getLocation()));
     }
