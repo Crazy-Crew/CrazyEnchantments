@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.v2.other;
+package com.badbones69.crazyenchantments.paper.support.other;
 
-import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
 import com.gmail.nossr50.api.PartyAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

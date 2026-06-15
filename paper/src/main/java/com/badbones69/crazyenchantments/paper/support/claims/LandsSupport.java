@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.v2.claims;
+package com.badbones69.crazyenchantments.paper.support.claims;
 
-import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
 import me.angeschossen.lands.api.LandsIntegration;
 import me.angeschossen.lands.api.flags.type.Flags;
 import me.angeschossen.lands.api.land.Area;

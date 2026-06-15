@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;

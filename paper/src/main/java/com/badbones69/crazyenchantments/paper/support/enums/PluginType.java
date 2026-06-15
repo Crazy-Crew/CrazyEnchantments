@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.support.v2.enums;
+package com.badbones69.crazyenchantments.paper.support.enums;
 
 public enum PluginType {
 

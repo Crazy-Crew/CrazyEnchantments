@@ -1,15 +1,15 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
-import com.badbones69.crazyenchantments.paper.support.v2.claims.LandsSupport;
-import com.badbones69.crazyenchantments.paper.support.v2.claims.PlotSupport;
-import com.badbones69.crazyenchantments.paper.support.v2.claims.TownySupport;
-import com.badbones69.crazyenchantments.paper.support.v2.claims.WorldGuardSupport;
-import com.badbones69.crazyenchantments.paper.support.v2.claims.factions.FactionsUUIDSupport;
-import com.badbones69.crazyenchantments.paper.support.v2.claims.skyblock.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
-import com.badbones69.crazyenchantments.paper.support.v2.other.MCMMOSupport;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.claims.LandsSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.PlotSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.TownySupport;
+import com.badbones69.crazyenchantments.paper.support.claims.WorldGuardSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.factions.FactionsUUIDSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.skyblock.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.other.MCMMOSupport;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;

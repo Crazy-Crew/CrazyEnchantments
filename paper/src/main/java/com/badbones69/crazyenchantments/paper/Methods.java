@@ -9,7 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentTy
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.google.gson.Gson;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;

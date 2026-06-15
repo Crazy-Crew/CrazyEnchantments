@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.GameMode;

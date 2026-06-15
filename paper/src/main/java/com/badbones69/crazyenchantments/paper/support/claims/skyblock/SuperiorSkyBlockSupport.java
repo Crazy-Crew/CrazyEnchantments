@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.v2.claims.skyblock;
+package com.badbones69.crazyenchantments.paper.support.claims.skyblock;
 
-import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandFlag;

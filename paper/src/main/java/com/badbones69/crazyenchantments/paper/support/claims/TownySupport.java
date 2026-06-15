@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.v2.claims;
+package com.badbones69.crazyenchantments.paper.support.claims;
 
-import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;

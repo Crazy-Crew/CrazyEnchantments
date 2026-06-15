@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.v2.interfaces.factions;
+package com.badbones69.crazyenchantments.paper.support.interfaces.factions;
 
-import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.v2.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.jspecify.annotations.NullMarked;

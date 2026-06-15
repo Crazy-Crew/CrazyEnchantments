@@ -17,7 +17,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.support.v2.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
