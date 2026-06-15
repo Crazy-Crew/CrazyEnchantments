@@ -47,42 +47,6 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean canExplodeBlock(@NonNull final Location location) {
-        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
-
-        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
-            final TerritorySupport provider = instance.getProvider();
-
-            if (!provider.canExplodeBlock(location)) continue;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean canExplodeBlock(@NonNull final Player player) {
-        return canExplodeBlock(player.getLocation());
-    }
-
-    public boolean canBreakBlock(@NonNull final Player player, @NonNull final Location location) {
-        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
-
-        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
-            final TerritorySupport provider = instance.getProvider();
-
-            if (!provider.canBreakBlock(player, location)) continue;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean canBreakBlock(@NonNull final Player player) {
-        return canBreakBlock(player, player.getLocation());
-    }
-
     public boolean isTerritory(@NonNull final String region, @NonNull final Location location) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
@@ -99,10 +63,6 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isTerritory(@NonNull final String region, @NonNull final Player player) {
-        return isTerritory(region, player.getLocation());
-    }
-
     public boolean isTerritory(@NonNull final Player player, @NonNull final Location location) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
@@ -115,10 +75,6 @@ public class SupportUtils {
         }
 
         return false;
-    }
-
-    public boolean isTerritory(@NonNull final Player player) {
-        return isTerritory(player, player.getLocation());
     }
 
     public boolean isOwner(@NonNull final Player player) {
