@@ -16,7 +16,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
-
 import java.util.UUID;
 
 @NullMarked
@@ -146,12 +145,23 @@ public final class TownySupport extends TerritorySupport<BlockState, Location> {
     }
 
     @Override
-    public boolean isFriendly(final Entity player, final Entity target) {
+    public boolean canInteract(final Player player, final Location location) {
+        return canInteract(player, location.getBlock().getState(true));
+    }
+
+    @Override
+    public boolean isCombatEnabled(final Location location) {
         if (!isPluginReady()) {
-            return false;
+            return true;
         }
 
-        return CombatUtil.isAlly(this.api.getResident(player.getUniqueId()), this.api.getResident(target.getUniqueId()));
+        final TownBlock town = this.api.getTownBlock(location);
+
+        if (town == null || !town.hasTown()) {
+            return true;
+        }
+
+        return !CombatUtil.preventPvP(town.getWorld(), town);
     }
 
     @Override
@@ -181,18 +191,12 @@ public final class TownySupport extends TerritorySupport<BlockState, Location> {
     }
 
     @Override
-    public boolean isCombatEnabled(final Location location) {
+    public boolean isFriendly(final Entity player, final Entity target) {
         if (!isPluginReady()) {
-            return true;
+            return false;
         }
 
-        final TownBlock town = this.api.getTownBlock(location);
-
-        if (town == null || !town.hasTown()) {
-            return true;
-        }
-
-        return !CombatUtil.preventPvP(town.getWorld(), town);
+        return CombatUtil.isAlly(this.api.getResident(player.getUniqueId()), this.api.getResident(target.getUniqueId()));
     }
 
     @Override

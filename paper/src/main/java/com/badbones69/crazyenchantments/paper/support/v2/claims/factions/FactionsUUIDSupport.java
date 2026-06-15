@@ -131,6 +131,15 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
     }
 
     @Override
+    public boolean canInteract(final Player player, final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        return !WorldUtil.isEnabled(location) || !Protection.denyInteract(player, location, false);
+    }
+
+    @Override
     public boolean isFriendly(final Entity damager, final Entity target) {
         if (!isPluginReady() ||
                 !(damager instanceof Player player) ||
@@ -170,7 +179,17 @@ public final class FactionsUUIDSupport extends FactionsSupport<FPlayer, Faction,
 
     @Override
     public boolean isCombatEnabled(final Location location) {
-        return super.isCombatEnabled(location);
+        if (!isPluginReady() || !WorldUtil.isEnabled(location)) {
+            return true;
+        }
+
+        final Faction faction = this.factions.getAt(location);
+
+        if (faction.isSafeZone()) {
+            return false;
+        }
+
+        return faction.isWarZone() || !faction.noPvPInTerritory();
     }
 
     @Override

@@ -67,18 +67,23 @@ public final class SuperiorSkyBlockSupport extends TerritorySupport<BlockState, 
     }
 
     @Override
-    public boolean canInteract(final Player player, final BlockState blockState) {
+    public boolean canInteract(final Player player, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
 
-        final Island island = SuperiorSkyblockAPI.getIslandAt(blockState.getLocation());
+        final Island island = SuperiorSkyblockAPI.getIslandAt(location);
 
         if (island == null) {
             return true;
         }
 
         return island.hasPermission(player, IslandPrivilege.getByName("INTERACT"));
+    }
+
+    @Override
+    public boolean canInteract(final Player player, final BlockState blockState) {
+        return canInteract(player, blockState.getLocation());
     }
 
     @Override

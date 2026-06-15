@@ -2,7 +2,9 @@ package com.badbones69.crazyenchantments.paper.support.v2.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.support.v2.enums.PluginType;
+import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -40,7 +42,11 @@ public abstract class TerritorySupport<B, L> {
         return true;
     }
 
-    public boolean canInteract(final Player player, final B block) {
+    public boolean canInteract(final Player player, final BlockState block) {
+        return true;
+    }
+
+    public boolean canInteract(final Player player, final Location location) {
         return true;
     }
 

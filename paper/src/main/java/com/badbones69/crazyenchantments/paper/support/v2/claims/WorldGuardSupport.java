@@ -15,6 +15,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Location;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
@@ -92,6 +93,11 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
         return regionManager.getApplicableRegions(vector).queryState(null, Flags.INTERACT) == StateFlag.State.ALLOW;
+    }
+
+    @Override
+    public boolean canInteract(final Player player, final BlockState block) {
+        return canInteract(player, block.getLocation());
     }
 
     @Override

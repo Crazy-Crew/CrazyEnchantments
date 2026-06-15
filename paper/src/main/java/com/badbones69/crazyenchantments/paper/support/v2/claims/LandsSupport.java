@@ -44,9 +44,7 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
             return true;
         }
 
-        final Location location = blockState.getLocation();
-
-        final Area area = this.api.getArea(location);
+        final Area area = this.api.getArea(blockState.getLocation());
 
         if (area == null) {
             return true;
@@ -61,9 +59,7 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
             return true;
         }
 
-        final Location location = blockState.getLocation();
-
-        final Area area = this.api.getArea(location);
+        final Area area = this.api.getArea(blockState.getLocation());
 
         if (area == null) {
             return true;
@@ -73,12 +69,10 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
     }
 
     @Override
-    public boolean canInteract(final Player player, final BlockState blockState) {
+    public boolean canInteract(final Player player, final Location location) {
         if (!isPluginReady()) {
             return true;
         }
-
-        final Location location = blockState.getLocation();
 
         final Area area = this.api.getArea(location);
 
@@ -87,6 +81,11 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
         }
 
         return area.hasRoleFlag(player.getUniqueId(), Flags.INTERACT_GENERAL);
+    }
+
+    @Override
+    public boolean canInteract(final Player player, final BlockState blockState) {
+        return canInteract(player, blockState.getLocation());
     }
 
     @Override
@@ -125,13 +124,13 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
             return false;
         }
 
-        final Land land = this.api.getLandPlayer(target.getUniqueId()).getOwningLand();
+        final Land land = this.api.getLandPlayer(player.getUniqueId()).getOwningLand();
 
         if (land == null) {
             return false;
         }
 
-        return land.isTrusted(player.getUniqueId());
+        return land.isTrusted(target.getUniqueId());
     }
 
     @Override
