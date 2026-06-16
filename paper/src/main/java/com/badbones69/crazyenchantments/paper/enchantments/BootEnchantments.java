@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -60,7 +61,9 @@ public class BootEnchantments implements Listener {
         if (event.isFlying()) {
             if (player.getAllowFlight()) {
                 event.setCancelled(true);
+
                 player.setFlying(true);
+
                 this.wingsManager.addFlyingPlayer(player);
             }
         } else {
@@ -80,8 +83,10 @@ public class BootEnchantments implements Listener {
                 player.setAllowFlight(true);
             } else {
                 if (isFlying && WingsUtils.checkGameMode(player)) {
-                    player.setFlying(false);
+                    player.setFlyingFallDamage(TriState.FALSE);
                     player.setAllowFlight(false);
+                    player.setFlying(false);
+
                     this.wingsManager.removeFlyingPlayer(player);
                 }
             }
@@ -111,8 +116,10 @@ public class BootEnchantments implements Listener {
 
         if (!this.wingsManager.isWingsEnabled() || !this.wingsManager.isFlyingPlayer(player)) return;
 
-        player.setFlying(false);
+        player.setFlyingFallDamage(TriState.FALSE);
         player.setAllowFlight(false);
+        player.setFlying(false);
+
         this.wingsManager.removeFlyingPlayer(player);
     }
 }

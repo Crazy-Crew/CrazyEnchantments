@@ -7,10 +7,9 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
-import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -31,8 +30,6 @@ public class WingsUtils {
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private static final Server server = plugin.getServer();
-
-    private static final FusionPaper fusion = plugin.getFusion();
 
     private static final CrazyPlatform platform = plugin.getPlatform();
 
@@ -101,7 +98,29 @@ public class WingsUtils {
             final List<Player> players = getNearbyPlayers(player, wingsManager.getEnemyRadius());
 
             for (final Player target : players) {
-                return support.isFriendly(player, target); // true, they can fly, false, they can't fly
+                if (!target.hasLineOfSight(player)) {
+                    continue;
+                }
+
+                if (!support.isFriendly(player, target)) {
+                    if (player.isFlying()) {
+                        wingsManager.removeFlyingPlayer(player);
+
+                        player.setFlyingFallDamage(TriState.FALSE);
+                        player.setFlying(false);
+                    }
+
+                    if (target.isFlying()) {
+                        wingsManager.removeFlyingPlayer(target);
+
+                        target.setFlyingFallDamage(TriState.FALSE);
+                        target.setFlying(false);
+                    }
+
+                    return false;
+                }
+
+                return true; // true, they can fly, false, they can't fly
             }
         }
 
