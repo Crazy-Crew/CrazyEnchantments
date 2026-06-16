@@ -133,6 +133,20 @@ public class SupportUtils {
         return false;
     }
 
+    public boolean isTerritory(@NonNull final Player player) {
+        final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
+
+        for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
+            final TerritorySupport provider = instance.getProvider();
+
+            if (!provider.isTerritory(player)) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean isOwner(@NonNull final Player player) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 

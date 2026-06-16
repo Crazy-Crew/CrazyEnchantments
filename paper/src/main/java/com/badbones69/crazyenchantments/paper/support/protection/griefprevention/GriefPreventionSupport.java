@@ -81,11 +81,37 @@ public final class GriefPreventionSupport extends TerritorySupport<Location, Loc
             return false;
         }
 
-        return !claim.hasExplicitPermission(damager.getUniqueId(), ClaimPermission.Inventory) && !claim.hasExplicitPermission(target.getUniqueId(), ClaimPermission.Inventory);
+        return claim.hasExplicitPermission(damager.getUniqueId(), ClaimPermission.Inventory) && claim.hasExplicitPermission(target.getUniqueId(), ClaimPermission.Inventory);
+    }
+
+    @Override
+    public boolean isTerritory(Player player, Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final Claim claim = this.dataStore.getClaimAt(location, true, null);
+
+        if (claim == null) {
+            return false;
+        }
+
+        final ArrayList<String> users = new ArrayList<>();
+
+        claim.getPermissions(users, new ArrayList<>(), new ArrayList<>(), users);
+
+        final UUID uuid = player.getUniqueId();
+
+        return claim.ownerID.equals(uuid) || users.contains(uuid.toString());
     }
 
     @Override
     public boolean isTerritory(final Player player) {
+        return isTerritory(player, player.getLocation());
+    }
+
+    @Override
+    public boolean isMember(final Player player) {
         if (!isPluginReady()) {
             return true;
         }
@@ -93,19 +119,16 @@ public final class GriefPreventionSupport extends TerritorySupport<Location, Loc
         final Claim claim = this.dataStore.getClaimAt(player.getLocation(), true, null);
 
         if (claim == null) {
-            return true;
+            return false;
         }
 
         final ArrayList<String> users = new ArrayList<>();
 
         claim.getPermissions(users, new ArrayList<>(), new ArrayList<>(), users);
 
-        return users.contains(player.getUniqueId().toString());
-    }
+        final UUID uuid = player.getUniqueId();
 
-    @Override
-    public boolean isMember(final Player player) {
-        return isTerritory(player);
+        return users.contains(uuid.toString());
     }
 
     @Override

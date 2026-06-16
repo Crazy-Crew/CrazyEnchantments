@@ -55,7 +55,7 @@ public class BootEnchantments implements Listener {
         if (player.getEquipment().getBoots() == null) return;
         if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
-        if (!WingsUtils.canFly(player) || WingsUtils.isEnemiesNearby(player)) return;
+        if (!WingsUtils.canFly(player)) return;
 
         if (event.isFlying()) {
             if (player.getAllowFlight()) {
@@ -77,15 +77,7 @@ public class BootEnchantments implements Listener {
 
         if (this.wingsManager.isWingsEnabled() && this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
             if (WingsUtils.canFly(player)) {
-                if (!WingsUtils.isEnemiesNearby(player)) {
-                    player.setAllowFlight(true);
-                } else {
-                    if (isFlying && WingsUtils.checkGameMode(player)) {
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                        this.wingsManager.removeFlyingPlayer(player);
-                    }
-                }
+                player.setAllowFlight(true);
             } else {
                 if (isFlying && WingsUtils.checkGameMode(player)) {
                     player.setFlying(false);
@@ -106,7 +98,7 @@ public class BootEnchantments implements Listener {
 
         if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
-        if (!WingsUtils.canFly(player) || WingsUtils.isEnemiesNearby(player)) return;
+        if (!WingsUtils.canFly(player)) return;
 
         player.setAllowFlight(true);
 

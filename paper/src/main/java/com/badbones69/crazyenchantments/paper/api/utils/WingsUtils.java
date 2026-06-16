@@ -7,6 +7,8 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.GameMode;
@@ -19,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,8 @@ public class WingsUtils {
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private static final Server server = plugin.getServer();
+
+    private static final FusionPaper fusion = plugin.getFusion();
 
     private static final CrazyPlatform platform = plugin.getPlatform();
 
@@ -94,41 +97,40 @@ public class WingsUtils {
             return false; // they can't fly
         }
 
-        final Location location = player.getLocation();
+        if (wingsManager.isEnemyCheckEnabled() && !player.hasPermission("crazyenchantments.bypass.wings")) {
+            final List<Player> players = getNearbyPlayers(player, wingsManager.getEnemyRadius());
 
-        boolean isTerritory = false; // they can't fly
+            for (final Player target : players) {
+                return support.isFriendly(player, target); // true, they can fly, false, they can't fly
+            }
+        }
+
+        final Location location = player.getLocation();
 
         for (final String region : wingsManager.getRegions()) {
             if (support.isTerritory(region, location)) {
-                isTerritory = true; // they can fly
-
-                break;
+                return true;
             }
         }
 
-        if (!isTerritory && support.isTerritory(player, location)) {
-            isTerritory = wingsManager.canOwnersFly() && support.isOwner(player) || wingsManager.canMembersFly() && support.isMember(player);
+        if (wingsManager.canOwnersFly() && support.isOwner(player)) {
+            return true; // they can fly
         }
 
-        return isTerritory; // true, they can fly, false, they can't fly
-    }
-
-    public static boolean isEnemiesNearby(Player player) {
-        if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
-            for (final Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
-                //todo() update this
-                if (!(player.hasPermission("crazyenchantments.bypass.wings") && support.isFriendly(player, otherPlayer))) return true;
-            }
+        if (wingsManager.canMembersFly() && support.isMember(player)) {
+            return true; // they can fly
         }
 
-        return false;
+        return support.isTerritory(player, location); // true, they can fly, false, they can't fly
     }
 
     private static List<Player> getNearbyPlayers(Player player, int radius) {
-        List<Player> players = new ArrayList<>();
+        final List<Player> players = new ArrayList<>();
 
-        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (entity instanceof Player) players.add((Player) entity);
+        for (final Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+            if (entity instanceof Player target) {
+                players.add(target);
+            }
         }
 
         return players;
