@@ -5,13 +5,14 @@ import com.ryderbelserion.fusion.core.api.FusionKey;
 public class Support {
 
     // protection plugins
+    public static final FusionKey griefprevention = FusionKey.key("griefprevention", "GriefPrevention");
     public static final FusionKey worldguard = FusionKey.key("crazyenchantments", "WorldGuard");
 
     // party plugins
-    public static final FusionKey mcmmo = FusionKey.key("crazyenchantments", "McMMO");
+    public static final FusionKey mcmmo = FusionKey.key("crazyenchantments", "mcMMO");
 
     // faction plugins
-    public static final FusionKey factions_uuid = FusionKey.key("crazyenchantments", "Factions");
+    public static final FusionKey factions_uuid = FusionKey.key("crazyenchantments", "FactionsUUID");
 
     // plot plugins
     public static final FusionKey plotsquared = FusionKey.key("crazyenchantments", "PlotSquared");
