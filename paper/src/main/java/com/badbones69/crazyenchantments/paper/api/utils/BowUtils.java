@@ -2,10 +2,12 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,8 +27,11 @@ import java.util.Map;
 
 public class BowUtils {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final SupportUtils support = this.platform.getSupport();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -60,7 +65,7 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(Entity entity) {
-        return this.starter.getPluginSupport().allowCombat(entity.getLocation());
+        return this.support.isCombatEnabled(entity.getLocation());
     }
 
     public EnchantedArrow getEnchantedArrow(Arrow arrow) {

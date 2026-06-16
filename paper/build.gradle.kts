@@ -5,6 +5,16 @@ plugins {
 project.group = "${rootProject.group}.paper"
 
 repositories {
+    exclusiveContent {
+        forRepository {
+            maven("https://dependency.download/releases")
+        }
+
+        filter {
+            includeGroup("dev.kitteh")
+        }
+    }
+
     maven("https://repo.md-5.net/content/repositories/snapshots/")
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
@@ -12,6 +22,8 @@ repositories {
     maven("https://repo.glaremasters.me/repository/towny/")
 
     maven("https://repo.bg-software.com/repository/api/")
+
+    maven("https://repo.incredibleplugins.com/releases/")
 
     maven("https://repo.triumphteam.dev/snapshots/")
 

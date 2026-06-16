@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -28,8 +29,13 @@ public class CrazyPlatform {
 
     private final Path dataPath = this.plugin.getDataPath();
 
+    private SupportUtils support;
+
     public void init() {
         loadExamples();
+
+        this.support = new SupportUtils();
+        this.support.init();
     }
 
     public void loadExamples() {
@@ -72,5 +78,9 @@ public class CrazyPlatform {
 
     public Optional<Player> getPlayer(@NonNull final String name) {
         return Optional.ofNullable(this.server.getPlayer(name));
+    }
+
+    public @NonNull final SupportUtils getSupport() {
+        return this.support;
     }
 }

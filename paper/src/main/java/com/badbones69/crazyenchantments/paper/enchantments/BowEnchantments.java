@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
@@ -13,9 +14,10 @@ import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
@@ -24,6 +26,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,6 +37,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
@@ -43,8 +47,15 @@ import java.util.Map;
 
 public class BowEnchantments implements Listener {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final Server server = this.plugin.getServer();
+
+    private final PluginManager pluginManager = this.server.getPluginManager();
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final SupportUtils support = this.platform.getSupport();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -54,10 +65,6 @@ public class BowEnchantments implements Listener {
 
     @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     // Plugin Managers.
     @NotNull
@@ -72,9 +79,9 @@ public class BowEnchantments implements Listener {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getEntity().getUniqueId())) return;
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
 
-        ItemStack bow = event.getBow();
+        final ItemStack bow = event.getBow();
 
-        if (!this.bowUtils.allowsCombat(player)) return;
+        if (!this.support.isCombatEnabled(player)) return;
 
         Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(bow);
         if (enchants.isEmpty()) return;
@@ -93,9 +100,12 @@ public class BowEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onLand(ProjectileHitEvent event) {
-        if (!(event.getEntity().getShooter() instanceof Player shooter)) return;
-        if (!(event.getEntity() instanceof Arrow entityArrow)) return;
-        if (!this.bowUtils.allowsCombat(event.getEntity())) return;
+        final Projectile entity = event.getEntity();
+
+        if (!(entity.getShooter() instanceof Player shooter)) return;
+        if (!(entity instanceof Arrow entityArrow)) return;
+
+        if (!this.support.isCombatEnabled(entityArrow.getLocation())) return;
 
         EnchantedArrow enchantedArrow = this.bowUtils.getEnchantedArrow(entityArrow);
 
@@ -121,20 +131,20 @@ public class BowEnchantments implements Listener {
             } catch (Exception ignore) {
             }
 
-            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
-                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
+            for (LivingEntity livingEntity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
+                final EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
                 EventUtils.addIgnoredUUID(shooter.getUniqueId());
-                shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-                if (!damageByEntityEvent.isCancelled() && !this.pluginSupport.isFriendly(enchantedArrow.getShooter(), entity) && !enchantedArrow.getShooter().getUniqueId().equals(entity.getUniqueId()))
-                    entity.damage(5D);
+                this.pluginManager.callEvent(damageByEntityEvent);
+
+                if (!damageByEntityEvent.isCancelled() && !this.support.isFriendly(enchantedArrow.getShooter(), entity) && !enchantedArrow.getShooter().getUniqueId().equals(entity.getUniqueId()))
+                    livingEntity.damage(5D);
 
                 EventUtils.removeIgnoredEvent(damageByEntityEvent);
                 EventUtils.removeIgnoredUUID(shooter.getUniqueId());
             }
-
         }
 
         new FoliaScheduler(this.plugin, null, entityArrow) {
@@ -154,10 +164,10 @@ public class BowEnchantments implements Listener {
         EnchantedArrow enchantedArrow = this.bowUtils.getEnchantedArrow(entityArrow);
         if (enchantedArrow == null) return;
 
-        if (!this.pluginSupport.allowCombat(enchantedArrow.arrow().getLocation())) return;
+        if (!this.support.isCombatEnabled(enchantedArrow.arrow().getLocation())) return;
         // Damaged player is friendly.
 
-        if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.pluginSupport.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
+        if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.support.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
             int heal = 1 + enchantedArrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
@@ -169,7 +179,7 @@ public class BowEnchantments implements Listener {
         }
 
         // Damaged player is an enemy.
-        if (this.pluginSupport.isFriendly(enchantedArrow.getShooter(), entity)) return;
+        if (this.support.isFriendly(enchantedArrow.getShooter(), entity)) return;
 
         this.bowUtils.spawnWebs(event.getEntity(), enchantedArrow);
 

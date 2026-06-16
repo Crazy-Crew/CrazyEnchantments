@@ -1,0 +1,32 @@
+package com.badbones69.crazyenchantments.paper.support.parties.mcmmo;
+
+import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
+import com.gmail.nossr50.api.PartyAPI;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public class McMMOSupport extends TerritorySupport<Location, Location> {
+
+    @Override
+    public PluginType getPluginType() {
+        return PluginType.DEFAULT;
+    }
+
+    @Override
+    public String getPluginName() {
+        return "McMMO";
+    }
+
+    @Override
+    public boolean isFriendly(final Entity player, final Entity target) {
+        if (!(player instanceof Player entityPlayer) || !(target instanceof Player entityTarget)) {
+            return false;
+        }
+
+        return PartyAPI.inSameParty(entityPlayer, entityTarget);
+    }
+}
