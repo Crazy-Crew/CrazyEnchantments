@@ -9,8 +9,11 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,11 +21,15 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 public class ArmorProcessor extends PoolProcessor {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
@@ -47,15 +54,20 @@ public class ArmorProcessor extends PoolProcessor {
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
             Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
+
             if (enchantments.isEmpty()) continue;
 
-            int heal = 1;
-            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue();
+            final Optional<AttributeInstance> instance = Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH));
 
-            if (maxHealth > player.getHealth() && player.getHealth() > 0) {
-                checkNursery(armor, player, enchantments, heal, maxHealth);
-            }
+            final double health = player.getHealth();
+
+            instance.ifPresentOrElse(action -> {
+                final double attribute = action.getValue();
+
+                if (attribute > health && health > 0) {
+                    checkNursery(armor, player, enchantments, 1, attribute);
+                }
+            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute!", player.getName()));
 
             if (player.getFoodLevel() < 20) {
                 checkImplants(armor, player, enchantments);
@@ -154,12 +166,19 @@ public class ArmorProcessor extends PoolProcessor {
     private void checkNursery(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int heal, double maxHealth) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.NURSERY, player, enchantments)) return;
 
+        final double health = player.getHealth();
+
         new FoliaScheduler(this.plugin, null, player) {
             @Override
             public void run() {
                 if (EnchantUtils.normalEnchantEvent(CEnchantments.NURSERY, player, armor)) {
-                    if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
-                    if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
+                    if (health + heal <= maxHealth) {
+                        player.setHealth(health + heal);
+                    }
+
+                    if (health + heal >= maxHealth) {
+                        player.setHealth(maxHealth);
+                    }
                 }
             }
         }.runNextTick();

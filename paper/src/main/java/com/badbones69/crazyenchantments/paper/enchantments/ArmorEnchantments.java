@@ -18,6 +18,8 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -52,6 +54,8 @@ import java.util.stream.Collectors;
 public class ArmorEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
@@ -264,8 +268,11 @@ public class ArmorEnchantments implements Listener {
             }
 
             if (player.getHealth() <= event.getFinalDamage() && EnchantUtils.isEventActive(CEnchantments.SYSTEMREBOOT, player, armor, enchants)) {
-                player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
-                event.setCancelled(true);
+                Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH)).ifPresentOrElse(attribute -> {
+                    player.setHealth(attribute.getValue());
+
+                    event.setCancelled(true);
+                }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", player.getName(), "System Reboot"));
 
                 return;
             }
@@ -298,12 +305,16 @@ public class ArmorEnchantments implements Listener {
 
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
                 double heal = enchants.get(CEnchantments.ENLIGHTENED.getEnchantment());
-                // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
 
-                if (player.getHealth() + heal < maxHealth) player.setHealth(player.getHealth() + heal);
+                Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH)).ifPresentOrElse(attribute -> {
+                    final double maxHealth = attribute.getValue();
 
-                if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
+                    final double playerHealth = player.getHealth();
+
+                    if (playerHealth + heal < maxHealth) player.setHealth(playerHealth + heal);
+
+                    if (playerHealth + heal >= maxHealth) player.setHealth(maxHealth);
+                }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", player.getName(), "Enlightened"));
             }
 
             if (EnchantUtils.isEventActive(CEnchantments.INSOMNIA, player, armor, enchants)) damager.damage(event.getDamage() + enchants.get(CEnchantments.INSOMNIA.getEnchantment()));

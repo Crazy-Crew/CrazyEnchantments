@@ -22,6 +22,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.utils.AttributeUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
@@ -39,7 +40,7 @@ import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -66,10 +67,11 @@ import java.util.concurrent.TimeUnit;
 
 public class CrazyManager {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final FusionPaper fusion = this.plugin.getFusion();
+
+    private final Server server = this.plugin.getServer();
     
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -153,18 +155,14 @@ public class CrazyManager {
         this.enchantmentBookSettings.getCategories().clear();
 
         // Check if we should patch player health.
-        boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health", true);
+        final boolean isPatchingHealth = config.getBoolean("Settings.Reset-Players-Max-Health", true);
 
-        this.plugin.getServer().getOnlinePlayers().forEach(player -> {
-            // Load our players.
+        for (final Player player : this.server.getOnlinePlayers()) {
             loadCEPlayer(player);
 
-            // Check if we need to patch playerHealth.
-            Attribute genericAttribute = Attribute.MAX_HEALTH;
-
-            double baseValue = player.getAttribute(genericAttribute).getBaseValue();
-
-            if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
+            if (isPatchingHealth) {
+                AttributeUtils.setHealth(player, 0);
+            }
 
             new FoliaScheduler(this.plugin, Scheduler.global_scheduler, TimeUnit.MINUTES) {
                 @Override
@@ -172,7 +170,7 @@ public class CrazyManager {
                     backupCEPlayer(player);
                 }
             }.runAtFixedRate(5, 5);
-        });
+        }
 
         // Invalidate cached enchants.
         CEnchantments.invalidateCachedEnchants();

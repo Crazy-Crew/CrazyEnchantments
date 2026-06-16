@@ -15,6 +15,8 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -44,10 +46,13 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class BowEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
 
     private final Server server = this.plugin.getServer();
 
@@ -169,13 +174,17 @@ public class BowEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.DOCTOR, enchantedArrow.getShooter(), enchantedArrow.bow(), enchantedArrow.enchantments()) && this.support.isFriendly(enchantedArrow.getShooter(), event.getEntity())) {
             int heal = 1 + enchantedArrow.getLevel(CEnchantments.DOCTOR);
-            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
 
-            if (entity.getHealth() < maxHealth) {
-                if (entity.getHealth() + heal < maxHealth) entity.setHealth(entity.getHealth() + heal);
-                if (entity.getHealth() + heal >= maxHealth) entity.setHealth(maxHealth);
-            }
+            Optional.ofNullable(entity.getAttribute(Attribute.MAX_HEALTH)).ifPresentOrElse(attribute -> {
+                final double maxHealth = attribute.getValue();
+
+                final double entityHealth = entity.getHealth();
+
+                if (entityHealth < maxHealth) {
+                    if (entityHealth + heal < maxHealth) entity.setHealth(entityHealth + heal);
+                    if (entityHealth + heal >= maxHealth) entity.setHealth(maxHealth);
+                }
+            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", entity.getName(), "Doctor"));
         }
 
         // Damaged player is an enemy.

@@ -18,6 +18,8 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -45,12 +47,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class SwordEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.plugin.getFusion();
 
     private final SupportUtils support = this.platform.getSupport();
 
@@ -212,12 +217,16 @@ public class SwordEnchantments implements Listener {
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.LIFESTEAL, damager, item, enchantments)) {
             int steal = enchantments.get(CEnchantments.LIFESTEAL.getEnchantment());
-            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue();
 
-            if (damager.getHealth() + steal < maxHealth) damager.setHealth(damager.getHealth() + steal);
+            final double entityHealth = damager.getHealth();
 
-            if (damager.getHealth() + steal >= maxHealth) damager.setHealth(maxHealth);
+            Optional.ofNullable(damager.getAttribute(Attribute.MAX_HEALTH)).ifPresentOrElse(attribute -> {
+                final double maxHealth = attribute.getValue();
+
+                if (entityHealth + steal < maxHealth) damager.setHealth(entityHealth + steal);
+
+                if (entityHealth + steal >= maxHealth) damager.setHealth(maxHealth);
+            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", damager.getName(), "Lifesteal"));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NUTRITION, damager, item, enchantments)) {
@@ -227,12 +236,15 @@ public class SwordEnchantments implements Listener {
         }
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VAMPIRE, damager, item, enchantments)) {
-            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-            double maxHealth = damager.getAttribute(Attribute.MAX_HEALTH).getValue();
+            final double entityHealth = damager.getHealth();
 
-            if (damager.getHealth() + event.getDamage() / 2 < maxHealth) damager.setHealth(damager.getHealth() + event.getDamage() / 2);
+            Optional.ofNullable(damager.getAttribute(Attribute.MAX_HEALTH)).ifPresentOrElse(attribute -> {
+                final double maxHealth = attribute.getValue();
 
-            if (damager.getHealth() + event.getDamage() / 2 >= maxHealth) damager.setHealth(maxHealth);
+                if (entityHealth + event.getDamage() / 2 < maxHealth) damager.setHealth(entityHealth + event.getDamage() / 2);
+
+                if (entityHealth + event.getDamage() / 2 >= maxHealth) damager.setHealth(maxHealth);
+            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", damager.getName(), "Vampire"));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BLINDNESS, damager, item, enchantments)) {

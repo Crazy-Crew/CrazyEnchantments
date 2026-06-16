@@ -3,10 +3,11 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.paper.api.utils.AttributeUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Endermite;
 import org.bukkit.entity.EntityType;
@@ -22,8 +23,9 @@ import java.util.HashMap;
 
 public class AllyMob {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final FusionPaper fusion = this.plugin.getFusion();
 
     @NotNull
     private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
@@ -63,11 +65,12 @@ public class AllyMob {
 
         this.ally = (LivingEntity) location.getWorld().spawnEntity(location, this.type.entityType);
 
-        this.ally.getAttribute(Attribute.MAX_HEALTH).setBaseValue(this.type.maxHealth);
+        AttributeUtils.setHealth(this.ally, this.type.maxHealth);
 
         this.ally.setHealth(this.type.maxHealth);
 
         HashMap<String, String> placeholders = new HashMap<>();
+
         placeholders.put("%Player%", this.owner.getName());
         placeholders.put("%Mob%", this.type.entityType.getName());
 
