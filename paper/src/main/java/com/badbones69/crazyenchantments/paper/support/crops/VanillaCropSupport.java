@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.crops;
 
-import com.badbones69.crazyenchantments.paper.support.interfaces.CropSupport;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.CropSupport;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.Farmland;

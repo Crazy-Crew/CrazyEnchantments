@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.claims;
+package com.badbones69.crazyenchantments.paper.support.protection.worldguard;
 
-import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.support.interfaces;
+package com.badbones69.crazyenchantments.paper.support.api.interfaces;
 
 import org.bukkit.block.BlockState;
 import org.jspecify.annotations.NullMarked;

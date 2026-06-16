@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.interfaces;
+package com.badbones69.crazyenchantments.paper.support.api.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.block.BlockState;

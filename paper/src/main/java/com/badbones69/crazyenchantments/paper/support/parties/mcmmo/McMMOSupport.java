@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.other;
+package com.badbones69.crazyenchantments.paper.support.parties.mcmmo;
 
-import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
 import com.gmail.nossr50.api.PartyAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class MCMMOSupport extends TerritorySupport<Location, Location> {
+public class McMMOSupport extends TerritorySupport<Location, Location> {
 
     @Override
     public PluginType getPluginType() {

@@ -11,7 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.badbones69.crazyenchantments.paper.support.interfaces.CropSupport;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.CropSupport;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;

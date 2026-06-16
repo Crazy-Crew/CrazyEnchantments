@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.paper.support.claims.factions;
+package com.badbones69.crazyenchantments.paper.support.factions.uuid;
 
-import com.badbones69.crazyenchantments.paper.support.interfaces.factions.FactionsSupport;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.factions.FactionsSupport;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;

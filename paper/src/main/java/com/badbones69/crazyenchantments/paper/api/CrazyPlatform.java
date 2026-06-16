@@ -2,14 +2,6 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.badbones69.crazyenchantments.paper.support.claims.LandsSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.PlotSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.TownySupport;
-import com.badbones69.crazyenchantments.paper.support.claims.WorldGuardSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.factions.FactionsUUIDSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.skyblock.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
-import com.badbones69.crazyenchantments.paper.support.other.MCMMOSupport;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -41,22 +33,6 @@ public class CrazyPlatform {
 
     public void init() {
         loadExamples();
-
-        List.of(
-            new WorldGuardSupport(),
-            new TownySupport(),
-            new LandsSupport(),
-            new PlotSupport(),
-
-            // other
-            new MCMMOSupport(),
-
-            // skyblock
-            new SuperiorSkyBlockSupport(),
-
-            // factions
-            new FactionsUUIDSupport()
-        ).forEach(TerritorySupport::init);
 
         this.support = new SupportUtils();
         this.support.init();

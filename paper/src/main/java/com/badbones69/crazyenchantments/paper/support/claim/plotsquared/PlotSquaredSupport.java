@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.paper.support.claims;
+package com.badbones69.crazyenchantments.paper.support.claim.plotsquared;
 
-import com.badbones69.crazyenchantments.paper.support.enums.PluginType;
-import com.badbones69.crazyenchantments.paper.support.interfaces.TerritorySupport;
+import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.flag.implementations.PvpFlag;
@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.UUID;
 
 @NullMarked
-public final class PlotSupport extends TerritorySupport<Location, Location> {
+public final class PlotSquaredSupport extends TerritorySupport<Location, Location> {
 
     @Override
     public PluginType getPluginType() {
