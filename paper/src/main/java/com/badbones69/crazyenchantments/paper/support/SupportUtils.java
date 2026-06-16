@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.support.claim.plotsquared.PlotSqua
 import com.badbones69.crazyenchantments.paper.support.claim.towny.TownyImpl;
 import com.badbones69.crazyenchantments.paper.support.factions.uuid.FactionsUUIDImpl;
 import com.badbones69.crazyenchantments.paper.support.parties.mcmmo.McMMOImpl;
+import com.badbones69.crazyenchantments.paper.support.protection.griefprevention.GriefPreventionImpl;
 import com.badbones69.crazyenchantments.paper.support.protection.worldguard.WorldGuardImpl;
 import com.badbones69.crazyenchantments.paper.support.skyblock.superor.SuperiorSkyBlockImpl;
 import com.ryderbelserion.fusion.core.api.FusionKey;
@@ -48,6 +49,7 @@ public class SupportUtils {
 
         List.of(
                 // protection plugins
+                new GriefPreventionImpl(),
                 new WorldGuardImpl(),
 
                 // party plugins
