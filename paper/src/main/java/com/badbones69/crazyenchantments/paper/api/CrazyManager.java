@@ -557,16 +557,16 @@ public class CrazyManager {
     public ItemStack changeEnchantmentLimiter(@NotNull final ItemStack itemStack, final int amount) {
         final PersistentDataContainerView view = itemStack.getPersistentDataContainer();
 
-        int type = view.getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
-
-        final int newAmount = type += amount; //todo() this needs to be tested.
+        final int newAmount = view.getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0) + amount;
 
         itemStack.editPersistentDataContainer(container -> {
-            if (newAmount == 0) {
+            if (newAmount <= 0) {
                 container.remove(DataKeys.limit_reducer.getNamespacedKey());
-            } else {
-                container.set(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, newAmount);
+
+                return;
             }
+
+            container.set(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, newAmount);
         });
 
         return itemStack;
@@ -579,6 +579,7 @@ public class CrazyManager {
      */
     public int getEnchantmentLimiter(@NotNull ItemStack item) {
         if (!useEnchantmentLimiter) return 0;
+
         return item.getPersistentDataContainer().getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
     }
 
