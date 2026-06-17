@@ -1,13 +1,16 @@
 package com.badbones69.crazyenchantments.paper.api.enums.keys;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
 import com.ryderbelserion.fusion.files.enums.FileType;
+import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -21,10 +24,13 @@ public enum FileKeys {
     GKITZ(FileType.PAPER_YAML, "GKitz.yml"),
     MESSAGES(FileType.PAPER_YAML, "Messages.yml"),
     ENCHANTMENT_TYPES(FileType.PAPER_YAML, "Enchantment-Types.yml"),
-    TINKER(FileType.PAPER_YAML, "Tinker.yml");
+    TINKER(FileType.PAPER_YAML, "Tinker.yml"),
+
+    SUPPORT(FileType.YAML, "support.yml");
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    private final PaperFileManager fileManager = this.plugin.getFileManager();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+    private final PaperFileManager fileManager = this.platform.getFileManager();
     private final Path path = this.plugin.getDataPath();
 
     private final FileType fileType;
@@ -41,6 +47,20 @@ public enum FileKeys {
         this.folder = this.path;
         this.location = this.folder.resolve(fileName);
         this.fileType = fileType;
+    }
+
+    public @NotNull final CommentedConfigurationNode getConfigurationNode() {
+        return getYamlCustomFile().getConfiguration();
+    }
+
+    public @NotNull final YamlCustomFile getYamlCustomFile() {
+        final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(this.location);
+
+        if (customFile.isEmpty()) {
+            throw new FusionException("Could not find custom file for " + this.location);
+        }
+
+        return customFile.get();
     }
 
     public @NotNull final YamlConfiguration getConfiguration() {

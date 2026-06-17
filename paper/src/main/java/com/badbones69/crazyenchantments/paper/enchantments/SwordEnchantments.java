@@ -55,7 +55,7 @@ public class SwordEnchantments implements Listener {
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    private final FusionPaper fusion = this.plugin.getFusion();
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final SupportUtils support = this.platform.getSupport();
 

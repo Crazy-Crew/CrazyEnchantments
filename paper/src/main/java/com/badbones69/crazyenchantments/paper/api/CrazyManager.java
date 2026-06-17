@@ -69,7 +69,9 @@ public class CrazyManager {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final FusionPaper fusion = this.plugin.getFusion();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final Server server = this.plugin.getServer();
     

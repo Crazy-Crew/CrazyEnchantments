@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
@@ -25,7 +26,9 @@ public class MenuManager {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private static final FusionPaper fusion = plugin.getFusion();
+    private static final CrazyPlatform platform = plugin.getPlatform();
+
+    private static final FusionPaper fusion = platform.getFusion();
 
     private static final List<EnchantmentType> enchantmentTypes = new ArrayList<>();
 

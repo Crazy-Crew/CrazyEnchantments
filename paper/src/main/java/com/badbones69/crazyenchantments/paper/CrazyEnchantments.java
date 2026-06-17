@@ -27,15 +27,12 @@ import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListene
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.ryderbelserion.fusion.core.api.enums.Level;
-import com.ryderbelserion.fusion.paper.FusionPaper;
-import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
 
 public class CrazyEnchantments extends JavaPlugin {
 
@@ -49,31 +46,12 @@ public class CrazyEnchantments extends JavaPlugin {
 
     private final BossBarController bossBarController = new BossBarController(this);
 
-    private PaperFileManager fileManager;
     private CrazyPlatform platform;
-    private FusionPaper fusion;
 
     @Override
     public void onEnable() {
-        this.fusion = new FusionPaper(this);
-        this.fusion.init();
-
         this.platform = new CrazyPlatform();
         this.platform.init();
-
-        this.fileManager = this.fusion.getFileManager();
-
-        List.of(
-                FileKeys.CONFIG,
-                FileKeys.BLOCKLIST,
-                FileKeys.HEADMAP,
-                FileKeys.DATA,
-                FileKeys.ENCHANTMENTS,
-                FileKeys.GKITZ,
-                FileKeys.MESSAGES,
-                FileKeys.ENCHANTMENT_TYPES,
-                FileKeys.TINKER
-        ).forEach(FileKeys::addFile);
 
         this.starter = new Starter();
         this.starter.run();
@@ -154,7 +132,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
         if (this.starter.getCrazyManager().isGkitzEnabled()) {
-            this.fusion.log(Level.WARNING, "G-Kitz Support is now enabled!");
+            this.platform.getFusion().log(Level.WARNING, "G-Kitz Support is now enabled!");
 
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
@@ -199,13 +177,5 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public @NotNull final CrazyPlatform getPlatform() {
         return this.platform;
-    }
-
-    public @NotNull final PaperFileManager getFileManager() {
-        return this.fileManager;
-    }
-
-    public @NotNull final FusionPaper getFusion() {
-        return this.fusion;
     }
 }

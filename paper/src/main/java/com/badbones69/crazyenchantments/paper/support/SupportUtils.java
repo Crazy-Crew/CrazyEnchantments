@@ -1,6 +1,10 @@
 package com.badbones69.crazyenchantments.paper.support;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
+import com.badbones69.crazyenchantments.paper.api.constants.Support;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.VanishSupport;
 import com.badbones69.crazyenchantments.paper.support.crops.VanillaCropSupport;
 import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.CropSupport;
@@ -13,6 +17,8 @@ import com.badbones69.crazyenchantments.paper.support.parties.mcmmo.McMMOImpl;
 import com.badbones69.crazyenchantments.paper.support.protection.griefprevention.GriefPreventionImpl;
 import com.badbones69.crazyenchantments.paper.support.protection.worldguard.WorldGuardImpl;
 import com.badbones69.crazyenchantments.paper.support.skyblock.superor.SuperiorSkyBlockImpl;
+import com.badbones69.crazyenchantments.paper.support.vanish.GenericVanishSupport;
+import com.badbones69.crazyenchantments.paper.support.vanish.plugins.EssentialsSupport;
 import com.ryderbelserion.fusion.core.api.FusionKey;
 import com.ryderbelserion.fusion.core.api.registry.mods.ModRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -25,7 +31,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,7 +40,9 @@ public class SupportUtils {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final FusionPaper fusion = this.plugin.getFusion();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final ModRegistry modRegistry = this.fusion.getModRegistry();
 
@@ -41,6 +50,7 @@ public class SupportUtils {
 
     private final ServicesManager servicesManager = this.server.getServicesManager();
 
+    private VanishSupport vanishSupport;
     private CropSupport cropSupport;
 
     public void init() {
@@ -82,14 +92,33 @@ public class SupportUtils {
             }
         });
 
+        final CommentedConfigurationNode configuration = FileKeys.SUPPORT.getConfigurationNode();
+
+        switch (configuration.node("vanish-support", "plugin").getString("none").toLowerCase()) {
+            case "essentials" -> {
+                final FusionKey key = Support.essentials;
+
+                if (this.fusion.isModReady(key)) {
+                    this.vanishSupport = new EssentialsSupport(key);
+                }
+            }
+
+            case "none" -> this.vanishSupport = new GenericVanishSupport();
+        }
+
         this.cropSupport = new VanillaCropSupport();
     }
 
-    public @NonNull final CropSupport getCropSupport() {
+    public final VanishSupport getVanishSupport() {
+        return this.vanishSupport;
+    }
+
+    public final CropSupport getCropSupport() {
         return this.cropSupport;
     }
 
-    public boolean isFriendly(@NonNull final Entity player, @NonNull final Entity target) {
+    @NullMarked
+    public boolean isFriendly(final Entity player, final Entity target) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -103,7 +132,8 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isTerritory(@NonNull final String region, @NonNull final Location location) {
+    @NullMarked
+    public boolean isTerritory(final String region, final Location location) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -119,7 +149,8 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isTerritory(@NonNull final Player player, @NonNull final Location location) {
+    @NullMarked
+    public boolean isTerritory(final Player player, final Location location) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -133,7 +164,8 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isTerritory(@NonNull final Player player) {
+    @NullMarked
+    public boolean isTerritory(final Player player) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -147,7 +179,8 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isOwner(@NonNull final Player player) {
+    @NullMarked
+    public boolean isOwner(final Player player) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -161,7 +194,8 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isMember(@NonNull final Player player) {
+    @NullMarked
+    public boolean isMember(final Player player) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -175,7 +209,8 @@ public class SupportUtils {
         return false;
     }
 
-    public boolean isCombatEnabled(@NonNull final Location location) {
+    @NullMarked
+    public boolean isCombatEnabled(final Location location) {
         final Collection<RegisteredServiceProvider<TerritorySupport>> registry = this.servicesManager.getRegistrations(TerritorySupport.class);
 
         for (final RegisteredServiceProvider<TerritorySupport> instance : registry) {
@@ -189,7 +224,8 @@ public class SupportUtils {
         return true;
     }
 
-    public boolean isCombatEnabled(@NonNull final Player player) {
+    @NullMarked
+    public boolean isCombatEnabled(final Player player) {
         return isCombatEnabled(player.getLocation());
     }
 }

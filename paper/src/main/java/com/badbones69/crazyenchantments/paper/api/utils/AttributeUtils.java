@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.attribute.Attribute;
@@ -14,7 +15,9 @@ public class AttributeUtils {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private static final FusionPaper fusion = plugin.getFusion();
+    private static final CrazyPlatform platform = plugin.getPlatform();
+
+    private static final FusionPaper fusion = platform.getFusion();
 
     public static void setHealth(final LivingEntity entity, final int health) {
         Optional.ofNullable(entity.getAttribute(Attribute.MAX_HEALTH)).ifPresentOrElse(attribute -> {

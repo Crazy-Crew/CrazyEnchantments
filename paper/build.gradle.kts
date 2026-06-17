@@ -15,6 +15,16 @@ repositories {
         }
     }
 
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.essentialsx.net/releases")
+        }
+
+        filter {
+            includeGroup("net.essentialsx")
+        }
+    }
+
     maven("https://repo.md-5.net/content/repositories/snapshots/")
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
@@ -36,36 +46,19 @@ dependencies {
 
     implementation(libs.metrics)
 
-    compileOnly(libs.informative.annotations)
-
     compileOnly(libs.vault) {
         exclude("org.bukkit", "bukkit")
     }
 
-    compileOnly(libs.griefprevention)
+    compileOnly(libs.bundles.protection)
+    compileOnly(libs.bundles.factions)
+    compileOnly(libs.bundles.skyblock)
+    compileOnly(libs.bundles.parties)
+    compileOnly(libs.bundles.vanish)
+    compileOnly(libs.bundles.claims)
+    compileOnly(libs.bundles.plot)
 
-    compileOnly(libs.worldguard)
-    compileOnly(libs.worldedit)
-
-    compileOnly(libs.kingdoms)
-
-    compileOnly(libs.factions) {
-        exclude("org.kitteh")
-        exclude("org.spongepowered")
-        exclude("com.darkblade12")
-    }
-
-    compileOnly(libs.plotsquared)
-
-    compileOnly(libs.skyblock)
-
-    compileOnly(libs.paster)
-
-    compileOnly(libs.towny)
-
-    compileOnly(libs.lands)
-
-    compileOnly(libs.mcmmo)
+    compileOnly(libs.bundles.shared)
 }
 
 tasks {

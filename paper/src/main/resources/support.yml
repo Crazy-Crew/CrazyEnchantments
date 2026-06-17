@@ -1,0 +1,5 @@
+vanish-support:
+  # Only one plugin can be used for checking if a player is vanished.
+  #
+  # A list of available plugins: Essentials, None
+  plugin: "None"

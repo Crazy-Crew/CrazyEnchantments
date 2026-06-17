@@ -19,6 +19,10 @@ public class EnchantCommand {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    protected final CrazyPlatform platform = this.plugin.getPlatform();
+
+    protected final PaperFileManager fileManager = this.platform.getFileManager();
+
     protected final Starter starter = this.plugin.getStarter();
 
     protected final ScramblerListener scrambler = this.starter.getScramblerListener();
@@ -31,11 +35,7 @@ public class EnchantCommand {
 
     protected final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
-    protected final PaperFileManager fileManager = this.plugin.getFileManager();
-
     protected final Server server = this.plugin.getServer();
-
-    protected final CrazyPlatform platform = this.plugin.getPlatform();
 
     protected final CrazyManager crazyManager = this.starter.getCrazyManager();
 

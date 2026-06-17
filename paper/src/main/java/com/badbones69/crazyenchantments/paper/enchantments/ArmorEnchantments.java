@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.badbones69.crazyenchantments.paper.support.api.interfaces.VanishSupport;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -55,11 +56,13 @@ public class ArmorEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final FusionPaper fusion = this.plugin.getFusion();
-
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
+    private final FusionPaper fusion = this.platform.getFusion();
+
     private final SupportUtils support = this.platform.getSupport();
+
+    private final VanishSupport vanishSupport = this.support.getVanishSupport();
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
@@ -361,7 +364,7 @@ public class ArmorEnchantments implements Listener {
 
         if (!player.hasLineOfSight(other) || !other.hasLineOfSight(player)) return;
 
-        //if (this.pluginSupport.isVanished(player) || this.pluginSupport.isVanished(other)) return; //todo()
+        if (this.vanishSupport.isVanished(player) || this.vanishSupport.isVanished(other)) return;
 
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();

@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
@@ -17,7 +18,9 @@ public class BlackSmithManager {
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private static final FusionPaper fusion = plugin.getFusion();
+    private static final CrazyPlatform platform = plugin.getPlatform();
+
+    private static final FusionPaper fusion = platform.getFusion();
 
     private static ItemStack exitButton;
     private static ItemStack redGlass,blueGlass,grayGlass;

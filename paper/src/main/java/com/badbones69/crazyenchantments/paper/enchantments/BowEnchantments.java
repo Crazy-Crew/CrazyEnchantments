@@ -52,13 +52,13 @@ public class BowEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final FusionPaper fusion = this.plugin.getFusion();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final Server server = this.plugin.getServer();
 
     private final PluginManager pluginManager = this.server.getPluginManager();
-
-    private final CrazyPlatform platform = this.plugin.getPlatform();
 
     private final SupportUtils support = this.platform.getSupport();
 

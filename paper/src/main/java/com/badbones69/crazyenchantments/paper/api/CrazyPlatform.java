@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bukkit.Server;
@@ -23,19 +25,44 @@ public class CrazyPlatform {
 
     private final Server server = this.plugin.getServer();
 
-    private final FusionPaper fusion = this.plugin.getFusion();
-
-    private final PaperFileManager fileManager = this.fusion.getFileManager();
-
     private final Path dataPath = this.plugin.getDataPath();
 
+    private PaperFileManager fileManager;
     private SupportUtils support;
 
+    private FusionPaper fusion;
+
     public void init() {
-        loadExamples();
+        this.fusion = new FusionPaper(this.plugin);
+        this.fusion.init();
+
+        this.fileManager = this.fusion.getFileManager();
+
+        this.fileManager.addFile(this.dataPath.resolve("support.yml"), FileType.YAML);
+
+        List.of(
+                FileKeys.CONFIG,
+                FileKeys.BLOCKLIST,
+                FileKeys.HEADMAP,
+                FileKeys.DATA,
+                FileKeys.ENCHANTMENTS,
+                FileKeys.GKITZ,
+                FileKeys.MESSAGES,
+                FileKeys.ENCHANTMENT_TYPES,
+                FileKeys.TINKER
+        ).forEach(FileKeys::addFile);
 
         this.support = new SupportUtils();
         this.support.init();
+
+        loadExamples();
+    }
+
+    public void reload() {
+        this.fileManager.addFile(this.dataPath.resolve("support.yml"), FileType.YAML)
+                .refresh(false);
+
+        loadExamples();
     }
 
     public void loadExamples() {
@@ -82,5 +109,13 @@ public class CrazyPlatform {
 
     public @NonNull final SupportUtils getSupport() {
         return this.support;
+    }
+
+    public @NonNull final FusionPaper getFusion() {
+        return this.fusion;
+    }
+
+    public @NonNull final PaperFileManager getFileManager() {
+        return this.fileManager;
     }
 }

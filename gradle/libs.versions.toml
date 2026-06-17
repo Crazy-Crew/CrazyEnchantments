@@ -27,6 +27,8 @@ skyblock = "2025.1" # https://bg-software.com/superiorskyblock/
 plotsquared = "7.5.11" # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
 kingdoms = "1.16.20.5" # https://www.spigotmc.org/resources/kingdomsx.77670/
 
+essentials = "2.21.2" # https://essentialsx.net
+
 ## Other
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 fusion = "4.32.0" # https://github.com/ryderbelserion/Fusion
@@ -63,9 +65,7 @@ shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "s
 # https://github.com/jpenilla/run-task
 run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
 
-worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
-worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
-
+## Economy Plugins
 vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 
 # https://github.com/Arcaniax-Development/HeadDatabase-API
@@ -91,19 +91,32 @@ triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "t
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
 fusion-kyori = { module = "com.ryderbelserion.fusion:fusion-kyori", version.ref = "fusion" }
 
-griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
+## Plot Plugins
+informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" }
 plotsquared = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
+paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" }
+
+## Claim Plugins
+kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 lands = { module = "com.incredibleplugins:lands-api", version.ref = "lands" }
-factions = { module = "dev.kitteh:factions", version.ref = "factions" }
 
-skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
+## Faction Plugins
+factionsuuid = { module = "dev.kitteh:factions", version.ref = "factions" }
+
+## Skyblock Plugins
+superiorskyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
+
+## Party Plugins
 mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
 
-kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
+## Protection Plugins
+griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
+worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
+worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 
-informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.6" }
-paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.6" }
+## Vanish Plugins
+essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essentials" }
 
 # https://github.com/Bastian/bStats
 metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
@@ -116,11 +129,45 @@ adventure = [
 ]
 
 shared = [
-    "headdatabaseapi",
-    "placeholderapi",
-    "itemsadder",
-    "oraxen",
-    "nexo"
+    #"headdatabaseapi",
+    "placeholderapi"
+
+    #"itemsadder",
+    #"oraxen",
+    #"nexo"
+]
+
+protection = [
+    "griefprevention",
+    "worldguard",
+    "worldedit"
+]
+
+factions = [
+    "factionsuuid"
+]
+
+claims = [
+    "towny",
+    "lands"
+]
+
+skyblock = [
+    "superiorskyblock"
+]
+
+parties = [
+    "mcmmo"
+]
+
+vanish = [
+    "essentialsx"
+]
+
+plot = [
+    "informative-annotations",
+    "plotsquared",
+    "paster"
 ]
 
 build = [

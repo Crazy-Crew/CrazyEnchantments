@@ -24,4 +24,7 @@ public class Support {
     // skyblock plugins
     public static final FusionKey superiorskyblock = FusionKey.key("crazyenchantments", "SuperiorSkyblock2");
 
+    // vanish plugins
+    public static final FusionKey essentials = FusionKey.key("crazyenchantments", "Essentials");
+
 }

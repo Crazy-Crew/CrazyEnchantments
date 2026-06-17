@@ -25,9 +25,7 @@ public class ReloadCommand extends EnchantCommand {
             this.crazyManager.backupCEPlayer(player);
         }
 
-        this.platform.init();
-
-        this.fileManager.refresh(false);
+        this.platform.reload();
 
         MenuManager.load(); // Load crazyManager after as it will set the enchants in each category.
 
