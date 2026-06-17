@@ -359,6 +359,8 @@ public class ArmorEnchantments implements Listener {
 
         if (!player.canSee(other) || !other.canSee(player)) return;
 
+        if (!player.hasLineOfSight(other) || !other.hasLineOfSight(player)) return;
+
         //if (this.pluginSupport.isVanished(player) || this.pluginSupport.isVanished(other)) return; //todo()
 
         CEnchantments enchant = event.getEnchantment();
