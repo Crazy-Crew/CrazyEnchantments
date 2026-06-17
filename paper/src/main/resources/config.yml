@@ -5,8 +5,6 @@
 ###################################################################
 Settings:
   Prefix: '&8[&aCrazyEnchantments&8]: ' #The prefix in the messages
-  # The vanish plugin
-  Vanish-Plugin: "Essentials"
   Toggle-Metrics: true #Turn on and off if your server stats are sent to https://bstats.org/ - Requires a restart!
   Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the player's data gets backed up.
   Reset-Players-Max-Health: true #This is for some servers that get a health duplication glitch from plugins like CombatTagPlus(v1.2.3 down)
