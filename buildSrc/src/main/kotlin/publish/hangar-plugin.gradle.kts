@@ -28,19 +28,50 @@ hangarPublish {
                 platformVersions.set(rootProject.property("project_versions").toString().split(",").map { it.trim() })
 
                 dependencies {
+                    // protection plugins
+                    url("WorldGuard", "https://modrinth.com/plugin/worldguard") {
+                        required = false
+                    }
+
                     hangar("GriefPrevention") {
                         required = false
                     }
 
+                    // placeholder plugins
                     hangar("PlaceholderAPI") {
                         required = false
                     }
 
-                    hangar("WorldEdit") {
+                    // other plugins
+                    hangar("Essentials") {
+                        required = false
+                    }
+
+                    // party plugins
+                    url("McMMO", "https://www.spigotmc.org/resources/official-mcmmo-original-author-returns.64348/") {
+                        required = false
+                    }
+
+                    // claim plugins
+                    url("Lands", "https://www.spigotmc.org/resources/lands-%E2%AD%95-land-claim-plugin-%E2%9C%85-grief-prevention-protection-gui-management-nations-wars-26-x-support.53313/") {
+                        required = false
+                    }
+
+                    url("PlotSquared", "https://www.spigotmc.org/resources/plotsquared-v7.77506/") {
                         required = false
                     }
 
                     hangar("Towny") {
+                        required = false
+                    }
+
+                    // skyblock plugins
+                    url("SuperiorSkyBlock2", "https://bg-software.com/superiorskyblock/") {
+                        required = false
+                    }
+
+                    // factions plugins
+                    url("FactionsUUID", "https://www.spigotmc.org/resources/factionsuuid.1035/") {
                         required = false
                     }
                 }

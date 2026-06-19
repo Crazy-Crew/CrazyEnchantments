@@ -27,11 +27,14 @@ modrinth {
     detectLoaders = false
 
     dependencies {
+        // protection plugins
         optional.project("GriefPrevention")
-
         optional.project("WorldGuard")
-        optional.project("WorldEdit")
 
+        // misc plugins
+        optional.project("Essentialsx")
+
+        // claim plugins
         optional.project("Towny")
     }
 }
