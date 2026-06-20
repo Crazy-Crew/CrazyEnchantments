@@ -157,7 +157,7 @@ public class ArmorEnchantments implements Listener {
         for (final Map.Entry<PotionEffectType, Integer> effect : getTopPotionEffects(topEnchants).entrySet()) {
             for (final PotionEffect currentEffect : player.getActivePotionEffects()) {
                 if (!currentEffect.getType().equals(effect.getKey())) continue;
-                if (currentEffect.getAmplifier() >= effect.getValue() - 1) break;
+                if (currentEffect.getAmplifier() <= effect.getValue() - 1) break;
 
                 player.removePotionEffect(effect.getKey());
 
