@@ -16,5 +16,6 @@
 - Prevent aura enchantments from activating if the player is not in their line of sight, or is invisible.
 - Disable player flight only if the player has a line of sight, and is not friendly.
 - Disable player fall damage if a player's flight is disabled.
+- Fixes [#953](https://github.com/Crazy-Crew/CrazyEnchantments/issues/953)
 
 As always, Report 🐛 to https://github.com/Crazy-Crew/CrazyEnchantments/issues
