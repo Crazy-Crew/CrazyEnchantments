@@ -19,9 +19,10 @@ val isBeta: Boolean = branch == rootProject.property("beta_branch").toString()
 val isAlpha: Boolean = branch == rootProject.property("alpha_branch").toString()
 val buildNumber: String = System.getenv("BUILD_NUMBER") ?: "N/A"
 val isJenkins: Boolean = buildNumber != "N/A"
+val isRelease: Boolean = System.getenv("IS_RELEASE") != null
 
 val commitHash: String = hash.subSequence(0, 7).toString()
-val content: String = if (isBeta || isJenkins) {
+val content: String = if (!isRelease && isBeta || isJenkins) {
     "[$commitHash](https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}/commit/$commitHash) $commit"
 } else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 
