@@ -22,9 +22,10 @@ val isJenkins: Boolean = buildNumber != "N/A"
 val isRelease: Boolean = System.getenv("IS_RELEASE") != null
 
 val commitHash: String = hash.subSequence(0, 7).toString()
-val content: String = if (!isRelease && isBeta || isJenkins) {
+val changelog = rootProject.file("changelog.md").readText(Charsets.UTF_8)
+val content: String = if (isRelease) changelog else if (isBeta || isJenkins) {
     "[$commitHash](https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}/commit/$commitHash) $commit"
-} else rootProject.file("changelog.md").readText(Charsets.UTF_8)
+} else changelog
 
 val minecraft = libs.findVersion("minecraft").get()
 
@@ -34,7 +35,7 @@ rootProject.group = rootProject.property("project_group").toString()
 
 rootProject.ext {
     set("version_name", if (isBeta) "${rootProject.version}" else "${rootProject.name} ${rootProject.version}")
-    set("release_type", if (isBeta || isJenkins) "beta" else if (isAlpha) "alpha" else "release")
+    set("release_type", if (isRelease) "release" else if (isBeta || isJenkins) "beta" else if (isAlpha) "alpha" else "release")
 
     set("current_commit", commitHash)
     set("previous_commit", System.getenv("GIT_PREVIOUS_SUCCESSFUL_COMMIT") ?: "N/A")
