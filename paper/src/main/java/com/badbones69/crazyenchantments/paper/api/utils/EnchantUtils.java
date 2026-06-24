@@ -106,8 +106,8 @@ public class EnchantUtils {
     public static boolean isMoveEventActive(CEnchantments enchant, Player player, Map<CEnchantment, Integer> enchants) {
         if (!isActive(player, enchant, enchants)) return false;
 
-        final Optional<CEPlayer> cePlayer = crazyManager.getCEPlayer(player.getUniqueId());
+        //final Optional<CEPlayer> cePlayer = crazyManager.getCEPlayer(player.getUniqueId());
 
-        return cePlayer.filter(value -> !value.onEnchantCooldown(enchant, 20)).isPresent();
+        return true; //cePlayer.filter(value -> !value.onEnchantCooldown(enchant, 20)).isPresent();
     }
 }
