@@ -75,7 +75,7 @@ public class ArmorProcessor extends PoolProcessor {
 
             checkCommander(armor, player, enchantments);
 
-            checkAngel(armor, player, enchantments, 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment()));
+            checkAngel(armor, player, enchantments, 4 + enchantments.getOrDefault(CEnchantments.ANGEL.getEnchantment(), -4));
 
             useHellForge(player, armor, enchantments);
         }
