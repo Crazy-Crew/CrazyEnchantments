@@ -134,7 +134,7 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
         final RegionManager regionManager = this.container.get(bukkitWorld);
 
         if (regionManager == null) {
-            return true;
+            return false;
         }
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
@@ -161,7 +161,7 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
         final RegionManager regionManager = this.container.get(bukkitWorld);
 
         if (regionManager == null) {
-            return true;
+            return false;
         }
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
@@ -190,7 +190,7 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
         final RegionManager regionManager = this.container.get(bukkitWorld);
 
         if (regionManager == null) {
-            return true;
+            return false;
         }
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());

@@ -194,7 +194,7 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
         final Land land = this.api.getLandByChunk(chunk.getWorld(), x, z);
 
         if (land == null) {
-            return true;
+            return false;
         }
 
         return land.isTrusted(player.getUniqueId());
@@ -215,7 +215,7 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
         final Land land = this.api.getLandByChunk(chunk.getWorld(), x, z);
 
         if (land == null) {
-            return true;
+            return false;
         }
 
         return land.getOwnerUID().equals(player.getUniqueId());
