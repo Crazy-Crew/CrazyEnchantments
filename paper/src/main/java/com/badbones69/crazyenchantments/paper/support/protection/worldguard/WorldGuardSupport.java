@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.support.protection.worldguard;
 
+import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -21,6 +22,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
+import java.util.List;
 
 @NullMarked
 public final class WorldGuardSupport extends TerritorySupport<Location, Location> {
@@ -146,6 +148,38 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isTerritory(final Player player, final Location location) {
+        if (!isPluginReady()) {
+            return true;
+        }
+
+        final BukkitWorld bukkitWorld = new BukkitWorld(location.getWorld());
+
+        final RegionManager regionManager = this.container.get(bukkitWorld);
+
+        if (regionManager == null) {
+            return false;
+        }
+
+        final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
+
+        final List<String> regions = FileKeys.CONFIG.getConfiguration().getStringList("Settings.EnchantmentOptions.Wings.Regions");
+
+        for (final ProtectedRegion key : regionManager.getApplicableRegions(vector)) {
+            if (!regions.contains(key.getId())) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isTerritory(final Player player) {
+        return isTerritory(player, player.getLocation());
     }
 
     @Override

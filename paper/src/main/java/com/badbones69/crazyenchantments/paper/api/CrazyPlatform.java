@@ -103,8 +103,12 @@ public class CrazyPlatform {
         ).forEach(file -> this.fileManager.extractFile(file, examples.resolve(file)));
     }
 
-    public Optional<Player> getPlayer(@NonNull final String name) {
+    public @NonNull final Optional<Player> getPlayer(@NonNull final String name) {
         return Optional.ofNullable(this.server.getPlayer(name));
+    }
+
+    public @NonNull final PaperFileManager getFileManager() {
+        return this.fileManager;
     }
 
     public @NonNull final SupportUtils getSupport() {
@@ -113,9 +117,5 @@ public class CrazyPlatform {
 
     public @NonNull final FusionPaper getFusion() {
         return this.fusion;
-    }
-
-    public @NonNull final PaperFileManager getFileManager() {
-        return this.fileManager;
     }
 }

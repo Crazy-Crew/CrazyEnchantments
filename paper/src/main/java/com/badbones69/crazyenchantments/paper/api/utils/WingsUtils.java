@@ -140,7 +140,11 @@ public class WingsUtils {
             return true; // they can fly
         }
 
-        return support.isTerritory(player, location); // true, they can fly, false, they can't fly
+        if (support.isTerritory(player, location)) {
+            return true; // they can fly
+        }
+
+        return false;
     }
 
     private static List<Player> getNearbyPlayers(Player player, int radius) {
