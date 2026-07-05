@@ -25,8 +25,6 @@ public class CurrencyAPI {
     @NotNull
     private final Starter starter = plugin.getStarter();
 
-    private final VaultSupport vaultSupport =  this.starter.getVaultSupport();
-
     /**
      * Get the amount that a player has from a specific currency.
      * @param player The player you wish to get the amount from.
@@ -36,7 +34,7 @@ public class CurrencyAPI {
     public int getCurrency(Player player, Currency currency) {
         try {
             return switch (currency) {
-                case VAULT -> (int) this.vaultSupport.getVault().getBalance(player);
+                case VAULT -> (int) this.starter.getVaultSupport().getVault().getBalance(player);
                 case XP_LEVEL -> player.getLevel();
                 case XP_TOTAL -> getTotalExperience(player);
             };
@@ -80,7 +78,7 @@ public class CurrencyAPI {
     public void takeCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> this.vaultSupport.getVault().withdrawPlayer(player, amount);
+                case VAULT -> this.starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
@@ -96,7 +94,7 @@ public class CurrencyAPI {
     public void giveCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> this.vaultSupport.getVault().depositPlayer(player, amount);
+                case VAULT -> this.starter.getVaultSupport().getVault().depositPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
@@ -191,6 +189,8 @@ public class CurrencyAPI {
     public void loadCurrency() {
         if (this.fusion.isPluginEnabled("Vault")) {
             this.starter.setVaultSupport(new VaultSupport());
+
+            return;
         }
 
         this.fusion.log(Level.WARNING, "No economy plugin was found, or the economy plugin did not enable. All economy based features will not work.");

@@ -116,8 +116,7 @@ public class Starter {
 
     public void setVaultSupport(@NonNull final VaultSupport vaultSupport) {
         this.vaultSupport = vaultSupport;
-
-        vaultSupport.loadVault();
+        this.vaultSupport.loadVault();
     }
 
     // Economy Management.
