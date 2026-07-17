@@ -7,7 +7,7 @@ project.group = "${rootProject.group}.paper"
 repositories {
     exclusiveContent {
         forRepository {
-            maven("https://dependency.download/releases")
+            maven("https://dependency.download/releases/")
         }
 
         filter {
@@ -17,7 +17,7 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://repo.essentialsx.net/releases")
+            maven("https://repo.essentialsx.net/releases/")
         }
 
         filter {
@@ -35,9 +35,21 @@ repositories {
 
     maven("https://repo.incredibleplugins.com/releases/")
 
+    maven("https://repo.fancyinnovations.com/releases/")
+
     maven("https://repo.triumphteam.dev/snapshots/")
 
+    maven("https://repo.hibiscusmc.com/releases/")
+
+    maven("https://repo.momirealms.net/releases/")
+
     maven("https://maven.enginehub.org/repo/")
+
+    maven("https://repo.nexomc.com/releases/")
+
+    maven("https://repo.oraxen.com/releases/")
+
+    maven("https://maven.devs.beer/")
 }
 
 dependencies {
@@ -69,7 +81,15 @@ tasks {
     shadowJar {
         listOf(
             "com.ryderbelserion.fusion",
-            "org.bstats"
+            "com.google.errorprone",
+            "io.leangen.geantyref",
+            "dev.triumphteam.cmd",
+            "org.spongepowered",
+            "com.google.gson",
+            "org.jspecify",
+            "org.bstats",
+            "org.yaml",
+            "ch.jalu"
         ).forEach {
             relocate(it, "libs.$it")
         }
@@ -89,10 +109,6 @@ tasks {
     runServer {
         jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
         jvmArgs("-Dcom.mojang.eula.agree=true")
-
-        downloadPlugins {
-            modrinth("luckperms", "v5.5.0-bukkit")
-        }
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 

@@ -1,38 +1,50 @@
 [versions]
-## Paper
+## Paper API
 paperweight = "2.0.0-beta.21" # https://github.com/PaperMC/paperweight
-adventure = "5.0.0" # https://github.com/KyoriPowered/adventure
+adventure = "5.2.0" # https://github.com/KyoriPowered/adventure
 paper = "26.1.2.build.+" # https://github.com/PaperMC/Paper
 
-## Minecraft
+## Minecraft API
 minecraft = "26.1.2" # https://minecraft.net
 
-# Plugin API
+## Plugin API
 headdatabaseapi = "1.3.2" # https://github.com/Arcaniax-Development/HeadDatabase-API
 placeholderapi = "2.12.2" # https://github.com/placeholderapi
+## Economy API
+essentials = "2.21.2" # https://essentialsx.net
+vault = "1.7.1" # https://github.com/MilkBowl/Vault
+## Custom Item API
+craftengine = "26.6" # https://github.com/Xiao-MoMi/craft-engine
 itemsadder = "4.0.10" # https://github.com/ItemsAdder
+hmcwraps = "1.8.2" # https://docs.hibiscusmc.com/hmcwraps/api
 oraxen = "1.211.0" # https://github.com/oraxen
-mcmmo = "2.2.049" # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
-vault = "1.7.1" # https://github.com/milkbowl/Vault
 nexo = "1.21.0" # https://github.com/Nexo-MC
-
-# Protection API
-worldguard = "7.0.15" # https://dev.bukkit.org/projects/worldguard/files
-worldedit = "7.4.0" # https://modrinth.com/plugin/worldedit/versions?l=bukkit
+## Protection API
+worldguard = "7.0.17" # https://github.com/EngineHub/WorldGuard
+worldedit = "7.4.4" # https://modrinth.com/plugin/worldedit
 griefprevention = "18.0.0" # https://jitpack.io/#GriefPrevention/GriefPrevention
 towny = "0.102.0.0" # https://github.com/TownyAdvanced/Towny?tab=readme-ov-file#current-recommended-versions
-factions = "4.5.1" # https://www.spigotmc.org/resources/factionsuuid.1035/
+mcmmo = "2.2.049" # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO
+factions = "4.5.1" # https://www.spigotmc.org/resources/factionsuuid.1035
 lands = "7.25.14" # https://github.com/Angeschossen/LandsAPI/wiki
-skyblock = "2025.1" # https://bg-software.com/superiorskyblock/
+skyblock = "2025.1" # https://bg-software.com/superiorskyblock
 plotsquared = "7.5.11" # https://intellectualsites.gitbook.io/plotsquared/api/api-documentation
-kingdoms = "1.16.20.5" # https://www.spigotmc.org/resources/kingdomsx.77670/
+kingdoms = "1.16.20.5" # https://www.spigotmc.org/resources/kingdomsx.77670
 
-essentials = "2.21.2" # https://essentialsx.net
+## Hologram API
+decentholograms = "2.9.9" # https://modrinth.com/plugin/decentholograms
+fancyholograms = "2.9.1" # https://modrinth.com/plugin/fancyholograms
+cmi-api = "9.8.6.4" # https://github.com/Zrips/CMI-API
+cmi-lib = "1.5.9.3" # https://www.spigotmc.org/resources/cmilib.87610
 
-## Other
+## Triumph API
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-fusion = "4.32.0" # https://github.com/ryderbelserion/Fusion
+## Metrics API
 bStats = "3.2.1" # https://github.com/Bastian/bStats
+## Fusion API
+fusion = "4.44.0" # https://github.com/ryderbelserion/Fusion
+## Database API
+hikari = "7.0.2" # https://github.com/brettwooldridge/HikariCP
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
@@ -40,7 +52,7 @@ run-paper = "3.0.2" # https://github.com/jpenilla/run-task
 minotaur = "2.9.0" # https://github.com/modrinth/minotaur
 feather = "0.6.1" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
-shadow = "9.4.1" # https://github.com/GradleUp/shadow
+shadow = "9.6.0" # https://github.com/GradleUp/shadow
 
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
@@ -65,19 +77,31 @@ shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "s
 # https://github.com/jpenilla/run-task
 run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
 
-## Economy Plugins
-vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
-
 # https://github.com/Arcaniax-Development/HeadDatabase-API
 headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabaseapi" }
 # https://github.com/placeholderapi
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+
+# https://github.com/Xiao-MoMi/craft-engine
+craftengine-bukkit = { module = "net.momirealms:craft-engine-bukkit", version.ref = "craftengine" }
+craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
 # https://github.com/ItemsAdder
 itemsadder = { module = "dev.lone:api-itemsadder", version.ref = "itemsadder" }
+# https://docs.hibiscusmc.com/hmcwraps/api
+hmcwraps = { module = "de.skyslycer.hmcwraps:api", version.ref = "hmcwraps" }
 # https://github.com/oraxen
 oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
 # https://github.com/Nexo-MC
 nexo = { module = "com.nexomc:nexo", version.ref = "nexo" }
+
+# https://modrinth.com/plugin/decentholograms
+decent-holograms = { module = "com.github.decentsoftware-eu:decentholograms", version.ref = "decentholograms" }
+# https://modrinth.com/plugin/fancyholograms
+fancy-holograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
+# https://github.com/Zrips/CMI-API
+cmi-api = { module = "com.Zrips.CMI:CMI-API", version.ref = "cmi-api" }
+# https://www.spigotmc.org/resources/cmilib.87610/
+cmi-lib = { module = "net.Zrips.CMILib:CMI-Lib", version.ref = "cmi-lib" }
 
 # https://github.com/KyoriPowered/adventure
 kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
@@ -115,11 +139,16 @@ griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", versi
 worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 
-## Vanish Plugins
-essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essentials" }
-
 # https://github.com/Bastian/bStats
 metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
+
+# https://github.com/MilkBowl/Vault
+vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+# https://essentialsx.net
+essentials = { module = "net.essentialsx:EssentialsX", version.ref = "essentials" }
+
+# https://github.com/brettwooldridge/HikariCP
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 
 [bundles]
 adventure = [
@@ -129,12 +158,26 @@ adventure = [
 ]
 
 shared = [
-    #"headdatabaseapi",
-    "placeholderapi"
+    "headdatabaseapi",
+    "placeholderapi",
 
-    #"itemsadder",
-    #"oraxen",
-    #"nexo"
+    "craftengine-bukkit",
+    "craftengine-core",
+
+    "itemsadder",
+    "hmcwraps",
+    "oraxen",
+    "nexo"
+]
+
+holograms = [
+    "decent-holograms",
+    "fancy-holograms"
+]
+
+cmi = [
+    "cmi-api",
+    "cmi-lib"
 ]
 
 protection = [
@@ -161,7 +204,7 @@ parties = [
 ]
 
 vanish = [
-    "essentialsx"
+    "essentials"
 ]
 
 plot = [
