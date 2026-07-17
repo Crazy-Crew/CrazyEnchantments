@@ -91,7 +91,9 @@ feather {
                             listOf(
                                 "*Click below to download!*",
                                 "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
-                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/${rootProject.property("repository_owner").toString().replace("-", "")}/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/${rootProject.property("repository_owner").toString().replace("-", "")}/${rootProject.name.lowercase()}/versions/${rootProject.version})",
+                                "",
+                                "<:business:1527739792358637598> [Jenkins](https://ci.crazycrew.us/job/${rootProject.name}/)"
                             ).convertList()
                         )
 
@@ -103,39 +105,6 @@ feather {
                         field(
                             ":hammer: Changelog",
                             rootProject.ext.get("mc_changelog").toString().updateMarkdown()
-                        )
-                    }
-                }
-            }
-        }
-
-        webhook {
-            group(rootProject.name.lowercase())
-            task("jenkins-build")
-
-            if (System.getenv("BUILD_WEBHOOK") != null) {
-                post(System.getenv("BUILD_WEBHOOK"))
-            }
-
-            username(rootProject.property("mascot_name").toString())
-
-            avatar(rootProject.property("mascot_avatar").toString())
-
-            embeds {
-                embed {
-                    color(color)
-
-                    title("${rootProject.name} (Build #${rootProject.ext.get("build_number")})")
-
-                    fields {
-                        field(
-                            ":hammer: Changelog",
-                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
-                        )
-
-                        field(
-                            ":link: Build Link",
-                            System.getenv("BUILD_URL") ?: "N/A",
                         )
                     }
                 }

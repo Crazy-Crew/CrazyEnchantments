@@ -6,6 +6,9 @@ on:
   release:
     types: [ published ]
 
+env:
+  version_status: "release"
+
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/build.yml@main

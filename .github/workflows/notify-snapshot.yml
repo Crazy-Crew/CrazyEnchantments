@@ -3,6 +3,9 @@ name: Notify Snapshot
 on:
   workflow_dispatch:
 
+env:
+  version_status: "beta"
+
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/notify.yml@main

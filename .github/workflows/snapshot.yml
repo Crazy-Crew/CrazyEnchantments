@@ -5,16 +5,19 @@ on:
 
   push:
     branches:
-      - dev
+      - main
+
+env:
+  version_status: "beta"
 
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/build.yml@main
 
     with:
-      branch: dev
+      branch: main
 
     secrets:
-      webhook: ${{ secrets.CM_WEBHOOK }}
+      webhook: ${{ secrets.CE_WEBHOOK }}
       modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
       hangar_token: ${{ secrets.HANGAR_KEY }}
