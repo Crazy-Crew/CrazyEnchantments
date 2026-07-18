@@ -92,7 +92,7 @@ feather {
                                 "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
                                 "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/${rootProject.property("repository_owner").toString().replace("-", "")}/${rootProject.name.lowercase()}/versions/${rootProject.version})",
                                 "",
-                                "<:business:1527739792358637598> [Jenkins](https://ci.crazycrew.us/job/${rootProject.name}/)"
+                                "<:business:1527739792358637598> [Jenkins](https://ci.crazycrew.us/job/${rootProject.name}/lastSuccessfulBuild/)"
                             ).convertList()
                         )
 
