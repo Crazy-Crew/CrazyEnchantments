@@ -1,0 +1,7 @@
+{
+  "version": "${version}",
+  "git": {
+    "current": "${current_commit}",
+    "previous": "${previous_commit}"
+  }
+}
