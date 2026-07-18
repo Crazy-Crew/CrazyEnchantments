@@ -33,7 +33,7 @@ val content: String = if (isRelease) changelog else if (isBeta || isAlpha || isJ
 val minecraft = libs.findVersion("minecraft").get()
 
 rootProject.description = rootProject.property("project_description").toString()
-rootProject.version = if (isBeta) "$minecraft-$commitHash" else if (isAlpha) "${rootProject.property("plugin_version")}-SNAPSHOT" else rootProject.property("plugin_version").toString()
+rootProject.version = if (isBeta || isJenkins) "$minecraft-$commitHash" else if (isAlpha) "${rootProject.property("plugin_version")}-SNAPSHOT" else rootProject.property("plugin_version").toString()
 rootProject.group = rootProject.property("project_group").toString()
 
 rootProject.ext {

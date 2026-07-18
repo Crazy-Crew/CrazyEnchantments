@@ -8,6 +8,7 @@ on:
       - main
 
 env:
+  GIT_PREVIOUS_SUCCESSFUL_COMMIT: ${{ github.event.before }}
   version_status: "beta"
 
 jobs:
