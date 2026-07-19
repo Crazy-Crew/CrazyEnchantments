@@ -78,7 +78,7 @@ feather {
                 embed {
                     color(color)
 
-                    title("A new $releaseType version of ${rootProject.name} is ready!")
+                    title("The next version of ${rootProject.name} is ready!")
 
                     if (isRelease) {
                         content("<@&${rootProject.property("discord_role_id").toString()}>")
