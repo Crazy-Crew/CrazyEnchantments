@@ -5,11 +5,14 @@ on:
 
 env:
   GIT_PREVIOUS_SUCCESSFUL_COMMIT: ${{ github.event.before }}
-  version_status: "release"
 
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/notify.yml@main
+
+    with:
+      status: "release"
+      branch: main
 
     secrets:
       webhook: ${{ secrets.BUILD_WEBHOOK }}
