@@ -3,9 +3,6 @@ name: Notify Snapshot
 on:
   workflow_dispatch:
 
-env:
-  GIT_PREVIOUS_SUCCESSFUL_COMMIT: ${{ github.event.before }}
-
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/notify.yml@main

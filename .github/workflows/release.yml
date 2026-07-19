@@ -6,9 +6,6 @@ on:
   release:
     types: [ published ]
 
-env:
-  GIT_PREVIOUS_SUCCESSFUL_COMMIT: ${{ github.event.before }}
-
 jobs:
   build:
     uses: Crazy-Crew/.github/.github/workflows/build.yml@main
