@@ -116,6 +116,7 @@ public class CrazyManager {
     private final List<GKitz> gkitz = new ArrayList<>();
     private final Map<UUID, CEPlayer> players = new HashMap<>();
     private final List<Material> blockList = new ArrayList<>();
+    private final List<Material> tfBlocks = new ArrayList<>();
     private final Map<Material, Double> headMap = new HashMap<>();
 
     private int rageMaxLevel;
@@ -146,10 +147,13 @@ public class CrazyManager {
         final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
         final FileConfiguration gkit = FileKeys.GKITZ.getConfiguration();
         final FileConfiguration enchants = FileKeys.ENCHANTMENTS.getConfiguration();
-
+        
+        final FileConfiguration tfBlocks = FileKeys.BLOCKS.getConfiguration();
+        
         final FileConfiguration blocks = FileKeys.BLOCKLIST.getConfiguration();
         final FileConfiguration heads = FileKeys.HEADMAP.getConfiguration();
 
+        this.tfBlocks.clear();
         this.blockList.clear();
         this.headMap.clear();
         this.gkitz.clear();
@@ -181,6 +185,13 @@ public class CrazyManager {
         blocks.getStringList("Block-List").forEach(id -> {
             try {
                 this.blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
+            } catch (Exception ignored) {}
+        });
+
+         // Loop through block list.
+        tfBlocks.getStringList("Blocks").forEach(id -> {
+            try {
+                this.tfBlocks.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {}
         });
 
@@ -864,6 +875,13 @@ public class CrazyManager {
      */
     public int getRageMaxLevel() {
         return this.rageMaxLevel;
+    }
+
+    /**
+     * @return The block list for treefeller.
+     */
+    public List<Material> getTreefellerList() {
+        return this.tfBlocks;
     }
 
     /**

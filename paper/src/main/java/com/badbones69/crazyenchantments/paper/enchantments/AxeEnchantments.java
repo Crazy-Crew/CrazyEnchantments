@@ -90,8 +90,10 @@ public class AxeEnchantments implements Listener {
     private Set<Block> getTree(Block startBlock, int maxBlocks) {
         Set<Block> checkedBlocks = new HashSet<>(), tree = new HashSet<>();
         Queue<Block> queue = new LinkedList<>();
-        queue.add(startBlock);
-        checkedBlocks.add(startBlock);
+        if (this.crazyManager.getTreefellerList().contains(startBlock.getType())) {
+            queue.add(startBlock);
+            checkedBlocks.add(startBlock);
+        }
         int startX = startBlock.getX(), startZ = startBlock.getZ();
 
         while (!queue.isEmpty()) {
@@ -104,20 +106,16 @@ public class AxeEnchantments implements Listener {
                         if (x == 0 && y == 0 && z == 0) continue; // Skip initial block.
 
                         Block neighbor = currentBlock.getRelative(x, y, z);
-                        if (neighbor.isEmpty() || checkedBlocks.contains(neighbor)) continue;
+                        if (neighbor.isEmpty() || checkedBlocks.contains(neighbor) || !this.crazyManager.getTreefellerList().contains(neighbor.getType())) continue;
                         if (notInRange(startX, neighbor.getX()) || notInRange(startZ, neighbor.getZ())) continue;
 
-                        String neighborType = neighbor.getType().toString();
-
-                        if ((neighborType.endsWith("LOG") || neighborType.endsWith("LEAVES"))) {
-                            if (neighborType.endsWith("LOG")) tree.add(neighbor);
-                            checkedBlocks.add(neighbor);
-                            queue.add(neighbor);
+                        tree.add(neighbor);
+                        checkedBlocks.add(neighbor);
+                        queue.add(neighbor);
                         }
                     }
                 }
             }
-        }
         return tree;
     }
 

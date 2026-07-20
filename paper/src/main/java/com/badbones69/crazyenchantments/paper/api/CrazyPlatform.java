@@ -49,7 +49,8 @@ public class CrazyPlatform {
                 FileKeys.GKITZ,
                 FileKeys.MESSAGES,
                 FileKeys.ENCHANTMENT_TYPES,
-                FileKeys.TINKER
+                FileKeys.TINKER,
+                FileKeys.BLOCKS
         ).forEach(FileKeys::addFile);
 
         this.support = new SupportUtils();
@@ -99,7 +100,8 @@ public class CrazyPlatform {
                 "GKitz.yml",
                 "HeadMap.yml",
                 "Messages.yml",
-                "Tinker.yml"
+                "Tinker.yml",
+                "Blocks.yml"
         ).forEach(file -> this.fileManager.extractFile(file, examples.resolve(file)));
     }
 

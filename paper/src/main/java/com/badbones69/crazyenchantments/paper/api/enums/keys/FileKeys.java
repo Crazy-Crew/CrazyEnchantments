@@ -25,6 +25,7 @@ public enum FileKeys {
     MESSAGES(FileType.PAPER_YAML, "Messages.yml"),
     ENCHANTMENT_TYPES(FileType.PAPER_YAML, "Enchantment-Types.yml"),
     TINKER(FileType.PAPER_YAML, "Tinker.yml"),
+    BLOCKS(FileType.PAPER_YAML, "Blocks.yml"),
 
     SUPPORT(FileType.YAML, "support.yml");
 
