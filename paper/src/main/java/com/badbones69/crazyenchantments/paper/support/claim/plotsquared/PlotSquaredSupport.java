@@ -43,6 +43,10 @@ public final class PlotSquaredSupport extends TerritorySupport<Location, Locatio
 
         final PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
 
+        if (plotPlayer == null) {
+            return isProtected(location);
+        }
+
         final Plot plot = plotPlayer.getCurrentPlot();
 
         if (plot == null) {
@@ -89,11 +93,16 @@ public final class PlotSquaredSupport extends TerritorySupport<Location, Locatio
         }
 
         final PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
+        final Location location = player.getLocation();
+
+        if (plotPlayer == null) {
+            return isProtected(location);
+        }
 
         final Plot plot = plotPlayer.getCurrentPlot();
 
         if (plot == null) {
-            return isProtected(player.getLocation());
+            return isProtected(location);
         }
 
         return plot.isAdded(player.getUniqueId());
@@ -111,6 +120,10 @@ public final class PlotSquaredSupport extends TerritorySupport<Location, Locatio
         }
 
         final PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
+
+        if (plotPlayer == null) {
+            return false;
+        }
 
         final Plot plot = plotPlayer.getCurrentPlot();
 
@@ -130,6 +143,10 @@ public final class PlotSquaredSupport extends TerritorySupport<Location, Locatio
         }
 
         final PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
+
+        if (plotPlayer == null) {
+            return false;
+        }
 
         final Plot plot = plotPlayer.getCurrentPlot();
 

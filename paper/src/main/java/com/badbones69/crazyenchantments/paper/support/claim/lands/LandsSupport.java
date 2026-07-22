@@ -6,6 +6,7 @@ import me.angeschossen.lands.api.LandsIntegration;
 import me.angeschossen.lands.api.flags.type.Flags;
 import me.angeschossen.lands.api.land.Area;
 import me.angeschossen.lands.api.land.Land;
+import me.angeschossen.lands.api.player.LandPlayer;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -124,7 +125,13 @@ public final class LandsSupport extends TerritorySupport<BlockState, Location> {
             return false;
         }
 
-        final Land land = this.api.getLandPlayer(player.getUniqueId()).getOwningLand();
+        final LandPlayer landPlayer = this.api.getLandPlayer(player.getUniqueId());
+
+        if (landPlayer == null) {
+            return false;
+        }
+
+        final Land land = landPlayer.getOwningLand();
 
         if (land == null) {
             return false;
