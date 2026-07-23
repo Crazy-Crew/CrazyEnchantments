@@ -191,7 +191,7 @@ factions = [
 ]
 
 claims = [
-    "towny",
+    #"towny",
     "lands"
 ]
 

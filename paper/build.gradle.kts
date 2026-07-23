@@ -25,11 +25,19 @@ repositories {
         }
     }
 
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.glaremasters.me/repository/towny/")
+        }
+
+        filter {
+            includeGroup("com.palmergames.bukkit.towny")
+        }
+    }
+
     maven("https://repo.md-5.net/content/repositories/snapshots/")
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
-
-    maven("https://repo.glaremasters.me/repository/towny/")
 
     maven("https://repo.bg-software.com/repository/api/")
 

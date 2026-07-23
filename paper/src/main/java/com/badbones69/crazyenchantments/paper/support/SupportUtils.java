@@ -11,7 +11,7 @@ import com.badbones69.crazyenchantments.paper.support.api.interfaces.CropSupport
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
 import com.badbones69.crazyenchantments.paper.support.claim.lands.LandsImpl;
 import com.badbones69.crazyenchantments.paper.support.claim.plotsquared.PlotSquaredImpl;
-import com.badbones69.crazyenchantments.paper.support.claim.towny.TownyImpl;
+//import com.badbones69.crazyenchantments.paper.support.claim.towny.TownyImpl;
 import com.badbones69.crazyenchantments.paper.support.factions.uuid.FactionsUUIDImpl;
 import com.badbones69.crazyenchantments.paper.support.parties.mcmmo.McMMOImpl;
 import com.badbones69.crazyenchantments.paper.support.protection.griefprevention.GriefPreventionImpl;
@@ -72,7 +72,7 @@ public class SupportUtils {
                 new PlotSquaredImpl(),
 
                 // claim plugins
-                new TownyImpl(),
+                //new TownyImpl(),
                 new LandsImpl(),
 
                 // skyblock plugins
