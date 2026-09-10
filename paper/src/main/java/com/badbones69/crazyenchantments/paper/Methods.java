@@ -562,7 +562,10 @@ public class Methods {
         if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems);
         dropXP(block, blockBreak.getExpToDrop()); //This will always try to drop xp when the event is not cancelled, as apposed to relying on isDropItems().
 
+        player.incrementStatistic(Statistic.MINE_BLOCK, block.getType()); //Run before setting to air to capture type.
+
         block.setType(Material.AIR);
+
         return false;
     }
 
