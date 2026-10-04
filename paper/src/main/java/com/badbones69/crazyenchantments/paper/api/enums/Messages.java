@@ -44,7 +44,7 @@ public enum Messages {
             "#ff0000That item already has the maximum amount of enchantments that you can add to it.",
             "#880808Use &2/ce limit #880808to check the current limit on the item.",
             "#880808For information on how to change the limit, read &2https://docs.crazycrew.us/docs/plugins/crazyenchantments/faq."
-    )), "Hit-Enchantment-Max"),
+    )), "list", "Hit-Enchantment-Max"),
     CONFLICTING_ENCHANT("&7This enchant conflicts with one already on the item.", "Conflicting-Enchant"),
     MAX_SLOTS_UNLOCKED("&cYou have already added the maximum amount of slots to this item.", "Hit-Slot-Max"),
     APPLIED_SLOT_CRYSTAL("&cYou have successfully added another slot to the item. The item now has %slot% extra slots.", "Applied-Slot-Crystal"),
@@ -113,7 +113,7 @@ public enum Messages {
             "&7You can add &6%space% &7more enchantments to this item.",
             "&c&cLimit set in config.yml: %limitSetInConfig%",
             "&0======================================"
-    )), true, "Limit-Command"),
+    )), "list", "Limit-Command"),
     HELP(StringUtils.toString(List.of(
             "&2&l&nCrazy Enchantments",
             "&b/ce - &9Opens up the menu.",
@@ -134,7 +134,7 @@ public enum Messages {
             "&b/ce book <enchantment> [level/min-max] [amount] [player] - &9Gives a player an enchantment Book.",
             "&b/ce lostbook <category> [amount] [player] - &9Gives a player a lost book item.",
             "&b/ce spawn <enchantment/category> [(level:#/min-max)/world:<world>/x:#/y:#/z:#] - &9Drops an enchantment book at the specific coordinates."
-    )), true, "Help");
+    )), "list", "Help");
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
@@ -146,14 +146,16 @@ public enum Messages {
     private final boolean isList;
     private final Object[] path;
 
-    Messages(final String defaultMessage, final boolean isList, final Object... path) {
+    Messages(final String defaultMessage, final String type, final Object... path) {
         this.defaultMessage = defaultMessage;
-        this.isList = isList;
+        this.isList = type.equalsIgnoreCase("list");
         this.path = path;
     }
 
     Messages(final String defaultMessage, final Object... path) {
-        this(defaultMessage, false, path);
+        this.defaultMessage = defaultMessage;
+        this.isList = false;
+        this.path = path;
     }
     
     public static void addMissingMessages() {
