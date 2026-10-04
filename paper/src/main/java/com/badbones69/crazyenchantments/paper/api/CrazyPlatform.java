@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.files.FileManager;
-import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -38,19 +37,9 @@ public class CrazyPlatform {
 
         this.fileManager = this.fusion.getFileManager();
 
-        this.fileManager.addFile(this.dataPath.resolve("support.yml"), FileType.YAML);
-
-        List.of(
-                FileKeys.CONFIG,
-                FileKeys.BLOCKLIST,
-                FileKeys.HEADMAP,
-                FileKeys.DATA,
-                FileKeys.ENCHANTMENTS,
-                FileKeys.GKITZ,
-                FileKeys.MESSAGES,
-                FileKeys.ENCHANTMENT_TYPES,
-                FileKeys.TINKER
-        ).forEach(FileKeys::addFile);
+        for (final FileKeys key : FileKeys.values()) {
+            key.addFile();
+        }
 
         this.support = new SupportUtils();
         this.support.init();
@@ -59,8 +48,7 @@ public class CrazyPlatform {
     }
 
     public void reload() {
-        this.fileManager.addFile(this.dataPath.resolve("support.yml"), FileType.YAML)
-                .refresh(false);
+        this.fileManager.refresh(false);
 
         loadExamples();
     }
