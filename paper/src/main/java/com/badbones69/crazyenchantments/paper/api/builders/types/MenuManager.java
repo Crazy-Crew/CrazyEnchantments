@@ -13,12 +13,12 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,19 +35,17 @@ public class MenuManager {
     public static void load() {
         enchantmentTypes.clear();
 
-        final FileConfiguration file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
+        final CommentedConfigurationNode file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
 
-        final ConfigurationSection section = file.getConfigurationSection("Types");
+        final CommentedConfigurationNode section = file.node("Types");
 
         if (section == null) {
-            fusion.log(Level.WARNING, "The types section cannot be found in enchantment-types.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.warn, "The types section cannot be found in enchantment-types.yml, It's possible the file is badly formatted!");
 
             return;
         }
 
-        for (String type : section.getKeys(false)) {
-            enchantmentTypes.add(new EnchantmentType(type));
-        }
+        section.childrenMap().forEach((id, node) -> enchantmentTypes.add(new EnchantmentType(id.toString(), node)));
     }
 
     public static List<EnchantmentType> getEnchantmentTypes() {
@@ -55,9 +53,10 @@ public class MenuManager {
     }
 
     public static void openKitsMenu(Player player) {
-        final FileConfiguration gkitz = FileKeys.GKITZ.getConfiguration();
+        final @NotNull CommentedConfigurationNode gkitz = FileKeys.GKITZ.getConfiguration();
 
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
+        player.openInventory(new KitsMenu(player, gkitz.node("Settings", "GUI-Size").getInt(27),
+                gkitz.node("Settings", "Inventory-Name").getString("&8List of all GKitz")).build().getInventory());
     }
 
     public static void openKitsPreviewMenu(Player player, int slots, GKitz kit) {
@@ -82,10 +81,6 @@ public class MenuManager {
     }
 
     public static void openTinkererMenu(Player player) {
-        player.openInventory(new TinkererMenu(player, 54, FileKeys.TINKER.getConfiguration().getString("Settings.GUIName", "&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
-    }
-
-    public static int getInventorySize(FileConfiguration configuration) {
-        return configuration.getInt("Settings.GUISize", 54);
+        player.openInventory(new TinkererMenu(player, 54, FileKeys.TINKER.getConfiguration().node("Settings", "GUIName").getString("&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
     }
 }

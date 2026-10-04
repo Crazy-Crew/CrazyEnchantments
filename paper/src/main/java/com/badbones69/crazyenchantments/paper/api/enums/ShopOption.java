@@ -1,16 +1,18 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 public enum ShopOption {
     
@@ -47,29 +49,41 @@ public enum ShopOption {
 
     @NotNull
     private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+    private final static FusionPaper fusion = plugin.getPlatform().getFusion();
     
     public static void loadShopOptions() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
         shopOptions.clear();
 
-        for (ShopOption shopOption : values()) {
-            String itemPath = "Settings." + shopOption.getPath() + ".";
-            String costPath = "Settings.Costs." + shopOption.getOptionPath() + ".";
+        final CommentedConfigurationNode section = config.node("Settings");
+        final CommentedConfigurationNode costs = section.node("Costs");
+
+        for (final ShopOption shopOption : values()) {
+            final String shopPath = shopOption.getPath();
+            final String optionPath = shopOption.getOptionPath();
+
+            final CommentedConfigurationNode shopSection = section.node(Methods.getString(shopPath));
+            final CommentedConfigurationNode optionSection = costs.node(Methods.getString(optionPath));
+
+            final Option option = new Option(
+                    new ItemBuilder()
+                            .setMaterial(shopSection.node("Item").getString("CHEST"))
+                            .setName(shopSection.node(shopOption.getNamePath()).getString("&cError getting name for %s".formatted(shopPath)))
+                            .setLore(StringUtils.getStringList(shopSection.node(shopOption.getLorePath())))
+                            .setItemModel(shopSection.node("Model", "Namespace").getString(""), shopSection.node("Model", "Key").getString(""))
+                            .setPlayerName(shopSection.node("Player").getString(""))
+                            .setGlow(shopSection.node("Glowing").getBoolean(false)),
+                    shopSection.node("Slot").getInt(1)-1,
+                    shopSection.node("InGUI").getBoolean(true),
+                    optionSection.node("Cost").getInt(100),
+                    Currency.getCurrency(optionSection.node("Currency").getString("Vault"))
+            );
 
             try {
-                shopOptions.put(shopOption, new Option(new ItemBuilder()
-                .setName(config.getString(itemPath + shopOption.getNamePath(), "Error getting name."))
-                .setLore(config.getStringList(itemPath + shopOption.getLorePath()))
-                .setMaterial(config.getString(itemPath + "Item", "CHEST"))
-                .setItemModel(config.getString(itemPath + "Model.Namespace", ""), config.getString(itemPath + "Model.Key", ""))
-                .setPlayerName(config.getString(itemPath + "Player", ""))
-                .setGlow(config.getBoolean(itemPath + "Glowing", false)),
-                config.getInt(itemPath + "Slot", 1) - 1,
-                config.getBoolean(itemPath + "InGUI", true),
-                config.getInt(costPath + "Cost", 100),
-                Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
-            } catch (Exception exception) {
-                plugin.getLogger().log(Level.SEVERE, "The option " + shopOption.getOptionPath() + " has failed to load.", exception);
+                shopOptions.put(shopOption, option);
+            } catch (final Exception exception) {
+                fusion.log(com.ryderbelserion.fusion.api.enums.Level.error, "Failed to load %s", exception, optionPath);
             }
         }
     }

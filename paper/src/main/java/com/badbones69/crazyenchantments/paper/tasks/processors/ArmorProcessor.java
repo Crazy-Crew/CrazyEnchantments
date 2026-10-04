@@ -9,7 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.attribute.Attribute;
@@ -21,8 +21,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 
 public class ArmorProcessor extends PoolProcessor {
@@ -67,7 +65,7 @@ public class ArmorProcessor extends PoolProcessor {
                 if (attribute > health && health > 0) {
                     checkNursery(armor, player, enchantments, 1, attribute);
                 }
-            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute!", player.getName()));
+            }, () -> this.fusion.log(Level.warn, "Player %s did not have the MAX_HEALTH attribute!", player.getName()));
 
             if (player.getFoodLevel() < 20) {
                 checkImplants(armor, player, enchantments);

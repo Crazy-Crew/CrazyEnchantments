@@ -6,12 +6,13 @@ import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -42,24 +43,28 @@ public enum Dust {
         this.knownNames = knowNames;
         this.configName = configName;
         
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        
-        this.max = config.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
-        this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration().node("Settings", "Dust", configName, "PercentRange");
+
+        this.max = config.node("Max").getInt(100);
+        this.min = config.node("Min").getInt(this.max);
     }
     
     public static void loadDust() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final @NotNull CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
         itemBuilderDust.clear();
 
         for (Dust dust : values()) {
-            String path = "Settings.Dust." + dust.getConfigName() + ".";
+            final CommentedConfigurationNode section = config.node("Settings", "Dust", dust.getConfigName());
+
             Dust.itemBuilderDust.put(dust, new ItemBuilder()
-            .setName(config.getString(path + "Name", "Error getting name."))
-            .setLore(config.getStringList(path + "Lore"))
-            .setItemModel(config.getString(path + "Model.Namespace", ""), config.getString(path + "Model.Key", ""))
-            .setMaterial(config.getString(path + "Item", "GLOWSTONE_DUST")));
+                    .setName(section.node("Item").getString()))
+                    .setLore(StringUtils.getStringList(section.node("Lore")))
+                    .setItemModel(
+                            section.node("Model", "Namespace").getString(""),
+                            section.node("Model", "Key").getString("")
+                    )
+                    .setMaterial(section.node("Item").getString("GLOWSTONE_DUST"));
         }
     }
     

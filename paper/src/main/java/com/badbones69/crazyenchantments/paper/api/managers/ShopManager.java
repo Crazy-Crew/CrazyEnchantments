@@ -9,9 +9,10 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,18 +38,23 @@ public class ShopManager {
     public void load() {
         this.customizerItems.clear();
         this.shopItems.clear();
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        this.inventoryName = ColorUtils.color(config.getString("Settings.InvName", "&4&l&nCrazy Enchanter"));
-        this.inventorySize = config.getInt("Settings.GUISize", 54);
-        this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table", false);
 
-        for (String customItemString : config.getStringList("Settings.GUICustomization")) {
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+
+        this.inventoryName = ColorUtils.color(config.node("Settings", "InvName").getString("&4&l&nCrazy Enchanter"));
+        this.inventorySize = config.node("Settings", "GUISize").getInt(54);
+        this.enchantmentTableShop = config
+                .node("Settings", "EnchantmentOptions", "Right-Click-Enchantment-Table")
+                .getBoolean(false);
+
+        for (final String customItemString : StringUtils.getStringList(config.node("Settings", "GUICustomization"))) {
             int slot = 0;
 
             for (String option : customItemString.split(", ")) {
                 if (option.contains("Slot:")) {
                     option = option.replace("Slot:", "");
                     slot = Integer.parseInt(option);
+
                     break;
                 }
             }
@@ -56,6 +62,7 @@ public class ShopManager {
             if (slot > this.inventorySize || slot <= 0) continue;
 
             slot--;
+
             this.customizerItems.put(ItemBuilder.convertString(customItemString), slot);
         }
 

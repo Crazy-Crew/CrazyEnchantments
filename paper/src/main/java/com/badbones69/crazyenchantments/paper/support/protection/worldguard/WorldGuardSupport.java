@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.support.protection.worldguard;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.TerritorySupport;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -166,7 +167,7 @@ public final class WorldGuardSupport extends TerritorySupport<Location, Location
 
         final BlockVector3 vector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
-        final List<String> regions = FileKeys.CONFIG.getConfiguration().getStringList("Settings.EnchantmentOptions.Wings.Regions");
+        final List<String> regions = StringUtils.getStringList(FileKeys.CONFIG.getConfigurationNode().node("Settings", "EnchantmentOptions", "Wings", "Regions"));
 
         for (final ProtectedRegion key : regionManager.getApplicableRegions(vector)) {
             if (!regions.contains(key.getId())) continue;

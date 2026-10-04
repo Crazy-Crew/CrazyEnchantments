@@ -35,6 +35,7 @@ public class CEPlayer {
     @NotNull
     private final Methods methods = this.plugin.getStarter().getMethods();
 
+    private final String playerName;
     private final UUID uuid;
     private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
@@ -48,13 +49,18 @@ public class CEPlayer {
      * @param uuid The player uuid.
      * @param gkitCoolDowns The cool-downs the player has.
      */
-    public CEPlayer(UUID uuid, List<GkitCoolDown> gkitCoolDowns) {
+    public CEPlayer(String player, UUID uuid, List<GkitCoolDown> gkitCoolDowns) {
         this.gkitCoolDowns = gkitCoolDowns;
         this.hasRage = false;
         this.rageLevel = 0;
         this.rageMultiplier = 0.0;
         this.rageTask = null;
+        this.playerName = player;
         this.uuid = uuid;
+    }
+
+    public CEPlayer(UUID uuid, List<GkitCoolDown> gkitCoolDowns) {
+        this("Unavailable", uuid, gkitCoolDowns);
     }
     
     /**
@@ -63,6 +69,10 @@ public class CEPlayer {
      */
     public Optional<Player> getPlayer() {
         return Optional.ofNullable(this.server.getPlayer(this.uuid));
+    }
+
+    public String getPlayerName() {
+        return this.playerName;
     }
 
     public UUID getUuid() {

@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,17 +28,19 @@ public class MigrateManager {
         final FileConfiguration TINKER = FileKeys.TINKER.getConfiguration();
 
         if (TINKER.getDouble("Settings.Tinker-Version") >= tinkerVersion) {
-            plugin.getLogger().info("Tinker.yml is up to date.");
+            fusion.log(Level.info, "Tinker.yml is up to date.");
+
             return;
         } else {
-            plugin.getLogger().warning("Updating Tinker.yml version.");
+            fusion.log(Level.warn, "Updating Tinker.yml version.");
 
             TINKER.set("Settings.Tinker-Version", tinkerVersion);
+
             FileKeys.TINKER.save();
         }
 
         if (firstFile.renameTo(secondFile)) {
-            plugin.getLogger().warning("Renamed " + firstFile.getName() + " to Tinker-v1.yml");
+            fusion.log(Level.warn, "Renamed %s to Tinker-v1.yml", firstFile.getName());
 
             FileKeys.TINKER.save();
         }
@@ -48,7 +50,7 @@ public class MigrateManager {
         final ConfigurationSection settings = secondConfiguration.getConfigurationSection("Settings");
 
         if (settings == null) {
-            fusion.log(Level.WARNING, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.warn, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
         } else {
             // Settings
             for (String setting : settings.getKeys(false)) {
@@ -59,7 +61,7 @@ public class MigrateManager {
         final ConfigurationSection enchantments = secondConfiguration.getConfigurationSection("Tinker.Vanilla-Enchantments");
 
         if (enchantments == null) {
-            fusion.log(Level.WARNING, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.warn, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
         } else {
             // Vanilla Enchantments
             for (String enchantment : enchantments.getKeys(false)) {
@@ -72,13 +74,13 @@ public class MigrateManager {
         final ConfigurationSection custom = secondConfiguration.getConfigurationSection("Tinker.Crazy-Enchantments");
 
         if (custom == null) {
-            fusion.log(Level.WARNING, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.warn, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
         } else {
             for (String enchantment : custom.getKeys(false)) {
                 final ConfigurationSection type = secondConfiguration.getConfigurationSection("Tinker.Crazy-Enchantments." + enchantment);
 
                 if (type == null) {
-                    fusion.log(Level.WARNING, "The enchantment {} could not be found in the tinker.yml", enchantment);
+                    fusion.log(Level.warn, "The enchantment {} could not be found in the tinker.yml", enchantment);
 
                     continue;
                 }

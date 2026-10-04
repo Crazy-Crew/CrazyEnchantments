@@ -2,9 +2,10 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,20 +27,35 @@ public class WingsManager {
     
     public void load() {
         this.isWingsEnabled = CEnchantments.WINGS.isActivated();
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        String path = "Settings.EnchantmentOptions.Wings.";
-        this.isCloudsEnabled = config.getBoolean(path + "Clouds", true);
-        this.isEnemyCheckEnabled = config.getBoolean(path + "Enemy-Toggle", true);
-        this.enemyRadius = config.getInt(path + "Distance", 25);
+
+        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+
+        final CommentedConfigurationNode section = configuration.node("Settings", "EnchantmentOptions", "Wings");
+
+        this.isCloudsEnabled = section.node("Clouds").getBoolean(true);
+        this.isEnemyCheckEnabled = section.node("Enemy-Toggle").getBoolean(true);
+        this.enemyRadius = section.node("Distance").getInt(25);
+
         this.whitelistWorlds.clear();
-        config.getStringList(path + "Worlds.Whitelisted").forEach(world -> this.whitelistWorlds.add(world.toLowerCase()));
+
+        StringUtils.getStringList(section.node("Worlds", "Whitelisted")).forEach(world -> {
+            this.whitelistWorlds.add(world.toLowerCase());
+        });
+
         this.blacklistWorlds.clear();
-        config.getStringList(path + "Worlds.Blacklisted").forEach(world -> this.blacklistWorlds.add(world.toLowerCase()));
-        this.limitlessFlightWorlds.clear();
-        config.getStringList(path + "Worlds.Limitless-Flight-Worlds").forEach(world -> this.limitlessFlightWorlds.add(world.toLowerCase()));
-        this.regions = config.getStringList(path + "Regions");
-        this.ownersCanFly = config.getBoolean(path + "Owners-Can-Fly", true);
-        this.membersCanFly = config.getBoolean(path + "Members-Can-Fly", true);
+
+        StringUtils.getStringList(section.node("Worlds", "Blacklisted")).forEach(world -> {
+            this.blacklistWorlds.add(world.toLowerCase());
+        });
+
+        StringUtils.getStringList(section.node("Worlds", "Limitless-Flight-Worlds")).forEach(world -> {
+            this.limitlessFlightWorlds.add(world.toLowerCase());
+        });
+
+        this.regions = StringUtils.getStringList(section.node("Regions"));
+
+        this.ownersCanFly = section.node("Owners-Can-Fly").getBoolean(true);
+        this.membersCanFly = section.node("Members-Can-Fly").getBoolean(true);
     }
     
     public boolean isWingsEnabled() {
@@ -133,6 +149,7 @@ public class WingsManager {
     
     public void setWingsTask(ScheduledTask task) {
         endWingsTask();
+
         this.wingsTask = task;
     }
     

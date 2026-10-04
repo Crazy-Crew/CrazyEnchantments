@@ -16,7 +16,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -29,7 +28,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +51,7 @@ public class EnchantmentControl implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void useEnchantedBook(InventoryClickEvent event) {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
@@ -80,9 +79,8 @@ public class EnchantmentControl implements Listener {
         if (methods.isEventCancelled(preApplyEvent)) return;
 
         if (hasEnchantment) {
-            if (!config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle", true)
-               || !(enchantments.get(enchantment) < ceBook.getLevel())
-            ) return;
+            if (!config.node("Settings", "EnchantmentOptions", "Armor-Upgrade", "Toggle").getBoolean(true)
+                    || !(enchantments.get(enchantment) < ceBook.getLevel())) return;
 
             event.setCancelled(true);
 
@@ -110,7 +108,7 @@ public class EnchantmentControl implements Listener {
                 return;
             } else if (preApplyEvent.getDestroyed()) {
                 if (!methods.isEventCancelled(new BookDestroyEvent(player, item, ceBook))) {
-                    if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break", true)) {
+                    if (config.node("Settings", "EnchantmentOptions", "Armor-Upgrade", "Enchantment-Break").getBoolean(true)) {
                         if (hasWhiteScrollProtection) {
                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                             player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
@@ -192,7 +190,7 @@ public class EnchantmentControl implements Listener {
 
         player.sendMessage(Messages.BOOK_FAILED.getMessage());
         methods.playItemBreak(player, book);
-        if (config.getBoolean("Settings.EnchantmentOptions.Limit.Change-On-Fail", true)) event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, 1));
+        if (config.node("Settings", "EnchantmentOptions", "Limit", "Change-On-Fail").getBoolean(true)) event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, 1));
         player.setItemOnCursor(null);
     }
 
@@ -202,7 +200,7 @@ public class EnchantmentControl implements Listener {
         if (event.useInteractedBlock().equals(Event.Result.ALLOW)) return;
 
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) &&
-                FileKeys.CONFIG.getConfiguration().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description", true)) {
+                FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "Right-Click-Book-Description").getBoolean(true)) {
             ItemStack item = methods.getItemInHand(event.getPlayer());
 
             CEBook book = enchantmentBookSettings.getCEBook(item);

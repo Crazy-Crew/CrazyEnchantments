@@ -16,7 +16,8 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.google.common.collect.Lists;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -24,13 +25,12 @@ import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,9 +56,7 @@ public class EnchantmentBookSettings {
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-
-        return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
+        return FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "UnSafe-Enchantments").getBoolean(true);
     }
 
     /**
@@ -232,59 +230,59 @@ public class EnchantmentBookSettings {
      * Loads in all config options.
      */
     public void populateMaps() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
-        final ConfigurationSection section = config.getConfigurationSection("Categories");
+        final CommentedConfigurationNode section = config.node("Categories");
 
         if (section == null) {
-            this.fusion.log(Level.WARNING, "The categories section cannot be found in config.yml, It's possible the file is badly formatted!");
+            this.fusion.log(Level.warn, "The categories section cannot be found in config.yml, It's possible the file is badly formatted!");
 
             return;
         }
 
-        for (String category : section.getKeys(false)) {
-            String path = "Categories." + category;
-
-            LostBook lostBook = new LostBook(
-                    config.getInt(path + ".LostBook.Slot", -1),
-                    config.getBoolean(path + ".LostBook.InGUI", false),
+        section.childrenMap().forEach((id, category) -> {
+            final LostBook lostBook = new LostBook(
+                    category.node("LostBook", "Slot").getInt(-1),
+                    category.node("LostBook", "InGUI").getBoolean(false),
                     new ItemBuilder()
-                            .setMaterial(config.getString(path + ".LostBook.Item", "BOOK"))
-                            .setItemModel(config.getString(path + ".LostBook.Model.Namespace", ""), config.getString(path + ".LostBook.Model.Key", ""))
-                            .setPlayerName(config.getString(path + ".LostBook.Player", ""))
-                            .setName(config.getString(path + ".LostBook.Name", "Error getting name."))
-                            .setLore(config.getStringList(path + ".LostBook.Lore"))
-                            .setGlow(config.getBoolean(path + ".LostBook.Glowing", true)),
-                    config.getInt(path + ".LostBook.Cost"),
-                    Currency.getCurrency(config.getString(path + ".LostBook.Currency")),
-                    config.getBoolean(path + ".LostBook.FireworkToggle", false),
-                    getColors(config.getString(path + ".LostBook.FireworkColors", "Red, White, Blue")),
-                    config.getBoolean(path + ".LostBook.Sound-Toggle", false),
-                    config.getString(path + ".LostBook.Sound", "BLOCK_ANVIL_PLACE"));
+                            .setMaterial(category.node("LostBook", "Item").getString("BOOK"))
+                            .setItemModel(category.node("LostBook", "Model", "Namespace")
+                                    .getString(""), category.node("LostBook", "Model", "Key")
+                                    .getString(""))
+                            .setPlayerName(category.node("LostBook", "Player").getString(""))
+                            .setName(category.node("LostBook", "Name").getString("&cError getting name for LostBook."))
+                            .setLore(StringUtils.getStringList(category.node("LostBook", "Lore")))
+                            .setGlow(category.node("LostBook", "Glowing").getBoolean(true)),
+                    category.node("LostBook", "Cost").getInt(100),
+                    Currency.getCurrency(category.node("LostBook", "Currency").getString("XP_TOTAL")),
+                    category.node("LostBook", "FireworkToggle").getBoolean(false),
+                    getColors(category.node("LostBook", "FireworkColors").getString("Red, White, Blue")),
+                    category.node("LostBook", "Sound-Toggle").getBoolean(false),
+                    category.node("LostBook", "Sound").getString("BLOCK_ANVIL_PLACE")
+            );
 
-            this.categories.add(new Category(
-                    category,
-                    config.getInt(path + ".Slot"),
-                    config.getBoolean(path + ".InGUI", true),
+            final Category item = new Category(
+                    id.toString(),
+                    category.node("Slot").getInt(-1),
+                    category.node("InGUI").getBoolean(true),
                     new ItemBuilder()
-                            .setMaterial(config.getString(path + ".Item", ColorUtils.getRandomPaneColor().getName()))
-                            .setItemModel(config.getString(path + ".Model.Namespace", ""), config.getString(path + ".Model.Key", ""))
-                            .setPlayerName(config.getString(path + ".Player", ""))
-                            .setName(config.getString(path + ".Name", "Error getting name."))
-                            .setLore(config.getStringList(path + ".Lore"))
-                            .setGlow(config.getBoolean(path + ".Glowing", false)),
-                    config.getInt(path + ".Cost"),
-                    Currency.getCurrency(config.getString(path + ".Currency")),
-                    config.getInt(path + ".Rarity"),
+                            .setMaterial(category.node("Item").getString(ColorUtils.getRandomPaneColor().getName()))
+                            .setItemModel(category.node("Model", "Namespace").getString(""), category.node("Model", "Key").getString("")),
+                    category.node("Cost").getInt(100),
+                    Currency.getCurrency(category.node("Currency").getString("XP_TOTAL")),
+                    category.node("Rarity").getInt(),
                     lostBook,
-                    config.getInt(path + ".EnchOptions.SuccessPercent.Max"),
-                    config.getInt(path + ".EnchOptions.SuccessPercent.Min"),
-                    config.getInt(path + ".EnchOptions.DestroyPercent.Max"),
-                    config.getInt(path + ".EnchOptions.DestroyPercent.Min"),
-                    config.getBoolean(path + ".EnchOptions.MaxLvlToggle"),
-                    config.getInt(path + ".EnchOptions.LvlRange.Max"),
-                    config.getInt(path + ".EnchOptions.LvlRange.Min")));
-        }
+                    category.node("EnchOptions", "SuccessPercent", "Max").getInt(-1),
+                    category.node("EnchOptions", "SuccessPercent", "Min").getInt(-1),
+                    category.node("EnchOptions", "DestroyPercent", "Max").getInt(-1),
+                    category.node("EnchOptions", "DestroyPercent", "Min").getInt(-1),
+                    category.node("EnchOptions", "MaxLvlToggle").getBoolean(false),
+                    category.node("EnchOptions", "LvlRange", "Max").getInt(-1),
+                    category.node("EnchOptions", "LvlRange", "Min").getInt(-1)
+            );
+
+            this.categories.add(item);
+        });
     }
 
     /**

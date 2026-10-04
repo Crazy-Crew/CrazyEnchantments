@@ -15,7 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Location;
@@ -129,7 +129,7 @@ public class BowEnchantments implements Listener {
 
             Entity lightning = location.getWorld().strikeLightningEffect(location);
 
-            int lightningSoundRange = FileKeys.CONFIG.getConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+            int lightningSoundRange = FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "Lightning-Sound-Range").getInt(160);
 
             try {
                 location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
@@ -184,7 +184,7 @@ public class BowEnchantments implements Listener {
                     if (entityHealth + heal < maxHealth) entity.setHealth(entityHealth + heal);
                     if (entityHealth + heal >= maxHealth) entity.setHealth(maxHealth);
                 }
-            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", entity.getName(), "Doctor"));
+            }, () -> this.fusion.log(Level.warn, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", entity.getName(), "Doctor"));
         }
 
         // Damaged player is an enemy.

@@ -74,7 +74,7 @@ public class AxeEnchantments implements Listener {
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
-        boolean damage = FileKeys.CONFIG.getConfiguration().getBoolean("Settings.EnchantmentOptions.TreeFeller-Full-Durability", true);
+        boolean damage = FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "TreeFeller-Full-Durability").getBoolean(true);
 
         if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
 

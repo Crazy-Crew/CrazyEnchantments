@@ -19,8 +19,8 @@ import com.badbones69.crazyenchantments.paper.support.protection.worldguard.Worl
 import com.badbones69.crazyenchantments.paper.support.skyblock.superor.SuperiorSkyBlockImpl;
 import com.badbones69.crazyenchantments.paper.support.vanish.GenericVanishSupport;
 import com.badbones69.crazyenchantments.paper.support.vanish.plugins.EssentialsSupport;
-import com.ryderbelserion.fusion.core.api.FusionKey;
-import com.ryderbelserion.fusion.core.api.registry.mods.ModRegistry;
+import com.ryderbelserion.fusion.api.objects.FusionKey;
+import com.ryderbelserion.fusion.core.mods.ModRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;

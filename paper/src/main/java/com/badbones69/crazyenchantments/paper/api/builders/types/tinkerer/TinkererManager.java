@@ -9,10 +9,10 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -21,6 +21,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ public class TinkererManager {
     @NotNull
     private static final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
-    public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand, FileConfiguration configuration) {
+    public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand, CommentedConfigurationNode configuration) {
         PlayerInventory inventory = player.getInventory();
 
         ItemStack item = mainHand ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
@@ -61,8 +62,10 @@ public class TinkererManager {
             inventory.setItemInOffHand(methods.removeItem(item));
         }
 
-        if (Currency.isCurrency(configuration.getString("Settings.Currency"))) {
-            currencyAPI.giveCurrency(player, Currency.getCurrency(configuration.getString("Settings.Currency")), amount);
+        final String currency = configuration.node("Settings", "Currency").getString("XP_TOTAL");
+
+        if (Currency.isCurrency(currency)) {
+            currencyAPI.giveCurrency(player, Currency.getCurrency(currency), amount);
         }
 
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -74,26 +77,36 @@ public class TinkererManager {
      * @param amount Amount of XP to store.
      * @return XP Bottle with custom amount of xp stored in it.
      */
-    public static ItemStack getXPBottle(Audience player, String amount, final FileConfiguration config) {
-        String id = config.getString("Settings.BottleOptions.Item", "EXPERIENCE_BOTTLE");
-        String name = config.getString("Settings.BottleOptions.Name", "");
-        List<String> lore = new ArrayList<>();
+    public static ItemStack getXPBottle(Audience player, String amount, final @NotNull CommentedConfigurationNode config) {
+        final String id = config.node("Settings", "BottleOptions", "Item").getString("EXPERIENCE_BOTTLE");
+        final String name = config.node("Settings", "BottleOptions", "Name").getString("");
+        final List<String> lore = new ArrayList<>();
 
-        for (String l : config.getStringList("Settings.BottleOptions.Lore")) {
-            lore.add(l.replace("%Total%", amount).replace("%total%", amount));
+        for (String line : StringUtils.getStringList(config.node("Settings", "BottleOptions", "Lore"))) {
+            lore.add(line.replace("%Total%", amount).replace("%total%", amount));
         }
 
-        return new ItemBuilder().setMaterial(id).setName(name).setItemModel(config.getString("Settings.BottleOptions.Model.Namespace", ""), config.getString("Settings.BottleOptions.Model.Key", "")).setLore(lore).addKey(DataKeys.experience.getNamespacedKey(), amount).build(player);
+        return new ItemBuilder().setMaterial(id).setName(name).setItemModel(
+                config.node("Settings", "BottleOptions", "Model", "Namespace").getString(""),
+                config.node("Settings", "BottleOptions", "Model", "Key").getString(""))
+                .setLore(lore)
+                .addKey(DataKeys.experience.getNamespacedKey(), amount)
+                .build(player);
     }
 
-    public static int getTotalXP(ItemStack item, final FileConfiguration config) {
+    public static int getTotalXP(ItemStack item, final CommentedConfigurationNode config) {
         int total = 0;
+
+        final CommentedConfigurationNode crazySection = config.node("Tinker", "Crazy-Enchantments");
+        final CommentedConfigurationNode vanillaSection = config.node("Tinker", "Vanilla-Enchantments");
 
         Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
 
         if (!ceEnchants.isEmpty()) { // CrazyEnchantments
             for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {
-                String[] values = config.getString("Tinker.Crazy-Enchantments." + enchantment.getKey().getName() + ".Items", "0").replaceAll(" ", "").split(",");
+                final String keyName = enchantment.getKey().getName();
+                final String[] values = crazySection.node(keyName, "Items").getString("0").replaceAll(" ", "").split(",");
+
                 int baseAmount = Integer.parseInt(values[0]);
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
                 int enchantmentLevel = enchantment.getValue();
@@ -105,7 +118,9 @@ public class TinkererManager {
         //todo() test data component usage here
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) { // Vanilla Enchantments
             for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
-                String[] values = config.getString("Tinker.Vanilla-Enchantments." + convertToLegacy(enchantment.getKey().getKey().value()).toUpperCase(), "0").replaceAll(" ", "").split(",");
+                final String keyName = convertToLegacy(enchantment.getKey().getKey().value()).toUpperCase();
+                final String[] values = vanillaSection.node(keyName).getString("0").replaceAll(" ", "").split(",");
+
                 int baseAmount = Integer.parseInt(values[0]); // TODO add converter to convert legacy to new enchant names.
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
                 int enchantmentLevel = enchantment.getValue();
@@ -178,11 +193,14 @@ public class TinkererManager {
 
     }
 
-    public static int getMaxDustLevelFromBook(CEBook book, FileConfiguration config) {
-        String path = "Tinker.Crazy-Enchantments." + book.getEnchantment().getName() + ".Book";
-        if (!config.contains(path)) return 1;
+    public static int getMaxDustLevelFromBook(CEBook book, CommentedConfigurationNode config) {
+        final String name = book.getEnchantment().getName();
 
-        String[] values = config.getString(path, "0").replaceAll(" ", "").split(",");
+        if (!config.hasChild("Tinker", "Crazy-Enchantments", name, "Book")) return 1;
+
+        final CommentedConfigurationNode section = config.node("Tinker", "Crazy-Enchantments", name, "Book");
+
+        String[] values = section.getString("0").replaceAll(" ", "").split(",");
         int baseAmount = Integer.parseInt(values[0]);
         int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
 

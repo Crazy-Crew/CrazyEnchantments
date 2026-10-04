@@ -4,9 +4,10 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 public class KitsManager {
 
@@ -16,28 +17,32 @@ public class KitsManager {
     private static ItemStack backRight, backLeft;
 
     public static void load() {
-        final FileConfiguration file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
+        final CommentedConfigurationNode configuration = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
 
-        String path = "Info-GUI-Settings";
+        final CommentedConfigurationNode section = configuration.node("Info-GUI-Settings");
 
-        inventoryName = ColorUtils.legacyTranslateColourCodes(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
-        inventorySize = file.getInt(path + ".Inventory.Size", 18);
+        inventoryName = ColorUtils.legacyTranslateColourCodes(section.node("Inventory", "Name").getString("&c&lEnchantment Info"));
+        inventorySize = section.node("Inventory", "Size").getInt(18);
+
+        final CommentedConfigurationNode backItemRightSection = section.node("Back-Item", "Right");
 
         backRight = new ItemBuilder()
-                .setMaterial(file.getString(path + ".Back-Item.Right.Item", "NETHER_STAR"))
-                .setPlayerName(file.getString(path + ".Back-Item.Right.Player", ""))
-                .setItemModel(file.getString(path + ".Back-Item.Right.Model.Namespace", ""), file.getString(path + ".Back-Item.Right.Item.Model.Key", ""))
-                .setName(file.getString(path + ".Back-Item.Right.Name", "&7&l<<&b&lBack"))
-                .setLore(file.getStringList(path + ".Back-Item.Right.Lore"))
+                .setMaterial(backItemRightSection.node("Item").getString("NETHER_STAR"))
+                .setPlayerName(backItemRightSection.node("Player").getString(""))
+                .setItemModel(backItemRightSection.node("Model", "Namespace").getString(""), backItemRightSection.node("Model", "Key").getString(""))
+                .setName(backItemRightSection.node("Name").getString("&7&l<<&b&lBack"))
+                .setLore(StringUtils.getStringList(backItemRightSection.node("Lore")))
                 .addKey(DataKeys.back_right.getNamespacedKey(), "")
                 .build();
 
+        final CommentedConfigurationNode backItemLeftSection = section.node("Back-Item", "Left");
+
         backLeft = new ItemBuilder()
-                .setMaterial(file.getString(path + ".Back-Item.Left.Item", "NETHER_STAR"))
-                .setPlayerName(file.getString(path + ".Back-Item.Left.Player", ""))
-                .setItemModel(file.getString(path + ".Back-Item.Left.Model.Namespace", ""), file.getString(path + ".Back-Item.Left.Item.Model.Key", ""))
-                .setName(file.getString(path + ".Back-Item.Left.Name", "&b&lBack&7&l>>"))
-                .setLore(file.getStringList(path + ".Back-Item.Left.Lore"))
+                .setMaterial(backItemLeftSection.node("Item").getString("NETHER_STAR"))
+                .setPlayerName(backItemLeftSection.node("Player").getString(""))
+                .setItemModel(backItemLeftSection.node("Model", "Namespace").getString(""), backItemRightSection.node("Model", "Key").getString(""))
+                .setName(backItemLeftSection.node("Name").getString("&b&lBack&7&l>>"))
+                .setLore(StringUtils.getStringList(backItemLeftSection.node("Lore")))
                 .addKey(DataKeys.back_left.getNamespacedKey(), "")
                 .build();
     }

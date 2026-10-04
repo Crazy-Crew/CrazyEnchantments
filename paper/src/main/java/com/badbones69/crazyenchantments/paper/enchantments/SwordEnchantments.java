@@ -18,7 +18,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import net.kyori.adventure.audience.Audience;
@@ -227,7 +227,7 @@ public class SwordEnchantments implements Listener {
                 if (entityHealth + steal < maxHealth) damager.setHealth(entityHealth + steal);
 
                 if (entityHealth + steal >= maxHealth) damager.setHealth(maxHealth);
-            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", damager.getName(), "Lifesteal"));
+            }, () -> this.fusion.log(Level.warn, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", damager.getName(), "Lifesteal"));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NUTRITION, damager, item, enchantments)) {
@@ -245,7 +245,7 @@ public class SwordEnchantments implements Listener {
                 if (entityHealth + event.getDamage() / 2 < maxHealth) damager.setHealth(entityHealth + event.getDamage() / 2);
 
                 if (entityHealth + event.getDamage() / 2 >= maxHealth) damager.setHealth(maxHealth);
-            }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", damager.getName(), "Vampire"));
+            }, () -> this.fusion.log(Level.warn, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", damager.getName(), "Vampire"));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BLINDNESS, damager, item, enchantments)) {

@@ -2,12 +2,10 @@ package com.badbones69.crazyenchantments.paper.api.enums.keys;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
-import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
+import com.ryderbelserion.fusion.api.exceptions.FusionException;
+import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
-import com.ryderbelserion.fusion.paper.files.PaperFileManager;
-import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -16,21 +14,21 @@ import java.util.Optional;
 
 public enum FileKeys {
 
-    CONFIG(FileType.PAPER_YAML, "config.yml"),
-    BLOCKLIST(FileType.PAPER_YAML, "BlockList.yml"),
-    HEADMAP(FileType.PAPER_YAML, "HeadMap.yml"),
-    DATA(FileType.PAPER_YAML, "Data.yml"),
-    ENCHANTMENTS(FileType.PAPER_YAML, "Enchantments.yml"),
-    GKITZ(FileType.PAPER_YAML, "GKitz.yml"),
-    MESSAGES(FileType.PAPER_YAML, "Messages.yml"),
-    ENCHANTMENT_TYPES(FileType.PAPER_YAML, "Enchantment-Types.yml"),
-    TINKER(FileType.PAPER_YAML, "Tinker.yml"),
+    CONFIG(FileType.YAML, "config.yml"),
+    BLOCKLIST(FileType.YAML, "BlockList.yml"),
+    HEADMAP(FileType.YAML, "HeadMap.yml"),
+    DATA(FileType.YAML, "Data.yml"),
+    ENCHANTMENTS(FileType.YAML, "Enchantments.yml"),
+    GKITZ(FileType.YAML, "GKitz.yml"),
+    MESSAGES(FileType.YAML, "Messages.yml"),
+    ENCHANTMENT_TYPES(FileType.YAML, "Enchantment-Types.yml"),
+    TINKER(FileType.YAML, "Tinker.yml"),
 
     SUPPORT(FileType.YAML, "support.yml");
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final CrazyPlatform platform = this.plugin.getPlatform();
-    private final PaperFileManager fileManager = this.platform.getFileManager();
+    private final FileManager fileManager = this.platform.getFileManager();
     private final Path path = this.plugin.getDataPath();
 
     private final FileType fileType;
@@ -63,18 +61,8 @@ public enum FileKeys {
         return customFile.get();
     }
 
-    public @NotNull final YamlConfiguration getConfiguration() {
-        return getPaperCustomFile().getConfiguration();
-    }
-
-    public @NotNull final PaperCustomFile getPaperCustomFile() {
-        final Optional<PaperCustomFile> customFile = this.fileManager.getPaperFile(this.location);
-
-        if (customFile.isEmpty()) {
-            throw new FusionException("Could not find custom file for " + this.location);
-        }
-
-        return customFile.get();
+    public @NotNull final CommentedConfigurationNode getConfiguration() {
+        return getConfigurationNode();
     }
 
     public @NotNull final FileType getFileType() {
@@ -90,6 +78,6 @@ public enum FileKeys {
     }
 
     public void addFile() {
-        this.fileManager.addPaperFile(this.location);
+        this.fileManager.addFile(this.location, this.fileType);
     }
 }

@@ -31,7 +31,8 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
@@ -52,6 +53,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -143,12 +147,12 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        final FileConfiguration gkit = FileKeys.GKITZ.getConfiguration();
-        final FileConfiguration enchants = FileKeys.ENCHANTMENTS.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode gkit = FileKeys.GKITZ.getConfiguration();
+        final CommentedConfigurationNode enchants = FileKeys.ENCHANTMENTS.getConfiguration();
 
-        final FileConfiguration blocks = FileKeys.BLOCKLIST.getConfiguration();
-        final FileConfiguration heads = FileKeys.HEADMAP.getConfiguration();
+        final CommentedConfigurationNode blocks = FileKeys.BLOCKLIST.getConfiguration();
+        final CommentedConfigurationNode heads = FileKeys.HEADMAP.getConfiguration();
 
         this.blockList.clear();
         this.headMap.clear();
@@ -157,7 +161,7 @@ public class CrazyManager {
         this.enchantmentBookSettings.getCategories().clear();
 
         // Check if we should patch player health.
-        final boolean isPatchingHealth = config.getBoolean("Settings.Reset-Players-Max-Health", true);
+        final boolean isPatchingHealth = config.node("Settings", "Reset-Players-Max-Health").getBoolean(true);
 
         for (final Player player : this.server.getOnlinePlayers()) {
             loadCEPlayer(player);
@@ -177,46 +181,46 @@ public class CrazyManager {
         // Invalidate cached enchants.
         CEnchantments.invalidateCachedEnchants();
 
-        // Loop through block list.
-        blocks.getStringList("Block-List").forEach(id -> {
+        StringUtils.getStringList(blocks).forEach(id -> {
             try {
                 this.blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {}
         });
 
-        ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
+        if (heads.hasChild("HeadOdds")) {
+            final CommentedConfigurationNode section = heads.node("HeadOdds");
 
-        if (headSec == null) {
-            this.fusion.log(Level.WARNING, "HeadOdds could not be found in HeadMap.yml!");
-        } else {
-            headSec.getKeys(false).forEach(id -> {
-                try {
-                    Material mat = new ItemBuilder().setMaterial(id).getMaterial();
-                    this.headMap.put(mat, headSec.getDouble(id));
-                } catch (Exception ignored) {}
+            section.childrenList().forEach(child -> {
+
+            });
+
+            section.childrenMap().forEach((object, child) -> {
+                final double amount = child.node(object).getDouble(0.0);
+
+                this.headMap.put(new ItemBuilder().setMaterial(object.toString()).getMaterial(), amount);
             });
         }
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item", "BOOK")));
-        this.useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
-        this.maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
-        this.useConfigLimits = config.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", false);
-        this.defaultLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
-        this.defaultBaseLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
-        this.useEnchantmentLimiter = config.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
-        this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
-        this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
-        this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
-        this.breakRageOnDamage = config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
-        this.useRageBossBar = config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
-        this.rageIncrement = config.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
-        setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
-        setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
+        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Methods.getNode(config, "Settings.Enchantment-Book-Item").getString("BOOK")));
+        this.useUnsafeEnchantments = Methods.getNode(config, "Settings.EnchantmentOptions.UnSafe-Enchantments").getBoolean(true);
+        this.maxEnchantmentCheck = Methods.getNode(config, "Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle").getBoolean(true);
+        this.useConfigLimits = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Check-Perms").getBoolean(false);
+        this.defaultLimit = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Default-Limit").getInt(0);
+        this.defaultBaseLimit = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Default-Base-Limit").getInt(0);
+        this.useEnchantmentLimiter = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Enable-SlotCrystal").getBoolean(true);
+        this.checkVanillaLimit = Methods.getNode(config, "Settings.EnchantmentOptions.IncludeVanillaEnchantments").getBoolean(false);
+        this.gkitzToggle = !config.hasChild("Settings", "GKitz", "Enabled") || Methods.getNode(config, "Settings.GKitz.Enabled").getBoolean(true);
+        this.rageMaxLevel = Methods.getNode(config, "Settings.EnchantmentOptions.MaxRageLevel").getInt(4);
+        this.breakRageOnDamage = Methods.getNode(config, "Settings.EnchantmentOptions.Break-Rage-On-Damage").getBoolean(true);
+        this.useRageBossBar = Methods.getNode(config, "Settings.EnchantmentOptions.Rage-Boss-Bar").getBoolean(false);
+        this.rageIncrement = Methods.getNode(config, "Settings.EnchantmentOptions.Rage-Increase").getDouble(0.1);
+        setDropBlocksBlast(Methods.getNode(config, "Settings.EnchantmentOptions.Drop-Blocks-For-Blast").getBoolean(true));
+        setDropBlocksVeinMiner(Methods.getNode(config, "Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner").getBoolean(true));
 
-        this.CEFailureOverride = config.getInt("Settings.CEFailureOverride", -1);
-        this.CESuccessOverride = config.getInt("Settings.CESuccessOverride", -1);
+        this.CEFailureOverride = Methods.getNode(config, "Settings.CEFailureOverride").getInt(-1);
+        this.CESuccessOverride = Methods.getNode(config, "Settings.CESuccessOverride").getInt(-1);
 
         this.enchantmentBookSettings.populateMaps();
 
@@ -224,66 +228,111 @@ public class CrazyManager {
             String name = cEnchantment.getName();
             String path = "Enchantments." + name;
 
-            if (enchants.contains(path)) { // To make sure the enchantment isn't broken.
-                CEnchantment enchantment = new CEnchantment(name)
-                .setCustomName(enchants.getString(path + ".Name"))
-                .setActivated(enchants.getBoolean(path + ".Enabled"))
-                .setMaxLevel(enchants.getInt(path + ".MaxPower"))
-                .setEnchantmentType(cEnchantment.getType())
-                .setInfoName(enchants.getString(path + ".Info.Name"))
-                .setInfoDescription(enchants.getStringList(path + ".Info.Description"))
-                .setCategories(enchants.getStringList(path + ".Categories"))
-                .setChance(cEnchantment.getChance())
-                .setChanceIncrease(cEnchantment.getChanceIncrease())
-                .setSound(enchants.getString(path + ".Sound"))
-                .setConflicts(enchants.getStringList(path + ".Conflicts"));
+            if (!enchants.hasChild(path)) {
+                continue;
+            }
 
-                if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(this.methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
+            final CEnchantment enchantment = new CEnchantment(name);
 
-                if (cEnchantment.hasChanceSystem()) {
-                    if (enchants.contains(path + ".Chance-System.Base")) {
-                        enchantment.setChance(enchants.getInt(path + ".Chance-System.Base"));
+            final CommentedConfigurationNode section = enchants.node(path);
+
+            final String displayName = section.node("Name").getString("");
+            final boolean isEnabled = section.node("Enabled").getBoolean(true);
+            final int maxPower = section.node("MaxPower").getInt(1);
+
+            final String infoName = section.node("Info", "Name").getString("");
+            final List<String> infoDescription = StringUtils.getStringList(section.node("Info", "Description"));
+
+            final List<String> categories = StringUtils.getStringList(section.node("Categories"));
+
+            final String sound = section.node("Sound").getString("");
+
+            final List<String> conflicts = StringUtils.getStringList(section.node("Conflicts"));
+
+            final int increase = cEnchantment.getChanceIncrease();
+            final int chance = cEnchantment.getChance();
+
+            enchantment.setCustomName(displayName)
+                    .setActivated(isEnabled)
+                    .setMaxLevel(maxPower)
+                    .setInfoName(infoName)
+                    .setInfoDescription(infoDescription)
+                    .setCategories(categories)
+                    .setChance(chance)
+                    .setChanceIncrease(increase)
+                    .setSound(sound)
+                    .setConflicts(conflicts);
+
+            if (section.hasChild("Enchantment-Type")) {
+                enchantment.setEnchantmentType(this.methods.getFromName(section.node("Enchantment-Type").getString("")));
+            }
+
+            if (cEnchantment.hasChanceSystem()) {
+                final CommentedConfigurationNode chanceSystem = section.node("Chance-System");
+
+                if (chanceSystem != null) {
+                    if (chanceSystem.hasChild("Base")) {
+                        enchantment.setChance(chanceSystem.node("Base").getInt(chance));
                     } else {
-                        enchantment.setChance(cEnchantment.getChance());
+                        enchantment.setChance(chance);
                     }
 
-                    if (enchants.contains(path + ".Chance-System.Increase")) {
-                        enchantment.setChanceIncrease(enchants.getInt(path + ".Chance-System.Increase"));
+                    if (chanceSystem.hasChild("Increase")) {
+                        enchantment.setChance(chanceSystem.node("Increase").getInt(increase));
                     } else {
-                        enchantment.setChanceIncrease(cEnchantment.getChanceIncrease());
+                        enchantment.setChance(increase);
                     }
                 }
-
-                enchantment.registerEnchantment();
             }
+
+            enchantment.registerEnchantment();
         }
 
         if (this.gkitzToggle) {
-            final ConfigurationSection section = gkit.getConfigurationSection("GKitz");
-
-            if (section == null) {
-                this.fusion.log(Level.WARNING, "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
+            if (!gkit.hasChild("Gkitz")) {
+                this.fusion.log(Level.warn, "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
             } else {
-                for (final String kit : section.getKeys(false)) {
-                    String path = "GKitz." + kit + ".";
+                final CommentedConfigurationNode gkitz = gkit.node("GKitz");
 
-                    int slot = gkit.getInt(path + "Display.Slot");
-                    String time = gkit.getString(path + "Cooldown");
-                    boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
+                gkitz.childrenMap().forEach((id, child) -> {
+                    final CommentedConfigurationNode display = child.node("Display");
 
-                    ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
-                            .setItemModel(gkit.getString(path + "Display.Model.Namespace", ""), gkit.getString(path + "Display.Model.Key", ""))
-                            .setName(gkit.getString(path + "Display.Name", "Error getting name."))
-                            .setLore(gkit.getStringList(path + "Display.Lore"))
-                            .setGlow(gkit.getBoolean(path + "Display.Glowing", false))
-                            .addKey(DataKeys.gkit_type.getNamespacedKey(), kit).build();
+                    final int displaySlot = display.node("Slot").getInt(-1);
+                    final String displayItem = display.node("Item").getString(ColorUtils.getRandomPaneColor().getName());
+                    final List<String> displayLore = StringUtils.getStringList(display.node("Lore"));
+                    final String displayName = display.node("Name").getString("&cError fetching name for %s".formatted(id));
 
-                    List<String> commands = gkit.getStringList(path + "Commands");
-                    List<String> itemStrings = gkit.getStringList(path + "Items");
-                    List<ItemStack> previewItems = getInfoGKit(itemStrings);
-                    previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
-                    this.gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, itemStrings, autoEquip));
-                }
+                    final String displayNamespace = display.node("Display", "Model", "Namespace").getString("");
+                    final String displayKey = display.node("Display", "Model", "Key").getString("");
+
+                    final boolean isGlowing = display.node("Glowing").getBoolean(false);
+
+                    final ItemStack itemStack = new ItemBuilder().setMaterial(displayItem)
+                            .setName(displayName)
+                            .setLore(displayLore)
+                            .setGlow(isGlowing)
+                            .setItemModel(displayNamespace, displayKey)
+                            .addKey(DataKeys.gkit_type.getNamespacedKey(), id.toString()).build();
+
+                    final List<String> commands = StringUtils.getStringList(child.node("Commands"));
+                    final List<String> items = StringUtils.getStringList(child.node("Items"));
+                    final List<ItemStack> itemStacks = getInfoGKit(items);
+                    final String time = child.node("Time").getString("");
+                    final boolean isAutoEquip = child.node("Auto-Equip").getBoolean(false);
+
+                    itemStacks.addAll(getInfoGKit(StringUtils.getStringList(child.node("Fake-Items"))));
+
+                    this.gkitz.add(new GKitz(
+                            id.toString(),
+                            displaySlot,
+                            time,
+                            itemStack,
+                            itemStacks,
+                            commands,
+                            items,
+                            isAutoEquip
+                    ));
+                });
             }
         }
 
@@ -334,21 +383,33 @@ public class CrazyManager {
      * @param player The player you wish to load.
      */
     public void loadCEPlayer(Player player) {
-        final FileConfiguration data = FileKeys.DATA.getConfiguration();
+        final CommentedConfigurationNode data = FileKeys.DATA.getConfiguration();
         final UUID uuid = player.getUniqueId();
         final String asString = uuid.toString();
 
-        List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
+        List<GkitCoolDown> cooldowns = new ArrayList<>();
 
-        for (GKitz kit : getGKitz()) {
-            if (data.contains("Players." + asString + ".GKitz." + kit.getName())) {
-                Calendar coolDown = Calendar.getInstance();
-                coolDown.setTimeInMillis(data.getLong("Players." + asString + ".GKitz." + kit.getName()));
-                gkitCoolDowns.add(new GkitCoolDown(kit, coolDown));
+        final CommentedConfigurationNode section = data.node(asString, "GKitz");
+
+        for (final GKitz kit : getGKitz()) {
+            final CommentedConfigurationNode gkitz = section.node("GKitz");
+
+            final String kitName = kit.getName();
+
+            if (!gkitz.hasChild(kitName)) {
+                continue;
             }
+
+            final CommentedConfigurationNode type = gkitz.node(kitName);
+
+            final Calendar calendar = Calendar.getInstance();
+
+            calendar.setTimeInMillis(type.getLong());
+
+            cooldowns.add(new GkitCoolDown(kit, calendar));
         }
 
-        addCEPlayer(uuid, new CEPlayer(uuid, gkitCoolDowns));
+        addCEPlayer(uuid, new CEPlayer(player.getName(), uuid, cooldowns));
     }
 
     /**
@@ -357,13 +418,22 @@ public class CrazyManager {
      * @param player Player you wish to remove.
      */
     public void unloadCEPlayer(Player player) {
-        final FileConfiguration data = FileKeys.DATA.getConfiguration();
+        final CommentedConfigurationNode data = FileKeys.DATA.getConfiguration();
 
+        final String playerName = player.getName();
         final UUID uuid = player.getUniqueId();
 
+        final CommentedConfigurationNode section = data.node(uuid.toString(), "GKitz");
+
         getCEPlayer(uuid).ifPresent(cePlayer -> {
-            for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
-                data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
+            for (final GkitCoolDown cooldown : cePlayer.getCoolDowns()) {
+                final String kitName = cooldown.getGKitz().getName();
+
+                try {
+                    section.node(kitName).set(cooldown.getCoolDown().getTimeInMillis());
+                } catch (final SerializationException exception) {
+                    this.fusion.log(Level.error, "Failed to set cooldown for the kit %s for player %s", kitName, playerName);
+                }
             }
 
             FileKeys.DATA.save();
@@ -385,11 +455,20 @@ public class CrazyManager {
      * @param cePlayer The player you wish to back up.
      */
     private void backupCEPlayer(CEPlayer cePlayer) {
-        final FileConfiguration data = FileKeys.DATA.getConfiguration();
-        String uuid = cePlayer.getUuid().toString();
+        final CommentedConfigurationNode data = FileKeys.DATA.getConfiguration();
 
-        for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
-            data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
+        final String uuid = cePlayer.getUuid().toString();
+        final String playerName = cePlayer.getPlayerName();
+        final CommentedConfigurationNode section = data.node(uuid, "GKitz");
+
+        for (final GkitCoolDown cooldown : cePlayer.getCoolDowns()) {
+            final String kitName = cooldown.getGKitz().getName();
+
+            try {
+                section.node(kitName).set(cooldown.getCoolDown().getTimeInMillis());
+            } catch (final SerializationException exception) {
+                this.fusion.log(Level.error, "Failed to set cooldown for the kit %s for player %s", kitName, playerName);
+            }
         }
 
         FileKeys.DATA.save();

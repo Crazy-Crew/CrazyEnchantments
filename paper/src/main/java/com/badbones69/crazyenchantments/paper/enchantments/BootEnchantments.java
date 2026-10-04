@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,10 +53,14 @@ public class BootEnchantments implements Listener {
     public void onPlayerFly(PlayerToggleFlightEvent event) {
         if (!this.wingsManager.isWingsEnabled()) return;
 
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+        final EntityEquipment equipment = player.getEquipment();
 
-        if (player.getEquipment().getBoots() == null) return;
-        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        final ItemStack itemStack = equipment.getBoots();
+
+        if (itemStack.isEmpty()) return;
+
+        if (!this.enchantmentBookSettings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (!WingsUtils.canFly(player)) return;
 
@@ -75,10 +81,14 @@ public class BootEnchantments implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getFrom() == event.getTo()) return;
 
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+        final EntityEquipment equipment = player.getEquipment();
+
+        final ItemStack itemStack = equipment.getBoots();
+
         boolean isFlying = player.isFlying(); // TODO implement single method for all enchantment checks. #EnchantUtils
 
-        if (this.wingsManager.isWingsEnabled() && this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
+        if (this.wingsManager.isWingsEnabled() && this.enchantmentBookSettings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) {
             if (WingsUtils.canFly(player)) {
                 player.setAllowFlight(true);
             } else {
@@ -97,7 +107,7 @@ public class BootEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
         if (!this.wingsManager.isWingsEnabled()) return;
 
@@ -112,7 +122,7 @@ public class BootEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
         if (!this.wingsManager.isWingsEnabled() || !this.wingsManager.isFlyingPlayer(player)) return;
 

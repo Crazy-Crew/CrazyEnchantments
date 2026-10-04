@@ -26,13 +26,13 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 public class CrazyEnchantments extends JavaPlugin {
 
@@ -62,37 +62,37 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.starter.getCurrencyAPI().loadCurrency();
 
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        final FileConfiguration tinker = FileKeys.TINKER.getConfiguration();
+        final @NotNull CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final @NotNull CommentedConfigurationNode tinker = FileKeys.TINKER.getConfiguration();
 
         boolean isSave = false;
 
-        if (!config.contains("Settings.CESuccessOverride")) {
-            config.set("Settings.CESuccessOverride", "-1");
+        if (!config.hasChild("Settings", "CESuccessOverride")) {
+            Methods.setNode(config, "Settings.CESuccessOverride", Integer.class, -1);
 
             isSave = true;
         }
 
-        if (!config.contains("Settings.CESuccessOverride")) {
-            config.set("Settings.CEFailureOverride", "-1");
+        if (!config.hasChild("Settings", "CEFailureOverride")) {
+            Methods.setNode(config, "Settings.CEFailureOverride", Integer.class, -1);
 
             isSave = true;
         }
 
-        if (!config.contains("Settings.Toggle-Metrics")) {
-            config.set("Settings.Toggle-Metrics", false);
+        if (!config.hasChild("Settings", "Toggle-Metrics")) {
+            Methods.setNode(config, "Settings.Toggle-Metrics", Boolean.class, false);
 
             isSave = true;
         }
 
-        if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
-            config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
+        if (!config.hasChild("Settings", "Refresh-Potion-Effects-On-World-Change")) {
+            Methods.setNode(config, "Settings.Refresh-Potion-Effects-On-World-Change", Boolean.class, false);
 
             isSave = true;
         }
 
-        if (!tinker.contains("Settings.Tinker-Version")) {
-            tinker.set("Settings.Tinker-Version", 1.0);
+        if (!tinker.hasChild("Settings", "Tinker-Version")) {
+            Methods.setNode(tinker, "Settings.Tinker-Version", Double.class, 1.0);
 
             isSave = true;
         }
@@ -101,7 +101,7 @@ public class CrazyEnchantments extends JavaPlugin {
             FileKeys.CONFIG.save();
         }
 
-        if (config.getBoolean("Settings.Toggle-Metrics", false)) new Metrics(this, 4494);
+        if (config.node("Settings", "Toggle-Metrics").getBoolean(false)) new Metrics(this, 4494);
 
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(new ShopListener(), this);
@@ -136,7 +136,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
         if (this.starter.getCrazyManager().isGkitzEnabled()) {
-            this.platform.getFusion().log(Level.WARNING, "G-Kitz Support is now enabled!");
+            this.platform.getFusion().log(Level.warn, "G-Kitz Support is now enabled!");
 
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }

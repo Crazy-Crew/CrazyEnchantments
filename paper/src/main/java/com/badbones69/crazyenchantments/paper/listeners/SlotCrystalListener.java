@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -9,8 +10,8 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,14 +39,16 @@ public class SlotCrystalListener implements Listener {
     private static ItemStack slot_crystal;
 
     public void load() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
         slot_crystal = new ItemBuilder()
-                .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
-                .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
-                .setItemModel(config.getString("Settings.Slot_Crystal.Model.Namespace", ""), config.getString("Settings.Slot_Crystal.Model.Key", ""))
-                .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
-                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
+                .setMaterial(Methods.getNode(config, "Settings.Slot_Crystal.Item").getString("RED_WOOL"))
+                .setName(Methods.getNode(config, "Settings.Slot_Crystal.Name").getString("Error getting slot crystal name."))
+                .setItemModel(Methods.getNode(config, "Settings.Slot_Crystal.Model.Namespace").getString(""),
+                        Methods.getNode(config, "Settings.Slot_Crystal.Model.Key").getString(""))
+                .setLore(StringUtils.getStringList(config.node(Methods.getString("Settings.Slot_Crystal.Lore"))))
+                .setGlow(Methods.getNode(config, "Settings.Slot_Crystal.Glowing").getBoolean(false))
+                .addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
     }
 
     @EventHandler(ignoreCancelled = true)

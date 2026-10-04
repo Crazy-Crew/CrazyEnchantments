@@ -6,13 +6,12 @@ import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +27,11 @@ public class AllyManager {
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
     
     public void load() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode section = config.node("Settings", "EnchantmentOptions", "Ally-Mobs");
 
-        for (AllyType type : AllyType.values()) {
-            this.allyTypeNameCache.put(type, ColorUtils.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
+        for (final AllyType type : AllyType.values()) {
+            this.allyTypeNameCache.put(type, ColorUtils.color(section.node(type.getConfigName()).getString(type.getDefaultName())));
         }
     }
     

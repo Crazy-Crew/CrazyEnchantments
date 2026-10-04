@@ -6,13 +6,13 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 public class BlackSmithManager {
 
@@ -132,35 +132,33 @@ public class BlackSmithManager {
         return maxEnchantments;
     }
 
-    private static ConfigurationSection getSection(FileConfiguration config) {
-        return config.getConfigurationSection("Settings.BlackSmith");
-    }
-
-    private static void get(FileConfiguration config) {
-        ConfigurationSection section = getSection(config);
+    private static void get(CommentedConfigurationNode config) {
+        CommentedConfigurationNode section = config.node("Settings", "BlackSmith");
 
         // If section is null, do nothing.
         if (section == null) {
-            fusion.log(Level.WARNING, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
+            fusion.log(Level.warn, "The black-smith section cannot be found in config.yml, It's possible the file is badly formatted!");
 
             return;
         }
 
         exitButton = new ItemBuilder()
-                .setMaterial(section.getString("Results.Item.Type", "BARRIER"))
-                .setName(section.getString("Results.None", "&c&lNo Results."))
-                .setItemModel(section.getString("Results.Item.Model.Namespace", ""), section.getString("Results.Item.Model.Key", ""))
-                .setLore(section.getStringList("Results.Not-Found-Lore"))
+                .setMaterial(section.node("Results", "Item", "Type").getString("BARRIER"))
+                .setName(section.node("Results", "None").getString("&c&lNo Results."))
+                .setItemModel(section.node("Results", "Item", "Model", "Namespace").getString(""),
+                        section.node("Results", "Item", "Model", "Key").getString(""))
+                .setLore(StringUtils.getStringList(section.node("Results", "Not-Found-Lore")))
                 .build();
 
-        inventoryName = ColorUtils.color(section.getString("GUIName"));
-        itemCost = section.getString("Results.Found", "&c&lCost: &6&l%cost% XP");
-        currency = Currency.getCurrency(section.getString("Transaction.Currency", "XP_LEVEL"));
+        inventoryName = ColorUtils.color(section.node("GUIName").getString(""));
+        itemCost = section.node("Results", "Found").getString("&c&lCost: &6&l%cost% XP");
+        currency = Currency.getCurrency(section.node("Transaction", "Currency").getString("XP_LEVEL"));
 
-        bookUpgrade = section.getInt("Transaction.Costs.Book-Upgrade", 5);
-        levelUp = section.getInt("Transaction.Costs.Power-Up", 5);
-        addEnchantment = section.getInt("Transaction.Costs.Add-Enchantment", 3);
+        bookUpgrade = section.node("Transaction", "Costs", "Book-Upgrade").getInt(5);
+        levelUp = section.node("Transaction", "Costs", "Power-Up").getInt(5);
+        addEnchantment = section.node("Transaction", "Costs", "Add-Enchantment").getInt(3);
 
-        maxEnchantments = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
+        maxEnchantments = config.node("Settings", "EnchantmentOptions", "MaxAmountOfEnchantmentsToggle")
+                .getBoolean(true);
     }
 }

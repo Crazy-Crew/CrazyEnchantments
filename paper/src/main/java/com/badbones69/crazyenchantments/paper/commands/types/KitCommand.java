@@ -12,10 +12,11 @@ import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -33,9 +34,13 @@ public class KitCommand {
     @Permission(value = "crazyenchantments.gkitz", def = PermissionDefault.TRUE)
     @Syntax("/gkitz")
     public void execute(final Player player) {
-        final FileConfiguration gkitz = FileKeys.GKITZ.getConfiguration();
+        final @NotNull CommentedConfigurationNode gkitz = FileKeys.GKITZ.getConfiguration();
 
-        player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size", 27), gkitz.getString("Settings.Inventory-Name", "&8List of all GKitz")).build().getInventory());
+        player.openInventory(new KitsMenu(player, gkitz
+                .node("Settings", "GUI-Size")
+                .getInt(27), gkitz
+                .node("Settings", "Inventory-Name")
+                .getString("&8List of all GKitz")).build().getInventory());
     }
 
     @Command("reset")

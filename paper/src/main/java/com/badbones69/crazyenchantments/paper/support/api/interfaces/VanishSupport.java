@@ -1,15 +1,15 @@
 package com.badbones69.crazyenchantments.paper.support.api.interfaces;
 
+import com.ryderbelserion.fusion.api.FusionProvider;
 import com.ryderbelserion.fusion.core.FusionCore;
-import com.ryderbelserion.fusion.core.api.FusionKey;
-import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.api.objects.FusionKey;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public abstract class VanishSupport {
 
-    private final FusionCore fusion = FusionProvider.getInstance();
+    private final FusionCore fusion = (FusionCore) FusionProvider.api();
 
     protected final FusionKey key;
 

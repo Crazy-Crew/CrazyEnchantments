@@ -73,6 +73,7 @@ public class LostBookController implements Listener {
 
         if (book == null) {
             player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+
             return;
         }
 

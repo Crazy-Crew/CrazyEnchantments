@@ -75,7 +75,7 @@ public class PickaxeEnchantments implements Listener {
         Block initialBlock = event.getBlock();
         ItemStack currentItem = this.methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
-        boolean damage = FileKeys.CONFIG.getConfiguration().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability", true);
+        boolean damage = FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "Blast-Full-Durability").getBoolean(true);
 
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return;
@@ -106,7 +106,7 @@ public class PickaxeEnchantments implements Listener {
         Block currentBlock = event.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
-        boolean damage = FileKeys.CONFIG.getConfiguration().getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
+        boolean damage = FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "VeinMiner-Full-Durability").getBoolean(true);
 
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.VEINMINER, enchantments)) return;
 

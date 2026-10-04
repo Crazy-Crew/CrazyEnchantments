@@ -7,18 +7,18 @@ import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.*;
 
 public class ProtectionCrystalSettings {
@@ -38,16 +38,29 @@ public class ProtectionCrystalSettings {
     private ItemBuilder crystal;
 
     public void loadProtectionCrystal() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
-        this.protectionString = config.getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection");
+        this.protectionString = config
+                .node("Settings", "ProtectionCrystal", "Protected")
+                .getString("&6Ancient Protection");
 
         this.crystal = new ItemBuilder()
-                .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
-                .setItemModel(config.getString("Settings.ProtectionCrystal.Model.Namespace", ""), config.getString("Settings.ProtectionCrystal.Model.Key", ""))
-                .setName(config.getString("Settings.ProtectionCrystal.Name", "Error getting name."))
-                .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false));
+                .setMaterial(config
+                        .node("Settings", "ProtectionCrystal", "Item")
+                        .getString("EMERALD"))
+                .setItemModel(config
+                        .node("Settings", "ProtectionCrystal", "Model", "Namespace")
+                        .getString(""),
+                        config
+                        .node("Settings", "ProtectionCrystal", "Model", "Key")
+                        .getString(""))
+                .setName(config
+                        .node("Settings", "ProtectionCrystal", "Name")
+                        .getString("&cError getting name for protection crystals."))
+                .setLore(StringUtils.getStringList(config.node("Settings", "ProtectionCrystal", "Lore")))
+                .setGlow(config
+                        .node("Settings", "ProtectionCrystal", "Glowing")
+                        .getBoolean(false));
     }
 
     public final ItemStack getCrystal(final Audience player) {
@@ -110,9 +123,11 @@ public class ProtectionCrystalSettings {
     public boolean isProtectionSuccessful(Player player) {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
-        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return this.methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
+        if (config.node("Settings", "ProtectionCrystal", "Chance", "Toggle").getBoolean(false)) {
+            return this.methods.randomPicker(config.node("Settings", "ProtectionCrystal", "Chance", "Success-Chance").getInt(100), 100);
+        }
 
         return true;
     }

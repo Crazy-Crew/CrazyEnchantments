@@ -2,15 +2,12 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -23,8 +20,6 @@ public class BlackSmithResult {
         resultItem = mainItem.clone();
 
         CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-        CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
         Starter starter = plugin.getStarter();
 

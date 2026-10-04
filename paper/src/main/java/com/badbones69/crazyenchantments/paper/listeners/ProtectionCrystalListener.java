@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +18,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,10 +85,10 @@ public class ProtectionCrystalListener implements Listener {
         Player player = event.getPlayer();
 
         if (this.protectionCrystalSettings.containsPlayer(player)) {
-            final YamlConfiguration configuration = FileKeys.CONFIG.getConfiguration();
+            final @NotNull CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
 
             // If the config does not have the option then it will lose the protection by default.
-            if (configuration.getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death", true)) {
+            if (configuration.node("Settings", "ProtectionCrystal", "Lose-Protection-On-Death").getBoolean(true)) {
                 for (ItemStack item : this.protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
                     player.getInventory().addItem(this.protectionCrystalSettings.removeProtection(item));
                 }

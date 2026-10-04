@@ -16,13 +16,12 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.text.WordUtils;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,13 +53,13 @@ public class ScrollListener implements Listener {
     private int blackScrollChance;
 
     public void loadScrollControl() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final @NotNull CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
-        this.suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
-        this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments", true);
-        this.useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle", true);
-        this.blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
-        this.blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle", false);
+        this.suffix = config.node("Settings", "TransmogScroll", "Amount-of-Enchantments").getString(" &7[&6&n%amount%&7]");
+        this.countVanillaEnchantments = config.node("Settings", "TransmogScroll", "Count-Vanilla-Enchantments").getBoolean(true);
+        this.useSuffix = config.node("Settings", "TransmogScroll", "Amount-Toggle").getBoolean(true);
+        this.blackScrollChance = config.node("Settings", "BlackScroll", "Chance").getInt(75);
+        this.blackScrollChanceToggle = config.node("Settings", "BlackScroll", "Chance-Toggle").getBoolean(false);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -168,7 +168,7 @@ public class ScrollListener implements Listener {
     }
 
     private ItemStack newOrderNewEnchantments(ItemStack item) {
-        final FileConfiguration configuration = FileKeys.CONFIG.getConfiguration();
+        final @NotNull CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
 
         final List<Component> lore = item.lore();
 
@@ -176,13 +176,13 @@ public class ScrollListener implements Listener {
 
         final Enchant data = Methods.getGson().fromJson(container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
 
-        final boolean addSpaces = configuration.getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
+        final boolean addSpaces = configuration.node("Settings", "TransmogScroll", "Add-Blank-Lines").getBoolean(true);
 
         final List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
 
         final Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-        List<String> order = configuration.getStringList("Settings.TransmogScroll.Lore-Order");
+        List<String> order = StringUtils.getStringList(configuration.node("Settings", "TransmogScroll", "Lore-Order"), List.of("CE_Enchantments", "Protection", "Normal_Lore"));
 
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
@@ -244,10 +244,15 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull PersistentDataContainerView container) {
         List<Component> lore = new ArrayList<>();
 
-        final YamlConfiguration configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
 
-        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(configuration.getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED")));
-        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(configuration.getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection")));
+        if (Scrolls.hasWhiteScrollProtection(container)) {
+            lore.add(ColorUtils.legacyTranslateColourCodes(configuration.node("Settings", "WhiteScroll", "ProtectedName").getString("&b&lPROTECTED")));
+        }
+
+        if (ProtectionCrystalSettings.isProtected(container)) {
+            lore.add(ColorUtils.legacyTranslateColourCodes(configuration.node("Settings", "ProtectionCrystal", "Protected").getString("&6Ancient Protection")));
+        }
 
         return lore;
     }
@@ -266,7 +271,7 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                ColorUtils.stripStringColour(FileKeys.CONFIG.getConfiguration().getString("Settings.ProtectionCrystal.Protected", "&6Ancient Protection"))
+                ColorUtils.stripStringColour(FileKeys.CONFIG.getConfiguration().node("Settings", "ProtectionCrystal", "Protected").getString("&6Ancient Protection"))
         ));
 
         return lore;

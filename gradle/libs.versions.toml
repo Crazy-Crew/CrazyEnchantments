@@ -1,11 +1,12 @@
 [versions]
 ## Paper API
-paperweight = "2.0.0-beta.21" # https://github.com/PaperMC/paperweight
+paperweight = "2.0.0-beta.24" # https://github.com/PaperMC/paperweight
 adventure = "5.2.0" # https://github.com/KyoriPowered/adventure
-paper = "26.1.2.build.+" # https://github.com/PaperMC/Paper
+run-paper = "3.1.0" # https://github.com/jpenilla/run-task
+paper = "26.3.build.+" # https://github.com/PaperMC/Paper
 
 ## Minecraft API
-minecraft = "26.1.2" # https://minecraft.net
+minecraft = "26.3" # https://minecraft.net
 
 ## Plugin API
 headdatabaseapi = "1.3.2" # https://github.com/Arcaniax-Development/HeadDatabase-API
@@ -13,12 +14,14 @@ placeholderapi = "2.12.2" # https://github.com/placeholderapi
 ## Economy API
 essentials = "2.21.2" # https://essentialsx.net
 vault = "1.7.1" # https://github.com/MilkBowl/Vault
+
 ## Custom Item API
-craftengine = "26.6" # https://github.com/Xiao-MoMi/craft-engine
-itemsadder = "4.0.10" # https://github.com/ItemsAdder
+craftengine = "26.9" # https://github.com/Xiao-MoMi/craft-engine
+itemsadder = "4.0.18-beta-10" # https://github.com/ItemsAdder
 hmcwraps = "1.8.2" # https://docs.hibiscusmc.com/hmcwraps/api
 oraxen = "1.211.0" # https://github.com/oraxen
 nexo = "1.21.0" # https://github.com/Nexo-MC
+
 ## Protection API
 worldguard = "7.0.17" # https://github.com/EngineHub/WorldGuard
 worldedit = "7.4.4" # https://modrinth.com/plugin/worldedit
@@ -42,17 +45,16 @@ triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 ## Metrics API
 bStats = "3.2.1" # https://github.com/Bastian/bStats
 ## Fusion API
-fusion = "4.47.2" # https://github.com/ryderbelserion/Fusion
+fusion = "4.52.0" # https://github.com/ryderbelserion/Fusion
 ## Database API
-hikari = "7.0.2" # https://github.com/brettwooldridge/HikariCP
+hikari = "7.1.0" # https://github.com/brettwooldridge/HikariCP
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "3.0.2" # https://github.com/jpenilla/run-task
-minotaur = "2.9.0" # https://github.com/modrinth/minotaur
-feather = "0.6.1" # https://github.com/ryderbelserion/Feather
+minotaur = "2.10.0" # https://github.com/modrinth/minotaur
+feather = "0.8.2" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
-shadow = "9.6.0" # https://github.com/GradleUp/shadow
+shadow = "9.6.1" # https://github.com/GradleUp/shadow
 
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
@@ -86,7 +88,7 @@ placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholder
 craftengine-bukkit = { module = "net.momirealms:craft-engine-bukkit", version.ref = "craftengine" }
 craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
 # https://github.com/ItemsAdder
-itemsadder = { module = "dev.lone:api-itemsadder", version.ref = "itemsadder" }
+itemsadder = { module = "beer.devs:itemsadder-api", version.ref = "itemsadder" }
 # https://docs.hibiscusmc.com/hmcwraps/api
 hmcwraps = { module = "de.skyslycer.hmcwraps:api", version.ref = "hmcwraps" }
 # https://github.com/oraxen

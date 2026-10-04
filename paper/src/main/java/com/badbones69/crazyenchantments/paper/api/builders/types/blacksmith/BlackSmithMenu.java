@@ -3,12 +3,14 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class BlackSmithMenu extends InventoryBuilder {
 
@@ -62,6 +65,10 @@ public class BlackSmithMenu extends InventoryBuilder {
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
+        private final CrazyPlatform platform = this.plugin.getPlatform();
+
+        private final FusionPaper fusion = this.platform.getFusion();
 
         @NotNull
         private final Starter starter = this.plugin.getStarter();
@@ -193,12 +200,12 @@ public class BlackSmithMenu extends InventoryBuilder {
 
         private void setBorder(BlackSmithResult item, Inventory inventory) {
             if (item.getCost() > 0) {
-                ItemStack result = item.getResultItem();
+                final ItemStack result = item.getResultItem();
 
-                String value = String.valueOf(item.getCost());
-                String message = Messages.replacePlaceholders("%Cost%", value, BlackSmithManager.getItemCost());
+                final String value = String.valueOf(item.getCost());
+                final String message = this.fusion.replacePlaceholders(BlackSmithManager.getItemCost(), Map.of("%Cost%", value));
 
-                for (int slot : resultBorder) {
+                for (int slot : this.resultBorder) {
                     inventory.setItem(slot, BlackSmithManager.getBlueGlass());
                 }
 
@@ -206,7 +213,7 @@ public class BlackSmithMenu extends InventoryBuilder {
             } else {
                 inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
 
-                for (int slot : resultBorder) {
+                for (int slot : this.resultBorder) {
                     inventory.setItem(slot, BlackSmithManager.getRedGlass());
                 }
             }

@@ -77,7 +77,7 @@ public class AllyMob {
         placeholders.put("%Player%", this.owner.getName());
         placeholders.put("%Mob%", this.type.entityType.getName());
 
-        this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
+        this.ally.setCustomName(this.fusion.replacePlaceholders(this.type.getName(), placeholders));
         this.ally.setCustomNameVisible(true);
 
         startSpawnTimer();

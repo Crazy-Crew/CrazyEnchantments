@@ -83,7 +83,7 @@ public class ColorUtils {
     }
 
     public static String getPrefix() {
-        return color(FileKeys.CONFIG.getConfiguration().getString("Settings.Prefix", "&8[&aCrazyEnchantments&8]: "));
+        return color(FileKeys.CONFIG.getConfiguration().node("Settings", "Prefix").getString("&8[&aCrazyEnchantments&8]: "));
     }
 
     public static String getPrefix(String msg) {

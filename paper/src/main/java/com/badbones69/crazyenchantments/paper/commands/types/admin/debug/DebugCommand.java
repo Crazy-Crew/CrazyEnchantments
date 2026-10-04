@@ -9,8 +9,8 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.PermissionDefault;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +23,10 @@ public class DebugCommand extends EnchantCommand {
         final List<String> brokenEnchantments = new ArrayList<>();
         final List<String> brokenEnchantmentTypes = new ArrayList<>();
 
-        final YamlConfiguration configuration = FileKeys.ENCHANTMENTS.getConfiguration();
+        final CommentedConfigurationNode configuration = FileKeys.ENCHANTMENTS.getConfiguration();
 
         for (CEnchantments enchantment : CEnchantments.values()) {
-            if (!configuration.contains("Enchantments." + enchantment.getName()))
-                brokenEnchantments.add(enchantment.getName());
+            if (!configuration.hasChild("Enchantments", enchantment.getName())) brokenEnchantments.add(enchantment.getName());
 
             if (enchantment.getType() == null) brokenEnchantmentTypes.add(enchantment.getName());
         }

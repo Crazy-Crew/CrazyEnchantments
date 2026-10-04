@@ -4,16 +4,17 @@ import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,18 +38,25 @@ public enum Scrolls {
     }
     
     public static void loadScrolls() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+
+        final CommentedConfigurationNode section = config.node("Settings");
 
         itemBuilderScrolls.clear();
 
         for (Scrolls scroll : values()) {
-            String path = "Settings." + scroll.getConfigName() + ".";
-            itemBuilderScrolls.put(scroll, new ItemBuilder()
-            .setName(config.getString(path + "Name", "Error getting name."))
-            .setLore(config.getStringList(path + "Item-Lore"))
-            .setItemModel(config.getString(path + "Model.Namespace", ""), config.getString(path + "Model.Key", ""))
-            .setMaterial(config.getString(path + "Item", "BOOK"))
-            .setGlow(config.getBoolean(path + "Glowing", false)));
+            final String name = scroll.getConfigName();
+
+            final CommentedConfigurationNode index = section.node(name);
+
+            final ItemBuilder builder = new ItemBuilder()
+                    .setName(index.node("Name").getString("&cError getting name for %s".formatted(name)))
+                    .setLore(StringUtils.getStringList(index.node("Item-Lore")))
+                    .setItemModel(index.node("Model", "Namespace").getString(""), index.node("Model", "Key").getString(""))
+                    .setMaterial(index.node("Item").getString("BOOK"))
+                    .setGlow(index.node("Glowing").getBoolean(false));
+
+            itemBuilderScrolls.put(scroll, builder);
         }
     }
     
@@ -111,9 +119,9 @@ public enum Scrolls {
     public static String getWhiteScrollProtectionName() {
         String protectNamed;
 
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
-        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED"));
+        protectNamed = ColorUtils.color(config.node("Settings", "WhiteScroll", "ProtectedName").getString("&b&lPROTECTED"));
 
         return protectNamed;
     }

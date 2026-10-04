@@ -1,19 +1,23 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.ryderbelserion.fusion.api.FusionProvider;
+import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LostBook {
+
+    private final FusionPaper fusion = (FusionPaper) FusionProvider.api();
 
     private final int slot;
     private final boolean inGUI;
@@ -37,9 +41,9 @@ public class LostBook {
 
         try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
-        } catch (Exception e) {
-            CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-            plugin.getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
+        } catch (final Exception exception) {
+            this.fusion.log(Level.warn, "The sound %s is not a valid sound!", sound);
+
             this.sound = null;
         }
 
@@ -87,18 +91,21 @@ public class LostBook {
     }
 
     public ItemBuilder getLostBook(Category category, int amount) {
-        final FileConfiguration file = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
         Map<String, String> placeholders = new HashMap<>();
 
         placeholders.put("%Category%", category.getDisplayItem().getName());
 
-        return new ItemBuilder().setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
-        .setItemModel(file.getString("Settings.LostBook.Model.Namespace", ""), file.getString("Settings.LostBook.Model.Key", ""))
-        .setAmount(amount)
-        .setName(file.getString("Settings.LostBook.Name", "Error getting name."))
-        .setNamePlaceholders(placeholders)
-        .setLore(file.getStringList("Settings.LostBook.Lore"))
-        .setLorePlaceholders(placeholders)
-        .addKey(DataKeys.lost_book.getNamespacedKey(), category.getName());
+        final CommentedConfigurationNode section = configuration.node("Settings", "LostBook");
+
+        return new ItemBuilder()
+                .setMaterial(section.node("Item").getString("BOOK"))
+                .setItemModel(section.node("Model", "Namespace").getString(""), section.node("Model", "Key").getString(""))
+                .setAmount(amount)
+                .setName(section.node("Name").getString("&cError getting LostBook name."))
+                .setLore(StringUtils.getStringList(section.node("Lore")))
+                .setNamePlaceholders(placeholders)
+                .setLorePlaceholders(placeholders)
+                .addKey(DataKeys.lost_book.getNamespacedKey(), category.getName());
     }
 }
