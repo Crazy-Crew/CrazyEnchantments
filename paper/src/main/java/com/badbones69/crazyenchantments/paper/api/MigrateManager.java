@@ -1,14 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.File;
 
 public class MigrateManager {
 
@@ -19,13 +13,13 @@ public class MigrateManager {
     private static final FusionPaper fusion = platform.getFusion();;
 
     public static void convert() {
-        double tinkerVersion = 1.1;
+        /*double tinkerVersion = 1.1;
 
         File firstFile = new File(plugin.getDataFolder() + "/Tinker.yml");
 
         File secondFile = new File(plugin.getDataFolder() + "/Tinker-v1.yml");
 
-        final FileConfiguration TINKER = FileKeys.TINKER.getConfiguration();
+        final CommentedConfigurationNode TINKER = FileKeys.TINKER.getConfiguration();
 
         if (TINKER.getDouble("Settings.Tinker-Version") >= tinkerVersion) {
             fusion.log(Level.info, "Tinker.yml is up to date.");
@@ -95,6 +89,6 @@ public class MigrateManager {
 
         FileKeys.TINKER.save();
 
-        plugin.getLogger().warning("Tinker.yml file has been updated.");
+        plugin.getLogger().warning("Tinker.yml file has been updated.");*/
     }
 }
