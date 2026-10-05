@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.ryderbelserion.core.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -91,7 +92,7 @@ public class ScrollListener implements Listener {
                     event.setCancelled(true);
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
-                    if (this.blackScrollChanceToggle && !this.methods.randomPicker(this.blackScrollChance, 100)) {
+                    if (this.blackScrollChanceToggle && !RandomUtils.isChanceLess(this.blackScrollChance, 100)) {
                         player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
                         return;
                     }

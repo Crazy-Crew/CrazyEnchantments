@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.google.gson.Gson;
+import com.ryderbelserion.core.utils.RandomUtils;
 import com.ryderbelserion.fusion.api.FusionProvider;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -227,25 +228,6 @@ public class Methods {
         return false;
     }
 
-    public boolean randomPicker(int min, int max) {
-        if (max <= min || max <= 0) return true;
-
-        Random random = new Random();
-
-        int chance = 1 + random.nextInt(max);
-        return chance <= min;
-    }
-
-    public Integer percentPick(int max, int min) {
-        if (max == min) {
-            return max;
-        } else {
-            Random random = new Random();
-
-            return min + random.nextInt(max - min);
-        }
-    }
-
     /**
      *
      * @param player The {@link Player} who's inventory should be checked.
@@ -372,7 +354,7 @@ public class Methods {
             if (hasUnbreaking) {
                 final int level = item.getEnchantmentLevel(Enchantment.UNBREAKING);
 
-                if (randomPicker(1, 1 + level)) {
+                if (RandomUtils.isChanceLess(1, 1 + level)) {
                     if (durability > maxDurability) {
                         player.getInventory().remove(item);
                     } else {

@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.core.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -126,7 +127,7 @@ public class ProtectionCrystalSettings {
         final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
 
         if (config.node("Settings", "ProtectionCrystal", "Chance", "Toggle").getBoolean(false)) {
-            return this.methods.randomPicker(config.node("Settings", "ProtectionCrystal", "Chance", "Success-Chance").getInt(100), 100);
+            return RandomUtils.isChanceLess(config.node("Settings", "ProtectionCrystal", "Chance", "Success-Chance").getInt(100), 100);
         }
 
         return true;

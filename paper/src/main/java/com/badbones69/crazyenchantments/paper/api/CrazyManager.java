@@ -42,8 +42,6 @@ import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -55,7 +53,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -117,6 +114,7 @@ public class CrazyManager {
     private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
 
     // Arrays.
+    private final Map<Dust, ItemBuilder> dusts = new HashMap<>();
     private final List<GKitz> gkitz = new ArrayList<>();
     private final Map<UUID, CEPlayer> players = new HashMap<>();
     private final List<Material> blockList = new ArrayList<>();
@@ -181,7 +179,7 @@ public class CrazyManager {
         // Invalidate cached enchants.
         CEnchantments.invalidateCachedEnchants();
 
-        StringUtils.getStringList(blocks).forEach(id -> {
+        StringUtils.getStringList(blocks.node("Block-List")).forEach(id -> {
             try {
                 this.blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {}
@@ -339,7 +337,7 @@ public class CrazyManager {
         // Load all scroll types.
         Scrolls.loadScrolls();
         // Load all dust types.
-        Dust.loadDust();
+        loadDust();
 
         // Loads the protection crystals.
         this.protectionCrystalSettings.loadProtectionCrystal();
@@ -349,11 +347,6 @@ public class CrazyManager {
         this.slotCrystalListener.load();
         // Loads the Scroll Control settings.
         this.scrollListener.loadScrollControl();
-
-        // Loads the scrolls.
-        Scrolls.loadScrolls();
-        // Loads the dust.
-        Dust.loadDust();
 
         // Loads the ShopOptions.
         ShopOption.loadShopOptions();
@@ -375,6 +368,38 @@ public class CrazyManager {
 
         // Starts the wings task.
         WingsUtils.startWings();
+    }
+
+    public void loadDust() {
+        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+
+        this.dusts.clear();
+
+        for (final Dust dust : Dust.values()) {
+            addDust(configuration, dust);
+        }
+    }
+
+    public ItemBuilder getDust(final Dust dust) {
+        return this.dusts.get(dust);
+    }
+
+    public void addDust(final CommentedConfigurationNode configuration, final Dust dust) {
+        final CommentedConfigurationNode section = configuration.node("Settings", "Dust", dust.getConfigName());
+
+        final ItemBuilder itemBuilder = new ItemBuilder();
+
+        itemBuilder.setName(section.node("Name").getString());
+        itemBuilder.setLore(StringUtils.getStringList(section.node("Lore")));
+
+        itemBuilder.setItemModel(
+                section.node("Model", "Namespace").getString(""),
+                section.node("Model", "Key").getString("")
+        );
+
+        itemBuilder.setMaterial(section.node("Item").getString("GLOWSTONE_DUST"));
+
+        this.dusts.put(dust, itemBuilder);
     }
 
     /**

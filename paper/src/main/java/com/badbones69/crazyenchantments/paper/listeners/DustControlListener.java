@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.google.gson.Gson;
+import com.ryderbelserion.core.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -212,7 +213,7 @@ public class DustControlListener implements Listener {
                 inventory.setItemInOffHand(this.methods.removeItem(item));
             }
 
-            ItemStack item2 = pickDust().getDust(player, this.methods.percentPick(data.getChance() + 1, 1), 1);
+            ItemStack item2 = pickDust().getDust(player, RandomUtils.pickRandomNumber(data.getChance() + 1, 1), 1);
 
             inventory.addItem(item2);
 

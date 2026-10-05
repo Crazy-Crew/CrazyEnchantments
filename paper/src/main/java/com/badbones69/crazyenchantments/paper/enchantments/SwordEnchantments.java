@@ -18,6 +18,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.ryderbelserion.core.utils.RandomUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
@@ -114,7 +115,7 @@ public class SwordEnchantments implements Listener {
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISARMER, damager, item, enchantments)) {
             Player player = (Player) event.getEntity();
 
-            EquipmentSlot equipmentSlot = getSlot(this.methods.percentPick(4, 0));
+            EquipmentSlot equipmentSlot = getSlot(RandomUtils.pickRandomNumber(4, 0));
 
             ItemStack armor = switch (equipmentSlot) {
                 case HEAD -> player.getEquipment().getHelmet();

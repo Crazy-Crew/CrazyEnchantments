@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
+import com.ryderbelserion.core.utils.RandomUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Material;
@@ -183,7 +184,7 @@ public class AxeEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.DEMONFORGED, damager, item, enchantments) && entity instanceof Player player) {
 
-            ItemStack armorItem = switch (this.methods.percentPick(4, 0)) {
+            ItemStack armorItem = switch (RandomUtils.pickRandomNumber(4, 0)) {
                 case 1 -> player.getEquipment().getHelmet();
                 case 2 -> player.getEquipment().getChestplate();
                 case 3 -> player.getEquipment().getLeggings();
