@@ -287,7 +287,7 @@ public class CrazyManager {
         }
 
         if (this.gkitzToggle) {
-            if (!gkit.hasChild("Gkitz")) {
+            if (!gkit.hasChild("GKitz")) {
                 this.fusion.log(Level.warn, "The gkitz section cannot be found in gkitz.yml, It's possible the file is badly formatted!");
             } else {
                 final CommentedConfigurationNode gkitz = gkit.node("GKitz");
@@ -297,6 +297,7 @@ public class CrazyManager {
 
                     final int displaySlot = display.node("Slot").getInt(-1);
                     final String displayItem = display.node("Item").getString(ColorUtils.getRandomPaneColor().getName());
+
                     final List<String> displayLore = StringUtils.getStringList(display.node("Lore"));
                     final String displayName = display.node("Name").getString("&cError fetching name for %s".formatted(id));
 
