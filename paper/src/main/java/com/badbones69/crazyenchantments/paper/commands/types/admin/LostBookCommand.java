@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class LostBookCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
+public class LostBookCommand extends BaseEnchantCommand {
 
     @Command(value = "lostbook", alias = {"lb"})
     @Permission(value = "crazyenchantments.lostbook", def = PermissionDefault.OP)

@@ -41,7 +41,7 @@ cmi-api = "9.8.6.4" # https://github.com/Zrips/CMI-API
 cmi-lib = "1.5.9.3" # https://www.spigotmc.org/resources/cmilib.87610
 
 ## Triumph API
-triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
+triumph-cmds = "2.1.0" # https://github.com/TriumphTeam/triumph-cmds
 ## Metrics API
 bStats = "3.2.1" # https://github.com/Bastian/bStats
 ## Fusion API
@@ -111,7 +111,7 @@ kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "a
 kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 
 # https://github.com/TriumphTeam/triumph-cmds
-triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
+triumph-cmds = { module = "dev.triumphteam:triumph-cmds-bukkit-api", version.ref = "triumph-cmds" }
 
 # https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }

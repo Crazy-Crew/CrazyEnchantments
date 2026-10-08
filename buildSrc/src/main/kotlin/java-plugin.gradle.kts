@@ -11,8 +11,6 @@ repositories {
 
     maven("https://repo.opencollab.dev/maven-snapshots/")
 
-    maven("https://repo.triumphteam.dev/snapshots/")
-
     maven("https://repo.crazycrew.us/libraries/")
     maven("https://repo.crazycrew.us/releases/")
 

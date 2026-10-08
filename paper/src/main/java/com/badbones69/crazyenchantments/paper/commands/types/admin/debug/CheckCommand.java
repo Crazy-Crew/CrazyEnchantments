@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.debug;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.commands.EnchantCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class CheckCommand extends EnchantCommand {
+public class CheckCommand extends BaseEnchantCommand {
 
     @Command(value = "check", alias = "checkenchants")
     @Permission(value = "crazyenchantments.check", def = PermissionDefault.OP)

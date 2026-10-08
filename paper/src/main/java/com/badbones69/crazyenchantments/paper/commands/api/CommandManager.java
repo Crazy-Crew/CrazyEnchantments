@@ -86,7 +86,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("ce_enchantment_numbers"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            final Map<String, String> arguments = context.getArgumentsMap();
+            final Map<String, String> arguments = context.argumentsMap();
 
             if (arguments.containsKey("custom_enchantment")) {
                 final String argument = arguments.get("custom_enchantment");
@@ -106,7 +106,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("enchantment_numbers"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            final Map<String, String> arguments = context.getArgumentsMap();
+            final Map<String, String> arguments = context.argumentsMap();
 
             if (arguments.containsKey("custom_enchantment")) {
                 final String argument = arguments.get("custom_enchantment");
@@ -180,7 +180,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("player_enchantments"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            final CommandSender sender = context.getSender();
+            final CommandSender sender = context.sender();
 
             if (sender instanceof Player player) {
                 final PlayerInventory inventory = player.getInventory();

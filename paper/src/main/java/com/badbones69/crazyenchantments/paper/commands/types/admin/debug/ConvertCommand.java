@@ -2,14 +2,14 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin.debug;
 
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.commands.EnchantCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
-public class ConvertCommand extends EnchantCommand {
+public class ConvertCommand extends BaseEnchantCommand {
 
     @Command("convert")
     @Permission(value = "crazyenchantments.convert", def = PermissionDefault.OP)

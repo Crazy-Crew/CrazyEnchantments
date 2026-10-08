@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.crystal;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.commands.EnchantCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
@@ -14,7 +14,7 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SlotCrystalCommand extends EnchantCommand {
+public class SlotCrystalCommand extends BaseEnchantCommand {
 
     @Command("slotcrystal")
     @Permission(value = "crazyenchantments.slotcrystal", def = PermissionDefault.OP)

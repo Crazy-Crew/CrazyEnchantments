@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.player;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.commands.EnchantCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;
@@ -11,7 +11,7 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LimitCommand extends EnchantCommand {
+public class LimitCommand extends BaseEnchantCommand {
 
     @Command("limit")
     @Permission(value = "crazyenchantments.limit", def = PermissionDefault.TRUE)

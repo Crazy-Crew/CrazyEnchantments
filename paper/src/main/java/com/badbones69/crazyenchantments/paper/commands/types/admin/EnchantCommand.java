@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.ArgName;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class EnchantCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
+public class EnchantCommand extends BaseEnchantCommand {
 
     @Command(value = "add")
     @Permission(value = "crazyenchantments.add", def = PermissionDefault.OP)

@@ -15,7 +15,7 @@ import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Command(value = "crazyenchantments", alias = {"ce", "enchanter"})
-public class EnchantCommand {
+public class BaseEnchantCommand {
 
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 

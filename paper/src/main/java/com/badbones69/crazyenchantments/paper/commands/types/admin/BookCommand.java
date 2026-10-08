@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.ArgName;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class BookCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
+public class BookCommand extends BaseEnchantCommand {
 
     @Command(value = "book")
     @Permission(value = "crazyenchantments.book", def = PermissionDefault.OP)
