@@ -266,6 +266,7 @@ public class EnchantmentBookSettings {
                     category.node("Slot").getInt(-1),
                     category.node("InGUI").getBoolean(true),
                     new ItemBuilder()
+                            .setName(category.node("Name").getString("&cError getting name for %s".formatted(id)))
                             .setMaterial(category.node("Item").getString(ColorUtils.getRandomPaneColor().getName()))
                             .setItemModel(category.node("Model", "Namespace").getString(""), category.node("Model", "Key").getString("")),
                     category.node("Cost").getInt(100),
