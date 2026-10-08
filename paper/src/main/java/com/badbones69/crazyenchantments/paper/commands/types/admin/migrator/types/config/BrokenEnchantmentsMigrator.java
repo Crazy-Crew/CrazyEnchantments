@@ -1,25 +1,25 @@
-package com.badbones69.crazyenchantments.paper.commands.types.admin.debug;
+package com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.config;
 
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
-import dev.triumphteam.cmd.bukkit.annotation.Permission;
-import dev.triumphteam.cmd.core.annotations.Command;
-import dev.triumphteam.cmd.core.annotations.Syntax;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.PermissionDefault;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FixCommand extends BaseEnchantCommand {
+public class BrokenEnchantmentsMigrator extends IMigrator {
 
-    @Command("fix")
-    @Permission(value = "crazyenchantments.fix", def = PermissionDefault.OP)
-    @Syntax("/crazyenchantments fix")
-    public void execute(final CommandSender sender) {
+    public BrokenEnchantmentsMigrator(@NonNull final CommandSender sender) {
+        super(sender, MigrationType.BROKEN_ENCHANTMENTS);
+    }
+
+    @Override
+    public void init() {
         final List<CEnchantments> brokenEnchantments = new ArrayList<>();
 
         final CommentedConfigurationNode config = FileKeys.ENCHANTMENTS.getConfiguration();
@@ -30,7 +30,7 @@ public class FixCommand extends BaseEnchantCommand {
             if (!config.hasChild(enchantment.getName())) brokenEnchantments.add(enchantment);
         }
 
-        sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
+        this.sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
 
         for (CEnchantments enchantment : brokenEnchantments) {
             final String name = enchantment.getName();
@@ -46,8 +46,6 @@ public class FixCommand extends BaseEnchantCommand {
             Methods.setNode(section, "Info.Name", String.class, "&e&l%s &7(&bI&7)".formatted(name));
             Methods.setNode(section, "Info.Description", String.class, enchantment.getDescription());
 
-            final String path = "Enchantments." + enchantment.getName();
-
             final List<String> categories = new ArrayList<>();
 
             this.bookSettings.getCategories().forEach(category -> categories.add(category.getName()));
@@ -55,5 +53,6 @@ public class FixCommand extends BaseEnchantCommand {
             Methods.setNode(section, "Categories", List.class, categories);
 
             FileKeys.ENCHANTMENTS.save();
-        }}
+        }
+    }
 }

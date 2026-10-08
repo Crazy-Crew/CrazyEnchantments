@@ -45,7 +45,7 @@ triumph-cmds = "2.1.0" # https://github.com/TriumphTeam/triumph-cmds
 ## Metrics API
 bStats = "3.2.1" # https://github.com/Bastian/bStats
 ## Fusion API
-fusion = "4.52.0" # https://github.com/ryderbelserion/Fusion
+fusion = "4.53.0" # https://github.com/ryderbelserion/Fusion
 ## Database API
 hikari = "7.1.0" # https://github.com/brettwooldridge/HikariCP
 

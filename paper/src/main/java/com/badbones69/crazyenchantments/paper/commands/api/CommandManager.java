@@ -23,9 +23,9 @@ import com.badbones69.crazyenchantments.paper.commands.types.admin.crystal.Cryst
 import com.badbones69.crazyenchantments.paper.commands.types.admin.crystal.ScramblerCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.crystal.SlotCrystalCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.debug.CheckCommand;
-import com.badbones69.crazyenchantments.paper.commands.types.admin.debug.ConvertCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.debug.DebugCommand;
-import com.badbones69.crazyenchantments.paper.commands.types.admin.debug.FixCommand;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.CommandMigrate;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.types.player.HelpCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.player.LimitCommand;
 import com.badbones69.crazyenchantments.paper.commands.types.player.single.BlackSmithCommand;
@@ -254,17 +254,29 @@ public class CommandManager {
             return numbers;
         });
 
+        commandManager.registerSuggestion(SuggestionKey.of("migrators"), (_) -> {
+            final List<String> migrators = new ArrayList<>();
+
+            for (MigrationType value : MigrationType.values()) {
+                final String name = value.getName();
+
+                migrators.add(name);
+            }
+
+            return migrators;
+        });
+
         commandManager.registerArgument(PlayerBuilder.class, (_, context) -> new PlayerBuilder(context));
 
         List.of(
                 new BlackSmithCommand(),
                 new TinkerCommand(),
 
-                new ConvertCommand(),
+                new CommandMigrate(),
                 new ReloadCommand(),
+
                 new CheckCommand(),
                 new DebugCommand(),
-                new FixCommand(),
 
                 new SlotCrystalCommand(),
                 new ScramblerCommand(),
