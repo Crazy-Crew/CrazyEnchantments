@@ -190,15 +190,15 @@ public enum Messages {
         return getMessage(true);
     }
     
-    public String getMessage(String placeholder, String replacement) {
-        Map<String, String> placeholders = new HashMap<>();
+    public String getMessage(final String placeholder, final String replacement) {
+        final Map<String, String> placeholders = new HashMap<>();
 
         placeholders.put(placeholder, replacement);
 
         return getMessage(placeholders, true);
     }
     
-    public String getMessage(Map<String, String> placeholders) {
+    public String getMessage(final Map<String, String> placeholders) {
         return getMessage(placeholders, true);
     }
     
@@ -206,15 +206,15 @@ public enum Messages {
         return getMessage(false);
     }
     
-    public String getMessageNoPrefix(Map<String, String> placeholders) {
+    public String getMessageNoPrefix(final Map<String, String> placeholders) {
         return getMessage(placeholders, false);
     }
     
-    private String getMessage(boolean prefix) {
+    private String getMessage(final boolean prefix) {
         return getMessage(new HashMap<>(), prefix);
     }
     
-    private String getMessage(Map<String, String> placeholders, boolean prefix) {
+    private String getMessage(final Map<String, String> placeholders, final boolean prefix) {
         String message;
 
         final CommentedConfigurationNode configuration = FileKeys.MESSAGES.getConfiguration().node("Messages");
@@ -234,10 +234,6 @@ public enum Messages {
         }
 
         return ColorUtils.color(message);
-    }
-    
-    private boolean exists() {
-        return FileKeys.MESSAGES.getConfiguration().hasChild(this.path);
     }
 
     private String getDefaultMessage() {
