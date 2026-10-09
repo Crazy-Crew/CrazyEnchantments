@@ -91,12 +91,6 @@ public class CrazyEnchantments extends JavaPlugin {
             isSave = true;
         }
 
-        if (!tinker.hasChild("Settings", "Tinker-Version")) {
-            Methods.setNode(tinker, "Settings.Tinker-Version", Double.class, 1.0);
-
-            isSave = true;
-        }
-
         if (isSave) {
             Files.CONFIG.save();
         }
