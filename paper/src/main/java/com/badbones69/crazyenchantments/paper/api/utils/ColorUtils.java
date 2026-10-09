@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -83,7 +83,7 @@ public class ColorUtils {
     }
 
     public static String getPrefix() {
-        return color(FileKeys.CONFIG.getConfiguration().node("Settings", "Prefix").getString("&8[&aCrazyEnchantments&8]: "));
+        return color(Files.CONFIG.getConfiguration().node("Settings", "Prefix").getString("&8[&aCrazyEnchantments&8]: "));
     }
 
     public static String getPrefix(String msg) {

@@ -64,7 +64,7 @@ dependencies {
 
     implementation(libs.metrics)
 
-    implementation(project(":core"))
+    implementation(project(":common"))
     
     compileOnly(libs.vault) {
         exclude("org.bukkit", "bukkit")

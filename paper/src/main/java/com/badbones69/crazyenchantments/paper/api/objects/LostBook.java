@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.ryderbelserion.fusion.api.FusionProvider;
@@ -91,7 +91,7 @@ public class LostBook {
     }
 
     public ItemBuilder getLostBook(Category category, int amount) {
-        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
         Map<String, String> placeholders = new HashMap<>();
 
         placeholders.put("%Category%", category.getDisplayItem().getName());

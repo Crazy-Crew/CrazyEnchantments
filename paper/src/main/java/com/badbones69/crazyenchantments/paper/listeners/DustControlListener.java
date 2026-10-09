@@ -5,15 +5,15 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.google.gson.Gson;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -62,7 +62,7 @@ public class DustControlListener implements Listener {
             data.setDestroyChance(percent);
         }
 
-        for (final String line : StringUtils.getStringList(FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentBookLore"))) {
+        for (final String line : StringUtils.getStringList(Files.CONFIG.getConfiguration().node("Settings", "EnchantmentBookLore"))) {
             if (line.toLowerCase().contains("%description%")) {
                 enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
 
@@ -85,7 +85,7 @@ public class DustControlListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
 
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         ItemStack book = event.getCurrentItem();
         ItemStack dust = event.getCursor();
@@ -202,7 +202,7 @@ public class DustControlListener implements Listener {
             event.setCancelled(true);
 
             if (this.methods.isInventoryFull(player)) {
-                player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+                Messages.inventory_full.sendMessage(player);
 
                 return true;
             }
@@ -219,7 +219,7 @@ public class DustControlListener implements Listener {
 
             player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
 
-            final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+            final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
             if (config.node("Settings", "Dust", "MysteryDust", "Firework", "Toggle").getBoolean(true)) {
                 final List<Color> colors = new ArrayList<>();
@@ -236,7 +236,7 @@ public class DustControlListener implements Listener {
     private Dust pickDust() {
         List<Dust> dusts = new ArrayList<>();
 
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         if (config.node("Settings", "Dust", "MysteryDust", "Dust-Toggle", "Success").getBoolean(true)) dusts.add(Dust.SUCCESS_DUST);
 

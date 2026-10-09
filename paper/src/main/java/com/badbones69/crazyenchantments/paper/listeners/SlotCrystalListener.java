@@ -3,9 +3,10 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -39,7 +40,7 @@ public class SlotCrystalListener implements Listener {
     private static ItemStack slot_crystal;
 
     public void load() {
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         slot_crystal = new ItemBuilder()
                 .setMaterial(Methods.getNode(config, "Settings.Slot_Crystal.Item").getString("RED_WOOL"))
@@ -53,37 +54,44 @@ public class SlotCrystalListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack crystalItem = event.getCursor();
-        ItemStack item = event.getCurrentItem();
-        List<Material> enchantableMaterials = new ArrayList<>();
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+
+        final ItemStack crystalItem = event.getCursor();
+        final ItemStack item = event.getCurrentItem();
+        final List<Material> enchantableMaterials = new ArrayList<>();
 
         if (item == null || item.isEmpty() || !isSlotCrystal(crystalItem) || isSlotCrystal(item)) return;
 
-        int maxEnchants = this.starter.getCrazyManager().getPlayerMaxEnchantments(player);
-        int enchAmount = this.enchantmentBookSettings.getEnchantmentAmount(item, this.starter.getCrazyManager().checkVanillaLimit());
-        int baseEnchants = this.starter.getCrazyManager().getPlayerBaseEnchantments(player);
-        int limiter = this.starter.getCrazyManager().getEnchantmentLimiter(item);
+        final CrazyManager crazyManager = this.starter.getCrazyManager();
+
+        int maxEnchants = crazyManager.getPlayerMaxEnchantments(player);
+        int enchAmount = this.enchantmentBookSettings.getEnchantmentAmount(item, crazyManager.checkVanillaLimit());
+        int baseEnchants = crazyManager.getPlayerBaseEnchantments(player);
+        int limiter = crazyManager.getEnchantmentLimiter(item);
 
         event.setCancelled(true);
 
         if (enchAmount >= maxEnchants) {
-            player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+            Messages.hit_enchantment_max.sendMessage(player);
+
             return;
         }
+
         if ((baseEnchants - limiter) >= maxEnchants) {
-            player.sendMessage(Messages.MAX_SLOTS_UNLOCKED.getMessage());
+            Messages.max_slots_unlocked.sendMessage(player);
+
             return;
         }
 
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
             enchantableMaterials.addAll(enchantmentType.getEnchantableMaterials());
         }
+
         if (!enchantableMaterials.contains(item.getType())) return;
 
         crystalItem.setAmount(crystalItem.getAmount() - 1);
         event.getCursor().setAmount(crystalItem.getAmount());
-        event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
+        event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, -1));
 
         final Map<String, String> placeholders = new HashMap<>();
 
@@ -92,7 +100,7 @@ public class SlotCrystalListener implements Listener {
         placeholders.put("%enchantAmount%", String.valueOf(enchAmount));
         placeholders.put("baseEnchants", String.valueOf(baseEnchants));
 
-        player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(placeholders));
+        Messages.applied_slot_crystal.sendMessage(player, placeholders);
     }
 
     private boolean isSlotCrystal(ItemStack crystalItem) {

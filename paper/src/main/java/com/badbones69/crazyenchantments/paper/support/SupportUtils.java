@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.support;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.constants.Support;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.VanishSupport;
 import com.badbones69.crazyenchantments.paper.support.crops.VanillaCropSupport;
 import com.badbones69.crazyenchantments.paper.support.api.enums.PluginType;
@@ -92,7 +92,7 @@ public class SupportUtils {
             }
         });
 
-        final CommentedConfigurationNode configuration = FileKeys.SUPPORT.getConfigurationNode();
+        final CommentedConfigurationNode configuration = Files.SUPPORT.getConfiguration();
 
         switch (configuration.node("vanish-support", "plugin").getString("none").toLowerCase()) {
             case "essentials" -> {

@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -26,7 +26,7 @@ public class BookCommand extends BaseEnchantCommand {
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.inventory_full.sendMessage(player); //todo() send message to sender as well, and make this message more verbose.
 
             return;
         }
@@ -35,10 +35,10 @@ public class BookCommand extends BaseEnchantCommand {
             final ItemStack itemStack = new CEBook(book, level, amount).buildBook(player); //todo() random support
 
             if (itemStack.isEmpty()) {
-                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                Messages.item_cannot_be_empty.sendMessage(sender, Map.of(
                         "%command%",
                         "book"
-                )));
+                ));
 
                 return;
             }
@@ -49,13 +49,13 @@ public class BookCommand extends BaseEnchantCommand {
 
             placeholders.put("%Player%", player.getName());
 
-            sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
+            Messages.send_enchantment_book.sendMessage(sender, placeholders);
         }, () -> {
             final Map<String, String> placeholders = new HashMap<>();
 
             placeholders.put("%Category%", name);
 
-            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+            Messages.not_a_category.sendMessage(sender, placeholders);
         });
     }
 }

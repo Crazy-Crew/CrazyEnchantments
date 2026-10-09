@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.player.single;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Flag;
@@ -34,7 +34,7 @@ public class TinkerCommand {
         }
 
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+            Messages.players_only.sendMessage(sender);
 
             return;
         }

@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -38,11 +39,11 @@ public class ProtectionCrystalListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
+        if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        ItemStack crystalItem = event.getCursor();
+        final ItemStack crystalItem = event.getCursor();
 
-        ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
+        final ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
         
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
 
@@ -53,7 +54,8 @@ public class ProtectionCrystalListener implements Listener {
         if (ProtectionCrystalSettings.isProtected(item.getPersistentDataContainer())) return;
 
         if (item.getAmount() > 1 || crystalItem.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            Messages.need_to_unstack_item.sendMessage(player);
+
             return;
         }
 
@@ -68,8 +70,8 @@ public class ProtectionCrystalListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (event.getKeepInventory()) return;
 
-        Player player = event.getEntity();
-        List<ItemStack> savedItems = new ArrayList<>();
+        final Player player = event.getEntity();
+        final List<ItemStack> savedItems = new ArrayList<>();
 
         for (ItemStack item : event.getDrops()) {
             if (ProtectionCrystalSettings.isProtected(item.getPersistentDataContainer()) && this.protectionCrystalSettings.isProtectionSuccessful(player)) savedItems.add(item);
@@ -82,19 +84,20 @@ public class ProtectionCrystalListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+        final PlayerInventory inventory = player.getInventory();
 
         if (this.protectionCrystalSettings.containsPlayer(player)) {
-            final @NotNull CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+            final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
             // If the config does not have the option then it will lose the protection by default.
             if (configuration.node("Settings", "ProtectionCrystal", "Lose-Protection-On-Death").getBoolean(true)) {
-                for (ItemStack item : this.protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
-                    player.getInventory().addItem(this.protectionCrystalSettings.removeProtection(item));
+                for (final ItemStack item : this.protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
+                    inventory.addItem(this.protectionCrystalSettings.removeProtection(item));
                 }
             } else {
-                for (ItemStack item : this.protectionCrystalSettings.getPlayer(player)) {
-                    player.getInventory().addItem(item);
+                for (final ItemStack item : this.protectionCrystalSettings.getPlayer(player)) {
+                    inventory.addItem(item);
                 }
             }
 

@@ -3,14 +3,14 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.inventory.ItemStack;
@@ -63,7 +63,7 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
 
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         this.glowing = config.node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
 
@@ -103,7 +103,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = FileKeys.CONFIG.getConfiguration().node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
+        this.glowing = Files.CONFIG.getConfiguration().node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
         this.destroyRate = RandomUtils.pickRandomNumber(category.getMaxDestroyRate(), category.getMinDestroyRate());
         this.successRate = RandomUtils.pickRandomNumber(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
@@ -119,7 +119,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = FileKeys.CONFIG.getConfiguration().node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
+        this.glowing = Files.CONFIG.getConfiguration().node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
         this.destroyRate = destroyRate;
         this.successRate = successRate;
     }
@@ -233,7 +233,7 @@ public class CEBook {
         String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
-        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
         for (final String bookLine : StringUtils.getStringList(configuration.node("Settings.EnchantmentBookLore"))) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {

@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.typ
 
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
@@ -22,7 +22,7 @@ public class BrokenEnchantmentsMigrator extends IMigrator {
     public void init() {
         final List<CEnchantments> brokenEnchantments = new ArrayList<>();
 
-        final CommentedConfigurationNode config = FileKeys.ENCHANTMENTS.getConfiguration();
+        final CommentedConfigurationNode config = Files.ENCHANTMENTS.getConfiguration();
 
         final CommentedConfigurationNode enchantments = config.node("Enchantments");
 
@@ -52,7 +52,7 @@ public class BrokenEnchantmentsMigrator extends IMigrator {
 
             Methods.setNode(section, "Categories", List.class, categories);
 
-            FileKeys.ENCHANTMENTS.save();
+            Files.ENCHANTMENTS.save();
         }
     }
 }

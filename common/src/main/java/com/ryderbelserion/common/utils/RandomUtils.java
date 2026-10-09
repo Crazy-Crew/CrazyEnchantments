@@ -1,4 +1,4 @@
-package com.ryderbelserion.core.utils;
+package com.ryderbelserion.common.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 

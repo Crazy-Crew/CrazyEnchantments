@@ -3,11 +3,10 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -41,7 +40,7 @@ public enum Dust {
         this.knownNames = knowNames;
         this.configName = configName;
         
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration().node("Settings", "Dust", configName, "PercentRange");
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration().node("Settings", "Dust", configName, "PercentRange");
 
         this.max = config.node("Max").getInt(100);
         this.min = config.node("Min").getInt(this.max);

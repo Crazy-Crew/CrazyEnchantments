@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -27,7 +27,7 @@ public class AllyManager {
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
     
     public void load() {
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
         final CommentedConfigurationNode section = config.node("Settings", "EnchantmentOptions", "Ally-Mobs");
 
         for (final AllyType type : AllyType.values()) {

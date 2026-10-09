@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
@@ -56,7 +56,7 @@ public class EnchantmentBookSettings {
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
-        return FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "UnSafe-Enchantments").getBoolean(true);
+        return Files.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "UnSafe-Enchantments").getBoolean(true);
     }
 
     /**
@@ -230,7 +230,7 @@ public class EnchantmentBookSettings {
      * Loads in all config options.
      */
     public void populateMaps() {
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         final CommentedConfigurationNode section = config.node("Categories");
 

@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -25,7 +25,7 @@ public class ScrollCommand extends BaseEnchantCommand {
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.inventory_full.sendMessage(player);
 
             return;
         }
@@ -34,10 +34,10 @@ public class ScrollCommand extends BaseEnchantCommand {
             final ItemStack itemStack = scroll.getScroll(player, amount);
 
             if (itemStack.isEmpty()) {
-                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                Messages.item_cannot_be_empty.sendMessage(sender, Map.of(
                         "%command%",
                         "scroll"
-                )));
+                ));
 
                 return;
             }
@@ -48,17 +48,17 @@ public class ScrollCommand extends BaseEnchantCommand {
 
             placeholders.putIfAbsent("%type%", scroll.getName());
 
-            player.sendMessage(Messages.GET_SCROLL.getMessage(placeholders));
+            Messages.get_scroll.sendMessage(player, placeholders);
 
             placeholders.putIfAbsent("%player%", player.getName());
 
-            sender.sendMessage(Messages.GIVE_SCROLL.getMessage(placeholders));
+            Messages.give_scroll.sendMessage(sender, placeholders);
         }, () -> {
             final Map<String, String> placeholders = new HashMap<>();
             
             placeholders.put("%Category%", name);
-            
-            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+
+            Messages.not_a_category.sendMessage(sender, placeholders);
         });
     }
 }

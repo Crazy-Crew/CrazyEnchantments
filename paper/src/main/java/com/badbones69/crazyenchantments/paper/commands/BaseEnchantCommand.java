@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.ryderbelserion.fusion.files.FileManager;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +21,8 @@ public class BaseEnchantCommand {
     protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     protected final CrazyPlatform platform = this.plugin.getPlatform();
+
+    protected final FusionPaper fusion = this.platform.getFusion();
 
     protected final FileManager fileManager = this.platform.getFileManager();
 

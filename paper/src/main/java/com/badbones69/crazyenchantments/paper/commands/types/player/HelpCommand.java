@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.player;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.ShopMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -26,6 +26,6 @@ public class HelpCommand extends BaseEnchantCommand {
     @Permission(value = "crazyenchantments.help", def = PermissionDefault.TRUE)
     @Syntax("/crazyenchantments help")
     public void execute(final CommandSender sender) {
-        sender.sendMessage(Messages.HELP.getMessage());
+        Messages.help.sendMessage(sender);
     }
 }

@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -15,7 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Material;
@@ -75,7 +75,7 @@ public class AxeEnchantments implements Listener {
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
-        boolean damage = FileKeys.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "TreeFeller-Full-Durability").getBoolean(true);
+        boolean damage = Files.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "TreeFeller-Full-Durability").getBoolean(true);
 
         if (!new MassBlockBreakEvent(player, blockList).callEvent()) return;
 

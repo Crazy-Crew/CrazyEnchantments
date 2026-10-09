@@ -5,8 +5,8 @@ import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -37,7 +37,7 @@ public class TinkererMenu extends InventoryBuilder {
         super(player, size, title);
     }
 
-    private final CommentedConfigurationNode configuration = FileKeys.TINKER.getConfiguration();
+    private final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration();
 
     @Override
     public InventoryBuilder build() {
@@ -63,7 +63,7 @@ public class TinkererMenu extends InventoryBuilder {
 
     public static class TinkererListener implements Listener {
 
-        private final CommentedConfigurationNode configuration = FileKeys.TINKER.getConfiguration();
+        private final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration();
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -132,7 +132,9 @@ public class TinkererMenu extends InventoryBuilder {
                     this.api.giveCurrency(player, currency, total);
                 }
 
-                if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
+                if (toggle) {
+                    Messages.tinker_sold_message.sendMessage(player);
+                }
 
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
 
@@ -187,13 +189,13 @@ public class TinkererMenu extends InventoryBuilder {
 
         private boolean isFirstEmpty(InventoryClickEvent event, Player player, ItemStack current, Inventory topInventory) {
             if (topInventory.firstEmpty() == -1) {
-                player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
+                Messages.tinker_inventory_full.sendMessage(player);
 
                 return true;
             }
 
             if (current.getAmount() > 1) {
-                player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+                Messages.need_to_unstack_item.sendMessage(player);
 
                 return true;
             }

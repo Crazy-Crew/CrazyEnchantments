@@ -5,8 +5,8 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
@@ -43,7 +43,7 @@ public class KitsMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        final CommentedConfigurationNode configuration = FileKeys.GKITZ.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.GKITZ.getConfiguration();
 
         for (String value : StringUtils.getStringList(configuration.node("Settings", "GUI-Customization"))) {
             int slot = 0;
@@ -157,12 +157,12 @@ public class KitsMenu extends InventoryBuilder {
 
                         player.updateInventory();
 
-                        player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                        Messages.received_gkit.sendMessage(player, placeholders);
                     } else {
-                        player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                        //player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders))); //todo() update this
                     }
                 } else {
-                    player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                    Messages.no_gkit_permission.sendMessage(player, placeholders);
                 }
             });
         }

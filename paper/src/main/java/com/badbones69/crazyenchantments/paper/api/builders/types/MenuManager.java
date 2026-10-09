@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManag
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsPreviewMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
@@ -35,7 +35,7 @@ public class MenuManager {
     public static void load() {
         enchantmentTypes.clear();
 
-        final CommentedConfigurationNode file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
+        final CommentedConfigurationNode file = Files.ENCHANTMENT_TYPES.getConfiguration();
 
         final CommentedConfigurationNode section = file.node("Types");
 
@@ -53,7 +53,7 @@ public class MenuManager {
     }
 
     public static void openKitsMenu(Player player) {
-        final @NotNull CommentedConfigurationNode gkitz = FileKeys.GKITZ.getConfiguration();
+        final @NotNull CommentedConfigurationNode gkitz = Files.GKITZ.getConfiguration();
 
         player.openInventory(new KitsMenu(player, gkitz.node("Settings", "GUI-Size").getInt(27),
                 gkitz.node("Settings", "Inventory-Name").getString("&8List of all GKitz")).build().getInventory());
@@ -81,6 +81,6 @@ public class MenuManager {
     }
 
     public static void openTinkererMenu(Player player) {
-        player.openInventory(new TinkererMenu(player, 54, FileKeys.TINKER.getConfiguration().node("Settings", "GUIName").getString("&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
+        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getConfiguration().node("Settings", "GUIName").getString("&7&lThe &4&lCrazy &c&lTinkerer")).build().getInventory());
     }
 }

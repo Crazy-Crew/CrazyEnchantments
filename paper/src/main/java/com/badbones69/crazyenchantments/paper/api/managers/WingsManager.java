@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.entity.Player;
@@ -28,7 +28,7 @@ public class WingsManager {
     public void load() {
         this.isWingsEnabled = CEnchantments.WINGS.isActivated();
 
-        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
         final CommentedConfigurationNode section = configuration.node("Settings", "EnchantmentOptions", "Wings");
 

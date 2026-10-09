@@ -5,8 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.badbones69.crazyenchantments.paper.commands.*;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.commands.api.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
@@ -27,6 +26,7 @@ import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListene
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
@@ -54,7 +54,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.platform = new CrazyPlatform();
+        this.platform = new CrazyPlatform(new FusionPaper(this), getDataPath());
         this.platform.init();
 
         this.starter = new Starter();
@@ -62,8 +62,8 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.starter.getCurrencyAPI().loadCurrency();
 
-        final @NotNull CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
-        final @NotNull CommentedConfigurationNode tinker = FileKeys.TINKER.getConfiguration();
+        final @NotNull CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
+        final @NotNull CommentedConfigurationNode tinker = Files.TINKER.getConfiguration();
 
         boolean isSave = false;
 
@@ -98,7 +98,7 @@ public class CrazyEnchantments extends JavaPlugin {
         }
 
         if (isSave) {
-            FileKeys.CONFIG.save();
+            Files.CONFIG.save();
         }
 
         if (config.node("Settings", "Toggle-Metrics").getBoolean(false)) new Metrics(this, 4494);

@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.player;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -39,6 +39,6 @@ public class LimitCommand extends BaseEnchantCommand {
         placeholders.put("%canHave%", String.valueOf(canAdd));
         placeholders.put("%limitSetInConfig%", String.valueOf(this.crazyManager.useConfigLimit()));
 
-        player.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
+        Messages.limit_command.sendMessage(player, placeholders);
     }
 }

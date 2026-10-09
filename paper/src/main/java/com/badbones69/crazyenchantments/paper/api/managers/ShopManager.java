@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -39,7 +39,7 @@ public class ShopManager {
         this.customizerItems.clear();
         this.shopItems.clear();
 
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         this.inventoryName = ColorUtils.color(config.node("Settings", "InvName").getString("&4&l&nCrazy Enchanter"));
         this.inventorySize = config.node("Settings", "GUISize").getInt(54);

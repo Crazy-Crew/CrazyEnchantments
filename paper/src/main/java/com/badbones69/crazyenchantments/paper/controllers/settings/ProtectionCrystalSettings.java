@@ -3,11 +3,11 @@ package com.badbones69.crazyenchantments.paper.controllers.settings;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -39,7 +39,7 @@ public class ProtectionCrystalSettings {
     private ItemBuilder crystal;
 
     public void loadProtectionCrystal() {
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         this.protectionString = config
                 .node("Settings", "ProtectionCrystal", "Protected")
@@ -124,7 +124,7 @@ public class ProtectionCrystalSettings {
     public boolean isProtectionSuccessful(Player player) {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         if (config.node("Settings", "ProtectionCrystal", "Chance", "Toggle").getBoolean(false)) {
             return RandomUtils.isChanceLess(config.node("Settings", "ProtectionCrystal", "Chance", "Success-Chance").getInt(100), 100);

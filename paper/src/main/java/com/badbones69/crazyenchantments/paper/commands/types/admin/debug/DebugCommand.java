@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin.debug;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -23,7 +23,7 @@ public class DebugCommand extends BaseEnchantCommand {
         final List<String> brokenEnchantments = new ArrayList<>();
         final List<String> brokenEnchantmentTypes = new ArrayList<>();
 
-        final CommentedConfigurationNode configuration = FileKeys.ENCHANTMENTS.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.ENCHANTMENTS.getConfiguration();
 
         for (CEnchantments enchantment : CEnchantments.values()) {
             if (!configuration.hasChild("Enchantments", enchantment.getName())) brokenEnchantments.add(enchantment.getName());

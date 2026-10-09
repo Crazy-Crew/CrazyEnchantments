@@ -7,7 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -145,12 +145,12 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
-        final CommentedConfigurationNode gkit = FileKeys.GKITZ.getConfiguration();
-        final CommentedConfigurationNode enchants = FileKeys.ENCHANTMENTS.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
+        final CommentedConfigurationNode gkit = Files.GKITZ.getConfiguration();
+        final CommentedConfigurationNode enchants = Files.ENCHANTMENTS.getConfiguration();
 
-        final CommentedConfigurationNode blocks = FileKeys.BLOCKLIST.getConfiguration();
-        final CommentedConfigurationNode heads = FileKeys.HEADMAP.getConfiguration();
+        final CommentedConfigurationNode blocks = Files.BLOCKLIST.getConfiguration();
+        final CommentedConfigurationNode heads = Files.HEADMAP.getConfiguration();
 
         this.blockList.clear();
         this.headMap.clear();
@@ -372,7 +372,7 @@ public class CrazyManager {
     }
 
     public void loadDust() {
-        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
         this.dusts.clear();
 
@@ -409,7 +409,7 @@ public class CrazyManager {
      * @param player The player you wish to load.
      */
     public void loadCEPlayer(Player player) {
-        final CommentedConfigurationNode data = FileKeys.DATA.getConfiguration();
+        final CommentedConfigurationNode data = Files.DATA.getConfiguration();
         final UUID uuid = player.getUniqueId();
         final String asString = uuid.toString();
 
@@ -444,7 +444,7 @@ public class CrazyManager {
      * @param player Player you wish to remove.
      */
     public void unloadCEPlayer(Player player) {
-        final CommentedConfigurationNode data = FileKeys.DATA.getConfiguration();
+        final CommentedConfigurationNode data = Files.DATA.getConfiguration();
 
         final String playerName = player.getName();
         final UUID uuid = player.getUniqueId();
@@ -462,7 +462,7 @@ public class CrazyManager {
                 }
             }
 
-            FileKeys.DATA.save();
+            Files.DATA.save();
 
             removeCEPlayer(uuid);
         });
@@ -481,7 +481,7 @@ public class CrazyManager {
      * @param cePlayer The player you wish to back up.
      */
     private void backupCEPlayer(CEPlayer cePlayer) {
-        final CommentedConfigurationNode data = FileKeys.DATA.getConfiguration();
+        final CommentedConfigurationNode data = Files.DATA.getConfiguration();
 
         final String uuid = cePlayer.getUuid().toString();
         final String playerName = cePlayer.getPlayerName();
@@ -497,7 +497,7 @@ public class CrazyManager {
             }
         }
 
-        FileKeys.DATA.save();
+        Files.DATA.save();
     }
 
     public boolean checkVanillaLimit() {

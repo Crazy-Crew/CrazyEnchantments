@@ -4,9 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
@@ -16,7 +16,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -30,11 +30,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
@@ -54,7 +56,7 @@ public class ScrollListener implements Listener {
     private int blackScrollChance;
 
     public void loadScrollControl() {
-        final @NotNull CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final @NotNull CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         this.suffix = config.node("Settings", "TransmogScroll", "Amount-of-Enchantments").getString(" &7[&6&n%amount%&7]");
         this.countVanillaEnchantments = config.node("Settings", "TransmogScroll", "Count-Vanilla-Enchantments").getBoolean(true);
@@ -65,21 +67,23 @@ public class ScrollListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onScrollUse(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack item = event.getCurrentItem();
-        ItemStack scroll = event.getCursor();
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+
+        final ItemStack item = event.getCurrentItem();
+        final ItemStack scroll = event.getCursor();
 
         if (item == null || item.getType().isAir() || scroll.getType().isAir()) return;
 
-        InventoryType.SlotType slotType = event.getSlotType();
+        final InventoryType.SlotType slotType = event.getSlotType();
 
         if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
 
-        Scrolls type = Scrolls.getFromPDC(scroll);
+        final Scrolls type = Scrolls.getFromPDC(scroll);
         if (type == null) return;
 
         if (scroll.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            Messages.need_to_unstack_item.sendMessage(player);
+
             return;
         }
 
@@ -87,19 +91,19 @@ public class ScrollListener implements Listener {
             case "BlackScroll" -> {
                 if (this.methods.isInventoryFull(player)) return;
 
-                List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
+                final List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     event.setCancelled(true);
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
                     if (this.blackScrollChanceToggle && !RandomUtils.isChanceLess(this.blackScrollChance, 100)) {
-                        player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+                        Messages.black_scroll_unsuccessful.sendMessage(player);
+
                         return;
                     }
 
-                    Random random = new Random();
+                    final CEnchantment enchantment = enchantments.get(ThreadLocalRandom.current().nextInt(enchantments.size()));
 
-                    CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
                     player.getInventory().addItem(new CEBook(enchantment, this.enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook(player));
                     event.setCurrentItem(this.enchantmentBookSettings.removeEnchantment(item, enchantment));
                 }
@@ -107,11 +111,15 @@ public class ScrollListener implements Listener {
 
             case "WhiteScroll" -> {
                 if (Scrolls.hasWhiteScrollProtection(item)) return;
+
                 for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                         event.setCancelled(true);
+
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
+
                         player.setItemOnCursor(this.methods.removeItem(scroll));
+
                         return;
                     }
                 }
@@ -121,12 +129,14 @@ public class ScrollListener implements Listener {
                 if (this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
                 if (item.lore() == null) return;
 
-                ItemStack orderedItem = newOrderNewEnchantments(item.clone());
+                final ItemStack orderedItem = newOrderNewEnchantments(item.clone());
 
                 if (item.isSimilar(orderedItem)) return;
 
                 event.setCancelled(true);
+
                 event.setCurrentItem(orderedItem);
+
                 player.setItemOnCursor(this.methods.removeItem(scroll));
             }
         }
@@ -134,12 +144,12 @@ public class ScrollListener implements Listener {
 
     @EventHandler()
     public void onScrollClick(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+        final PlayerInventory inventory = player.getInventory();
 
-        if (checkScroll(player.getInventory().getItemInMainHand(), player, event)) return;
+        if (checkScroll(inventory.getItemInMainHand(), player, event)) return;
 
-        checkScroll(player.getInventory().getItemInOffHand(), player, event);
-
+        checkScroll(inventory.getItemInOffHand(), player, event);
     }
 
     private boolean checkScroll(final ItemStack scroll, final Player player, final PlayerInteractEvent event) {
@@ -156,7 +166,7 @@ public class ScrollListener implements Listener {
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
 
-            player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+            Messages.right_click_black_scroll.sendMessage(player);
 
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {
@@ -169,7 +179,7 @@ public class ScrollListener implements Listener {
     }
 
     private ItemStack newOrderNewEnchantments(ItemStack item) {
-        final @NotNull CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
         final List<Component> lore = item.lore();
 
@@ -214,6 +224,7 @@ public class ScrollListener implements Listener {
             switch (selection) {
                 case "CE_Enchantments" -> {
                     if (addSpaces && !wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
+
                     newLore.addAll(enchantLore);
 
                     wasEmpty = enchantLore.isEmpty();
@@ -221,6 +232,7 @@ public class ScrollListener implements Listener {
 
                 case "Protection" -> {
                     if (addSpaces && !wasEmpty && !protectionLore.isEmpty()) newLore.add(Component.text(""));
+
                     newLore.addAll(protectionLore);
 
                     wasEmpty = protectionLore.isEmpty();
@@ -245,7 +257,7 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(@NotNull PersistentDataContainerView container) {
         List<Component> lore = new ArrayList<>();
 
-        final CommentedConfigurationNode configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
         if (Scrolls.hasWhiteScrollProtection(container)) {
             lore.add(ColorUtils.legacyTranslateColourCodes(configuration.node("Settings", "WhiteScroll", "ProtectedName").getString("&b&lPROTECTED")));
@@ -272,7 +284,7 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                ColorUtils.stripStringColour(FileKeys.CONFIG.getConfiguration().node("Settings", "ProtectionCrystal", "Protected").getString("&6Ancient Protection"))
+                ColorUtils.stripStringColour(Files.CONFIG.getConfiguration().node("Settings", "ProtectionCrystal", "Protected").getString("&6Ancient Protection"))
         ));
 
         return lore;

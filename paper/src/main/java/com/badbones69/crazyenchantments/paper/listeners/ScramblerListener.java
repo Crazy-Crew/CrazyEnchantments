@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -55,7 +55,7 @@ public class ScramblerListener implements Listener {
     private String guiName;
 
     public void loadScrambler() {
-        final CommentedConfigurationNode config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         this.scramblerItem = new ItemBuilder()
                 .setMaterial(Methods.getNode(config, "Settings.Scrambler.Item").getString("SUNFLOWER"))
@@ -247,7 +247,7 @@ public class ScramblerListener implements Listener {
         if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
 
         if (inventory.getType() != InventoryType.PLAYER) {
-            player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
+            Messages.need_to_use_player_inventory.sendMessage(player);
 
             return;
         }

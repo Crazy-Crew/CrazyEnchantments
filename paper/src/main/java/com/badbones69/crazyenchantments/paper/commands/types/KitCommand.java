@@ -4,9 +4,8 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
@@ -34,7 +33,7 @@ public class KitCommand {
     @Permission(value = "crazyenchantments.gkitz", def = PermissionDefault.TRUE)
     @Syntax("/gkitz")
     public void execute(final Player player) {
-        final @NotNull CommentedConfigurationNode gkitz = FileKeys.GKITZ.getConfiguration();
+        final @NotNull CommentedConfigurationNode gkitz = Files.GKITZ.getConfiguration();
 
         player.openInventory(new KitsMenu(player, gkitz
                 .node("Settings", "GUI-Size")
@@ -57,7 +56,7 @@ public class KitCommand {
                 placeholders.put("%Gkit%", gkit.getName());
                 placeholders.put("%Kit%", gkit.getName());
 
-                sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
+                Messages.reset_gkit.sendMessage(sender, placeholders);
             });
         }, () -> {
             final Map<String, String> placeholders = new HashMap<>();
@@ -65,7 +64,7 @@ public class KitCommand {
             placeholders.put("%Kit%", kit);
             placeholders.put("%Gkit%", kit);
 
-            sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
+            Messages.not_a_gkit.sendMessage(sender, placeholders);
         });
     }
 
@@ -93,18 +92,19 @@ public class KitCommand {
                     if (cePlayer.canUseGKit(gkit) || ignoreCooldown) {
                         cePlayer.giveGKit(gkit);
 
-                       safePlayer.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                       Messages.received_gkit.sendMessage(safePlayer, placeholders);
 
                         if (ignoreCooldown) {
-                            sender.sendMessage(Messages.GIVEN_GKIT.getMessage(placeholders));
+                            Messages.given_gkit.sendMessage(sender, placeholders);
                         } else {
                             cePlayer.addCoolDown(gkit);
                         }
                     } else {
-                        sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(gkit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                        //sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(gkit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders))); //todo() redo this
+                        //sender.sendMessage(cePlayer.getCoolDown(gkit).getCoolDownLeft(Messages.still_in_cooldown.getMessage(sender, placeholders)));
                     }
                 } else {
-                    sender.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                    Messages.no_gkit_permission.sendMessage(sender, placeholders);
                 }
             });
         }, () -> {
@@ -113,7 +113,7 @@ public class KitCommand {
             placeholders.put("%Kit%", kit);
             placeholders.put("%Gkit%", kit);
 
-            sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
+            Messages.not_a_gkit.sendMessage(sender, placeholders);
         });
     }
 }

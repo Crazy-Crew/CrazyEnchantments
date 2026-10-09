@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.debug;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -23,8 +23,9 @@ public class CheckCommand extends BaseEnchantCommand {
         Arrays.stream(player.getEquipment().getArmorContents()).filter(Objects::nonNull).forEach(item -> {
             final StringBuilder enchantmentsString = new StringBuilder();
 
-            String main = Messages.MAIN_UPDATE_ENCHANTS.getMessageNoPrefix();
-            main = main.replace("%item%", item.getType().toString());
+            final String main = Messages.main_update_enchants.getMessage(player, Map.of(
+                    "%item%", item.getType().toString()
+            ));
 
             this.bookSettings.getEnchantments(item).forEach((enchantment, level) -> {
                 final Map<String, String> placeholders = new HashMap<>();
@@ -32,12 +33,12 @@ public class CheckCommand extends BaseEnchantCommand {
                 placeholders.put("%enchant%", enchantment.getName());
                 placeholders.put("%level%", String.valueOf(level));
 
-                enchantmentsString.append(Messages.BASE_UPDATE_ENCHANTS.getMessageNoPrefix(placeholders));
+                enchantmentsString.append(Messages.base_update_enchants.getMessage(player, placeholders));
             });
 
-            main = main.replace("%itemEnchants%", enchantmentsString.toString());
-
-            sender.sendMessage(main);
+            sender.sendMessage(this.fusion.replacePlaceholders(main, Map.of(
+                    "%itemEnchants%", enchantmentsString.toString()
+            )));
         });
     }
 }

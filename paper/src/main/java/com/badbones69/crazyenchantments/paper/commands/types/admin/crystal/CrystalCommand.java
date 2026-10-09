@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.crystal;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -23,10 +23,10 @@ public class CrystalCommand extends BaseEnchantCommand {
         final ItemStack itemStack = this.crystal.getCrystal(player, amount);
         
         if (itemStack.isEmpty()) {
-            sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+            Messages.item_cannot_be_empty.sendMessage(sender, Map.of(
                     "%command%",
                     "crystal"
-            )));
+            ));
             
             return;
         }
@@ -34,7 +34,7 @@ public class CrystalCommand extends BaseEnchantCommand {
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.inventory_full.sendMessage(player); //todo() send message to sender as well, and make this message more verbose.
 
             return;
         }
@@ -46,7 +46,7 @@ public class CrystalCommand extends BaseEnchantCommand {
         
         inventory.addItem(itemStack);
 
-        sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
-        player.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+        Messages.give_protection_crystal.sendMessage(sender, placeholders);
+        Messages.get_protection_crystal.sendMessage(player, placeholders);
     }
 }

@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -35,6 +35,6 @@ public class ReloadCommand extends BaseEnchantCommand {
 
         KitsManager.load();
 
-        sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
+        Messages.config_reload.sendMessage(sender);
     }
 }

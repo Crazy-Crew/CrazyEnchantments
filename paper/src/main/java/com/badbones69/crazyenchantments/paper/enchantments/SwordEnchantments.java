@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
@@ -18,7 +18,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.core.utils.RandomUtils;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
@@ -97,7 +97,7 @@ public class SwordEnchantments implements Listener {
                     cePlayer.setRageLevel(0);
                     cePlayer.setRage(false);
 
-                    rageInformPlayer(player, Messages.RAGE_DAMAGED, 0f);
+                    rageInformPlayer(player, Messages.rage_damaged, 0f);
                 }
             });
         }
@@ -161,7 +161,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+            Messages.disordered_enemy_hot_bar.sendMessage(damager);
         }
 
         this.crazyManager.getCEPlayer(damager).ifPresent(cePlayer -> {
@@ -176,7 +176,7 @@ public class SwordEnchantments implements Listener {
                     int rageUp = cePlayer.getRageLevel() + 1;
 
                     if (cePlayer.getRageMultiplier().intValue() >= rageUp) {
-                        rageInformPlayer(damager, Messages.RAGE_RAGE_UP, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
+                        rageInformPlayer(damager, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
                         cePlayer.setRageLevel(rageUp);
                     }
 
@@ -186,7 +186,7 @@ public class SwordEnchantments implements Listener {
                     cePlayer.setRage(true);
                     cePlayer.setRageLevel(1);
 
-                    rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) this.crazyManager.getRageMaxLevel()));
+                    rageInformPlayer(damager, Messages.rage_building, ((float) cePlayer.getRageLevel() / (float) this.crazyManager.getRageMaxLevel()));
                 }
 
                 cePlayer.setRageTask(new FoliaScheduler(this.plugin, null, damager) {
@@ -196,7 +196,7 @@ public class SwordEnchantments implements Listener {
                         cePlayer.setRage(false);
                         cePlayer.setRageLevel(0);
 
-                        rageInformPlayer(damager, Messages.RAGE_COOLED_DOWN, 0f);
+                        rageInformPlayer(damager, Messages.rage_cooled_down, 0f);
                     }
                 }.runDelayed(80));
             }
@@ -387,22 +387,18 @@ public class SwordEnchantments implements Listener {
         };
     }
 
-    private void rageInformPlayer(Player player, Messages message, Map<String, String> placeholders, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
-
+    private void rageInformPlayer(Player player, Map<String, String> placeholders, float progress) {
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
+            this.bossBarController.updateBossBar(player, Messages.rage_rage_up.getMessage(player, placeholders), progress);
         } else {
-            player.sendMessage(message.getMessage(placeholders));
+            Messages.rage_rage_up.sendMessage(player, placeholders);
         }
     }
     private void rageInformPlayer(Player player, Messages message, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
-
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
+            this.bossBarController.updateBossBar(player, message.getMessage(player), progress);
         } else {
-            player.sendMessage(message.getMessage());
+            message.sendMessage(player);
         }
     }
 }

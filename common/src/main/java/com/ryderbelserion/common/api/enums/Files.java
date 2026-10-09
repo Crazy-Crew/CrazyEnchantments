@@ -1,18 +1,17 @@
-package com.badbones69.crazyenchantments.paper.api.enums.keys;
+package com.ryderbelserion.common.api.enums;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
+import com.ryderbelserion.common.CrazyEnchantmentsPlugin;
+import com.ryderbelserion.common.api.EnchantmentProvider;
 import com.ryderbelserion.fusion.api.exceptions.FusionException;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.files.types.configurate.YamlCustomFile;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public enum FileKeys {
+public enum Files {
 
     CONFIG(FileType.YAML, "config.yml"),
     BLOCKLIST(FileType.YAML, "BlockList.yml"),
@@ -26,32 +25,27 @@ public enum FileKeys {
 
     SUPPORT(FileType.YAML, "support.yml");
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    private final CrazyPlatform platform = this.plugin.getPlatform();
-    private final FileManager fileManager = this.platform.getFileManager();
+    private final CrazyEnchantmentsPlugin plugin = EnchantmentProvider.api();
+    private final FileManager fileManager = this.plugin.getFileManager();
     private final Path path = this.plugin.getDataPath();
 
     private final FileType fileType;
     private final Path location; // the file location
     private final Path folder; // the folder which defaults to the data path
 
-    FileKeys(@NotNull final FileType fileType, @NotNull final String fileName, @NotNull final String folder) {
+    Files(@NonNull final FileType fileType, @NonNull final String fileName, @NonNull final String folder) {
         this.folder = this.path.resolve(folder);
         this.location = this.folder.resolve(fileName);
         this.fileType = fileType;
     }
 
-    FileKeys(@NotNull final FileType fileType, @NotNull final String fileName) {
+    Files(@NonNull final FileType fileType, @NonNull final String fileName) {
         this.folder = this.path;
         this.location = this.folder.resolve(fileName);
         this.fileType = fileType;
     }
 
-    public @NotNull final CommentedConfigurationNode getConfigurationNode() {
-        return getYamlCustomFile().getConfiguration();
-    }
-
-    public @NotNull final YamlCustomFile getYamlCustomFile() {
+    public @NonNull final YamlCustomFile getYamlCustomFile() {
         final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(this.location);
 
         if (customFile.isEmpty()) {
@@ -61,15 +55,15 @@ public enum FileKeys {
         return customFile.get();
     }
 
-    public @NotNull final CommentedConfigurationNode getConfiguration() {
-        return getConfigurationNode();
+    public @NonNull final CommentedConfigurationNode getConfiguration() {
+        return getYamlCustomFile().getConfiguration();
     }
 
-    public @NotNull final FileType getFileType() {
+    public @NonNull final FileType getFileType() {
         return this.fileType;
     }
 
-    public @NotNull final Path getPath() {
+    public @NonNull final Path getPath() {
         return this.location;
     }
 

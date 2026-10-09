@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types;
 
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ public class TinkerMigrator extends IMigrator {
 
     @Override
     public void init() {
-        final CommentedConfigurationNode configuration = FileKeys.TINKER.getConfiguration().node("Tinker");
+        final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration().node("Tinker");
 
         if (configuration.hasChild("Vanilla-Enchantments")) {
             final CommentedConfigurationNode section = configuration.node("Vanilla-Enchantments");
@@ -64,7 +64,7 @@ public class TinkerMigrator extends IMigrator {
                 }
             });
 
-            FileKeys.TINKER.save();
+            Files.TINKER.save();
         }
     }
 }
