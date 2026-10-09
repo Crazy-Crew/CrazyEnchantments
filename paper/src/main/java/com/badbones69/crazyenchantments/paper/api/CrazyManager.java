@@ -31,6 +31,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -201,24 +202,24 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Methods.getNode(config, "Settings.Enchantment-Book-Item").getString("BOOK")));
-        this.useUnsafeEnchantments = Methods.getNode(config, "Settings.EnchantmentOptions.UnSafe-Enchantments").getBoolean(true);
-        this.maxEnchantmentCheck = Methods.getNode(config, "Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle").getBoolean(true);
-        this.useConfigLimits = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Check-Perms").getBoolean(false);
-        this.defaultLimit = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Default-Limit").getInt(0);
-        this.defaultBaseLimit = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Default-Base-Limit").getInt(0);
-        this.useEnchantmentLimiter = Methods.getNode(config, "Settings.EnchantmentOptions.Limit.Enable-SlotCrystal").getBoolean(true);
-        this.checkVanillaLimit = Methods.getNode(config, "Settings.EnchantmentOptions.IncludeVanillaEnchantments").getBoolean(false);
-        this.gkitzToggle = !config.hasChild("Settings", "GKitz", "Enabled") || Methods.getNode(config, "Settings.GKitz.Enabled").getBoolean(true);
-        this.rageMaxLevel = Methods.getNode(config, "Settings.EnchantmentOptions.MaxRageLevel").getInt(4);
-        this.breakRageOnDamage = Methods.getNode(config, "Settings.EnchantmentOptions.Break-Rage-On-Damage").getBoolean(true);
-        this.useRageBossBar = Methods.getNode(config, "Settings.EnchantmentOptions.Rage-Boss-Bar").getBoolean(false);
-        this.rageIncrement = Methods.getNode(config, "Settings.EnchantmentOptions.Rage-Increase").getDouble(0.1);
-        setDropBlocksBlast(Methods.getNode(config, "Settings.EnchantmentOptions.Drop-Blocks-For-Blast").getBoolean(true));
-        setDropBlocksVeinMiner(Methods.getNode(config, "Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner").getBoolean(true));
+        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(ConfigUtils.getNode(config, "Settings.Enchantment-Book-Item").getString("BOOK")));
+        this.useUnsafeEnchantments = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.UnSafe-Enchantments").getBoolean(true);
+        this.maxEnchantmentCheck = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle").getBoolean(true);
+        this.useConfigLimits = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Limit.Check-Perms").getBoolean(false);
+        this.defaultLimit = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Limit.Default-Limit").getInt(0);
+        this.defaultBaseLimit = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Limit.Default-Base-Limit").getInt(0);
+        this.useEnchantmentLimiter = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Limit.Enable-SlotCrystal").getBoolean(true);
+        this.checkVanillaLimit = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.IncludeVanillaEnchantments").getBoolean(false);
+        this.gkitzToggle = !config.hasChild("Settings", "GKitz", "Enabled") || ConfigUtils.getNode(config, "Settings.GKitz.Enabled").getBoolean(true);
+        this.rageMaxLevel = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.MaxRageLevel").getInt(4);
+        this.breakRageOnDamage = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Break-Rage-On-Damage").getBoolean(true);
+        this.useRageBossBar = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Rage-Boss-Bar").getBoolean(false);
+        this.rageIncrement = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Rage-Increase").getDouble(0.1);
+        setDropBlocksBlast(ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Drop-Blocks-For-Blast").getBoolean(true));
+        setDropBlocksVeinMiner(ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner").getBoolean(true));
 
-        this.CEFailureOverride = Methods.getNode(config, "Settings.CEFailureOverride").getInt(-1);
-        this.CESuccessOverride = Methods.getNode(config, "Settings.CESuccessOverride").getInt(-1);
+        this.CEFailureOverride = ConfigUtils.getNode(config, "Settings.CEFailureOverride").getInt(-1);
+        this.CESuccessOverride = ConfigUtils.getNode(config, "Settings.CESuccessOverride").getInt(-1);
 
         this.enchantmentBookSettings.populateMaps();
 

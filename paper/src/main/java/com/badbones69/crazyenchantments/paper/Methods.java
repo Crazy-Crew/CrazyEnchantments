@@ -12,9 +12,6 @@ import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.google.gson.Gson;
 import com.ryderbelserion.common.utils.RandomUtils;
-import com.ryderbelserion.fusion.api.FusionProvider;
-import com.ryderbelserion.fusion.api.enums.Level;
-import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.*;
@@ -37,8 +34,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,38 +56,12 @@ public class Methods {
 
     private final SupportUtils support = this.platform.getSupport();
 
-    private static final FusionPaper fusion = (FusionPaper) FusionProvider.api();
-
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
         return null;
-    }
-
-    public static CommentedConfigurationNode getNode(final CommentedConfigurationNode parent, final String path) {
-        return parent.node(getString(path));
-    }
-
-    public static void setNode(final CommentedConfigurationNode parent, final String path, final Class<?> type, final Object value) {
-        try {
-            parent.node(getString(path)).set(type, value);
-        } catch (final SerializationException exception) {
-            fusion.log(Level.error, "Failed to set node @ %s path using class type %s with value %s", exception, path, type, value);
-        }
-    }
-
-    public static void setNode(final CommentedConfigurationNode parent, final Class<?> type, final Object value, final Object... path) {
-        try {
-            parent.node(path).set(type, value);
-        } catch (final SerializationException exception) {
-            fusion.log(Level.error, "Failed to set node @ %s path using class type %s with value %s", exception, path, type, value);
-        }
-    }
-
-    public static Object[] getString(final String path) {
-        return path.split("\\.");
     }
 
     public int getRandomNumber(String range) {

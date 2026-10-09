@@ -34,7 +34,7 @@ public abstract class CrazyEnchantmentsPlugin<C, S, F extends FusionKyori<S>> {
     public void loadMessages() {
         final List<Path> paths = this.fileManager.getFilesByPath(this.path.resolve("locale"), ".yml");
 
-        paths.add(this.path.resolve("messages.yml")); // add to list
+        paths.add(this.path.resolve("Messages.yml")); // add to list
 
         this.fusion.getMessageRegistry().init(action -> {
             for (final Path path : paths) {

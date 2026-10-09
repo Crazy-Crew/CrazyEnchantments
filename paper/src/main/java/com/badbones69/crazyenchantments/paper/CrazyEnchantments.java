@@ -62,38 +62,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.starter.getCurrencyAPI().loadCurrency();
 
-        final @NotNull CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
-        final @NotNull CommentedConfigurationNode tinker = Files.TINKER.getConfiguration();
-
-        boolean isSave = false;
-
-        if (!config.hasChild("Settings", "CESuccessOverride")) {
-            Methods.setNode(config, "Settings.CESuccessOverride", Integer.class, -1);
-
-            isSave = true;
-        }
-
-        if (!config.hasChild("Settings", "CEFailureOverride")) {
-            Methods.setNode(config, "Settings.CEFailureOverride", Integer.class, -1);
-
-            isSave = true;
-        }
-
-        if (!config.hasChild("Settings", "Toggle-Metrics")) {
-            Methods.setNode(config, "Settings.Toggle-Metrics", Boolean.class, false);
-
-            isSave = true;
-        }
-
-        if (!config.hasChild("Settings", "Refresh-Potion-Effects-On-World-Change")) {
-            Methods.setNode(config, "Settings.Refresh-Potion-Effects-On-World-Change", Boolean.class, false);
-
-            isSave = true;
-        }
-
-        if (isSave) {
-            Files.CONFIG.save();
-        }
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         if (config.node("Settings", "Toggle-Metrics").getBoolean(false)) new Metrics(this, 4494);
 

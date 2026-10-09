@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.ryderbelserion.common.api.enums.Files;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
@@ -63,8 +64,8 @@ public enum ShopOption {
             final String shopPath = shopOption.getPath();
             final String optionPath = shopOption.getOptionPath();
 
-            final CommentedConfigurationNode shopSection = section.node(Methods.getString(shopPath));
-            final CommentedConfigurationNode optionSection = costs.node(Methods.getString(optionPath));
+            final CommentedConfigurationNode shopSection = section.node(ConfigUtils.getString(shopPath));
+            final CommentedConfigurationNode optionSection = costs.node(ConfigUtils.getString(optionPath));
 
             final Option option = new Option(
                     new ItemBuilder()

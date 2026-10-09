@@ -3,13 +3,17 @@ package com.ryderbelserion.common.api.enums.messages;
 import com.ryderbelserion.common.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.common.api.EnchantmentProvider;
 import com.ryderbelserion.common.api.sender.ISenderAdapter;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.api.objects.FusionKey;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import com.ryderbelserion.fusion.core.api.registry.message.adapter.YamlMessageAdapter;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
+import com.ryderbelserion.fusion.kyori.utils.AdvUtils;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.CommentedConfigurationNode;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static com.ryderbelserion.common.CrazyEnchantmentsPlugin.namespace;
@@ -165,16 +169,19 @@ public enum Messages {
     private final String defaultValue;
     private final Object[] path;
     private final FusionKey id;
+    private final boolean isList;
 
     Messages(final String id, final String defaultValue, final Object... path) {
         this.defaultValue = defaultValue;
         this.id = FusionKey.key(namespace, id);
+        this.isList = false;
         this.path = path;
     }
 
     Messages(final String id, final List<String> defaultValue, final Object... path) {
         this.defaultValue = StringUtils.toString(defaultValue);
         this.id = FusionKey.key(namespace, id);
+        this.isList = true;
         this.path = path;
     }
 
@@ -186,6 +193,26 @@ public enum Messages {
                 this.id,
                 adapter
         );
+    }
+
+    public void migrateKey(final MessageRegistry registry, final CommentedConfigurationNode configuration, final FusionKey id) {
+        final YamlMessageAdapter adapter = new YamlMessageAdapter(configuration, this.defaultValue, this.path);
+
+        final String value = adapter.getValue();
+
+        if (this.isList) {
+            final List<String> lines = new ArrayList<>();
+
+            for (final String line : value.split("\n")) {
+                lines.add(AdvUtils.convert(line, true));
+            }
+
+            ConfigUtils.setNode(configuration, List.class, lines);
+        } else {
+            ConfigUtils.setNode(configuration, String.class, AdvUtils.convert(value, true));
+        }
+
+        addKey(registry, configuration, id);
     }
 
     public void sendMessage(final Audience audience, final Map<String, String> placeholders) {

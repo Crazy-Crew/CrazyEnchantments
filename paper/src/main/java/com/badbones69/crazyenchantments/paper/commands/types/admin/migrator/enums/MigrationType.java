@@ -6,6 +6,7 @@ public enum MigrationType {
 
     BROKEN_ENCHANTMENTS("broken_enchantments"),
     LEGACY_TO_MINIMESSAGE("legacy_to_minimessage"),
+    MISSING_OPTIONS("missing_options"),
     TINKER("tinker");
 
     private final String name;

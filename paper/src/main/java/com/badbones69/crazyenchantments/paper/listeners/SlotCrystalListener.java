@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -43,12 +44,12 @@ public class SlotCrystalListener implements Listener {
         final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         slot_crystal = new ItemBuilder()
-                .setMaterial(Methods.getNode(config, "Settings.Slot_Crystal.Item").getString("RED_WOOL"))
-                .setName(Methods.getNode(config, "Settings.Slot_Crystal.Name").getString("Error getting slot crystal name."))
-                .setItemModel(Methods.getNode(config, "Settings.Slot_Crystal.Model.Namespace").getString(""),
-                        Methods.getNode(config, "Settings.Slot_Crystal.Model.Key").getString(""))
-                .setLore(StringUtils.getStringList(config.node(Methods.getString("Settings.Slot_Crystal.Lore"))))
-                .setGlow(Methods.getNode(config, "Settings.Slot_Crystal.Glowing").getBoolean(false))
+                .setMaterial(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Item").getString("RED_WOOL"))
+                .setName(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Name").getString("Error getting slot crystal name."))
+                .setItemModel(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Model.Namespace").getString(""),
+                        ConfigUtils.getNode(config, "Settings.Slot_Crystal.Model.Key").getString(""))
+                .setLore(StringUtils.getStringList(config.node(ConfigUtils.getString("Settings.Slot_Crystal.Lore"))))
+                .setGlow(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Glowing").getBoolean(false))
                 .addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
     }
 

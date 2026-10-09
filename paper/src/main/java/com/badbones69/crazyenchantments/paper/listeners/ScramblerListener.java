@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
@@ -58,18 +59,18 @@ public class ScramblerListener implements Listener {
         final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
         this.scramblerItem = new ItemBuilder()
-                .setMaterial(Methods.getNode(config, "Settings.Scrambler.Item").getString("SUNFLOWER"))
-        .setItemModel(Methods.getNode(config, "Settings.Scrambler.Item.Model.Namespace").getString(""),
-                Methods.getNode(config, "Settings.Scrambler.Item.Model.Key").getString(""))
-        .setName(Methods.getNode(config, "Settings.Scrambler.Name").getString("&cError getting name for scrambler item."))
+                .setMaterial(ConfigUtils.getNode(config, "Settings.Scrambler.Item").getString("SUNFLOWER"))
+        .setItemModel(ConfigUtils.getNode(config, "Settings.Scrambler.Item.Model.Namespace").getString(""),
+                ConfigUtils.getNode(config, "Settings.Scrambler.Item.Model.Key").getString(""))
+        .setName(ConfigUtils.getNode(config, "Settings.Scrambler.Name").getString("&cError getting name for scrambler item."))
         .setLore(StringUtils.getStringList(config.node("Settings", "Scrambler", "Lore")))
-        .setGlow(Methods.getNode(config, "Settings.Scrambler.Glowing").getBoolean(false));
+        .setGlow(ConfigUtils.getNode(config, "Settings.Scrambler.Glowing").getBoolean(false));
 
         this.pointer = new ItemBuilder()
-                .setMaterial(Methods.getNode(config, "Settings.Scrambler.GUI.Pointer.Item").getString("REDSTONE_TORCH"))
-        .setItemModel(Methods.getNode(config, "Settings.Scrambler.GUI.Pointer.Item.Model.Namespace").getString(""),
-                Methods.getNode(config, "Settings.Scrambler.GUI.Pointer.Item.Model.Key").getString(""))
-        .setName(Methods.getNode(config, "Settings.Scrambler.GUI.Pointer.Name").getString("&cError getting name for pointer item."))
+                .setMaterial(ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Item").getString("REDSTONE_TORCH"))
+        .setItemModel(ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Item.Model.Namespace").getString(""),
+                ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Item.Model.Key").getString(""))
+        .setName(ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Name").getString("&cError getting name for pointer item."))
         .setLore(StringUtils.getStringList(config.node("Settings", "Scrambler", "GUI", "Pointer", "Lore")));
 
         this.animationToggle = config.node("Settings", "Scrambler", "GUI", "Toggle").getBoolean(true);
