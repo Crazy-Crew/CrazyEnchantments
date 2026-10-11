@@ -4,13 +4,13 @@ import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enum
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
 import com.ryderbelserion.common.api.enums.Files;
 import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.api.objects.FusionKey;
-import kotlin.io.FilesKt;
+import com.ryderbelserion.fusion.kyori.utils.AdvUtils;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-
 import java.nio.file.Path;
 import java.util.List;
 
@@ -43,5 +43,18 @@ public class LegacyMigrator extends IMigrator {
                 }, () -> this.fusion.log(Level.info, "Path %s not found in cache.".formatted(path)));
             }
         });
+
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
+
+        if (configuration.hasChild("Settings", "Prefix")) {
+            ConfigUtils.setNode(
+                    configuration,
+                    String.class,
+                    AdvUtils.convert(configuration.node("Settings", "Prefix").getString("<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ")),
+                    "Settings", "Prefix"
+            );
+
+            Files.CONFIG.save();
+        }
     }
 }

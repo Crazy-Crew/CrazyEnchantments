@@ -1,23 +1,17 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.ryderbelserion.common.api.enums.Files;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static java.util.regex.Matcher.quoteReplacement;
 
 public class ColorUtils {
 
@@ -66,40 +60,6 @@ public class ColorUtils {
         }
 
         return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
-    }
-
-    public static void sendMessage(CommandSender commandSender, String message, boolean prefixToggle) {
-        if (message == null || message.isEmpty()) return;
-
-        String prefix = getPrefix();
-
-        if (commandSender instanceof Player player) {
-            if (!prefix.isEmpty() && prefixToggle) player.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix))); else player.sendMessage(color(message));
-
-            return;
-        }
-
-        if (!prefix.isEmpty() && prefixToggle) commandSender.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix))); else commandSender.sendMessage(color(message));
-    }
-
-    public static String getPrefix() {
-        return color(Files.CONFIG.getConfiguration().node("Settings", "Prefix").getString("&8[&aCrazyEnchantments&8]: "));
-    }
-
-    public static String getPrefix(String msg) {
-        return color(getPrefix() + msg);
-    }
-
-    public static String sanitizeColor(String msg) {
-        return sanitizeFormat(color(msg));
-    }
-
-    public static String sanitizeFormat(String string) {
-        return TextComponent.toLegacyText(TextComponent.fromLegacyText(string));
-    }
-
-    public static String removeColor(String msg) {
-        return ChatColor.stripColor(msg);
     }
 
     public static net.kyori.adventure.text.TextComponent legacyTranslateColourCodes(String input) {

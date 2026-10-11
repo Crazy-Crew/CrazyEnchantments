@@ -108,7 +108,7 @@ public class ShopListener implements Listener {
                         player.getInventory().addItem(book.buildBook(player));
                     });
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                    //player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it.")); //todo() add message
                 }
 
                 return;

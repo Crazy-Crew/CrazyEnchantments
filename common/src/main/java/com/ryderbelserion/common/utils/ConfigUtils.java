@@ -1,5 +1,6 @@
 package com.ryderbelserion.common.utils;
 
+import com.ryderbelserion.common.api.enums.Files;
 import com.ryderbelserion.fusion.api.FusionProvider;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
@@ -28,6 +29,12 @@ public class ConfigUtils {
         } catch (final SerializationException exception) {
             fusion.log(Level.error, "Failed to set node @ %s path using class type %s with value %s", exception, path, type, value);
         }
+    }
+
+    public static String getPrefix() {
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
+
+        return configuration.node("Settings", "Prefix").getString("<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ");
     }
 
     public static Object[] getString(final String path) {

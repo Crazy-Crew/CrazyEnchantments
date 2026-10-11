@@ -3,8 +3,8 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin.debug;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.ryderbelserion.common.api.enums.Files;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;
@@ -31,39 +31,56 @@ public class DebugCommand extends BaseEnchantCommand {
             if (enchantment.getType() == null) brokenEnchantmentTypes.add(enchantment.getName());
         }
 
-        if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
-            sender.sendMessage(ColorUtils.getPrefix("&aAll enchantments are loaded."));
-        } else {
+        final StringBuilder builder = new StringBuilder();
 
+        final String prefix = ConfigUtils.getPrefix();
+
+        if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
+            builder.append("%s<green>All enchantments have loaded".formatted(prefix)).append("\n");
+        } else {
             if (!brokenEnchantments.isEmpty()) {
                 int amount = 1;
-                sender.sendMessage(ColorUtils.getPrefix("&cMissing Enchantments:"));
-                sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
 
-                for (String broke : brokenEnchantments) {
-                    sender.sendMessage(ColorUtils.color("&c#" + amount + ": &6" + broke));
+                List.of(
+                        "%s<red>Missing Enchantments:",
+                        "%s<gray>These enchantments are broken due to one of the following reasons:"
+                ).forEach(line -> builder.append(line.formatted(prefix)).append("\n"));
+
+                for (final String broke : brokenEnchantments) {
+                    builder.append("%s<red>#%s: <gold>%s".formatted(prefix, amount, broke)).append("\n");
+
                     amount++;
                 }
 
-                sender.sendMessage(ColorUtils.color("&7- &cMissing from the Enchantments.yml"));
-                sender.sendMessage(ColorUtils.color("&7- &c<Enchantment Name>: option was changed"));
-                sender.sendMessage(ColorUtils.color("&7- &cYaml format has been broken."));
+                List.of(
+                        "<gray>- <red>Missing from the Enchantments.yml",
+                        "<gray>- <red>[Enchantment Name]: option was changed.",
+                        "<gray>- <red>Yaml format is broken."
+                ).forEach(line -> builder.append(line).append("\n"));
             }
 
             if (!brokenEnchantmentTypes.isEmpty()) {
                 int i = 1;
-                sender.sendMessage(ColorUtils.getPrefix("&cEnchantments with null types:"));
-                sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
+
+                List.of(
+                        "%s<red>Enchantments with null types:",
+                        "%s<gray>These enchantments are broken due to the enchantment type being null."
+                ).forEach(line -> builder.append(line.formatted(prefix)).append("\n"));
 
                 for (String broke : brokenEnchantmentTypes) {
-                    sender.sendMessage(ColorUtils.color("&c#" + i + ": &6" + broke));
+                    builder.append("<red>#%s: <gold>%s".formatted(i, broke)).append("\n");
+
                     i++;
                 }
             }
         }
 
-        sender.sendMessage(ColorUtils.getPrefix("&cEnchantment Types and amount of items in each:"));
+        builder.append("%s<red>Enchantment Types and amount of items in each:".formatted(prefix)).append("\n");
 
-        MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
+        MenuManager.getEnchantmentTypes().forEach(type -> builder.append("<red>%s: <gold>%s".formatted(type.getName(), type.getEnchantableMaterials().size())));
+
+        for (final String line : builder.toString().split("\n")) {
+            sender.sendRichMessage(line);
+        }
     }
 }
