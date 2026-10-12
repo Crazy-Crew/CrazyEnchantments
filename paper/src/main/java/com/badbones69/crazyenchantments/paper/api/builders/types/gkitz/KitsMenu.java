@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.ryderbelserion.common.api.enums.messages.Messages;
@@ -13,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -29,6 +31,7 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
@@ -36,6 +39,10 @@ public class KitsMenu extends InventoryBuilder {
     public KitsMenu(Player player, int size, String title) {
         super(player, size, title);
     }
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final Starter starter = this.plugin.getStarter();
 
@@ -72,8 +79,14 @@ public class KitsMenu extends InventoryBuilder {
 
                 if (currentLore != null) {
                     for (Component line : currentLore) {
-                        String legacyLoreLine = ColorUtils.toLegacy(line);
-                        if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
+                        final String index = ColorUtils.toLegacy(line).toLowerCase();
+
+                        if (index.matches(".*%(day|hour|minute|second)%.*")) {
+                            final String translated = this.fusion.replacePlaceholders(index, gkitCooldown.getCoolDownLeft());
+
+                            line = ColorUtils.legacyTranslateColourCodes(translated);
+                        }
+
                         lore.add(line);
                     }
                 }
@@ -159,7 +172,7 @@ public class KitsMenu extends InventoryBuilder {
 
                         Messages.received_gkit.sendMessage(player, placeholders);
                     } else {
-                        //player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders))); //todo() update this
+                        Messages.still_in_cooldown.sendMessage(player, cePlayer.getCoolDown(kit).getCoolDownLeft());
                     }
                 } else {
                     Messages.no_gkit_permission.sendMessage(player, placeholders);

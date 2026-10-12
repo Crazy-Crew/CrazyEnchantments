@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GkitCoolDown {
     
@@ -34,7 +35,7 @@ public class GkitCoolDown {
         return Calendar.getInstance().after(this.coolDownTime);
     }
     
-    public String getCoolDownLeft(String message) {
+    public Map<String, String> getCoolDownLeft() {
         long days = 0, hours = 0, minutes = 0, seconds = 0, total;
 
         int second = 1000, minute = second*60, hour = minute*60, day = hour*24;
@@ -51,9 +52,25 @@ public class GkitCoolDown {
             seconds = total / second;
         }
 
-        return ColorUtils.color(message.replace("%Day%", String.valueOf(days)).replace("%day%", String.valueOf(days))
-                .replace("%Hour%", String.valueOf(hours)).replace("%hour%", String.valueOf(hours))
-                .replace("%Minute%", String.valueOf(minutes)).replace("%minute%", String.valueOf(minutes))
-                .replace("%Second%", String.valueOf(seconds)).replace("%second%", String.valueOf(seconds)));
+        final Map<String, String> placeholders = new HashMap<>();
+
+        final String daily = String.valueOf(days);
+        final String hourly = String.valueOf(hours);
+        final String minutely = String.valueOf(minutes);
+        final String secondly = String.valueOf(seconds);
+
+        placeholders.put("%Day%", daily);
+        placeholders.put("%day%", daily);
+
+        placeholders.put("%Hour%", hourly);
+        placeholders.put("%hour%", hourly);
+
+        placeholders.put("%Minute%", minutely);
+        placeholders.put("%minute%", minutely);
+
+        placeholders.put("%Second%", secondly);
+        placeholders.put("%second%", secondly);
+
+        return placeholders;
     }
 }

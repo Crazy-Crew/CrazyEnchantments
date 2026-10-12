@@ -100,8 +100,7 @@ public class KitCommand {
                             cePlayer.addCoolDown(gkit);
                         }
                     } else {
-                        //sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(gkit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders))); //todo() redo this
-                        //sender.sendMessage(cePlayer.getCoolDown(gkit).getCoolDownLeft(Messages.still_in_cooldown.getMessage(sender, placeholders)));
+                        Messages.still_in_cooldown.sendMessage(sender, cePlayer.getCoolDown(gkit).getCoolDownLeft());
                     }
                 } else {
                     Messages.no_gkit_permission.sendMessage(sender, placeholders);
