@@ -19,7 +19,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.VanishSupport;
 import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
@@ -275,7 +275,7 @@ public class ArmorEnchantments implements Listener {
                     player.setHealth(attribute.getValue());
 
                     event.setCancelled(true);
-                }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", player.getName(), "System Reboot"));
+                }, () -> this.fusion.log(Level.warn, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", player.getName(), "System Reboot"));
 
                 return;
             }
@@ -317,7 +317,7 @@ public class ArmorEnchantments implements Listener {
                     if (playerHealth + heal < maxHealth) player.setHealth(playerHealth + heal);
 
                     if (playerHealth + heal >= maxHealth) player.setHealth(maxHealth);
-                }, () -> this.fusion.log(Level.WARNING, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", player.getName(), "Enlightened"));
+                }, () -> this.fusion.log(Level.warn, "Player %s did not have the MAX_HEALTH attribute when using %s enchantment!", player.getName(), "Enlightened"));
             }
 
             if (EnchantUtils.isEventActive(CEnchantments.INSOMNIA, player, armor, enchants)) damager.damage(event.getDamage() + enchants.get(CEnchantments.INSOMNIA.getEnchantment()));

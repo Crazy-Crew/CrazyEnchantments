@@ -3,17 +3,18 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.common.utils.ConfigUtils;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,21 +56,25 @@ public class ScramblerListener implements Listener {
     private String guiName;
 
     public void loadScrambler() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
-        this.scramblerItem = new ItemBuilder().setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
-        .setItemModel(config.getString("Settings.Scrambler.Item.Model.Namespace", ""), config.getString("Settings.Scrambler.Item.Model.Key", ""))
-        .setName(config.getString("Settings.Scrambler.Name", "Error getting name."))
-        .setLore(config.getStringList("Settings.Scrambler.Lore"))
-        .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false));
+        this.scramblerItem = new ItemBuilder()
+                .setMaterial(ConfigUtils.getNode(config, "Settings.Scrambler.Item").getString("SUNFLOWER"))
+        .setItemModel(ConfigUtils.getNode(config, "Settings.Scrambler.Item.Model.Namespace").getString(""),
+                ConfigUtils.getNode(config, "Settings.Scrambler.Item.Model.Key").getString(""))
+        .setName(ConfigUtils.getNode(config, "Settings.Scrambler.Name").getString("&cError getting name for scrambler item."))
+        .setLore(StringUtils.getStringList(config.node("Settings", "Scrambler", "Lore")))
+        .setGlow(ConfigUtils.getNode(config, "Settings.Scrambler.Glowing").getBoolean(false));
 
-        this.pointer = new ItemBuilder().setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH"))
-        .setItemModel(config.getString("Settings.Scrambler.GUI.Pointer.Item.Model.Namespace", ""), config.getString("Settings.Scrambler.GUI.Pointer.Item.Model.Key", ""))
-        .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name", "Error getting name."))
-        .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
+        this.pointer = new ItemBuilder()
+                .setMaterial(ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Item").getString("REDSTONE_TORCH"))
+        .setItemModel(ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Item.Model.Namespace").getString(""),
+                ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Item.Model.Key").getString(""))
+        .setName(ConfigUtils.getNode(config, "Settings.Scrambler.GUI.Pointer.Name").getString("&cError getting name for pointer item."))
+        .setLore(StringUtils.getStringList(config.node("Settings", "Scrambler", "GUI", "Pointer", "Lore")));
 
-        this.animationToggle = config.getBoolean("Settings.Scrambler.GUI.Toggle", true);
-        this.guiName = ColorUtils.color(config.getString("Settings.Scrambler.GUI.Name", "Error getting name."));
+        this.animationToggle = config.node("Settings", "Scrambler", "GUI", "Toggle").getBoolean(true);
+        this.guiName = ColorUtils.color(config.node("Settings", "Scrambler", "GUI", "Name").getString("&cError getting name for scrambler gui name."));
     }
 
     /**
@@ -242,7 +248,7 @@ public class ScramblerListener implements Listener {
         if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
 
         if (inventory.getType() != InventoryType.PLAYER) {
-            player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
+            Messages.need_to_use_player_inventory.sendMessage(player);
 
             return;
         }

@@ -3,19 +3,20 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.common.utils.RandomUtils;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,6 @@ public class CEBook {
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
 
     @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
@@ -65,15 +63,25 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
 
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
-        this.glowing = config.getBoolean("Settings.Enchantment-Book-Glowing", true);
-        int successMax = config.getInt("Settings.BlackScroll.SuccessChance.Max", 100);
-        int successMin = config.getInt("Settings.BlackScroll.SuccessChance.Min", 15);
-        int destroyMax = config.getInt("Settings.BlackScroll.DestroyChance.Max", 100);
-        int destroyMin = config.getInt("Settings.BlackScroll.DestroyChance.Min", 15);
-        this.destroyRate = this.methods.percentPick(destroyMax, destroyMin);
-        this.successRate = this.methods.percentPick(successMax, successMin);
+        this.glowing = config.node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
+
+        int successMax = config
+                .node("Settings", "BlackScroll", "SuccessChance", "Max")
+                .getInt(100);
+        int successMin = config
+                .node("Settings", "BlackScroll", "SuccessChance", "Min")
+                .getInt(15);
+        int destroyMax = config
+                .node("Settings", "BlackScroll", "DestroyChance", "Max")
+                .getInt(100);
+        int destroyMin = config
+                .node("Settings", "BlackScroll", "DestroyChance", "Min")
+                .getInt(15);
+
+        this.destroyRate = RandomUtils.pickRandomNumber(destroyMax, destroyMin);
+        this.successRate = RandomUtils.pickRandomNumber(successMax, successMin);
     }
     
     /**
@@ -95,9 +103,9 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = FileKeys.CONFIG.getConfiguration().getBoolean("Settings.Enchantment-Book-Glowing", true);
-        this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
-        this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
+        this.glowing = Files.CONFIG.getConfiguration().node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
+        this.destroyRate = RandomUtils.pickRandomNumber(category.getMaxDestroyRate(), category.getMinDestroyRate());
+        this.successRate = RandomUtils.pickRandomNumber(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
     
     /**
@@ -111,7 +119,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = FileKeys.CONFIG.getConfiguration().getBoolean("Settings.Enchantment-Book-Glowing", true);
+        this.glowing = Files.CONFIG.getConfiguration().node("Settings", "Enchantment-Book-Glowing").getBoolean(true);
         this.destroyRate = destroyRate;
         this.successRate = successRate;
     }
@@ -225,17 +233,17 @@ public class CEBook {
         String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
-        final YamlConfiguration configuration = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
-        for (String bookLine : configuration.getStringList("Settings.EnchantmentBookLore")) {
+        for (final String bookLine : StringUtils.getStringList(configuration.node("Settings.EnchantmentBookLore"))) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : this.enchantment.getInfoDescription()) {
                     lore.add(ColorUtils.color(enchantmentLine));
                 }
             } else {
                 lore.add(ColorUtils.color(bookLine)
-                .replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate))
-                .replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate)));
+                        .replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate))
+                        .replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate)));
             }
         }
 
@@ -254,7 +262,7 @@ public class CEBook {
      * @return True if the success rate was successful.
      */
     public boolean roleSuccess() {
-        return methods.randomPicker(this.getSuccessRate(), 100);
+        return RandomUtils.isChanceLess(this.getSuccessRate(), 100);
     }
 
     /**
@@ -262,7 +270,7 @@ public class CEBook {
      * @return True if the destroy rate was successful.
      */
     public boolean roleDestroy() {
-        return methods.randomPicker(this.getDestroyRate(), 100);
+        return RandomUtils.isChanceLess(this.getDestroyRate(), 100);
     }
 
 }

@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
@@ -28,6 +28,6 @@ public class AttributeUtils {
             }
 
             attribute.setBaseValue(attribute.getBaseValue());
-        }, () -> fusion.log(Level.WARNING, "Could not find the MAX_HEALTH attribute on the Entity %s(%s) with type %s", entity.getName(), entity.getUniqueId(), entity.getType()));
+        }, () -> fusion.log(Level.warn, "Could not find the MAX_HEALTH attribute on the Entity %s(%s) with type %s", entity.getName(), entity.getUniqueId(), entity.getType()));
     }
 }

@@ -1,8 +1,9 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.ArgName;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class EnchantCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
+public class EnchantCommand extends BaseEnchantCommand {
 
     @Command(value = "add")
     @Permission(value = "crazyenchantments.add", def = PermissionDefault.OP)
@@ -36,7 +37,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
         final ItemStack itemStack = inventory.getItemInMainHand();
 
         if (itemStack.isEmpty()) {
-            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
+            Messages.doesnt_have_item_in_hand.sendMessage(player);
 
             return;
         }
@@ -50,7 +51,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
         }, () -> {
             placeholders.put("%Enchantment%", enchantment);
 
-            player.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage(placeholders));
+            Messages.not_an_enchantment.sendMessage(player, placeholders);
         }));
     }
 
@@ -140,7 +141,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
         if (itemStack.isEmpty()) {
             placeholders.put("%Enchantment%", enchantReference.get());
 
-            sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage(placeholders));
+            Messages.not_an_enchantment.sendMessage(sender, placeholders);
 
             return;
         }
@@ -152,7 +153,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
         placeholders.put("%Y%", String.valueOf(location.getBlockY()));
         placeholders.put("%Z%", String.valueOf(location.getBlockZ()));
 
-        sender.sendMessage(Messages.SPAWNED_BOOK.getMessage(placeholders));
+        Messages.spawned_book.sendMessage(sender, placeholders);
     }
 
     @Command(value = "info")
@@ -174,7 +175,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
                 }, () -> {
                     placeholders.put("%Enchantment%", enchantment);
 
-                    player.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage(placeholders));
+                    Messages.not_an_enchantment.sendMessage(player, placeholders);
                 }));
     }
 
@@ -187,7 +188,7 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
         final ItemStack itemStack = inventory.getItemInMainHand();
 
         if (itemStack.isEmpty()) {
-            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
+            Messages.doesnt_have_item_in_hand.sendMessage(player);
 
             return;
         }
@@ -200,12 +201,12 @@ public class EnchantCommand extends com.badbones69.crazyenchantments.paper.comma
 
                 placeholders.put("%Enchantment%", context.getCustomName());
 
-                player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders).replace("&", ""));
+                Messages.removed_enchantment.sendMessage(player, placeholders);
             }
         }, () -> Optional.ofNullable(this.methods.getEnchantment(enchantment)).ifPresentOrElse(itemStack::removeEnchantment, () -> {
             placeholders.put("%Enchantment%", enchantment);
 
-            player.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
+            Messages.doesnt_have_enchantment.sendMessage(player, placeholders);
         }));
     }
 }

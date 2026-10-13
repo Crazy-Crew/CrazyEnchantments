@@ -16,6 +16,7 @@ import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -54,10 +55,13 @@ public class WingsUtils {
 
                     if (player == null) return;
 
+                    final EntityEquipment equipment = player.getEquipment();
+                    final ItemStack itemStack = equipment.getBoots();
+
                     new FoliaScheduler(plugin, null, player) {
                         @Override
                         public void run() {
-                            if (player.isFlying() && player.getEquipment().getBoots() != null && settings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
+                            if (player.isFlying() && !itemStack.isEmpty() && settings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) {
                                 final Location location = player.getLocation().subtract(0, .25, 0);
 
                                 if (wingsManager.isCloudsEnabled()) player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);

@@ -3,20 +3,22 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,9 +27,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
@@ -36,15 +40,19 @@ public class KitsMenu extends InventoryBuilder {
         super(player, size, title);
     }
 
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.platform.getFusion();
+
     private final Starter starter = this.plugin.getStarter();
 
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @Override
     public InventoryBuilder build() {
-        final FileConfiguration configuration = FileKeys.GKITZ.getConfiguration();
+        final CommentedConfigurationNode configuration = Files.GKITZ.getConfiguration();
 
-        for (String value : configuration.getStringList("Settings.GUI-Customization")) {
+        for (String value : StringUtils.getStringList(configuration.node("Settings", "GUI-Customization"))) {
             int slot = 0;
 
             for (final String option : value.split(", ")) {
@@ -71,8 +79,14 @@ public class KitsMenu extends InventoryBuilder {
 
                 if (currentLore != null) {
                     for (Component line : currentLore) {
-                        String legacyLoreLine = ColorUtils.toLegacy(line);
-                        if (legacyLoreLine.toLowerCase().matches(".*%(day|hour|minute|second)%.*")) line = ColorUtils.legacyTranslateColourCodes(gkitCooldown.getCoolDownLeft(legacyLoreLine));
+                        final String index = ColorUtils.toLegacy(line).toLowerCase();
+
+                        if (index.matches(".*%(day|hour|minute|second)%.*")) {
+                            final String translated = this.fusion.replacePlaceholders(index, gkitCooldown.getCoolDownLeft());
+
+                            line = ColorUtils.legacyTranslateColourCodes(translated);
+                        }
+
                         lore.add(line);
                     }
                 }
@@ -156,12 +170,12 @@ public class KitsMenu extends InventoryBuilder {
 
                         player.updateInventory();
 
-                        player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                        Messages.received_gkit.sendMessage(player, placeholders);
                     } else {
-                        player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                        Messages.still_in_cooldown.sendMessage(player, cePlayer.getCoolDown(kit).getCoolDownLeft());
                     }
                 } else {
-                    player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                    Messages.no_gkit_permission.sendMessage(player, placeholders);
                 }
             });
         }

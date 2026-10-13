@@ -56,8 +56,6 @@ repositories {
     maven("https://repo.nexomc.com/releases/")
 
     maven("https://repo.oraxen.com/releases/")
-
-    maven("https://maven.devs.beer/")
 }
 
 dependencies {
@@ -66,6 +64,8 @@ dependencies {
 
     implementation(libs.metrics)
 
+    implementation(project(":common"))
+    
     compileOnly(libs.vault) {
         exclude("org.bukkit", "bukkit")
     }

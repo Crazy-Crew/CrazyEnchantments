@@ -3,14 +3,15 @@ package com.badbones69.crazyenchantments.paper;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.google.gson.Gson;
+import com.ryderbelserion.common.utils.RandomUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.*;
@@ -33,11 +34,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -93,7 +96,9 @@ public class Methods {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
-            if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
+            if (toggle) {
+                Messages.no_permission.sendMessage(player);
+            }
 
             return false;
         }
@@ -111,15 +116,6 @@ public class Methods {
     @Nullable
     public Player getPlayer(String name) {
         return this.plugin.getServer().getPlayer(name);
-    }
-
-    public boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(playerName)) return true;
-        }
-
-        sender.sendMessage(Messages.NOT_ONLINE.getMessage());
-        return false;
     }
 
     public void removeItem(@NotNull ItemStack item, @NotNull Player player) {
@@ -195,25 +191,6 @@ public class Methods {
         return false;
     }
 
-    public boolean randomPicker(int min, int max) {
-        if (max <= min || max <= 0) return true;
-
-        Random random = new Random();
-
-        int chance = 1 + random.nextInt(max);
-        return chance <= min;
-    }
-
-    public Integer percentPick(int max, int min) {
-        if (max == min) {
-            return max;
-        } else {
-            Random random = new Random();
-
-            return min + random.nextInt(max - min);
-        }
-    }
-
     /**
      *
      * @param player The {@link Player} who's inventory should be checked.
@@ -221,7 +198,9 @@ public class Methods {
      */
     public boolean isInventoryFull(@NotNull Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
-        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+
+        Messages.inventory_full.sendMessage(player);
+
         return true;
     }
 
@@ -340,7 +319,7 @@ public class Methods {
             if (hasUnbreaking) {
                 final int level = item.getEnchantmentLevel(Enchantment.UNBREAKING);
 
-                if (randomPicker(1, 1 + level)) {
+                if (RandomUtils.isChanceLess(1, 1 + level)) {
                     if (durability > maxDurability) {
                         player.getInventory().remove(item);
                     } else {
@@ -427,7 +406,8 @@ public class Methods {
 
             if (this.support.isFriendly(shooter, livingEntity)) continue;
 
-            final EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
+            final EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION)
+                    .withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
 
             this.pluginManager.callEvent(event);
 
@@ -483,27 +463,31 @@ public class Methods {
 
         Entity lightning = null;
 
-        if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
+        final World world = loc.getWorld();
 
-        int lightningSoundRange = FileKeys.CONFIG.getConfiguration().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+        if (world != null) {
+            lightning = world.strikeLightning(loc);
 
-        try {
-            loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
-        } catch (Exception ignore) {}
+            final int lightningSoundRange = Files.CONFIG.getConfiguration().node("Settings", "EnchantmentOptions", "Lightning-Sound-Range").getInt(160);
+
+            try {
+                world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
+            } catch (Exception ignore) {}
+        }
 
         return lightning;
     }
 
     public void switchCurrency(@NotNull Player player, @NotNull Currency option, @NotNull String one, @NotNull String two, @NotNull String cost) {
-        HashMap<String, String> placeholders = new HashMap<>();
+        final Map<String, String> placeholders = new HashMap<>();
 
         placeholders.put(one, cost);
         placeholders.put(two, cost);
 
         switch (option) {
-            case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-            case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-            case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+            case VAULT -> Messages.need_more_money.sendMessage(player, placeholders);
+            case XP_LEVEL -> Messages.need_more_xp_levels.sendMessage(player, placeholders);
+            case XP_TOTAL -> Messages.need_more_total_xp.sendMessage(player, placeholders);
         }
     }
 
@@ -524,7 +508,8 @@ public class Methods {
     public boolean inCreativeMode(@NotNull Player player) {
         if (player.getGameMode() != GameMode.CREATIVE) return false;
 
-        player.sendMessage(Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage());
+        Messages.player_is_in_creative_mode.sendMessage(player);
+
         return true;
     }
 
@@ -534,6 +519,7 @@ public class Methods {
      */
     public void playItemBreak(@NotNull Player player, @NotNull ItemStack item) {
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+
         player.getWorld().spawnParticle(Particle.ITEM, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
     }
 

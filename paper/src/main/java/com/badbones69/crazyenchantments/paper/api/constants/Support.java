@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.constants;
 
-import com.ryderbelserion.fusion.core.api.FusionKey;
+import com.ryderbelserion.fusion.api.objects.FusionKey;
 
 public class Support {
 

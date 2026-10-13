@@ -3,13 +3,13 @@ package com.badbones69.crazyenchantments.paper.api.objects.enchants;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,21 +27,23 @@ public class EnchantmentType {
     private final List<CEnchantment> enchantments = new ArrayList<>();
     private final List<Material> enchantableMaterials = new ArrayList<>();
 
-    public EnchantmentType(String name) {
-        final FileConfiguration file = FileKeys.ENCHANTMENT_TYPES.getConfiguration();
-        String path = "Types." + name;
+    public EnchantmentType(String name, CommentedConfigurationNode configuration) {
         this.displayName = name;
-        this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
+        this.slot = configuration.node("Display-Item", "Slot").getInt(1)-1;
+
         this.displayItem = new ItemBuilder()
-        .setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
-        .setItemModel(file.getString(path + ".Display-Item.Model.Namespace", ""), file.getString(path + ".Display-Item.Model.Key", ""))
-        .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
-        .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
+                .setMaterial(configuration.node("Display-Item", "Item").getString("Stone"))
+                .setItemModel(configuration.node("Display-Item", "Model", "Namespace").getString(""), configuration.node("Display-Item", "Model", "Key").getString(""))
+                .setName(configuration.node("Display-Item", "Name").getString("&cError getting name for %s".formatted(name)))
+                .setLore(StringUtils.getStringList(configuration.node("Display-Item", "Lore")))
+                .build();
 
-        for (String type : file.getStringList(path + ".Enchantable-Items")) {
-            Material material = new ItemBuilder().setMaterial(type).getMaterial();
+        for (final String type : StringUtils.getStringList(configuration.node("Enchantable-Items"))) {
+            final Material material = new ItemBuilder().setMaterial(type).getMaterial();
 
-            if (material != null) this.enchantableMaterials.add(material);
+            if (material != null) {
+                this.enchantableMaterials.add(material);
+            }
         }
     }
 

@@ -1,8 +1,8 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class DustCommand extends com.badbones69.crazyenchantments.paper.commands.EnchantCommand {
+public class DustCommand extends BaseEnchantCommand {
 
     @Command(value = "dust")
     @Permission(value = "crazyenchantments.dust", def = PermissionDefault.OP)
@@ -26,7 +26,7 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.inventory_full.sendMessage(player); //todo() add an extra message, update default message
 
             return;
         }
@@ -35,10 +35,10 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
             final ItemStack itemStack = dust.getDust(player, percent, amount); //todo() random support
 
             if (itemStack.isEmpty()) {
-                sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+                Messages.item_cannot_be_empty.sendMessage(sender, Map.of(
                         "%command%",
                         "dust"
-                )));
+                ));
 
                 return;
             }
@@ -52,18 +52,18 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
 
             switch (dust) {
                 case SUCCESS_DUST -> {
-                    player.sendMessage(Messages.GET_SUCCESS_DUST.getMessage(placeholders));
-                    sender.sendMessage(Messages.GIVE_SUCCESS_DUST.getMessage(placeholders));
+                    Messages.get_success_dust.sendMessage(player, placeholders);
+                    Messages.give_success_dust.sendMessage(sender, placeholders);
                 }
 
                 case DESTROY_DUST -> {
-                    player.sendMessage(Messages.GET_DESTROY_DUST.getMessage(placeholders));
-                    sender.sendMessage(Messages.GIVE_DESTROY_DUST.getMessage(placeholders));
+                    Messages.get_destroy_dust.sendMessage(player, placeholders);
+                    Messages.give_destroy_dust.sendMessage(sender, placeholders);
                 }
 
                 case MYSTERY_DUST -> {
-                    player.sendMessage(Messages.GET_MYSTERY_DUST.getMessage(placeholders));
-                    sender.sendMessage(Messages.GIVE_MYSTERY_DUST.getMessage(placeholders));
+                    Messages.get_mystery_dust.sendMessage(player, placeholders);
+                    Messages.give_mystery_dust.sendMessage(sender, placeholders);
                 }
             }
         }, () -> {
@@ -71,7 +71,7 @@ public class DustCommand extends com.badbones69.crazyenchantments.paper.commands
 
             placeholders.put("%Category%", name);
 
-            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+            Messages.not_a_category.sendMessage(player, placeholders);
         });
     }
 }

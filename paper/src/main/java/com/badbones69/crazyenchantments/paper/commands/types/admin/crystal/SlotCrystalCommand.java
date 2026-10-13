@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.crystal;
 
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.commands.EnchantCommand;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.badbones69.crazyenchantments.paper.commands.BaseEnchantCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;
@@ -14,7 +14,7 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SlotCrystalCommand extends EnchantCommand {
+public class SlotCrystalCommand extends BaseEnchantCommand {
 
     @Command("slotcrystal")
     @Permission(value = "crazyenchantments.slotcrystal", def = PermissionDefault.OP)
@@ -23,10 +23,10 @@ public class SlotCrystalCommand extends EnchantCommand {
         final ItemStack itemStack = this.slotCrystal.getSlotCrystal(amount);
 
         if (itemStack.isEmpty()) {
-            sender.sendMessage(Messages.ITEM_CANNOT_BE_EMPTY.getMessage(Map.of(
+            Messages.item_cannot_be_empty.sendMessage(sender, Map.of(
                     "%command%",
                     "slotcrystal"
-            )));
+            ));
 
             return;
         }
@@ -34,7 +34,7 @@ public class SlotCrystalCommand extends EnchantCommand {
         final PlayerInventory inventory = player.getInventory();
 
         if (inventory.firstEmpty() == -1) {
-            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+            Messages.inventory_full.sendMessage(player); //todo() send message to sender as well, and make this message more verbose.
 
             return;
         }
@@ -46,7 +46,7 @@ public class SlotCrystalCommand extends EnchantCommand {
         
         inventory.addItem(itemStack);
 
-        sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
-        player.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
+        Messages.give_slot_crystal.sendMessage(sender, placeholders);
+        Messages.get_slot_crystal.sendMessage(player, placeholders);
     }
 }

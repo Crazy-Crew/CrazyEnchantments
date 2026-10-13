@@ -1,56 +1,49 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.adapters.PaperSenderAdapter;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
-import com.ryderbelserion.fusion.core.api.enums.Level;
-import com.ryderbelserion.fusion.files.enums.FileType;
+import com.ryderbelserion.common.CrazyEnchantmentsPlugin;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
-import com.ryderbelserion.fusion.paper.files.PaperFileManager;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class CrazyPlatform {
+public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, FusionPaper> {
 
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Server server = this.plugin.getServer();
 
-    private final Path dataPath = this.plugin.getDataPath();
-
-    private PaperFileManager fileManager;
+    private PaperSenderAdapter senderAdapter;
     private SupportUtils support;
 
-    private FusionPaper fusion;
+    public CrazyPlatform(@NonNull final FusionPaper fusion, @NonNull final Path path) {
+        super(fusion, path);
+    }
 
+    @Override
     public void init() {
-        this.fusion = new FusionPaper(this.plugin);
-        this.fusion.init().post();
+        super.init();
 
-        this.fileManager = this.fusion.getFileManager();
+        for (final Files key : Files.values()) {
+            key.addFile();
+        }
 
-        this.fileManager.addFile(this.dataPath.resolve("support.yml"), FileType.YAML);
+        this.senderAdapter = new PaperSenderAdapter();
 
-        List.of(
-                FileKeys.CONFIG,
-                FileKeys.BLOCKLIST,
-                FileKeys.HEADMAP,
-                FileKeys.DATA,
-                FileKeys.ENCHANTMENTS,
-                FileKeys.GKITZ,
-                FileKeys.MESSAGES,
-                FileKeys.ENCHANTMENT_TYPES,
-                FileKeys.TINKER
-        ).forEach(FileKeys::addFile);
+        loadMessages();
 
         this.support = new SupportUtils();
         this.support.init();
@@ -58,36 +51,41 @@ public class CrazyPlatform {
         loadExamples();
     }
 
+    @Override
     public void reload() {
-        this.fileManager.addFile(this.dataPath.resolve("support.yml"), FileType.YAML)
-                .refresh(false);
+        super.reload();
 
         loadExamples();
     }
 
-    public void loadExamples() {
-        final Path examples = this.dataPath.resolve("examples");
+    @Override
+    public @NonNull final PaperSenderAdapter getSenderAdapter() {
+        return this.senderAdapter;
+    }
 
-        if (Files.exists(examples)) {
-            try (final Stream<Path> values = Files.walk(examples)) {
+    public void loadExamples() {
+        final Path examples = this.path.resolve("examples");
+
+        if (java.nio.file.Files.exists(examples)) {
+            try (final Stream<Path> values = java.nio.file.Files.walk(examples)) {
                 values.sorted(Comparator.reverseOrder()).forEach(path -> { // sorted in reverse order, to ensure the directories are empty first.
                     try {
-                        this.fusion.log(Level.WARNING, "Successfully deleted path %s, re-generating the examples later.", path);
+                        this.fusion.log(Level.warn, "Successfully deleted path %s, re-generating the examples later.", path);
 
-                        Files.delete(path);
+                        java.nio.file.Files.delete(path);
                     } catch (final IOException exception) {
-                        this.fusion.log(Level.WARNING, "Failed to delete %s in loop.", exception, path);
+                        this.fusion.log(Level.warn, "Failed to delete %s in loop.", exception, path);
                     }
                 });
             } catch (final Exception exception) {
-                this.fusion.log(Level.WARNING, "Failed to delete %s.", exception, examples);
+                this.fusion.log(Level.warn, "Failed to delete %s.", exception, examples);
             }
         }
 
         try {
-            Files.createDirectory(examples);
+            java.nio.file.Files.createDirectory(examples);
         } catch (IOException exception) {
-            this.fusion.log(Level.WARNING, "Failed to create directory %s.", exception, examples);
+            this.fusion.log(Level.warn, "Failed to create directory %s.", exception, examples);
         }
 
         List.of(
@@ -107,14 +105,11 @@ public class CrazyPlatform {
         return Optional.ofNullable(this.server.getPlayer(name));
     }
 
-    public @NonNull final PaperFileManager getFileManager() {
-        return this.fileManager;
-    }
-
     public @NonNull final SupportUtils getSupport() {
         return this.support;
     }
 
+    @Override
     public @NonNull final FusionPaper getFusion() {
         return this.fusion;
     }

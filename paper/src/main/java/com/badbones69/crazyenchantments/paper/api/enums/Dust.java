@@ -2,18 +2,18 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.ryderbelserion.common.utils.RandomUtils;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +24,6 @@ public enum Dust {
     MYSTERY_DUST("Mystery-Dust", "MysteryDust", Arrays.asList("m", "mystery")),
     FAILED_DUST("Failed-Dust", "FailedDust", Arrays.asList("f", "failed"));
     
-    private static final HashMap<Dust, ItemBuilder> itemBuilderDust = new HashMap<>();
     private final String name;
     private final String configName;
     private final List<String> knownNames;
@@ -34,33 +33,17 @@ public enum Dust {
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Methods methods = this.plugin.getStarter().getMethods();
+    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
     
     Dust(String name, String configName, List<String> knowNames) {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
         
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        
-        this.max = config.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
-        this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
-    }
-    
-    public static void loadDust() {
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration().node("Settings", "Dust", configName, "PercentRange");
 
-        itemBuilderDust.clear();
-
-        for (Dust dust : values()) {
-            String path = "Settings.Dust." + dust.getConfigName() + ".";
-            Dust.itemBuilderDust.put(dust, new ItemBuilder()
-            .setName(config.getString(path + "Name", "Error getting name."))
-            .setLore(config.getStringList(path + "Lore"))
-            .setItemModel(config.getString(path + "Model.Namespace", ""), config.getString(path + "Model.Key", ""))
-            .setMaterial(config.getString(path + "Item", "GLOWSTONE_DUST")));
-        }
+        this.max = config.node("Max").getInt(100);
+        this.min = config.node("Min").getInt(this.max);
     }
     
     public static Dust getFromName(String nameString) {
@@ -89,11 +72,11 @@ public enum Dust {
     }
     
     public ItemStack getDust(final Audience player, final int amount) {
-        return getDust(player, this.methods.percentPick(this.max, this.min), amount);
+        return getDust(player, RandomUtils.pickRandomNumber(this.max, this.min), amount);
     }
 
     public ItemStack getDust(final Audience player, final int percent, final int amount) {
-        final ItemStack item = itemBuilderDust.get(this).addLorePlaceholder("%Percent%", String.valueOf(percent)).setAmount(amount).build(player);
+        final ItemStack item = this.crazyManager.getDust(this).addLorePlaceholder("%Percent%", String.valueOf(percent)).setAmount(amount).build(player);
 
         if (Objects.equals(getName(), FAILED_DUST.getName())) return item;
 

@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -29,7 +28,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,9 +50,6 @@ public class HoeEnchantments implements Listener {
 
     @NotNull
     private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     // Settings.
     @NotNull

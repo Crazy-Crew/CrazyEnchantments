@@ -8,7 +8,7 @@ plugins {
 
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
-val git = feather.getBuilder()
+val git = feather.builder
 val utils = git.utils
 
 val branch = utils.getRemoteBranch()

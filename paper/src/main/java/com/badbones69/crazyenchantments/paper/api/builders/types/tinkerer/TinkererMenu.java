@@ -5,16 +5,16 @@ import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
+import com.ryderbelserion.common.api.enums.messages.Messages;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +27,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.List;
 import java.util.Map;
 
@@ -36,16 +37,18 @@ public class TinkererMenu extends InventoryBuilder {
         super(player, size, title);
     }
 
-    private final FileConfiguration configuration = FileKeys.TINKER.getConfiguration();
+    private final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration();
 
     @Override
     public InventoryBuilder build() {
         final Player player = getPlayer();
 
-        final ItemStack button = new ItemBuilder().setMaterial(this.configuration.getString("Settings.TradeButton-Type", "RED_STAINED_GLASS_PANE"))
-                .setName(this.configuration.getString("Settings.TradeButton", "&eClick to accept the trade"))
-                .setLore(this.configuration.getStringList("Settings.TradeButton-Lore"))
-                .setItemModel(this.configuration.getString("Settings.TradeButton-Model.Namespace", ""), this.configuration.getString("Settings.TradeButton-Model.Key", ""))
+        final CommentedConfigurationNode section = this.configuration.node("Settings");
+
+        final ItemStack button = new ItemBuilder().setMaterial(section.node("TradeButton-Type").getString("RED_STAINED_GLASS_PANE"))
+                .setName(section.node("TradeButton").getString("&eClick to accept the trade"))
+                .setLore(StringUtils.getStringList(section.node("TradeButton-Lore")))
+                .setItemModel(section.node("TradeButton-Model", "Namespace").getString(""), section.node("TradeButton-Model", "Key").getString(""))
                 .addKey(DataKeys.trade_button.getNamespacedKey(), "").build(player);
 
         getInventory().setItem(0, button);
@@ -60,7 +63,7 @@ public class TinkererMenu extends InventoryBuilder {
 
     public static class TinkererListener implements Listener {
 
-        private final FileConfiguration configuration = FileKeys.TINKER.getConfiguration();
+        private final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration();
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -104,7 +107,7 @@ public class TinkererMenu extends InventoryBuilder {
                 int total = 0;
                 boolean toggle = false;
 
-                final Currency currency = Currency.getCurrency(this.configuration.getString("Settings.Currency", "Vault"));
+                final Currency currency = Currency.getCurrency(this.configuration.node("Settings", "Currency").getString("Vault"));
 
                 for (Map.Entry<Integer, Integer> slot : this.slots.entrySet()) {
                     ItemStack reward = inventory.getItem(slot.getValue());
@@ -129,7 +132,9 @@ public class TinkererMenu extends InventoryBuilder {
                     this.api.giveCurrency(player, currency, total);
                 }
 
-                if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
+                if (toggle) {
+                    Messages.tinker_sold_message.sendMessage(player);
+                }
 
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
 
@@ -184,13 +189,13 @@ public class TinkererMenu extends InventoryBuilder {
 
         private boolean isFirstEmpty(InventoryClickEvent event, Player player, ItemStack current, Inventory topInventory) {
             if (topInventory.firstEmpty() == -1) {
-                player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
+                Messages.tinker_inventory_full.sendMessage(player);
 
                 return true;
             }
 
             if (current.getAmount() > 1) {
-                player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+                Messages.need_to_unstack_item.sendMessage(player);
 
                 return true;
             }

@@ -7,7 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -187,12 +187,12 @@ public class CurrencyAPI {
      * Loads the currency if it is on the server.
      */
     public void loadCurrency() {
-        if (this.fusion.isPluginEnabled("Vault")) {
+        if (this.fusion.isModReady("Vault")) {
             this.starter.setVaultSupport(new VaultSupport());
 
             return;
         }
 
-        this.fusion.log(Level.WARNING, "No economy plugin was found, or the economy plugin did not enable. All economy based features will not work.");
+        this.fusion.log(Level.warn, "No economy plugin was found, or the economy plugin did not enable. All economy based features will not work.");
     }
 }

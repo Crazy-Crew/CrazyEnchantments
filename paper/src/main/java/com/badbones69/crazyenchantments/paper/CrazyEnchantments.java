@@ -5,8 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
-import com.badbones69.crazyenchantments.paper.api.enums.keys.FileKeys;
-import com.badbones69.crazyenchantments.paper.commands.*;
+import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.commands.api.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
@@ -26,13 +25,14 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
-import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 public class CrazyEnchantments extends JavaPlugin {
 
@@ -54,7 +54,7 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.platform = new CrazyPlatform();
+        this.platform = new CrazyPlatform(new FusionPaper(this), getDataPath());
         this.platform.init();
 
         this.starter = new Starter();
@@ -62,46 +62,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.starter.getCurrencyAPI().loadCurrency();
 
-        final FileConfiguration config = FileKeys.CONFIG.getConfiguration();
-        final FileConfiguration tinker = FileKeys.TINKER.getConfiguration();
+        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
 
-        boolean isSave = false;
-
-        if (!config.contains("Settings.CESuccessOverride")) {
-            config.set("Settings.CESuccessOverride", "-1");
-
-            isSave = true;
-        }
-
-        if (!config.contains("Settings.CESuccessOverride")) {
-            config.set("Settings.CEFailureOverride", "-1");
-
-            isSave = true;
-        }
-
-        if (!config.contains("Settings.Toggle-Metrics")) {
-            config.set("Settings.Toggle-Metrics", false);
-
-            isSave = true;
-        }
-
-        if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
-            config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
-
-            isSave = true;
-        }
-
-        if (!tinker.contains("Settings.Tinker-Version")) {
-            tinker.set("Settings.Tinker-Version", 1.0);
-
-            isSave = true;
-        }
-
-        if (isSave) {
-            FileKeys.CONFIG.save();
-        }
-
-        if (config.getBoolean("Settings.Toggle-Metrics", false)) new Metrics(this, 4494);
+        if (config.node("Settings", "Toggle-Metrics").getBoolean(false)) new Metrics(this, 4494);
 
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(new ShopListener(), this);
@@ -136,7 +99,7 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
         if (this.starter.getCrazyManager().isGkitzEnabled()) {
-            this.platform.getFusion().log(Level.WARNING, "G-Kitz Support is now enabled!");
+            this.platform.getFusion().log(Level.warn, "G-Kitz Support is now enabled!");
 
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
