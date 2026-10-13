@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.type
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.config.BrokenEnchantmentsMigrator;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.config.MissingOptionsMigrator;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Syntax;
@@ -29,6 +30,8 @@ public class CommandMigrate extends BaseEnchantCommand {
         }
 
         if (migrator == null) {
+            Messages.command_migrate_not_available.sendMessage(sender);
+
             return;
         }
 

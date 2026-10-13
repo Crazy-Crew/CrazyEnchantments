@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.config;
 
-import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
 import com.ryderbelserion.common.api.enums.Files;
@@ -8,6 +7,7 @@ import com.ryderbelserion.common.utils.ConfigUtils;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
+import java.util.List;
 
 public class MissingOptionsMigrator extends IMigrator {
 
@@ -47,6 +47,8 @@ public class MissingOptionsMigrator extends IMigrator {
 
         if (isSave) {
             Files.CONFIG.save();
+
+            sendMessage(List.of("<green>⤷ config.yml"), 1, 0, false);
         }
     }
 }

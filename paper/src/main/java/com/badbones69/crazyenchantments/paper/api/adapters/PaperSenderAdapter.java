@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.adapters;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.ryderbelserion.common.api.sender.ISenderAdapter;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.api.objects.FusionKey;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -93,11 +94,13 @@ public class PaperSenderAdapter extends ISenderAdapter<Component, Audience> {
 
         final Map<String, String> map = new HashMap<>(placeholders);
 
-        /*final String prefix = ColorUtils.getPrefix();
+        final String prefix = ConfigUtils.getPrefix();
 
         if (!prefix.isEmpty()) {
             map.putIfAbsent("{prefix}", prefix);
-        }*/
+            map.putIfAbsent("%prefix%", prefix);
+            map.putIfAbsent("%Prefix%", prefix);
+        }
 
         return this.fusion.asComponent(sender, value, map);
     }
@@ -120,11 +123,13 @@ public class PaperSenderAdapter extends ISenderAdapter<Component, Audience> {
 
         final Map<String, String> map = new HashMap<>(placeholders);
 
-        /*final String prefix = ColorUtils.getPrefix();
+        final String prefix = ConfigUtils.getPrefix();
 
         if (!prefix.isEmpty()) {
             map.putIfAbsent("{prefix}", prefix);
-        }*/
+            map.putIfAbsent("%prefix%", prefix);
+            map.putIfAbsent("%Prefix%", prefix);
+        }
 
         return this.fusion.replacePlaceholders(this.fusion.papi(sender, value), map);
     }

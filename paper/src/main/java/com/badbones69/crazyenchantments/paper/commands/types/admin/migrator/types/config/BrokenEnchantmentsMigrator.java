@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.typ
 
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.ryderbelserion.common.api.enums.Files;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces.IMigrator;
 import com.ryderbelserion.common.utils.ConfigUtils;
@@ -30,9 +29,7 @@ public class BrokenEnchantmentsMigrator extends IMigrator {
             if (!config.hasChild(enchantment.getName())) brokenEnchantments.add(enchantment);
         }
 
-        this.sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
-
-        for (CEnchantments enchantment : brokenEnchantments) {
+        for (final CEnchantments enchantment : brokenEnchantments) {
             final String name = enchantment.getName();
 
             final CommentedConfigurationNode section = enchantments.node(name);
@@ -54,5 +51,7 @@ public class BrokenEnchantmentsMigrator extends IMigrator {
 
             Files.ENCHANTMENTS.save();
         }
+
+        sendMessage(List.of("<green>⤷ Enchantments.yml"), brokenEnchantments.size(), 0, false);
     }
 }

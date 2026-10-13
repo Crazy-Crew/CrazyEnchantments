@@ -7,6 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TinkerMigrator extends IMigrator {
 
     public TinkerMigrator(@NonNull final CommandSender sender) {
@@ -15,6 +18,9 @@ public class TinkerMigrator extends IMigrator {
 
     @Override
     public void init() {
+        final List<String> failed = new ArrayList<>();
+        final List<String> success = new ArrayList<>();
+
         final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration().node("Tinker");
 
         if (configuration.hasChild("Vanilla-Enchantments")) {
@@ -31,6 +37,10 @@ public class TinkerMigrator extends IMigrator {
                     }
                 }
             });
+
+            success.add("<green>⤷ Tinker.yml");
+        } else {
+            failed.add("<red>⤷ Tinker.yml");
         }
 
         if (configuration.hasChild("Crazy-Enchantments")) {
@@ -65,6 +75,24 @@ public class TinkerMigrator extends IMigrator {
             });
 
             Files.TINKER.save();
+
+            if (failed.isEmpty()) {
+                success.add("<green>⤷ Tinker.yml");
+            }
+        } {
+            if (success.isEmpty()) {
+                failed.add("<red>⤷ Tinker.yml");
+            }
         }
+
+        final int convertedFiles = success.size();
+        final int failedFiles = failed.size();
+
+        final List<String> files = new ArrayList<>(failedFiles + convertedFiles);
+
+        files.addAll(failed);
+        files.addAll(success);
+
+        sendMessage(files, convertedFiles, failedFiles, false);
     }
 }

@@ -21,6 +21,25 @@ import static com.ryderbelserion.common.CrazyEnchantmentsPlugin.namespace;
 @NullMarked
 public enum Messages {
 
+    command_migrate_error("command.migrate.error", "{prefix}<red>We could not migrate <green>{file} <red>using <green>{type} <red>migration for <green>{reason}.", "command", "migrate", "error"),
+    command_migrate_not_available("command.migrate.not.available", "{prefix}<green>This migration type is not available.", "migrate", "not-available"),
+    command_migrate_simple_success("command.migrate.simple.success", "{prefix}<green>Successfully migrated <green>{file} <red> using <green>{type}!", "command", "migrate", "success"),
+    command_migrate_detailed_success("command.migrate.detailed.success", List.of(
+            "<bold><gold>━━━━━━━━━━━━━━━━━━━ Migration Stats ━━━━━━━━━━━━━━━━━━━</gold></bold>",
+            "<dark_gray>»</dark_gray> <green>Successful Conversions: ",
+            " ⤷ {succeeded_amount}</green>",
+            "<dark_gray>»</dark_gray> <red>Failed Conversions: ",
+            " ⤷ {failed_amount}</red>",
+            "",
+            "<red>Conversion Time: <yellow>{time}",
+            "<red>Conversion Type: <yellow>{type}",
+            "",
+            "<red>Converted Files:",
+            "{files}",
+            "",
+            "<bold><gold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gold></bold>"
+    ), "command", "migrate", "detailed-success"),
+
     correct_usage("correct.usage", "<red>The correct usage for this command is <yellow>%usage%.", "Correct-Usage"),
 
     must_be_console_sender("must.be.console.sender", "<red>You must be console sender to run this command.", "Must-Be-Console-Sender"),
@@ -207,9 +226,9 @@ public enum Messages {
                 lines.add(AdvUtils.convert(line, true));
             }
 
-            ConfigUtils.setNode(configuration, List.class, lines);
+            ConfigUtils.setNode(configuration, List.class, lines, this.path);
         } else {
-            ConfigUtils.setNode(configuration, String.class, AdvUtils.convert(value, true));
+            ConfigUtils.setNode(configuration, String.class, AdvUtils.convert(value, true), this.path);
         }
 
         addKey(registry, configuration, id);

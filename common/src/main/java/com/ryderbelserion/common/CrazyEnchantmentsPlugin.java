@@ -41,7 +41,7 @@ public abstract class CrazyEnchantmentsPlugin<C, S, F extends FusionKyori<S>> {
                 this.fileManager.getYamlFile(path).ifPresentOrElse(customFile -> {
                     final String fileName = customFile.getFileName();
 
-                    final FusionKey key = FusionKey.key(namespace, fileName.equalsIgnoreCase("messages.yml") ? "default" : fileName.toLowerCase());
+                    final FusionKey key = FusionKey.key(namespace, fileName.equalsIgnoreCase("Messages.yml") ? "default" : fileName.toLowerCase());
 
                     final CommentedConfigurationNode configuration = customFile.getConfiguration();
 

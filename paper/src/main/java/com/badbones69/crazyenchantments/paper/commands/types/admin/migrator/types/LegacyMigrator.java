@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ryderbelserion.common.CrazyEnchantmentsPlugin.namespace;
@@ -24,23 +25,34 @@ public class LegacyMigrator extends IMigrator {
 
     @Override
     public void init() {
+        final List<String> failed = new ArrayList<>();
+        final List<String> success = new ArrayList<>();
+
         final List<Path> paths = this.fileManager.getFilesByPath(this.path.resolve("locale"), ".yml");
 
-        paths.add(this.path.resolve("messages.yml")); // add to list
+        paths.add(this.path.resolve("Messages.yml")); // add to list
 
         this.messageRegistry.init(action -> {
             for (final Path path : paths) {
                 this.fileManager.getYamlFile(path).ifPresentOrElse(customFile -> {
                     final String fileName = customFile.getFileName();
 
-                    final FusionKey key = FusionKey.key(namespace, fileName.equalsIgnoreCase("messages.yml") ? "default" : fileName.toLowerCase());
+                    final FusionKey key = FusionKey.key(namespace, fileName.equalsIgnoreCase("Messages.yml") ? "default" : fileName.toLowerCase());
 
                     final CommentedConfigurationNode configuration = customFile.getConfiguration();
 
                     for (final Messages message : Messages.values()) {
                         message.migrateKey(action, configuration, key);
                     }
-                }, () -> this.fusion.log(Level.info, "Path %s not found in cache.".formatted(path)));
+
+                    customFile.save();
+
+                    success.add("<green>⤷ " + fileName);
+                }, () -> {
+                    this.fusion.log(Level.info, "Path %s not found in cache.".formatted(path));
+
+                    failed.add("<red>⤷ " + path);
+                });
             }
         });
 
@@ -55,6 +67,20 @@ public class LegacyMigrator extends IMigrator {
             );
 
             Files.CONFIG.save();
+
+            success.add("<green>⤷ config.yml");
+        } else {
+            failed.add("<red>⤷ config.yml");
         }
+
+        final int convertedFiles = success.size();
+        final int failedFiles = failed.size();
+
+        final List<String> files = new ArrayList<>(failedFiles + convertedFiles);
+
+        files.addAll(failed);
+        files.addAll(success);
+
+        sendMessage(files, convertedFiles, failedFiles, true);
     }
 }

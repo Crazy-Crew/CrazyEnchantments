@@ -1,4 +1,30 @@
 Messages:
+  # All messages related to commands.
+  command:
+    migrate:
+      # A list of available placeholders: {file}, {type}, {reason}
+      error: "{prefix}<red>We could not migrate <green>{file} <red>using <green>{type} <red>migration for <green>{reason}."
+      # A list of available placeholders: {prefix}
+      not-available: "{prefix}<green>This migration type is not available."
+      # A list of available placeholders: {prefix}, {file}, {type}
+      success: "{prefix}<green>Successfully migrated <green>{file} <red> using <green>{type}!"
+      # A list of available placeholders: {succeeded_amount}, {failed_amount}, {time}, {type}, {files}
+      #
+      # {files} will output multiple crates if migrating from another plugin
+      detailed-success:
+        - "<bold><gold>━━━━━━━━━━━━━━━━━━━ Migration Stats ━━━━━━━━━━━━━━━━━━━</gold></bold>"
+        - "<dark_gray>»</dark_gray> <green>Successful Conversions: "
+        - " ⤷ {succeeded_amount}</green>"
+        - "<dark_gray>»</dark_gray> <red>Failed Conversions: "
+        - " ⤷ {failed_amount}</red>"
+        - ""
+        - "<red>Conversion Time: <yellow>{time}"
+        - "<red>Conversion Type: <yellow>{type}"
+        - ""
+        - "<red>Converted Files:"
+        - "{files}"
+        - ""
+        - "<bold><gold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gold></bold>"
   Config-Reload: '<gray>You have reloaded the Config.yml'
   Need-To-UnStack-Item: '<red>You need to unstack that item before you can use it.'
   Not-An-Enchantment: '<red>That is not an enchantment.'
