@@ -49,6 +49,15 @@ val releaseType = rootProject.ext.get("release_type").toString()
 val color = rootProject.property("${releaseType.lowercase()}_color").toString()
 val isRelease = releaseType.equals("release", true)
 
+val lines = rootProject.ext.get("mc_changelog").toString()
+val result: String = if (lines.length > 1024) {
+    listOf(
+        "Click the download links above!"
+    ).convertList()
+} else {
+    lines
+}
+
 feather {
     targetDirectory = rootProject.rootDir.toPath()
 
@@ -103,7 +112,7 @@ feather {
 
                         field(
                             ":hammer: Changelog",
-                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                            result.updateMarkdown()
                         )
                     }
                 }
