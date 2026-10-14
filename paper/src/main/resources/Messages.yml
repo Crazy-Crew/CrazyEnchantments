@@ -25,6 +25,8 @@ Messages:
         - "{files}"
         - ""
         - "<bold><gold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gold></bold>"
+  category:
+    no-valid-enchantments: "{prefix}<red>There is no enchantments included in {category}."
   Config-Reload: '{prefix}<gray>You have reloaded the Config.yml'
   Need-To-UnStack-Item: '{prefix}<red>You need to unstack that item before you can use it.'
   Not-An-Enchantment: '{prefix}<red>That is not an enchantment.'

@@ -72,7 +72,7 @@ public class LostBookController implements Listener {
         final CEBook book = this.crazyManager.getRandomEnchantmentBook(category);
 
         if (book == null) {
-            //player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it.")); //todo() custom message
+            Messages.no_enchantments_category.sendMessage(player, Map.of("{category}", category.getName()));
 
             return;
         }

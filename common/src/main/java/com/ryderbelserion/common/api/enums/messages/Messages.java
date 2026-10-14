@@ -80,6 +80,7 @@ public enum Messages {
 
     config_reload("config.reload", "{prefix}<gray>You have reloaded the Config.yml", "Config-Reload"),
     not_an_enchantment("not.an.enchantment", "{prefix}<red>That is not an enchantment.", "Not-An-Enchantment"),
+    no_enchantments_category("category.no.valid.enchantments", "{prefix}<red>There is no enchantments included in {category}.", "category", "no-valid-enchantments"),
     hit_enchantment_max("hit.enchantment.max", List.of(
             "{prefix}<#ff0000>That item already has the maximum amount of enchantments that you can add to it.",
             "{prefix}<#880808>Use <dark_green>/ce limit <#880808>to check the current limit on the item.",

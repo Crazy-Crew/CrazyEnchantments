@@ -52,6 +52,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class CrazyManager {
@@ -189,10 +191,6 @@ public class CrazyManager {
         if (heads.hasChild("HeadOdds")) {
             final CommentedConfigurationNode section = heads.node("HeadOdds");
 
-            section.childrenList().forEach(child -> {
-
-            });
-
             section.childrenMap().forEach((object, child) -> {
                 final double amount = child.node(object).getDouble(0.0);
 
@@ -224,16 +222,15 @@ public class CrazyManager {
         this.enchantmentBookSettings.populateMaps();
 
         for (CEnchantments cEnchantment : CEnchantments.values()) {
-            String name = cEnchantment.getName();
-            String path = "Enchantments." + name;
+            final String name = cEnchantment.getName();
 
-            if (!enchants.hasChild(path)) {
+            if (!enchants.hasChild("Enchantments", name)) {
                 continue;
             }
 
             final CEnchantment enchantment = new CEnchantment(name);
 
-            final CommentedConfigurationNode section = enchants.node(path);
+            final CommentedConfigurationNode section = enchants.node("Enchantments", name);
 
             final String displayName = section.node("Name").getString("");
             final boolean isEnabled = section.node("Enabled").getBoolean(true);
@@ -555,15 +552,18 @@ public class CrazyManager {
         return this.players.values().stream().toList();
     }
     
-    public CEBook getRandomEnchantmentBook(Category category) {
+    public CEBook getRandomEnchantmentBook(@NonNull final Category category) {
         try {
-            List<CEnchantment> enchantments = category.getEnabledEnchantments();
-            CEnchantment enchantment = enchantments.get(new Random().nextInt(enchantments.size()));
+            final List<CEnchantment> enchantments = category.getEnabledEnchantments();
+
+            final CEnchantment enchantment = enchantments.get(ThreadLocalRandom.current().nextInt(enchantments.size()));
 
             return new CEBook(enchantment, randomLevel(enchantment, category), 1, category);
-        } catch (Exception e) {
-            this.plugin.getLogger().info("The category " + category.getName() + " has no enchantments."
-            + " Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml.");
+        } catch (final Exception exception) {
+            this.fusion.log(Level.warn,
+                    "The category %s has no enchantments. Please add enchantments to the category in the Enchantments.yml. " +
+                            "If you do not wish to have the category feel free to delete it from the Config.yml.", category.getName());
+
             return null;
         }
     }

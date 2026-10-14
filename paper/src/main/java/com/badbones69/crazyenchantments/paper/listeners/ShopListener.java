@@ -15,9 +15,9 @@ import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.ryderbelserion.common.api.enums.messages.Messages;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,6 +31,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.util.Map;
 
 public class ShopListener implements Listener {
 
@@ -97,7 +98,7 @@ public class ShopListener implements Listener {
                     }
                 }
 
-                CEBook book = crazyManager.getRandomEnchantmentBook(category);
+                final CEBook book = this.crazyManager.getRandomEnchantmentBook(category);
 
                 if (book != null) {
                     this.crazyManager.getCEPlayer(player).ifPresent(cePlayer -> {
@@ -108,7 +109,7 @@ public class ShopListener implements Listener {
                         player.getInventory().addItem(book.buildBook(player));
                     });
                 } else {
-                    //player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it.")); //todo() add message
+                    Messages.no_enchantments_category.sendMessage(player, Map.of("{category}", category.getName()));
                 }
 
                 return;

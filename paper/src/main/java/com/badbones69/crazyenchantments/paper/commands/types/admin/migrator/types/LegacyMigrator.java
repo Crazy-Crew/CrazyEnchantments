@@ -62,7 +62,7 @@ public class LegacyMigrator extends IMigrator {
             ConfigUtils.setNode(
                     configuration,
                     String.class,
-                    AdvUtils.convert(configuration.node("Settings", "Prefix").getString("<dark_gray>[<green>CrazyEnchantments<dark_gray>]: ")),
+                    AdvUtils.convert(configuration.node("Settings", "Prefix").getString("<dark_gray>[<green>CrazyEnchantments<dark_gray>]: "), true),
                     "Settings", "Prefix"
             );
 

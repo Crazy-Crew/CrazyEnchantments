@@ -292,7 +292,7 @@ public class EnchantmentBookSettings {
      */
     @Nullable
     public Category getCategory(String name) {
-        for (Category category : this.categories) {
+        for (final Category category : this.categories) {
             if (category.getName().equalsIgnoreCase(name)) return category;
         }
 
@@ -301,6 +301,7 @@ public class EnchantmentBookSettings {
 
     private List<Color> getColors(String string) {
         List<Color> colors = new ArrayList<>();
+
         ColorUtils.color(colors, string);
 
         return colors;
