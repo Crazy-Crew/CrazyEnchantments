@@ -223,12 +223,12 @@ public enum Messages {
             final List<String> lines = new ArrayList<>();
 
             for (final String line : value.split("\n")) {
-                lines.add(AdvUtils.convert(line, true));
+                lines.add(AdvUtils.convert(line.startsWith("{prefix}") ? line : "{prefix}%s".formatted(line), true));
             }
 
             ConfigUtils.setNode(configuration, List.class, lines, this.path);
         } else {
-            ConfigUtils.setNode(configuration, String.class, AdvUtils.convert(value, true), this.path);
+            ConfigUtils.setNode(configuration, String.class, AdvUtils.convert(value.startsWith("{prefix}") ? value : "{prefix}%s".formatted(value), true), this.path);
         }
 
         addKey(registry, configuration, id);
