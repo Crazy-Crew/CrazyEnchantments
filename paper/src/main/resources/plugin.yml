@@ -24,7 +24,9 @@ softdepend:
   - Lands
   - StackMob
   - Vault
+  - ItemsAdder
   - Oraxen
+  - Nexo
   - MCMMO
   - YardWatch
 
