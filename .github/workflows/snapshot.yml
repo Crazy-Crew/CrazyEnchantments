@@ -4,6 +4,20 @@ on:
   workflow_dispatch:
 
   push:
+    paths-ignore:
+      - 'gradle/wrapper/**'
+      - '.github/**'
+      - '.idea/icon.png'
+
+      - 'changelog.md'
+      - 'README.md'
+      - 'LICENSE'
+
+      - '.gitignore'
+
+      - 'gradlew.bat'
+      - 'gradlew'
+
     branches:
       - main
 
