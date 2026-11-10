@@ -1,8 +1,7 @@
 <center><div align="center">
 
-![CrazyEnchantments](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/crazyenchantments/banner/webp/banner.webp)
+![CrazyEnchantments](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/repositories/crazyenchantments/banner/webp/banner.webp)
 
-[![][jenkins-shield]][jenkins-url]
 [![][contributors-shield]][contributors-url]
 [![][forks-shield]][forks-url]
 [![][stars-shield]][stars-url]
@@ -22,7 +21,7 @@
 [![paper software](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/supported/paper_vector.svg)](https://papermc.io/)
 [![purpur software](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/supported/purpur_vector.svg)](https://purpurmc.org/)
 
-[![Partnered with ApexHosting](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/apex-banner-transparent.webp)](https://billing.apexminecrafthosting.com/aff.php?aff=5511)
+[![Partnered with ApexHosting](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/partners/apex-banner-transparent.webp)](https://billing.apexminecrafthosting.com/aff.php?aff=5511)
 
 <big>**Initial Plugin Setup**</big><br>
 CrazyEnchantments as first install will come with `config.yml`, `Gkitz.yml`, `HeadMap.yml`, `Messages.yml`, `Tinker.yml`, `Enchantments.yml`, `Enchantment-Types.yml`
@@ -74,9 +73,6 @@ Send any console errors or files you have through https://mclo.gs/ - (We don't o
 
 ![CrazyEnchantments Statistics](https://bstats.org/signatures/bukkit/CrazyEnchantments.svg)
 </center>
-
-[jenkins-shield]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fci.crazycrew.us%2Fjob%2FCrazyEnchantments%2F&style=flat&logo=jenkins
-[jenkins-url]: https://ci.crazycrew.us/job/CrazyEnchantments/
 
 [contributors-shield]: https://img.shields.io/github/contributors-anon/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [contributors-url]: https://github.com/Crazy-Crew/CrazyEnchantments/graphs/contributors
