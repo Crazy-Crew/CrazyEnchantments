@@ -3,6 +3,11 @@ name: Debug Build
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
+    if: github.repository_owner == 'Crazy-Crew'
+
     uses: Crazy-Crew/.github/.github/workflows/debug.yml@main

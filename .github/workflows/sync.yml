@@ -7,8 +7,13 @@ on:
     paths:
       - 'README.md'   # Triggers for changes to this specific file
 
+permissions:
+  contents: write
+
 jobs:
   sync:
+    if: github.repository_owner == 'Crazy-Crew'
+
     uses: Crazy-Crew/.github/.github/workflows/sync.yml@main
 
     secrets:
