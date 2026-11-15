@@ -3,9 +3,6 @@ name: Notify Release
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
   build:
     if: github.repository_owner == 'Crazy-Crew'
@@ -14,7 +11,6 @@ jobs:
 
     with:
       status: "release"
-      branch: main
 
     secrets:
       webhook: ${{ secrets.BUILD_WEBHOOK }}
