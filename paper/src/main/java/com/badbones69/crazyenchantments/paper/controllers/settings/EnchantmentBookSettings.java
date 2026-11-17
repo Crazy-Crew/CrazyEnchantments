@@ -268,7 +268,10 @@ public class EnchantmentBookSettings {
                     new ItemBuilder()
                             .setName(category.node("Name").getString("&cError getting name for %s".formatted(id)))
                             .setMaterial(category.node("Item").getString(ColorUtils.getRandomPaneColor().getName()))
-                            .setItemModel(category.node("Model", "Namespace").getString(""), category.node("Model", "Key").getString("")),
+                            .setItemModel(category.node("Model", "Namespace").getString(""), category.node("Model", "Key").getString(""))
+                            .setPlayerName(category.node("Player").getString(""))
+                            .setLore(StringUtils.getStringList(category.node("Lore")))
+                            .setGlow(category.node("Glowing").getBoolean(false)),
                     category.node("Cost").getInt(100),
                     Currency.getCurrency(category.node("Currency").getString("XP_TOTAL")),
                     category.node("Rarity").getInt(),

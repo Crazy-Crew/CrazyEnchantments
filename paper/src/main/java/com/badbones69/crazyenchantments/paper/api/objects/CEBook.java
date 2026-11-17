@@ -235,7 +235,7 @@ public class CEBook {
 
         final CommentedConfigurationNode configuration = Files.CONFIG.getConfiguration();
 
-        for (final String bookLine : StringUtils.getStringList(configuration.node("Settings.EnchantmentBookLore"))) {
+        for (final String bookLine : StringUtils.getStringList(configuration.node("Settings", "EnchantmentBookLore"))) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : this.enchantment.getInfoDescription()) {
                     lore.add(ColorUtils.color(enchantmentLine));
