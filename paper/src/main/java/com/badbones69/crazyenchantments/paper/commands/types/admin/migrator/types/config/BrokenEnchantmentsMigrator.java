@@ -26,7 +26,7 @@ public class BrokenEnchantmentsMigrator extends IMigrator {
         final CommentedConfigurationNode enchantments = config.node("Enchantments");
 
         for (final CEnchantments enchantment : CEnchantments.values()) {
-            if (!config.hasChild(enchantment.getName())) brokenEnchantments.add(enchantment);
+            if (!enchantments.hasChild(enchantment.getName())) brokenEnchantments.add(enchantment);
         }
 
         for (final CEnchantments enchantment : brokenEnchantments) {
@@ -41,7 +41,7 @@ public class BrokenEnchantmentsMigrator extends IMigrator {
             ConfigUtils.setNode(section, "MaxPower", Integer.class, 1);
             ConfigUtils.setNode(section, "Enchantment-Type", String.class, enchantment.getType().getName());
             ConfigUtils.setNode(section, "Info.Name", String.class, "&e&l%s &7(&bI&7)".formatted(name));
-            ConfigUtils.setNode(section, "Info.Description", String.class, enchantment.getDescription());
+            ConfigUtils.setNode(section, "Info.Description", List.class, enchantment.getDescription());
 
             final List<String> categories = new ArrayList<>();
 
