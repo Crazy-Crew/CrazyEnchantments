@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.support;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.constants.Support;
+import com.badbones69.crazyenchantments.paper.support.claim.towny.TownyImpl;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.support.api.interfaces.VanishSupport;
 import com.badbones69.crazyenchantments.paper.support.crops.VanillaCropSupport;
@@ -72,7 +73,7 @@ public class SupportUtils {
                 new PlotSquaredImpl(),
 
                 // claim plugins
-                //new TownyImpl(),
+                new TownyImpl(),
                 new LandsImpl(),
 
                 // skyblock plugins
