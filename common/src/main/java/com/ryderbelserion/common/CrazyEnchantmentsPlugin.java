@@ -62,6 +62,8 @@ public abstract class CrazyEnchantmentsPlugin<C, S, F extends FusionKyori<S>> {
     }
 
     public void reload() {
+        this.fusion.reload();
+
         this.fileManager.refresh(false);
     }
 
