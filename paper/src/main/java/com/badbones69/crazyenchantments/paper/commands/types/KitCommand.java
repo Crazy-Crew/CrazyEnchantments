@@ -33,7 +33,13 @@ public class KitCommand {
     @Permission(value = "crazyenchantments.gkitz", def = PermissionDefault.TRUE)
     @Syntax("/gkitz")
     public void execute(final Player player) {
-        final @NotNull CommentedConfigurationNode gkitz = Files.GKITZ.getConfiguration();
+        if (!this.crazyManager.isGkitzEnabled()) {
+            Messages.gkit_not_enabled.sendMessage(player);
+
+            return;
+        }
+
+        final CommentedConfigurationNode gkitz = Files.GKITZ.getConfiguration();
 
         player.openInventory(new KitsMenu(player, gkitz
                 .node("Settings", "GUI-Size")
@@ -46,6 +52,12 @@ public class KitCommand {
     @Permission(value = "crazyenchantments.gkitz.reset", def = PermissionDefault.OP)
     @Syntax("/gkitz reset <kit> [player]")
     public void reset(final CommandSender sender, @Suggestion("kits") final String kit, final Player player) {
+        if (!this.crazyManager.isGkitzEnabled()) {
+            Messages.gkit_not_enabled.sendMessage(sender);
+
+            return;
+        }
+
         Optional.ofNullable(this.crazyManager.getGKitFromName(kit)).ifPresentOrElse(gkit -> {
             this.crazyManager.getCEPlayer(player.getUniqueId()).ifPresent(cePlayer -> {
                 cePlayer.removeCoolDown(gkit);
@@ -72,6 +84,12 @@ public class KitCommand {
     @Permission(value = "crazyenchantments.gkitz.use", def = PermissionDefault.OP)
     @Syntax("/gkitz give <kit> [player]")
     public void give(final CommandSender sender, @Suggestion("kits") final String kit, @dev.triumphteam.cmd.core.annotations.Optional final Player target) {
+        if (!this.crazyManager.isGkitzEnabled()) {
+            Messages.gkit_not_enabled.sendMessage(sender);
+
+            return;
+        }
+
         final Player safePlayer = target != null ? target : sender instanceof Player player ? player : null;
 
         if (safePlayer == null) {
