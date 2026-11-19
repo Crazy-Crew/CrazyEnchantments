@@ -2,10 +2,15 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.adapters.PaperSenderAdapter;
+import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
+import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.common.CrazyEnchantmentsPlugin;
 import com.ryderbelserion.fusion.api.enums.Level;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -13,10 +18,14 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -33,6 +42,8 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
         super(fusion, path);
     }
 
+    private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
+
     @Override
     public void init() {
         super.init();
@@ -48,12 +59,16 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
         this.support = new SupportUtils();
         this.support.init();
 
+        loadShopOptions(Files.CONFIG.getConfiguration()); // load shop options
+
         loadExamples();
     }
 
     @Override
     public void reload() {
         super.reload();
+
+        loadShopOptions(Files.CONFIG.getConfiguration()); // load shop options
 
         loadExamples();
     }
@@ -99,6 +114,65 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
                 "Messages.yml",
                 "Tinker.yml"
         ).forEach(file -> this.fileManager.extractFile(file, examples.resolve(file)));
+    }
+
+    public void loadShopOptions(final CommentedConfigurationNode config) {
+        this.shopOptions.clear();
+
+        final CommentedConfigurationNode section = config.node("Settings");
+
+        if (section == null) {
+            this.fusion.log(Level.warn, "Failed to find the Settings configuration section in config.yml");
+
+            return;
+        }
+
+        for (final ShopOption option : ShopOption.values()) {
+            final String path = option.getPath();
+
+            CommentedConfigurationNode itemNode = section.node(path);
+
+            if (itemNode == null) {
+                this.fusion.log(Level.warn, "Failed to find %s in the config.yml", path);
+
+                continue;
+            }
+
+            if (option == ShopOption.SUCCESS_DUST || option == ShopOption.DESTROY_DUST) {
+                final CommentedConfigurationNode dust = section.node("Dust", path);
+
+                if (dust != null) {
+                    itemNode = dust;
+                }
+            }
+
+            final CommentedConfigurationNode costNode = section.node("Costs", path);
+
+            addShopOption(option, itemNode, costNode, option.getNamePath(), option.getLorePath());
+        }
+    }
+
+    public void addShopOption(final ShopOption shopOption, final CommentedConfigurationNode itemNode, final CommentedConfigurationNode costNode, final String namePath, final String lorePath) {
+        try {
+            final CEOption option = new CEOption(
+                    new ItemBuilder().setMaterial(itemNode.node("Item").getString("CHEST")).setName(itemNode.node(namePath).getString(shopOption.getDefaultName()))
+                            .setLore(StringUtils.getStringList(itemNode.node(lorePath), shopOption.getDefaultLore()))
+                            .setPlayerName(itemNode.node("Player").getString(""))
+                            .setGlow(itemNode.node("Glowing").getBoolean(false)),
+                    itemNode.node("Slot").getInt(-1)-1,
+                    itemNode.node("InGUI").getBoolean(true),
+                    costNode.node("Cost").getInt(100),
+                    Currency.getCurrency(costNode.node("Currency").getString("XP_LEVEL"))
+            );
+
+            this.shopOptions.put(shopOption, option);
+        } catch (final Exception exception) {
+            this.fusion.log(Level.warn, "The option %s has failed to load.", shopOption.getPath(), exception);
+        }
+    }
+
+    public @NonNull final Map<ShopOption, CEOption> getShopOptions() {
+        return Collections.unmodifiableMap(this.shopOptions);
     }
 
     public @NonNull final Optional<Player> getPlayer(@NonNull final String name) {
