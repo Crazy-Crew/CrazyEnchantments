@@ -5,6 +5,8 @@ import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
+import net.kyori.adventure.audience.Audience;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
@@ -99,8 +101,12 @@ public enum ShopOption {
 
     private final Map<ShopOption, CEOption> shopOptions = this.platform.getShopOptions();
 
+    public ItemStack getItem(final Audience player) {
+        return getItemBuilder().build(player);
+    }
+
     public ItemStack getItem() {
-        return getItemBuilder().build();
+        return getItem(Audience.empty());
     }
 
     public ItemBuilder getItemBuilder() {
