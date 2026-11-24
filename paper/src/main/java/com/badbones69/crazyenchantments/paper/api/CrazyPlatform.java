@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.support.SupportUtils;
 import com.ryderbelserion.common.CrazyEnchantmentsPlugin;
@@ -16,7 +17,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.io.IOException;
@@ -31,10 +31,11 @@ import java.util.stream.Stream;
 
 public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, FusionPaper> {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Server server = this.plugin.getServer();
 
+    private EnchantmentBookSettings bookSettings;
     private PaperSenderAdapter senderAdapter;
     private SupportUtils support;
 
@@ -42,7 +43,9 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
         super(fusion, path);
     }
 
-    private final Map<ShopOption, CEOption> shopOptions = new HashMap<>();
+    private final Map<String, CEOption> shopOptions = new HashMap<>();
+
+    private CrazyItems crazyItems;
 
     @Override
     public void init() {
@@ -59,7 +62,13 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
         this.support = new SupportUtils();
         this.support.init();
 
+        this.bookSettings = new EnchantmentBookSettings();
+        this.bookSettings.load();
+
         loadShopOptions(Files.CONFIG.getConfiguration()); // load shop options
+
+        this.crazyItems = new CrazyItems();
+        this.crazyItems.init();
 
         loadExamples();
     }
@@ -117,7 +126,7 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
     }
 
     public void loadShopOptions(final CommentedConfigurationNode config) {
-        this.shopOptions.clear();
+        //this.shopOptions.clear();
 
         final CommentedConfigurationNode section = config.node("Settings");
 
@@ -165,18 +174,26 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
                     Currency.getCurrency(costNode.node("Currency").getString("XP_LEVEL"))
             );
 
-            this.shopOptions.put(shopOption, option);
+            this.shopOptions.put(shopOption.getPath(), option);
         } catch (final Exception exception) {
-            this.fusion.log(Level.warn, "The option %s has failed to load.", shopOption.getPath(), exception);
+            this.fusion.log(Level.warn, "The option %s has failed to load for reason %s.", shopOption.getPath(), exception.getMessage());
         }
     }
 
-    public @NonNull final Map<ShopOption, CEOption> getShopOptions() {
+    public @NonNull final Optional<CEOption> getOption(@NonNull final String option) {
+        return Optional.of(this.shopOptions.get(option));
+    }
+
+    public @NonNull final Map<String, CEOption> getShopOptions() {
         return Collections.unmodifiableMap(this.shopOptions);
     }
 
     public @NonNull final Optional<Player> getPlayer(@NonNull final String name) {
         return Optional.ofNullable(this.server.getPlayer(name));
+    }
+
+    public @NonNull final EnchantmentBookSettings getBookSettings() {
+        return this.bookSettings;
     }
 
     public @NonNull final SupportUtils getSupport() {
@@ -186,5 +203,9 @@ public class CrazyPlatform extends CrazyEnchantmentsPlugin<Component, Audience, 
     @Override
     public @NonNull final FusionPaper getFusion() {
         return this.fusion;
+    }
+
+    public @NonNull final CrazyItems getCrazyItems() {
+        return this.crazyItems;
     }
 }

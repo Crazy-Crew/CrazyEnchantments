@@ -2,13 +2,15 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.audience.Audience;
@@ -19,7 +21,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
@@ -29,17 +30,15 @@ import java.util.Map;
 
 public class TinkererManager {
 
-    @NotNull
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private static final Starter starter = plugin.getStarter();
+    private static final CrazyPlatform platform = plugin.getPlatform();
 
-    @NotNull
-    private static final Methods methods = starter.getMethods();
+    private static final EnchantmentBookSettings bookSettings = platform.getBookSettings();
 
-    @NotNull
-    private static final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
+    private static final CrazyManager crazyManager = plugin.getCrazyManager();
+
+    private static final CurrencyAPI currencyAPI = crazyManager.getCurrencyAPI();
 
     public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand, CommentedConfigurationNode configuration) {
         PlayerInventory inventory = player.getInventory();
@@ -57,9 +56,9 @@ public class TinkererManager {
         event.setCancelled(true);
 
         if (mainHand) {
-            inventory.setItemInMainHand(methods.removeItem(item));
+            inventory.setItemInMainHand(Methods.removeItem(item));
         } else {
-            inventory.setItemInOffHand(methods.removeItem(item));
+            inventory.setItemInOffHand(Methods.removeItem(item));
         }
 
         final String currency = configuration.node("Settings", "Currency").getString("XP_TOTAL");
@@ -100,7 +99,7 @@ public class TinkererManager {
         final CommentedConfigurationNode crazySection = config.node("Tinker", "Crazy-Enchantments");
         final CommentedConfigurationNode vanillaSection = config.node("Tinker", "Vanilla-Enchantments");
 
-        Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
+        Map<CEnchantment, Integer> ceEnchants = bookSettings.getEnchantments(item);
 
         if (!ceEnchants.isEmpty()) { // CrazyEnchantments
             for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {

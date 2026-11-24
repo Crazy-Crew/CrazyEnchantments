@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
@@ -16,6 +17,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.google.common.collect.Lists;
+import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -39,17 +41,105 @@ import java.util.Map;
 
 public class EnchantmentBookSettings {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
+    private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
+    private final List<Category> categories = Lists.newArrayList();
     private ItemBuilder enchantmentBook;
 
-    private final List<Category> categories = Lists.newArrayList();
+    public void load() {
+        this.registeredEnchantments.clear();
+        this.categories.clear();
 
-    private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
+        setEnchantmentBook(new ItemBuilder().setMaterial(ConfigUtils.getNode(Files.CONFIG.getConfiguration(), "Settings.Enchantment-Book-Item").getString("BOOK")));
+
+        populateMaps();
+    }
+
+    /**
+     * Get a CEnchantment enchantment from the name.
+     * @param enchant The name of the enchantment.
+     * @return The enchantment as a CEnchantment but if not found will be null.
+     */
+    public CEnchantment getEnchantmentFromName(@NotNull final String enchant) {
+        CEnchantment value = null;
+
+        for (final CEnchantment enchantment : getRegisteredEnchantments()) {
+            if (enchantment.getName().equalsIgnoreCase(enchant)) {
+                value = enchantment;
+
+                break;
+            }
+        }
+
+        return value;
+    }
+
+    /**
+     * Register a new enchantment into the plugin.
+     * @param enchantment The enchantment you wish to register.
+     */
+    public void registerEnchantment(CEnchantment enchantment) {
+        getRegisteredEnchantments().add(enchantment);
+    }
+
+    /**
+     * Unregister an enchantment that is registered into plugin.
+     * @param enchantment The enchantment you wish to unregister.
+     */
+    public void unregisterEnchantment(CEnchantment enchantment) {
+        getRegisteredEnchantments().remove(enchantment);
+    }
+
+    public void addEnchantment(final ItemStack item, final CEnchantment enchantment, final int level) {
+        final Map<CEnchantment, Integer> enchantments = new HashMap<>();
+
+        enchantments.put(enchantment, level);
+
+        addEnchantments(item, enchantments);
+    }
+
+    /**
+     * @param itemStack The meta you want to add the enchantment to.
+     * @param enchantments The enchantments to be added.
+     */
+    public void addEnchantments(final ItemStack itemStack, final Map<CEnchantment, Integer> enchantments) {
+        final Map<CEnchantment, Integer> currentEnchantments = getEnchantments(itemStack);
+
+        removeEnchantments(itemStack, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
+
+        final String data = itemStack.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
+        final Enchant enchantData = data != null ? Methods.getGson().fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
+
+        final List<Component> lore = itemStack.lore();
+
+        final List<Component> oldLore = lore != null ? lore : new ArrayList<>();
+
+        final List<Component> newLore = new ArrayList<>();
+
+        for (Map.Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
+            final CEnchantment enchantment = entry.getKey();
+            final int level = entry.getValue();
+
+            final String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+
+            newLore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+
+            for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
+                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
+            }
+        }
+
+        newLore.addAll(oldLore);
+
+        itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(newLore).build());
+
+        itemStack.editPersistentDataContainer(container -> container.set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(enchantData)));
+    }
 
     /**
      *

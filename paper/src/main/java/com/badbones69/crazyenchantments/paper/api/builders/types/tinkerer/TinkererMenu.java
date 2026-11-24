@@ -1,6 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
@@ -25,8 +27,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.List;
 import java.util.Map;
@@ -65,10 +65,13 @@ public class TinkererMenu extends InventoryBuilder {
 
         private final CommentedConfigurationNode configuration = Files.TINKER.getConfiguration();
 
-        @NotNull
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+        private final CrazyPlatform platform = this.plugin.getPlatform();
+        private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
-        private final CurrencyAPI api = this.plugin.getStarter().getCurrencyAPI();
+        private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+
+        private final CurrencyAPI api = this.crazyManager.getCurrencyAPI();
 
         private final Map<Integer, Integer> slots = TinkererManager.getSlots();
 
@@ -76,15 +79,12 @@ public class TinkererMenu extends InventoryBuilder {
         public void onExperienceUse(PlayerInteractEvent event) {
             if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
 
-            Player player = event.getPlayer();
+            final Player player = event.getPlayer();
 
             if (TinkererManager.useExperience(player, event, true, this.configuration)) return;
 
             TinkererManager.useExperience(player, event, false, this.configuration);
         }
-
-        @NotNull
-        private final EnchantmentBookSettings enchantmentBookSettings = this.plugin.getStarter().getEnchantmentBookSettings();
 
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {
@@ -144,8 +144,8 @@ public class TinkererMenu extends InventoryBuilder {
             if (current.getType().toString().endsWith("STAINED_GLASS_PANE")) return;
 
             // Adding/taking items.
-            if (this.enchantmentBookSettings.isEnchantmentBook(current)) { // Adding a book.
-                CEBook book = this.enchantmentBookSettings.getCEBook(current);
+            if (this.bookSettings.isEnchantmentBook(current)) { // Adding a book.
+                CEBook book = this.bookSettings.getCEBook(current);
 
                 if (book == null) return;
 

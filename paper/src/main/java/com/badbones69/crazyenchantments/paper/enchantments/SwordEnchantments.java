@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
@@ -40,11 +39,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,32 +49,21 @@ import java.util.Optional;
 
 public class SwordEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
     private final SupportUtils support = this.platform.getSupport();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
     private final BossBarController bossBarController = this.plugin.getBossBarController();
 
-    // Economy Management.
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final CurrencyAPI currencyAPI = this.crazyManager.getCurrencyAPI();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
@@ -88,7 +73,7 @@ public class SwordEnchantments implements Listener {
 
         if (this.crazyManager.isBreakRageOnDamageOn() && event.getEntity() instanceof Player player) {
             this.crazyManager.getCEPlayer(player).ifPresent(cePlayer -> {
-                RageBreakEvent rageBreakEvent = new RageBreakEvent(player, event.getDamager(), this.methods.getItemInHand(player));
+                RageBreakEvent rageBreakEvent = new RageBreakEvent(player, event.getDamager(), Methods.getItemInHand(player));
                 this.plugin.getServer().getPluginManager().callEvent(rageBreakEvent);
 
                 if (!rageBreakEvent.isCancelled() && cePlayer.hasRage()) {
@@ -105,11 +90,11 @@ public class SwordEnchantments implements Listener {
         if (!(event.getEntity() instanceof LivingEntity en)) return;
         if (!(event.getDamager() instanceof final Player damager)) return;
 
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
         if (event.getEntity().isDead()) return;
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(item);
         boolean isEntityPlayer = event.getEntity() instanceof Player;
 
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISARMER, damager, item, enchantments)) {
@@ -133,7 +118,7 @@ public class SwordEnchantments implements Listener {
                     case FEET -> player.getEquipment().setBoots(null);
                 }
 
-                this.methods.addItemToInventory(player, armor);
+                Methods.addItemToInventory(player, armor);
             }
         }
 
@@ -279,9 +264,9 @@ public class SwordEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.PARALYZE, damager, item, enchantments)) {
 
-            for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, damager)) {
+            for (LivingEntity entity : Methods.getNearbyLivingEntities(2D, damager)) {
                 EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, DamageSource.builder(DamageType.INDIRECT_MAGIC).withDirectEntity(damager).build(), 5D);
-                this.methods.entityEvent(damager, entity, damageByEntityEvent);
+                Methods.entityEvent(damager, entity, damageByEntityEvent);
             }
 
             en.getWorld().strikeLightningEffect(en.getLocation());
@@ -321,8 +306,8 @@ public class SwordEnchantments implements Listener {
 
         Player damager = event.getEntity().getKiller();
         Player player = event.getEntity();
-        ItemStack item = this.methods.getItemInHand(damager);
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        ItemStack item = Methods.getItemInHand(damager);
+        Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.HEADLESS, damager, item, enchantments)) {
             ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD").setPlayerName(player.getName()).build(player);
@@ -348,8 +333,8 @@ public class SwordEnchantments implements Listener {
         final Player killer = entity.getKiller();
 
         if (killer != null) {
-            ItemStack item = this.methods.getItemInHand(killer);
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+            ItemStack item = Methods.getItemInHand(killer);
+            Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.INQUISITIVE, killer, item, enchantments)) {
                 event.setDroppedExp(event.getDroppedExp() * (enchantments.get(CEnchantments.INQUISITIVE.getEnchantment()) + 1));

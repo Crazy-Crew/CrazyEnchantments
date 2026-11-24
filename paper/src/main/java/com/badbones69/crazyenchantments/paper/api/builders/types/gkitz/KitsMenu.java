@@ -1,9 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.ryderbelserion.common.api.enums.messages.Messages;
@@ -14,7 +12,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
-import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -26,12 +23,10 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
@@ -39,14 +34,6 @@ public class KitsMenu extends InventoryBuilder {
     public KitsMenu(Player player, int size, String title) {
         super(player, size, title);
     }
-
-    private final CrazyPlatform platform = this.plugin.getPlatform();
-
-    private final FusionPaper fusion = this.platform.getFusion();
-
-    private final Starter starter = this.plugin.getStarter();
-
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @Override
     public InventoryBuilder build() {
@@ -102,11 +89,9 @@ public class KitsMenu extends InventoryBuilder {
 
     public static class KitsListener implements Listener {
 
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-        private final Starter starter = this.plugin.getStarter();
-
-        private final CrazyManager crazyManager = this.starter.getCrazyManager();
+        private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
         @EventHandler(ignoreCancelled = true)
         public void onPreviewClick(InventoryClickEvent event) {

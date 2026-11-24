@@ -2,7 +2,8 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
@@ -15,21 +16,19 @@ import com.ryderbelserion.fusion.core.utils.StringUtils;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CEBook {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
+
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     private CEnchantment enchantment;
     private int amount;
@@ -197,7 +196,7 @@ public class CEBook {
      * @return Destroy rate of the book or the override value if set in config.yml
      */
     public int getDestroyRate() {
-        return this.starter.getCrazyManager().getCEFailureOverride() == -1 ? this.destroyRate : this.starter.getCrazyManager().getCEFailureOverride();
+        return this.crazyManager.getCEFailureOverride() == -1 ? this.destroyRate : this.crazyManager.getCEFailureOverride();
     }
     
     /**
@@ -214,7 +213,7 @@ public class CEBook {
      * @return The success rate of the book or the override value if set in config.yml.
      */
     public int getSuccessRate() {
-        return this.starter.getCrazyManager().getCESuccessOverride() == -1 ? this.successRate : this.starter.getCrazyManager().getCESuccessOverride();
+        return this.crazyManager.getCESuccessOverride() == -1 ? this.successRate : this.crazyManager.getCESuccessOverride();
     }
     
     /**
@@ -247,7 +246,7 @@ public class CEBook {
             }
         }
 
-        return this.enchantmentBookSettings.getNormalBook().setAmount(this.amount).setName(name).setLore(lore).setGlow(this.glowing);
+        return this.bookSettings.getNormalBook().setAmount(this.amount).setName(name).setLore(lore).setGlow(this.glowing);
     }
     
     /**

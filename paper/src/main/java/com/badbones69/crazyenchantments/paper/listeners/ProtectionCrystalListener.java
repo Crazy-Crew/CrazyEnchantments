@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
@@ -17,25 +17,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProtectionCrystalListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    private final ProtectionCrystalSettings protectionCrystalSettings = this.crazyManager.getProtectionCrystalSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -61,7 +53,7 @@ public class ProtectionCrystalListener implements Listener {
 
         event.setCancelled(true);
 
-        player.setItemOnCursor(this.methods.removeItem(crystalItem));
+        player.setItemOnCursor(Methods.removeItem(crystalItem));
 
         event.setCurrentItem(this.protectionCrystalSettings.addProtection(item));
     }
@@ -107,6 +99,6 @@ public class ProtectionCrystalListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCrystalClick(PlayerInteractEvent event) {
-        if (this.protectionCrystalSettings.isProtectionCrystal(this.methods.getItemInHand(event.getPlayer()))) event.setCancelled(true);
+        if (this.protectionCrystalSettings.isProtectionCrystal(Methods.getItemInHand(event.getPlayer()))) event.setCancelled(true);
     }
 }

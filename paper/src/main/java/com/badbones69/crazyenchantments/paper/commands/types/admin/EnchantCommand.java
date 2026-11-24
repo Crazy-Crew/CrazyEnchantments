@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
@@ -44,9 +45,9 @@ public class EnchantCommand extends BaseEnchantCommand {
 
         final Map<String, String> placeholders = new HashMap<>();
 
-        Optional.ofNullable(this.crazyManager.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
-            this.crazyManager.addEnchantment(itemStack, context, level);
-        }, () -> Optional.ofNullable(this.methods.getEnchantment(enchantment)).ifPresentOrElse(context -> {
+        Optional.ofNullable(this.bookSettings.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
+            this.bookSettings.addEnchantment(itemStack, context, level);
+        }, () -> Optional.ofNullable(Methods.getEnchantment(enchantment)).ifPresentOrElse(context -> {
             itemStack.addUnsafeEnchantment(context, level);
         }, () -> {
             placeholders.put("%Enchantment%", enchantment);
@@ -105,7 +106,7 @@ public class EnchantCommand extends BaseEnchantCommand {
         if (flags.hasFlag("level")) {
             flags.getFlagValue("level").ifPresent(value -> {
                 if (value.contains("-")) {
-                    level.set(this.methods.getRandomNumber(value));
+                    level.set(Methods.getRandomNumber(value));
 
                     return;
                 }
@@ -126,7 +127,7 @@ public class EnchantCommand extends BaseEnchantCommand {
             flags.getFlagValue("e").flatMap(context -> {
                 enchantReference.set(context);
 
-                return Optional.ofNullable(this.crazyManager.getEnchantmentFromName(context));
+                return Optional.ofNullable(this.bookSettings.getEnchantmentFromName(context));
             }).ifPresent(enchantment -> reference.set(new CEBook(enchantment, level.get()).buildBook(sender)));
         } else if (flags.hasFlag("c")) {
             flags.getFlagValue("c").flatMap(context -> {
@@ -168,8 +169,8 @@ public class EnchantCommand extends BaseEnchantCommand {
 
         final Map<String, String> placeholders = new HashMap<>();
 
-        Optional.ofNullable(this.methods.getFromName(enchantment)).ifPresentOrElse(context -> MenuManager.openInfoMenu(player, context), () ->
-                Optional.ofNullable(this.crazyManager.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
+        Optional.ofNullable(Methods.getFromName(enchantment)).ifPresentOrElse(context -> MenuManager.openInfoMenu(player, context), () ->
+                Optional.ofNullable(this.bookSettings.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
                     player.sendMessage(context.getInfoName());
                     context.getInfoDescription().forEach(player::sendMessage);
                 }, () -> {
@@ -195,15 +196,15 @@ public class EnchantCommand extends BaseEnchantCommand {
 
         final Map<String, String> placeholders = new HashMap<>();
 
-        Optional.ofNullable(this.crazyManager.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
+        Optional.ofNullable(this.bookSettings.getEnchantmentFromName(enchantment)).ifPresentOrElse(context -> {
             if (this.bookSettings.getEnchantments(itemStack).containsKey(context)) {
-                this.methods.setItemInHand(player, this.bookSettings.removeEnchantment(itemStack, context));
+                Methods.setItemInHand(player, this.bookSettings.removeEnchantment(itemStack, context));
 
                 placeholders.put("%Enchantment%", context.getCustomName());
 
                 Messages.removed_enchantment.sendMessage(player, placeholders);
             }
-        }, () -> Optional.ofNullable(this.methods.getEnchantment(enchantment)).ifPresentOrElse(itemStack::removeEnchantment, () -> {
+        }, () -> Optional.ofNullable(Methods.getEnchantment(enchantment)).ifPresentOrElse(itemStack::removeEnchantment, () -> {
             placeholders.put("%Enchantment%", enchantment);
 
             Messages.doesnt_have_enchantment.sendMessage(player, placeholders);

@@ -13,7 +13,7 @@ import java.util.Optional;
 @NullMarked
 public class AttributeUtils {
 
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private static final CrazyPlatform platform = plugin.getPlatform();
 

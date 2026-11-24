@@ -10,18 +10,14 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 import java.util.Optional;
 
 public class EnchantUtils {
 
-    @NotNull
-    private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final static CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final static CrazyManager crazyManager = plugin.getCrazyManager();
 
     /**
      * Get the highest category rarity the enchantment is in.

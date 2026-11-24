@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.ryderbelserion.common.api.enums.Files;
@@ -40,19 +40,18 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 import java.util.Optional;
 
 public class BowEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
@@ -62,21 +61,9 @@ public class BowEnchantments implements Listener {
 
     private final SupportUtils support = this.platform.getSupport();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Managers.
-    @NotNull
-    private final BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
-
-    @NotNull
-    private final BowUtils bowUtils = this.starter.getBowUtils();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+    private final BowEnchantmentManager bowEnchantmentManager = this.crazyManager.getBowEnchantmentManager();
+    private final BowUtils bowUtils = this.crazyManager.getBowUtils();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
@@ -88,7 +75,7 @@ public class BowEnchantments implements Listener {
 
         if (!this.support.isCombatEnabled(player)) return;
 
-        Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(bow);
+        Map<CEnchantment, Integer> enchants = this.bookSettings.getEnchantments(bow);
         if (enchants.isEmpty()) return;
 
         // Add the arrow to the list.
@@ -120,7 +107,7 @@ public class BowEnchantments implements Listener {
         this.bowUtils.spawnWebs(event.getHitEntity(), enchantedArrow);
 
         if (EnchantUtils.isEventActive(CEnchantments.BOOM, shooter, enchantedArrow.bow(), enchantedArrow.enchantments())) {
-            this.methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
+            Methods.explode(enchantedArrow.getShooter(), enchantedArrow.arrow());
             enchantedArrow.arrow().remove();
         }
 
@@ -136,7 +123,7 @@ public class BowEnchantments implements Listener {
             } catch (Exception ignore) {
             }
 
-            for (LivingEntity livingEntity : this.methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
+            for (LivingEntity livingEntity : Methods.getNearbyLivingEntities(2D, enchantedArrow.arrow())) {
                 final EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);

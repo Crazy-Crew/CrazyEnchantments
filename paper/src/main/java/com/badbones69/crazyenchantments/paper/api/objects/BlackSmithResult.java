@@ -1,32 +1,31 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class BlackSmithResult {
 
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
+
     private int cost = 0;
     private ItemStack resultItem;
     
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
-        resultItem = mainItem.clone();
+        this.resultItem = mainItem.clone();
 
-        CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-        Starter starter = plugin.getStarter();
-
-        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-
-        CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
-        CEBook subBook = enchantmentBookSettings.getCEBook(subItem);
+        CEBook mainBook = this.bookSettings.getCEBook(mainItem);
+        CEBook subBook = this.bookSettings.getCEBook(subItem);
 
         if (mainBook != null && subBook != null) {
             // Books are the same enchantment.

@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -26,8 +25,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,25 +35,17 @@ import java.util.UUID;
 
 public class HoeEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private final SupportUtils support = this.platform.getSupport();
 
     private final CropSupport cropSupport = this.support.getCropSupport();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    // Settings.
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
 
     private final Set<Material> harvesterCrops = Set.of(Material.WHEAT, Material.CARROTS, Material.BEETROOTS, Material.POTATOES, Material.NETHER_WART, Material.COCOA);
 
@@ -69,17 +59,17 @@ public class HoeEnchantments implements Listener {
         if (event.getHand() != EquipmentSlot.HAND) return;
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ItemStack hoe = this.methods.getItemInHand(player);
+            ItemStack hoe = Methods.getItemInHand(player);
             Block block = event.getClickedBlock();
             if (block == null) return;
-            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(hoe);
+            Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(hoe);
 
             // Crop is not fully grown.
             if (this.seedlings.contains(block.getType())
                     && !this.cropSupport.isCropGrown(block.getState(false))
                     && EnchantUtils.isEventActive(CEnchantments.GREENTHUMB, player, hoe, enchantments)) {
                 fullyGrowPlant(block);
-                if (player.getGameMode() != GameMode.CREATIVE) this.methods.removeDurability(hoe, player);
+                if (player.getGameMode() != GameMode.CREATIVE) Methods.removeDurability(hoe, player);
             }
 
             if (block.getType() == Material.GRASS_BLOCK || block.getType() == Material.DIRT || block.getType() == Material.SOUL_SAND || block.getType() == Material.FARMLAND) {
@@ -103,7 +93,7 @@ public class HoeEnchantments implements Listener {
                         if (enchantments.containsKey(CEnchantments.PLANTER.getEnchantment())) plantSeedSuccess(soil, player, hasGreenThumb);
 
                         // Take durability from the hoe for each block set to a soil.
-                        if (player.getGameMode() != GameMode.CREATIVE) this.methods.removeDurability(hoe, player);
+                        if (player.getGameMode() != GameMode.CREATIVE) Methods.removeDurability(hoe, player);
                     }
                 }
 
@@ -112,11 +102,11 @@ public class HoeEnchantments implements Listener {
                 if (player.getGameMode() != GameMode.CREATIVE && CEnchantments.PLANTER.isActivated()
                         && enchantments.containsKey(CEnchantments.PLANTER.getEnchantment())
                         && !enchantments.containsKey(CEnchantments.TILLER.getEnchantment())
-                        && plantSeedSuccess(block, player, hasGreenThumb)) this.methods.removeDurability(hoe, player);
+                        && plantSeedSuccess(block, player, hasGreenThumb)) Methods.removeDurability(hoe, player);
             }
         } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated()
-                && this.enchantmentBookSettings.getEnchantments(this.methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
-            HashMap<Block, BlockFace> blockFace = new HashMap<>();
+                && this.bookSettings.getEnchantments(Methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
+            Map<Block, BlockFace> blockFace = new HashMap<>();
             blockFace.put(event.getClickedBlock(), event.getBlockFace());
             this.blocks.put(player.getUniqueId(), blockFace);
         }
@@ -132,8 +122,8 @@ public class HoeEnchantments implements Listener {
 
             if (!this.harvesterCrops.contains(plant.getType())) return;
 
-            ItemStack hoe = this.methods.getItemInHand(player);
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(hoe);
+            ItemStack hoe = Methods.getItemInHand(player);
+            Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(hoe);
             if (!this.blocks.containsKey(player.getUniqueId())) return;
 
             if (!EnchantUtils.isEventActive(CEnchantments.HARVESTER, player, hoe, enchantments)) return;
@@ -144,7 +134,7 @@ public class HoeEnchantments implements Listener {
 
             if (this.cropSupport.isCropGrown(plant.getState(false))) return;
 
-            getAreaCrops(plant, blockFace).forEach(block -> this.methods.playerBreakBlock(player, block, hoe, true));
+            getAreaCrops(plant, blockFace).forEach(block -> Methods.playerBreakBlock(player, block, hoe, true));
         }
     }
 
@@ -189,11 +179,15 @@ public class HoeEnchantments implements Listener {
         if (seedType != null) {
             if (soil.getType() != Material.FARMLAND && !isSoulSand) soil.setType(Material.FARMLAND);
 
-            if (player.getGameMode() != GameMode.CREATIVE) methods.removeItem(playerSeedItem, player); // Take seed from player
+            if (player.getGameMode() != GameMode.CREATIVE && playerSeedItem != null) {
+                Methods.removeItem(playerSeedItem, player); // Take seed from player
+            }
 
             plant.setType(seedType);
 
-            if (hasGreenThumb) fullyGrowPlant(plant); // TODO re-add enchant check
+            if (hasGreenThumb) {
+                fullyGrowPlant(plant); // TODO re-add enchant check
+            }
 
             return true;
         }
@@ -292,6 +286,6 @@ public class HoeEnchantments implements Listener {
             default -> {}
         }
 
-        return this.methods.getEnchantBlocks(loc, loc2);
+        return Methods.getEnchantBlocks(loc, loc2);
     }
 }

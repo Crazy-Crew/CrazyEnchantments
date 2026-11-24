@@ -1,24 +1,34 @@
 package com.badbones69.crazyenchantments.paper.api.builders;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("ALL")
 public abstract class InventoryBuilder implements InventoryHolder {
 
-    @NotNull
-    protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    protected final CrazyPlatform platform = this.plugin.getPlatform();
+
+    protected final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     protected final Server server = this.plugin.getServer();
+
+    protected final FusionPaper fusion = this.platform.getFusion();
+
+    protected final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     private final Inventory inventory;
     private final Player player;

@@ -29,7 +29,7 @@ public enum DataKeys {
     back_right("back_right", PersistentDataType.STRING);
 
     @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final String NamespacedKey;
     private final PersistentDataType type;

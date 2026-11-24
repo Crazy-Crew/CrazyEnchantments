@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -24,8 +24,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,22 +32,16 @@ import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
+
     private final SupportUtils support = this.platform.getSupport();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    // Settings.
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Managers.
-    @NotNull
-    private final AllyManager allyManager = this.starter.getAllyManager();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+    private final AllyManager allyManager = this.crazyManager.getAllyManager();
 
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 
@@ -74,6 +67,7 @@ public class AllyEnchantments implements Listener {
             }
             if (inCoolDown(player)) {
                 this.allyManager.setEnemy(player, enemy);
+
                 return;
             }
 

@@ -1,14 +1,12 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,30 +14,24 @@ import java.util.Map;
 
 public class CEItem {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
-    private final ItemStack item;
-    private final List<Enchantment> vanillaEnchantmentRemove;
-    private final List<CEnchantment> cEnchantmentRemove;
     private final Map<Enchantment, Integer> vanillaEnchantments;
+    private final List<Enchantment> vanillaEnchantmentRemove;
     private final Map<CEnchantment, Integer> cEnchantments;
+    private final List<CEnchantment> cEnchantmentRemove;
+    private final ItemStack item;
     
     public CEItem(ItemStack item) {
         this.item = item;
-        // Has to make a new map as .getEnchantments is a ImmutableMap.
         this.vanillaEnchantments = new HashMap<>(item.getEnchantments());
-        EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-        this.cEnchantments = enchantmentBookSettings.getEnchantments(item);
+        this.cEnchantments = this.bookSettings.getEnchantments(item);
         this.vanillaEnchantmentRemove = new ArrayList<>();
         this.cEnchantmentRemove = new ArrayList<>();
     }
@@ -89,14 +81,14 @@ public class CEItem {
     }
 
     public boolean canAddEnchantment(Player player) {
-        return crazyManager.canAddEnchantment(player, this.cEnchantments.size(), this.vanillaEnchantments.size());
+        return this.crazyManager.canAddEnchantment(player, this.cEnchantments.size(), this.vanillaEnchantments.size());
     }
 
     public ItemStack build() {
         this.vanillaEnchantmentRemove.forEach(this.item::removeEnchantment);
         this.vanillaEnchantments.keySet().forEach(enchantment -> this.item.addUnsafeEnchantment(enchantment, this.vanillaEnchantments.get(enchantment)));
-        this.cEnchantmentRemove.forEach(enchantment -> this.enchantmentBookSettings.removeEnchantment(this.item, enchantment));
-        this.crazyManager.addEnchantments(this.item, this.cEnchantments);
+        this.cEnchantmentRemove.forEach(enchantment -> this.bookSettings.removeEnchantment(this.item, enchantment));
+        this.bookSettings.addEnchantments(this.item, this.cEnchantments);
 
         return this.item;
     }

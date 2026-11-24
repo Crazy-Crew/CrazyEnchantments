@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
@@ -18,23 +19,17 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class BootEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    // Plugin Managers.
-    @NotNull
-    private final WingsManager wingsManager = this.starter.getWingsManager();
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+    private final WingsManager wingsManager = this.crazyManager.getWingsManager();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
@@ -60,7 +55,7 @@ public class BootEnchantments implements Listener {
 
         if (itemStack.isEmpty()) return;
 
-        if (!this.enchantmentBookSettings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.bookSettings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (!WingsUtils.canFly(player)) return;
 
@@ -88,7 +83,7 @@ public class BootEnchantments implements Listener {
 
         boolean isFlying = player.isFlying(); // TODO implement single method for all enchantment checks. #EnchantUtils
 
-        if (this.wingsManager.isWingsEnabled() && this.enchantmentBookSettings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) {
+        if (this.wingsManager.isWingsEnabled() && this.bookSettings.getEnchantments(itemStack).containsKey(CEnchantments.WINGS.getEnchantment())) {
             if (WingsUtils.canFly(player)) {
                 player.setAllowFlight(true);
             } else {
@@ -111,7 +106,7 @@ public class BootEnchantments implements Listener {
 
         if (!this.wingsManager.isWingsEnabled()) return;
 
-        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.bookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (!WingsUtils.canFly(player)) return;
 

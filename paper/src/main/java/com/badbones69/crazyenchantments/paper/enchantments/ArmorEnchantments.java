@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -45,7 +44,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -54,9 +52,11 @@ import java.util.stream.Collectors;
 
 public class ArmorEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
@@ -64,25 +64,11 @@ public class ArmorEnchantments implements Listener {
 
     private final VanishSupport vanishSupport = this.support.getVanishSupport();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final ProtectionCrystalSettings protectionCrystalSettings = this.crazyManager.getProtectionCrystalSettings();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    // Settings.
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Managers.
-    @NotNull
-    private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
+    private final ArmorEnchantmentManager armorEnchantmentManager = this.crazyManager.getArmorEnchantmentManager();
 
     private final ArmorProcessor armorProcessor = new ArmorProcessor();
 
@@ -145,7 +131,7 @@ public class ArmorEnchantments implements Listener {
 
         // Remove all effects that they no longer should have from the armor.
         if (!oldItem.isEmpty()) {
-            getTopPotionEffects(this.enchantmentBookSettings.getEnchantments(oldItem)
+            getTopPotionEffects(this.bookSettings.getEnchantments(oldItem)
                     .entrySet().stream()
                     .filter(enchant -> !topEnchants.containsKey(enchant.getKey()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b)))
@@ -198,7 +184,7 @@ public class ArmorEnchantments implements Listener {
         Map<CEnchantment, Integer> toAdd = getUpperEnchants(player);
 
         if (!newItem.isEmpty()) {
-            this.enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
+            this.bookSettings.getEnchantments(newItem).entrySet().stream()
                     .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
                     .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase()), newItem))
                     .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
@@ -217,7 +203,7 @@ public class ArmorEnchantments implements Listener {
         HashMap<CEnchantment, Integer> topEnchants = new HashMap<>();
 
         Arrays.stream(player.getEquipment().getArmorContents())
-                .map(this.enchantmentBookSettings::getEnchantments)
+                .map(this.bookSettings::getEnchantments)
                 .forEach(enchantments -> enchantments.entrySet().stream()
                         .filter(ench -> !topEnchants.containsKey(ench.getKey()) || topEnchants.get(ench.getKey()) <= ench.getValue())
                         .forEach(ench -> topEnchants.put(ench.getKey(), ench.getValue())));
@@ -234,7 +220,7 @@ public class ArmorEnchantments implements Listener {
         if (this.support.isFriendly(damager, player)) return;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchants = this.bookSettings.getEnchantments(armor);
             if (enchants.isEmpty()) continue;
 
             for (ArmorEnchantment armorEnchantment : this.armorEnchantmentManager.getArmorEnchantments()) {
@@ -329,11 +315,11 @@ public class ArmorEnchantments implements Listener {
             if (EnchantUtils.isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(enchants.get(CEnchantments.CACTUS.getEnchantment()));
 
             if (EnchantUtils.isEventActive(CEnchantments.STORMCALLER, player, armor, enchants)) {
-                Entity lightning = this.methods.lightning(damager);
+                Entity lightning = Methods.lightning(damager);
 
-                for (LivingEntity en : this.methods.getNearbyLivingEntities(2D, player)) {
+                for (LivingEntity en : Methods.getNearbyLivingEntities(2D, player)) {
                     EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(en, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(player).withDirectEntity(lightning).build(), 5D);
-                    this.methods.entityEvent(player, en, damageByEntityEvent);
+                    Methods.entityEvent(player, en, damageByEntityEvent);
                 }
 
                 damager.damage(5D);
@@ -343,7 +329,7 @@ public class ArmorEnchantments implements Listener {
         if (!(damager instanceof Player)) return;
 
         for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
-            Map<CEnchantment, Integer> enchants = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchants = this.bookSettings.getEnchantments(armor);
             if (!enchants.containsKey(CEnchantments.LEADERSHIP.getEnchantment())) continue;
 
             int radius = 4 + enchants.get(CEnchantments.LEADERSHIP.getEnchantment());
@@ -369,7 +355,7 @@ public class ArmorEnchantments implements Listener {
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();
 
-        if (!this.support.isCombatEnabled(other.getLocation()) || this.support.isFriendly(player, other) || this.methods.hasPermission(other, "bypass.aura", false)) return;
+        if (!this.support.isCombatEnabled(other.getLocation()) || this.support.isFriendly(player, other) || Methods.hasPermission(other, "bypass.aura", false)) return;
 
         Map<CEnchantment, Integer> enchantments = Map.of(enchant.getEnchantment(), level);
 
@@ -417,10 +403,10 @@ public class ArmorEnchantments implements Listener {
         if (!this.support.isCombatEnabled(player.getLocation())) return;
 
         for (ItemStack item : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+            Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.SELFDESTRUCT, player, item, enchantments)) {
-                this.methods.explode(player);
+                Methods.explode(player);
 
                 List<ItemStack> items = event.getDrops().stream().filter(drop -> ProtectionCrystalSettings.isProtected(drop.getPersistentDataContainer()) && this.protectionCrystalSettings.isProtectionSuccessful(player)).toList();
 

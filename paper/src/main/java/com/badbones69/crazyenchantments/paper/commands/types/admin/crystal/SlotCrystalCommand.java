@@ -20,7 +20,7 @@ public class SlotCrystalCommand extends BaseEnchantCommand {
     @Permission(value = "crazyenchantments.slotcrystal", def = PermissionDefault.OP)
     @Syntax("/crazyenchantments slotcrystal [amount] [player]")
     public void execute(final CommandSender sender, @Suggestion("numbers") final int amount, final Player player) {
-        final ItemStack itemStack = this.slotCrystal.getSlotCrystal(amount);
+        final ItemStack itemStack = this.items.getSlotCrystal(player, amount);
 
         if (itemStack.isEmpty()) {
             Messages.item_cannot_be_empty.sendMessage(sender, Map.of(

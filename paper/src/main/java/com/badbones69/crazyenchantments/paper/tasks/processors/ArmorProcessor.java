@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.tasks.processors;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -25,19 +24,15 @@ import java.util.*;
 
 public class ArmorProcessor extends PoolProcessor {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
     private final SupportUtils support = this.platform.getSupport();
-
-    private final Starter starter = this.plugin.getStarter();
-
-    private final Methods methods = this.starter.getMethods();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     public ArmorProcessor() {}
 
@@ -51,7 +46,7 @@ public class ArmorProcessor extends PoolProcessor {
         if (player == null) return;
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(armor);
 
             if (enchantments.isEmpty()) continue;
 
@@ -80,8 +75,8 @@ public class ArmorProcessor extends PoolProcessor {
 
         PlayerInventory inv = player.getInventory();
 
-        useHellForge(player, inv.getItemInMainHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
-        useHellForge(player, inv.getItemInOffHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
+        useHellForge(player, inv.getItemInMainHand(), this.bookSettings.getEnchantments(inv.getItemInMainHand()));
+        useHellForge(player, inv.getItemInOffHand(), this.bookSettings.getEnchantments(inv.getItemInOffHand()));
     }
 
     private void checkCommander(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
@@ -190,7 +185,7 @@ public class ArmorProcessor extends PoolProcessor {
             public void run() {
                 if (!EnchantUtils.normalEnchantEvent(CEnchantments.HELLFORGED, player, item)) return;
 
-                final int armorDurability = methods.getDurability(item);
+                final int armorDurability = Methods.getDurability(item);
 
                 if (armorDurability <= 0) return;
 
@@ -198,7 +193,7 @@ public class ArmorProcessor extends PoolProcessor {
 
                 finalArmorDurability -= enchantments.get(CEnchantments.HELLFORGED.getEnchantment());
 
-                methods.setDurability(item, finalArmorDurability);
+                Methods.setDurability(item, finalArmorDurability);
             }
         }.runNextTick();
     }

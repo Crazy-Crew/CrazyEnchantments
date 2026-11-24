@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class VaultSupport {
 
     @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private Economy vault = null;
 

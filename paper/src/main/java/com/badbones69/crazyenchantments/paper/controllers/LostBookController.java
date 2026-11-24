@@ -2,8 +2,8 @@ package com.badbones69.crazyenchantments.paper.controllers;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
@@ -18,27 +18,18 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LostBookController implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent event) {
@@ -47,13 +38,13 @@ public class LostBookController implements Listener {
 
         if ((event.getItem() == null || event.getAction() != Action.RIGHT_CLICK_AIR) && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
-        final ItemStack item = this.methods.getItemInHand(player);
+        final ItemStack item = Methods.getItemInHand(player);
 
         final String data = item.getPersistentDataContainer().get(DataKeys.lost_book.getNamespacedKey(), PersistentDataType.STRING);
 
         if (data == null) return;
 
-        for (Category eachCategory : enchantmentBookSettings.getCategories()) {
+        for (Category eachCategory : this.bookSettings.getCategories()) {
             if (!data.equalsIgnoreCase(eachCategory.getName())) continue;
 
             category = eachCategory;
@@ -63,11 +54,11 @@ public class LostBookController implements Listener {
 
         event.setCancelled(true);
 
-        if (this.methods.isInventoryFull(player)) return;
+        if (Methods.isInventoryFull(player)) return;
 
         final LostBook lostBook = category.getLostBook();
 
-        this.methods.removeItem(item, player);
+        Methods.removeItem(item, player);
 
         final CEBook book = this.crazyManager.getRandomEnchantmentBook(category);
 
@@ -85,7 +76,7 @@ public class LostBookController implements Listener {
 
         Messages.clean_lost_book.sendMessage(player, placeholders);
 
-        if (lostBook.useFirework()) this.methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
+        if (lostBook.useFirework()) Methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 
         if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
     }

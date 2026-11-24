@@ -31,7 +31,7 @@ public class BookCommand extends BaseEnchantCommand {
             return;
         }
         
-        Optional.ofNullable(this.crazyManager.getEnchantmentFromName(name)).ifPresentOrElse(book -> {
+        Optional.ofNullable(this.bookSettings.getEnchantmentFromName(name)).ifPresentOrElse(book -> {
             final ItemStack itemStack = new CEBook(book, level, amount).buildBook(player); //todo() random support
 
             if (itemStack.isEmpty()) {

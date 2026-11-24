@@ -10,8 +10,6 @@ import com.ryderbelserion.common.utils.RandomUtils;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +28,9 @@ public enum Dust {
     private final int max;
     private final int min;
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
     
     Dust(String name, String configName, List<String> knowNames) {
         this.name = name;

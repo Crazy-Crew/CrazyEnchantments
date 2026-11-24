@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 @Syntax("/tinkerer -p [player]")
 public class TinkerCommand {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 

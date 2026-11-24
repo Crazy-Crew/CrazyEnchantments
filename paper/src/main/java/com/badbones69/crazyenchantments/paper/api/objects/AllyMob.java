@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.utils.AttributeUtils;
@@ -17,20 +18,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 public class AllyMob {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
-    @NotNull
-    private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+
+    private final AllyManager allyManager = this.crazyManager.getAllyManager();
 
     private final AllyType type;
     private final Player owner;
@@ -155,11 +155,11 @@ public class AllyMob {
         private final EntityType entityType;
         private final int maxHealth;  // TODO Make this into a config option.
 
-        @NotNull
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-        @NotNull
-        private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+        private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+
+        private final AllyManager allyManager = this.crazyManager.getAllyManager();
         
         AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
             this.configName = configName;

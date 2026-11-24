@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -31,11 +30,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,32 +43,24 @@ import java.util.LinkedList;
 
 public class AxeEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
+
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+
     private final SupportUtils support = this.platform.getSupport();
-
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeFeller(BlockBreakEvent event) {
         if (!event.isDropItems() || EventUtils.isIgnoredEvent(event)) return;
 
         Player player = event.getPlayer();
-        ItemStack currentItem = methods.getItemInHand(player);
+        ItemStack currentItem = Methods.getItemInHand(player);
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
+        Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(currentItem);
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.TREEFELLER, enchantments)) return;
 
         Set<Block> blockList = getTree(event.getBlock(), 5 * enchantments.get(CEnchantments.TREEFELLER.getEnchantment()));
@@ -81,11 +70,11 @@ public class AxeEnchantments implements Listener {
 
         for (Block block : blockList) {
             if (block == event.getBlock()) continue;
-            if (this.methods.playerBreakBlock(player, block, currentItem, true)) continue;
-            if (damage) this.methods.removeDurability(currentItem, player);
+            if (Methods.playerBreakBlock(player, block, currentItem, true)) continue;
+            if (damage) Methods.removeDurability(currentItem, player);
         }
 
-        if (!damage) this.methods.removeDurability(currentItem, player);
+        if (!damage) Methods.removeDurability(currentItem, player);
 
     }
 
@@ -137,11 +126,11 @@ public class AxeEnchantments implements Listener {
 
         if (this.support.isFriendly(damager, entity)) return;
 
-        final ItemStack item = this.methods.getItemInHand(damager);
+        final ItemStack item = Methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
 
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 1));
@@ -191,7 +180,7 @@ public class AxeEnchantments implements Listener {
                 default -> player.getEquipment().getBoots();
             };
 
-            this.methods.removeDurability(armorItem, player);
+            Methods.removeDurability(armorItem, player);
         }
     }
 
@@ -204,9 +193,9 @@ public class AxeEnchantments implements Listener {
         if (!this.support.isCombatEnabled(player.getLocation())) return;
 
         Player damager = player.getKiller();
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = Methods.getItemInHand(damager);
 
-        if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.enchantmentBookSettings.getEnchantments(item))) {
+        if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, this.bookSettings.getEnchantments(item))) {
             event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build(player));
         }
     }
@@ -218,8 +207,8 @@ public class AxeEnchantments implements Listener {
 
         if (killer == null) return;
 
-        ItemStack item = this.methods.getItemInHand(killer);
-        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
+        ItemStack item = Methods.getItemInHand(killer);
+        Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(item);
         Material headMat = EntityUtils.getHeadMaterial(entity);
 
         if (headMat != null && !EventUtils.containsDrop(event, headMat)) {

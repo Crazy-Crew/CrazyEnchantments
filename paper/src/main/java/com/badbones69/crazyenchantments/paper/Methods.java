@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -29,34 +30,35 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Methods {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     
-    private final Server server = this.plugin.getServer();
+    private static final Server server = plugin.getServer();
 
-    private final PluginManager pluginManager = this.server.getPluginManager();
+    private static final PluginManager pluginManager = server.getPluginManager();
 
-    private final CrazyPlatform platform = this.plugin.getPlatform();
+    private static final CrazyPlatform platform = plugin.getPlatform();
 
-    private final SupportUtils support = this.platform.getSupport();
+    private static final SupportUtils support = platform.getSupport();
 
-    public EnchantmentType getFromName(String name) {
+    public static EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
@@ -64,7 +66,7 @@ public class Methods {
         return null;
     }
 
-    public int getRandomNumber(String range) {
+    public static int getRandomNumber(String range) {
         int number = 1;
         String[] split = range.split("-");
 
@@ -79,12 +81,11 @@ public class Methods {
         return number;
     }
 
-    public int getRandomNumber(int min, int max) {
-        Random random = new Random();
-        return min + random.nextInt(max - min);
+    public static int getRandomNumber(int min, int max) {
+        return min + ThreadLocalRandom.current().nextInt(max - min);
     }
 
-    public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
+    public static boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
         if (sender instanceof Player player) {
             return hasPermission(player, perm, toggle);
         } else {
@@ -92,7 +93,7 @@ public class Methods {
         }
     }
 
-    public boolean hasPermission(Player player, String perm, boolean toggle) {
+    public static boolean hasPermission(Player player, String perm, boolean toggle) {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
@@ -105,24 +106,24 @@ public class Methods {
     }
 
     @NotNull
-    public ItemStack getItemInHand(@NotNull Player player) {
+    public static ItemStack getItemInHand(@NotNull Player player) {
         return player.getInventory().getItemInMainHand();
     }
 
-    public void setItemInHand(@NotNull Player player, @Nullable ItemStack item) {
+    public static void setItemInHand(@NotNull Player player, @Nullable ItemStack item) {
         player.getInventory().setItemInMainHand(item);
     }
 
     @Nullable
-    public Player getPlayer(String name) {
-        return this.plugin.getServer().getPlayer(name);
+    public static Player getPlayer(String name) {
+        return server.getPlayer(name);
     }
 
-    public void removeItem(@NotNull ItemStack item, @NotNull Player player) {
+    public static void removeItem(@NotNull ItemStack item, @NotNull Player player) {
         removeItem(item, player, 1);
     }
 
-    public void removeItem(@NotNull ItemStack item, @NotNull Player player, int amount) {
+    public static void removeItem(@NotNull ItemStack item, @NotNull Player player, int amount) {
         try {
             boolean found = false;
 
@@ -151,12 +152,12 @@ public class Methods {
     }
 
     @Nullable
-    public ItemStack removeItem(@NotNull ItemStack item) {
+    public static ItemStack removeItem(@NotNull ItemStack item) {
         return removeItem(item, 1);
     }
 
     @Nullable
-    public ItemStack removeItem(@NotNull ItemStack item, int amount) {
+    public static ItemStack removeItem(@NotNull ItemStack item, int amount) {
         ItemStack itemStack = item.clone();
 
         if (item.getAmount() <= amount) {
@@ -169,7 +170,7 @@ public class Methods {
     }
 
     @NotNull
-    public ItemStack addLore(@NotNull ItemStack item, String loreString) {
+    public static ItemStack addLore(@NotNull ItemStack item, String loreString) {
         List<net.kyori.adventure.text.Component> lore = item.lore();
         
         if (lore == null) lore = new ArrayList<>();
@@ -181,7 +182,7 @@ public class Methods {
         return item;
     }
 
-    public boolean hasArgument(@NotNull String arg, @NotNull List<String> message) {
+    public static boolean hasArgument(@NotNull String arg, @NotNull List<String> message) {
         for (String line : message) {
             line = ColorUtils.color(line).toLowerCase();
 
@@ -196,7 +197,7 @@ public class Methods {
      * @param player The {@link Player} who's inventory should be checked.
      * @return Returns if the player's inventory is full while letting them know.
      */
-    public boolean isInventoryFull(@NotNull Player player) {
+    public static boolean isInventoryFull(@NotNull Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
 
         Messages.inventory_full.sendMessage(player);
@@ -209,15 +210,16 @@ public class Methods {
      * @param player The {@link Player} to give items to.
      * @param item The {@link ItemStack} to give to the player.
      */
-    public void addItemToInventory(@NotNull Player player, @NotNull ItemStack item) {
+    public static void addItemToInventory(@NotNull Player player, @NotNull ItemStack item) {
         player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
-    public void addItemToInventory(@NotNull Player player, @NotNull List<Item> itemList) {
+
+    public static void addItemToInventory(@NotNull Player player, @NotNull List<Item> itemList) {
         itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
     }
 
     @NotNull
-    public List<LivingEntity> getNearbyLivingEntities(double radius, @NotNull Entity entity) {
+    public static List<LivingEntity> getNearbyLivingEntities(double radius, @NotNull Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
         List<LivingEntity> entities = new ArrayList<>();
 
@@ -229,15 +231,15 @@ public class Methods {
     }
 
     @NotNull
-    public List<Entity> getNearbyEntities(double radius, @NotNull Entity entity) {
+    public static List<Entity> getNearbyEntities(double radius, @NotNull Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
     }
 
-    public void fireWork(@NotNull Location loc, @NotNull List<Color> colors) {
+    public static void fireWork(@NotNull Location loc, @NotNull List<Color> colors) {
         fireWork(loc, new ArrayList<>(colors));
     }
 
-    public void fireWork(@NotNull Location loc, @NotNull ArrayList<Color> colors) {
+    public static void fireWork(@NotNull Location loc, @NotNull ArrayList<Color> colors) {
         Firework firework = loc.getWorld().spawn(loc, Firework.class);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         fireworkMeta.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
@@ -249,9 +251,9 @@ public class Methods {
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
 
-        this.plugin.getFireworkDamageListener().addFirework(firework);
+        addFirework(firework);
 
-        new FoliaScheduler(this.plugin, loc) {
+        new FoliaScheduler(plugin, loc) {
             @Override
             public void run() {
                 firework.detonate();
@@ -259,7 +261,13 @@ public class Methods {
         }.runDelayed(2);
     }
 
-    public Enchantment getEnchantment(@NotNull String enchantmentName) {
+    public static void addFirework(Entity firework) {
+        PersistentDataContainer container = firework.getPersistentDataContainer();
+
+        container.set(DataKeys.no_firework_damage.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
+    }
+
+    public static Enchantment getEnchantment(@NotNull String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
             enchantmentName = enchantmentName.replaceAll("-|_| ", "");
@@ -273,7 +281,7 @@ public class Methods {
         return null;
     }
 
-    public int getMaxDurability(@NotNull ItemStack item) {
+    public static int getMaxDurability(@NotNull ItemStack item) {
         int durability = item.getType().getMaxDurability();
 
         if (item.hasData(DataComponentTypes.MAX_DAMAGE)) {
@@ -287,7 +295,7 @@ public class Methods {
         return durability;
     }
 
-    public int getDurability(@NotNull ItemStack item) {
+    public static int getDurability(@NotNull ItemStack item) {
         int durability = 0;
 
         if (item.hasData(DataComponentTypes.DAMAGE)) {
@@ -301,13 +309,13 @@ public class Methods {
         return durability;
     }
 
-    public void setDurability(@NotNull ItemStack item, int newDamage) {
+    public static void setDurability(@NotNull ItemStack item, int newDamage) {
         newDamage = Math.max(newDamage, 0);
 
         item.setData(DataComponentTypes.DAMAGE, newDamage);
     }
 
-    public void removeDurability(@NotNull ItemStack item, @NotNull Player player) {
+    public static void removeDurability(@NotNull ItemStack item, @NotNull Player player) {
         final int maxDurability = getMaxDurability(item);
         final int durability = getDurability(item);
 
@@ -338,7 +346,7 @@ public class Methods {
         }
     }
 
-    public void explode(@NotNull final Player player) {
+    public static void explode(@NotNull final Player player) {
         final Location location = player.getLocation();
         final Vector vector = location.toVector();
 
@@ -349,7 +357,7 @@ public class Methods {
         for (final Entity entity : getNearbyEntities(3D, player)) {
             final Location entityLocation = entity.getLocation();
 
-            if (!this.support.isCombatEnabled(entityLocation)) continue;
+            if (!support.isCombatEnabled(entityLocation)) continue;
 
             if (entity.getType() == EntityType.ITEM) { //todo() why?
                 entity.remove();
@@ -359,7 +367,7 @@ public class Methods {
 
             if (!(entity instanceof LivingEntity livingEntity)) continue;
 
-            if (this.support.isFriendly(player, livingEntity)) continue;
+            if (support.isFriendly(player, livingEntity)) continue;
 
             final UUID entityUUID = entity.getUniqueId();
 
@@ -377,7 +385,7 @@ public class Methods {
         return gson;
     }
 
-    private void spawnExplodeParticles(@NotNull World world, @NotNull Location location) {
+    private static void spawnExplodeParticles(@NotNull World world, @NotNull Location location) {
         world.spawnParticle(Particle.FLAME, location, 200);
         world.spawnParticle(Particle.CLOUD, location, 30, .4F, .5F, .4F);
         world.spawnParticle(Particle.EXPLOSION, location, 2);
@@ -385,7 +393,7 @@ public class Methods {
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
     }
 
-    public void explode(@NotNull Entity shooter, @NotNull Entity arrow) {
+    public static void explode(@NotNull Entity shooter, @NotNull Entity arrow) {
         final Location location = arrow.getLocation();
         final Vector vector = location.toVector();
 
@@ -394,7 +402,7 @@ public class Methods {
         for (final Entity entity : getNearbyEntities(3D, arrow)) {
             final Location entityLocation = entity.getLocation();
 
-            if (!this.support.isCombatEnabled(entityLocation)) continue;
+            if (!support.isCombatEnabled(entityLocation)) continue;
 
             if (entity.getType() == EntityType.ITEM) { //todo() why?
                 entity.remove();
@@ -404,12 +412,12 @@ public class Methods {
 
             if (!(entity instanceof LivingEntity livingEntity)) continue;
 
-            if (this.support.isFriendly(shooter, livingEntity)) continue;
+            if (support.isFriendly(shooter, livingEntity)) continue;
 
             final EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION)
                     .withCausingEntity(shooter).withDirectEntity(arrow).build(), 5D);
 
-            this.pluginManager.callEvent(event);
+            pluginManager.callEvent(event);
 
             if (event.isCancelled()) continue;
 
@@ -420,8 +428,9 @@ public class Methods {
     }
 
     @NotNull
-    public HashSet<Block> getEnchantBlocks(@NotNull Location loc, @NotNull Location loc2) {
-        HashSet<Block> blockList = new HashSet<>();
+    public static Set<Block> getEnchantBlocks(@NotNull Location loc, @NotNull Location loc2) {
+        Set<Block> blockList = new HashSet<>();
+
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
         int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
         int topBlockY = (Math.max(loc.getBlockY(), loc2.getBlockY()));
@@ -440,17 +449,17 @@ public class Methods {
         return blockList;
     }
 
-    public void entityEvent(@NotNull Player damager, @NotNull LivingEntity entity, @NotNull EntityDamageEvent damageByEntityEvent) {
+    public static void entityEvent(@NotNull Player damager, @NotNull LivingEntity entity, @NotNull EntityDamageEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
 
-        this.pluginManager.callEvent(damageByEntityEvent);
+        pluginManager.callEvent(damageByEntityEvent);
 
         final boolean isCancelled = damageByEntityEvent.isCancelled();
 
         final Location location = entity.getLocation();
 
-        if (!isCancelled && this.support.isCombatEnabled(location) && !this.support.isFriendly(damager, entity)) {
+        if (!isCancelled && support.isCombatEnabled(location) && !support.isFriendly(damager, entity)) {
             entity.damage(5D);
         }
 
@@ -458,7 +467,7 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public Entity lightning(@NotNull LivingEntity entity) {
+    public static Entity lightning(@NotNull LivingEntity entity) {
         Location loc = entity.getLocation();
 
         Entity lightning = null;
@@ -478,7 +487,7 @@ public class Methods {
         return lightning;
     }
 
-    public void switchCurrency(@NotNull Player player, @NotNull Currency option, @NotNull String one, @NotNull String two, @NotNull String cost) {
+    public static void switchCurrency(@NotNull Player player, @NotNull Currency option, @NotNull String one, @NotNull String two, @NotNull String cost) {
         final Map<String, String> placeholders = new HashMap<>();
 
         placeholders.put(one, cost);
@@ -496,7 +505,7 @@ public class Methods {
      * @param event The event to check.
      * @return True if the event is cancelled.
      */
-    public boolean isEventCancelled(@NotNull Event event) {
+    public static boolean isEventCancelled(@NotNull Event event) {
         return !event.callEvent();
     }
 
@@ -505,7 +514,7 @@ public class Methods {
      * @param player The {@link Player} whom to check.
      * @return True if the player is in creative mode.
      */
-    public boolean inCreativeMode(@NotNull Player player) {
+    public static boolean inCreativeMode(@NotNull Player player) {
         if (player.getGameMode() != GameMode.CREATIVE) return false;
 
         Messages.player_is_in_creative_mode.sendMessage(player);
@@ -517,7 +526,7 @@ public class Methods {
      * Plays item break sound and effect.
      * @param player The {@link Player} who's item broke.
      */
-    public void playItemBreak(@NotNull Player player, @NotNull ItemStack item) {
+    public static void playItemBreak(@NotNull Player player, @NotNull ItemStack item) {
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 
         player.getWorld().spawnParticle(Particle.ITEM, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
@@ -532,7 +541,7 @@ public class Methods {
      * @param tool ItemStack used to break the block.
      * @return If the event was cancelled.
      */
-    public boolean playerBreakBlock(@NotNull Player player, @NotNull Block block, @NotNull ItemStack tool, boolean hasDrops) {
+    public static boolean playerBreakBlock(@NotNull Player player, @NotNull Block block, @NotNull ItemStack tool, boolean hasDrops) {
         // My favorite chain of methods I created. Feel free to ask if there are problems. -TDL
         BlockBreakEvent blockBreak = new BlockBreakEvent(block, player);
         Collection<ItemStack> dropItems = !tool.isEmpty() ? block.getDrops(tool, player) : block.getDrops();
@@ -540,7 +549,7 @@ public class Methods {
         blockBreak.setExpToDrop(getXPThroughNMS(block, tool));
 
         EventUtils.addIgnoredEvent(blockBreak);
-        this.plugin.getServer().getPluginManager().callEvent(blockBreak);
+        pluginManager.callEvent(blockBreak);
         EventUtils.removeIgnoredEvent(blockBreak);
 
         if (blockBreak.isCancelled()) return true;
@@ -561,7 +570,7 @@ public class Methods {
      * @param block The block that is dropping xp.
      * @param expToDrop The amount of xp it should drop.
      */
-    private void dropXP(@NotNull Block block, int expToDrop) {
+    private static void dropXP(@NotNull Block block, int expToDrop) {
         if (expToDrop < 1) return;
 
         ExperienceOrb exp = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
@@ -574,19 +583,18 @@ public class Methods {
      * @param block The block that was broken.
      * @param items The items that will be dropped from the broken block.
      */
-    private void blockDropItems(@NotNull Player player, @NotNull Block block, @NotNull Collection<ItemStack> items) {
+    private static void blockDropItems(@NotNull Player player, @NotNull Block block, @NotNull Collection<ItemStack> items) {
         List<Item> dropItems = new ArrayList<>();
 
         items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
 
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
 
-        this.plugin.getServer().getPluginManager().callEvent(event);
+        pluginManager.callEvent(event);
 
         // If cancelled, removes the blocks as they should have never been there.
         // This mimics the method that the base server uses.
         if (event.isCancelled()) dropItems.forEach(Entity::remove);
-
     }
 
     /**
@@ -595,12 +603,13 @@ public class Methods {
      * @param item The {@link ItemStack} used to break the block.
      * @return The amount of xp the block would drop when broken by that item.
      */
-    private int getXPThroughNMS(@NotNull Block block, @NotNull ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
+    private static int getXPThroughNMS(@NotNull Block block, @NotNull ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
         CraftBlock cb = (CraftBlock) block;
 
         net.minecraft.world.level.block.state.BlockState iWorldblockdata = cb.getBlockState();
         net.minecraft.world.level.block.Block worldBlock = iWorldblockdata.getBlock();
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+
         return worldBlock.getExpDrop(iWorldblockdata, cb.getLevel().getMinecraftWorld(), cb.getPosition(), nmsItem, true);
     }
 }

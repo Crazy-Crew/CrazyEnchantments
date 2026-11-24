@@ -2,8 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.builders;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
@@ -41,7 +39,6 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.profile.PlayerTextures;
@@ -60,8 +57,14 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import static com.badbones69.crazyenchantments.paper.api.utils.ColorUtils.getColor;
 
-@SuppressWarnings("UnusedReturnValue")
 public class ItemBuilder {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+    private final EnchantmentBookSettings settings = this.platform.getBookSettings();
+    private final Server server = this.plugin.getServer();
+    private final ComponentLogger logger = this.plugin.getComponentLogger();
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final List<Component> itemLore = new ArrayList<>();
     private Component itemName;
@@ -180,18 +183,6 @@ public class ItemBuilder {
 
         this.namespaces = new HashMap<>();
     }
-
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    private final CrazyPlatform platform = this.plugin.getPlatform();
-
-    private final Server server = this.plugin.getServer();
-
-    private final ComponentLogger logger = this.plugin.getComponentLogger();
-
-    private final FusionPaper fusion = this.platform.getFusion();
-
-    private final Starter starter = this.plugin.getStarter();
 
     /**
      * Deduplicate an item builder.
@@ -544,16 +535,12 @@ public class ItemBuilder {
         return item;
     }
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    private final EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
-
     public void addEnchantments(final ItemStack itemStack, final Map<CEnchantment, Integer> enchantments) {
-        if (this.crazyManager != null) {
+        /*if (this.crazyManager != null) {
             this.crazyManager.addEnchantments(itemStack, enchantments);
 
             return;
-        }
+        }*/
 
         final Map<CEnchantment, Integer> currentEnchantments = this.settings.getEnchantments(itemStack);
 
@@ -1157,7 +1144,7 @@ public class ItemBuilder {
                             continue;
                         }
 
-                        CEnchantment ceEnchant = plugin.getStarter().getCrazyManager().getEnchantmentFromName(option);
+                        CEnchantment ceEnchant = CrazyEnchantments.getPlugin().getPlatform().getBookSettings().getEnchantmentFromName(option);
 
                         if (ceEnchant != null) {
                             if (number != 0) itemBuilder.addCEEnchantments(ceEnchant, number);

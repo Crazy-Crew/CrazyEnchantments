@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 @Syntax("/blacksmith -p [player]")
 public class BlackSmithCommand {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 

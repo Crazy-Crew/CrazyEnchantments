@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MenuManager {
 
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private static final CrazyPlatform platform = plugin.getPlatform();
 

@@ -2,22 +2,24 @@ package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GKitz {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
+
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
     
     private final int slot;
     private final String name;
@@ -98,7 +100,7 @@ public class GKitz {
 
             for (String option : itemString.split(", ")) {
                 try {
-                    CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(option.split(":")[0]);
+                    CEnchantment enchantment = this.bookSettings.getEnchantmentFromName(option.split(":")[0]);
                     String level = option.split(":")[1];
 
                     if (enchantment != null) {

@@ -2,13 +2,17 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
+import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
@@ -27,19 +31,13 @@ import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
-import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
-import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.ryderbelserion.common.utils.ConfigUtils;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
@@ -47,7 +45,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -70,50 +67,15 @@ import java.util.concurrent.TimeUnit;
 
 public class CrazyManager {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
     private final Server server = this.plugin.getServer();
-    
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    // Settings.
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Listeners.
-    @NotNull
-    private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
-    @NotNull
-    private final ScrollListener scrollListener = this.starter.getScrollListener();
-
-    @NotNull
-    private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
-
-    @NotNull
-    private final AllyManager allyManager = this.starter.getAllyManager();
-
-    // Wings.
-    @NotNull
-    private final WingsManager wingsManager = this.starter.getWingsManager();
-
-    @NotNull
-    private final ShopManager shopManager = this.starter.getShopManager();
-    
-    @NotNull
-    private final BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
-    
-    @NotNull
-    private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
 
     // Arrays.
     private final Map<Dust, ItemBuilder> dusts = new HashMap<>();
@@ -142,11 +104,37 @@ public class CrazyManager {
     private int CESuccessOverride;
     private int CEFailureOverride;
 
+    private ProtectionCrystalSettings protectionCrystalSettings;
+    private ArmorEnchantmentManager armorEnchantmentManager;
+    private BowEnchantmentManager bowEnchantmentManager;
+    private VaultSupport vaultSupport;
+    private WingsManager wingsManager;
+    private CurrencyAPI currencyAPI;
+    private AllyManager allyManager;
+    private ShopManager shopManager;
+    private BowUtils bowUtils;
+
     /**
      * Loads everything for the Crazy Enchantments plugin.
      * Do not use unless needed.
      */
     public void load() {
+        this.protectionCrystalSettings = new ProtectionCrystalSettings();
+
+        BlackSmithManager.load();
+        KitsManager.load();
+
+        MenuManager.load();
+
+        this.currencyAPI = new CurrencyAPI();
+        this.shopManager = new ShopManager();
+        this.armorEnchantmentManager = new ArmorEnchantmentManager();
+        this.bowEnchantmentManager = new BowEnchantmentManager();
+        this.wingsManager = new WingsManager();
+        this.allyManager = new AllyManager();
+
+        this.bowUtils = new BowUtils();
+
         final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
         final CommentedConfigurationNode gkit = Files.GKITZ.getConfiguration();
         final CommentedConfigurationNode enchants = Files.ENCHANTMENTS.getConfiguration();
@@ -154,11 +142,11 @@ public class CrazyManager {
         final CommentedConfigurationNode blocks = Files.BLOCKLIST.getConfiguration();
         final CommentedConfigurationNode heads = Files.HEADMAP.getConfiguration();
 
+        this.currencyAPI.loadCurrency();
+
         this.blockList.clear();
         this.headMap.clear();
         this.gkitz.clear();
-        this.enchantmentBookSettings.getRegisteredEnchantments().clear();
-        this.enchantmentBookSettings.getCategories().clear();
 
         // Check if we should patch player health.
         final boolean isPatchingHealth = config.node("Settings", "Reset-Players-Max-Health").getBoolean(true);
@@ -199,7 +187,6 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(ConfigUtils.getNode(config, "Settings.Enchantment-Book-Item").getString("BOOK")));
         this.useUnsafeEnchantments = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.UnSafe-Enchantments").getBoolean(true);
         this.maxEnchantmentCheck = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle").getBoolean(true);
         this.useConfigLimits = ConfigUtils.getNode(config, "Settings.EnchantmentOptions.Limit.Check-Perms").getBoolean(false);
@@ -217,8 +204,6 @@ public class CrazyManager {
 
         this.CEFailureOverride = ConfigUtils.getNode(config, "Settings.CEFailureOverride").getInt(-1);
         this.CESuccessOverride = ConfigUtils.getNode(config, "Settings.CESuccessOverride").getInt(-1);
-
-        this.enchantmentBookSettings.populateMaps();
 
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             final String name = cEnchantment.getName();
@@ -259,7 +244,7 @@ public class CrazyManager {
                     .setConflicts(conflicts);
 
             if (section.hasChild("Enchantment-Type")) {
-                enchantment.setEnchantmentType(this.methods.getFromName(section.node("Enchantment-Type").getString("")));
+                enchantment.setEnchantmentType(Methods.getFromName(section.node("Enchantment-Type").getString("")));
             }
 
             if (cEnchantment.hasChanceSystem()) {
@@ -339,12 +324,6 @@ public class CrazyManager {
 
         // Loads the protection crystals.
         this.protectionCrystalSettings.loadProtectionCrystal();
-        // Loads the scrambler.
-        this.scramblerListener.loadScrambler();
-        // Loads Slot Crystal.
-        this.slotCrystalListener.load();
-        // Loads the Scroll Control settings.
-        this.scrollListener.loadScrollControl();
 
         // Loads the shop manager.
         this.shopManager.load();
@@ -533,7 +512,7 @@ public class CrazyManager {
      * @return The player but as a CEPlayer. Will return null if not found.
      */
     public Optional<CEPlayer> getCEPlayer(Player player) {
-        return Optional.ofNullable(this.players.get(player.getUniqueId()));
+        return getCEPlayer(player.getUniqueId());
     }
 
     public Optional<CEPlayer> getCEPlayer(UUID uuid) {
@@ -562,94 +541,6 @@ public class CrazyManager {
 
             return null;
         }
-    }
-
-    /**
-     * Get all the current registered enchantments.
-     * @return A list of all the registered enchantments in the plugin.
-     */
-    public List<CEnchantment> getRegisteredEnchantments() {
-        return new ArrayList<>(this.enchantmentBookSettings.getRegisteredEnchantments());
-    }
-
-    /**
-     * Get a CEnchantment enchantment from the name.
-     * @param enchant The name of the enchantment.
-     * @return The enchantment as a CEnchantment but if not found will be null.
-     */
-    public CEnchantment getEnchantmentFromName(@NotNull final String enchant) {
-        CEnchantment value = null;
-
-        for (final CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
-            if (enchantment.getName().equalsIgnoreCase(enchant)) {
-                value = enchantment;
-
-                break;
-            }
-        }
-
-        return value;
-    }
-
-    /**
-     * Register a new enchantment into the plugin.
-     * @param enchantment The enchantment you wish to register.
-     */
-    public void registerEnchantment(CEnchantment enchantment) {
-        this.enchantmentBookSettings.getRegisteredEnchantments().add(enchantment);
-    }
-
-    /**
-     * Unregister an enchantment that is registered into plugin.
-     * @param enchantment The enchantment you wish to unregister.
-     */
-    public void unregisterEnchantment(CEnchantment enchantment) {
-        this.enchantmentBookSettings.getRegisteredEnchantments().remove(enchantment);
-    }
-
-    public void addEnchantment(final ItemStack item, final CEnchantment enchantment, final int level) {
-        Map<CEnchantment, Integer> enchantments = new HashMap<>();
-
-        enchantments.put(enchantment, level);
-
-        addEnchantments(item, enchantments);
-    }
-
-    /**
-     * @param itemStack The meta you want to add the enchantment to.
-     * @param enchantments The enchantments to be added.
-     */
-    public void addEnchantments(final ItemStack itemStack, final Map<CEnchantment, Integer> enchantments) {
-        final Map<CEnchantment, Integer> currentEnchantments = this.enchantmentBookSettings.getEnchantments(itemStack);
-
-        this.enchantmentBookSettings.removeEnchantments(itemStack, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
-
-        String data = itemStack.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
-        final Enchant enchantData = data != null ? Methods.getGson().fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
-
-        final List<Component> lore = itemStack.lore();
-
-        final List<Component> oldLore = lore != null ? lore : new ArrayList<>();
-        List<Component> newLore = new ArrayList<>();
-
-        for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
-            CEnchantment enchantment = entry.getKey();
-            int level = entry.getValue();
-
-            String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
-
-            newLore.add(ColorUtils.legacyTranslateColourCodes(loreString));
-
-            for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
-                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
-            }
-        }
-
-        newLore.addAll(oldLore);
-
-        itemStack.setData(DataComponentTypes.LORE, ItemLore.lore().addLines(newLore).build());
-
-        itemStack.editPersistentDataContainer(container -> container.set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, Methods.getGson().toJson(enchantData)));
     }
 
     /**
@@ -696,7 +587,8 @@ public class CrazyManager {
         Set<CEnchantments> allEnchantPotionEffects = getEnchantmentPotions().keySet();
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchantments = this.bookSettings.getEnchantments(armor);
+
             for (CEnchantments ench : allEnchantPotionEffects) {
                 if (!enchantments.containsKey(ench.getEnchantment())) continue;
                 Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
@@ -739,7 +631,7 @@ public class CrazyManager {
 
         for (ItemStack armor : items) {
             if (armor == null || armor.isSimilar(excludedItem)) continue;
-            Map<CEnchantment, Integer> ench = this.enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> ench = this.bookSettings.getEnchantments(armor);
             for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
                 if (!ench.containsKey(enchantments.getKey().getEnchantment())) continue;
                 int level = ench.get(enchantments.getKey().getEnchantment());
@@ -836,9 +728,9 @@ public class CrazyManager {
      * @return The max amount of enchantments a player can have on an item.
      */
     public int getPlayerMaxEnchantments(Player player) {
-        int limit = defaultLimit;
+        int limit = this.defaultLimit;
 
-        if (useConfigLimits) return limit;
+        if (this.useConfigLimits) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
@@ -886,7 +778,7 @@ public class CrazyManager {
         //todo() update permissions
         if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
-        return this.enchantmentBookSettings.getEnchantmentAmount(item, this.checkVanillaLimit) <
+        return this.bookSettings.getEnchantmentAmount(item, this.checkVanillaLimit) <
                 Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
@@ -1010,8 +902,8 @@ public class CrazyManager {
 
             for (String option : itemString.split(", ")) {
                 try {
-                    Enchantment enchantment = this.methods.getEnchantment(option.split(":")[0]);
-                    CEnchantment cEnchantment = getEnchantmentFromName(option.split(":")[0]);
+                    Enchantment enchantment = Methods.getEnchantment(option.split(":")[0]);
+                    CEnchantment cEnchantment = this.bookSettings.getEnchantmentFromName(option.split(":")[0]);
                     String level = option.split(":")[1];
 
                     if (enchantment != null) {
@@ -1029,7 +921,7 @@ public class CrazyManager {
             itemBuilder.getLore().addAll(0, customEnchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList());
             itemBuilder.setEnchantments(enchantments);
 
-            items.add(itemBuilder.addKey(DataKeys.random_number.getNamespacedKey(), String.valueOf(methods.getRandomNumber(0, Integer.MAX_VALUE))).build());
+            items.add(itemBuilder.addKey(DataKeys.random_number.getNamespacedKey(), String.valueOf(Methods.getRandomNumber(0, Integer.MAX_VALUE))).build());
             // This is done so items do not stack if there are multiple of the same.
         }
 
@@ -1067,4 +959,44 @@ public class CrazyManager {
     /** Gets the failure override from the config. Default -1 means no override should be used */
     public int getCEFailureOverride() { return CEFailureOverride; }
 
+    public ProtectionCrystalSettings getProtectionCrystalSettings() {
+        return this.protectionCrystalSettings;
+    }
+
+    public VaultSupport getVaultSupport() {
+        return this.vaultSupport;
+    }
+
+    public void setVaultSupport(@NonNull final VaultSupport vaultSupport) {
+        this.vaultSupport = vaultSupport;
+        this.vaultSupport.loadVault();
+    }
+
+    public CurrencyAPI getCurrencyAPI() {
+        return this.currencyAPI;
+    }
+
+    public ArmorEnchantmentManager getArmorEnchantmentManager() {
+        return this.armorEnchantmentManager;
+    }
+
+    public BowEnchantmentManager getBowEnchantmentManager() {
+        return this.bowEnchantmentManager;
+    }
+
+    public WingsManager getWingsManager() {
+        return this.wingsManager;
+    }
+
+    public AllyManager getAllyManager() {
+        return this.allyManager;
+    }
+
+    public ShopManager getShopManager() {
+        return this.shopManager;
+    }
+
+    public BowUtils getBowUtils() {
+        return this.bowUtils;
+    }
 }

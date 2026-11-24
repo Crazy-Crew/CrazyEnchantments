@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
@@ -22,7 +22,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -62,21 +61,15 @@ public class BlackSmithMenu extends InventoryBuilder {
         private final int subSlot = 14;
         private final int outputSlot = 17;
 
-        @NotNull
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+        private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
         private final CrazyPlatform platform = this.plugin.getPlatform();
 
         private final FusionPaper fusion = this.platform.getFusion();
 
-        @NotNull
-        private final Starter starter = this.plugin.getStarter();
-
-        @NotNull
-        private final Methods methods = this.starter.getMethods();
-
-        @NotNull
-        private final EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
+        private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {
@@ -100,7 +93,7 @@ public class BlackSmithMenu extends InventoryBuilder {
                 // If item is not 1, return.
                 if (item.getAmount() != 1) return;
 
-                if (!this.settings.getEnchantments(item).isEmpty() || this.settings.isEnchantmentBook(item)) {
+                if (!this.bookSettings.getEnchantments(item).isEmpty() || this.bookSettings.isEnchantmentBook(item)) {
                     if (inventory.getItem(this.mainSlot) == null) {
                         event.setCurrentItem(null);
                         inventory.setItem(this.mainSlot, item); // Moves clicked item to main slot.
@@ -126,7 +119,7 @@ public class BlackSmithMenu extends InventoryBuilder {
             } else {
                 if (event.getRawSlot() == this.mainSlot || event.getRawSlot() == this.subSlot) { // Clicked either the main slot or sub slot.
                     event.setCurrentItem(null); // Sets the clicked slot to air.
-                    this.methods.addItemToInventory(player, item);
+                    Methods.addItemToInventory(player, item);
                     inventory.setItem(outputSlot, BlackSmithManager.getExitButton());
                     resultBorder.forEach(slot -> inventory.setItem(slot, BlackSmithManager.getRedGlass()));
                     playSound(player, this.click);
@@ -140,19 +133,19 @@ public class BlackSmithMenu extends InventoryBuilder {
                             Currency currency = BlackSmithManager.getCurrency();
 
                             if (currency != null && player.getGameMode() != GameMode.CREATIVE) {
-                                CurrencyAPI currencyAPI = this.plugin.getStarter().getCurrencyAPI();
+                                final CurrencyAPI currencyAPI = this.crazyManager.getCurrencyAPI();
 
                                 if (currencyAPI.canBuy(player, currency, result.getCost())) {
                                     currencyAPI.takeCurrency(player, currency, result.getCost());
                                 } else {
                                     String needed = String.valueOf(result.getCost() - currencyAPI.getCurrency(player, currency));
 
-                                    this.methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
+                                    Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                     return;
                                 }
                             }
 
-                            this.methods.addItemToInventory(player, result.getResultItem());
+                            Methods.addItemToInventory(player, result.getResultItem());
 
                             inventory.setItem(this.mainSlot, null);
                             inventory.setItem(this.subSlot, null);
@@ -189,7 +182,7 @@ public class BlackSmithMenu extends InventoryBuilder {
 
                 if (itemStack != null) {
                     if (itemStack.getType() != Material.AIR) {
-                        this.methods.addItemToInventory(player, itemStack);
+                        Methods.addItemToInventory(player, itemStack);
                     }
                 }
             }
@@ -208,7 +201,7 @@ public class BlackSmithMenu extends InventoryBuilder {
                     inventory.setItem(slot, BlackSmithManager.getBlueGlass());
                 }
 
-                inventory.setItem(this.outputSlot, this.methods.addLore(result, message));
+                inventory.setItem(this.outputSlot, Methods.addLore(result, message));
             } else {
                 inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
 

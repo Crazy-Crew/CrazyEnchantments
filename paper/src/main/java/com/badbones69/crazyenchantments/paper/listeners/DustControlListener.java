@@ -2,9 +2,9 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -32,8 +32,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,17 +39,11 @@ import java.util.Random;
 
 public class DustControlListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
-
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     private void setBookLore(ItemStack item, int percent, String rate, CEnchantment enchantment, EnchantedBook data) {
         final List<Component> lore = new ArrayList<>();
@@ -106,7 +98,7 @@ public class DustControlListener implements Listener {
 
         CEnchantment enchantment = null;
 
-        for (CEnchantment en : this.crazyManager.getRegisteredEnchantments()) {
+        for (CEnchantment en : this.bookSettings.getRegisteredEnchantments()) {
             if (en.getName().equalsIgnoreCase(bookData.getName())) {
                 enchantment = en;
                 toggle = true;
@@ -121,7 +113,7 @@ public class DustControlListener implements Listener {
         if (configName.equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
             int per = dustData.getChance();
 
-            if (this.methods.hasArgument("%success_rate%", StringUtils.getStringList(config.node("Settings", "EnchantmentBookLore")))) {
+            if (Methods.hasArgument("%success_rate%", StringUtils.getStringList(config.node("Settings", "EnchantmentBookLore")))) {
                 int total = bookData.getSuccessChance();
 
                 if (total >= 100) return;
@@ -141,7 +133,7 @@ public class DustControlListener implements Listener {
 
                 setBookLore(book, per, "Success", enchantment, bookData);
 
-                player.setItemOnCursor(this.methods.removeItem(dust));
+                player.setItemOnCursor(Methods.removeItem(dust));
             }
 
             return;
@@ -150,7 +142,7 @@ public class DustControlListener implements Listener {
         if (configName.equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
             int per = dustData.getChance();
 
-            if (this.methods.hasArgument("%destroy_rate%", StringUtils.getStringList(config.node("Settings", "EnchantmentBookLore")))) {
+            if (Methods.hasArgument("%destroy_rate%", StringUtils.getStringList(config.node("Settings", "EnchantmentBookLore")))) {
                 int total = bookData.getDestroyChance();
                 if (total <= 0) return;
 
@@ -169,7 +161,7 @@ public class DustControlListener implements Listener {
 
                 setBookLore(book, per, "Destroy", enchantment, bookData);
 
-                player.setItemOnCursor(this.methods.removeItem(dust));
+                player.setItemOnCursor(Methods.removeItem(dust));
             }
         }
     }
@@ -203,16 +195,16 @@ public class DustControlListener implements Listener {
         } else if (data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
             event.setCancelled(true);
 
-            if (this.methods.isInventoryFull(player)) {
+            if (Methods.isInventoryFull(player)) {
                 Messages.inventory_full.sendMessage(player);
 
                 return true;
             }
 
             if (mainHand) {
-                inventory.setItemInMainHand(this.methods.removeItem(item));
+                inventory.setItemInMainHand(Methods.removeItem(item));
             } else {
-                inventory.setItemInOffHand(this.methods.removeItem(item));
+                inventory.setItemInOffHand(Methods.removeItem(item));
             }
 
             ItemStack item2 = pickDust().getDust(player, RandomUtils.pickRandomNumber(data.getChance() + 1, 1), 1);
@@ -228,7 +220,7 @@ public class DustControlListener implements Listener {
 
                 ColorUtils.color(colors, config.node("Settings", "Dust", "MysteryDust", "Firework", "Colors").getString("Black, Gray, Lime"));
 
-                this.methods.fireWork(player.getLocation().add(0, 1, 0), colors);
+                Methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }
         }
 

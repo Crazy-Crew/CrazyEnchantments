@@ -2,8 +2,8 @@ package com.badbones69.crazyenchantments.paper.commands.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -53,11 +53,10 @@ import java.util.Optional;
 public class CommandManager {
 
     private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin(CrazyEnchantments.class);
-    private static final Starter starter = plugin.getStarter();
-    private static final Methods methods = starter.getMethods();
-    private static final CrazyManager crazyManager = starter.getCrazyManager();
+    private static final CrazyPlatform platform = plugin.getPlatform();
+    private static final EnchantmentBookSettings bookSettings = platform.getBookSettings();
+    private static final CrazyManager crazyManager = plugin.getCrazyManager();
     private static final Server server = plugin.getServer();
-    private static final EnchantmentBookSettings book = starter.getEnchantmentBookSettings();
 
     private static final BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(plugin);
 
@@ -91,7 +90,7 @@ public class CommandManager {
             if (arguments.containsKey("custom_enchantment")) {
                 final String argument = arguments.get("custom_enchantment");
 
-                Optional.ofNullable(crazyManager.getEnchantmentFromName(argument)).ifPresent(enchantment -> {
+                Optional.ofNullable(bookSettings.getEnchantmentFromName(argument)).ifPresent(enchantment -> {
                     for (int amount = 1; amount <= enchantment.getMaxLevel(); amount++) {
                         completions.add(String.valueOf(amount));
                     }
@@ -111,13 +110,13 @@ public class CommandManager {
             if (arguments.containsKey("custom_enchantment")) {
                 final String argument = arguments.get("custom_enchantment");
 
-                Optional.ofNullable(crazyManager.getEnchantmentFromName(argument)).ifPresent(enchantment -> {
+                Optional.ofNullable(bookSettings.getEnchantmentFromName(argument)).ifPresent(enchantment -> {
                     for (int amount = 1; amount <= enchantment.getMaxLevel(); amount++) {
                         completions.add(String.valueOf(amount));
                     }
                 });
 
-                Optional.ofNullable(methods.getEnchantment(argument)).ifPresent(enchantment -> {
+                Optional.ofNullable(Methods.getEnchantment(argument)).ifPresent(enchantment -> {
                     for (int amount = 1; amount <= enchantment.getMaxLevel(); amount++) {
                         completions.add(String.valueOf(amount));
                     }
@@ -160,7 +159,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("categories"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            for (final Category category : book.getCategories()) {
+            for (final Category category : bookSettings.getCategories()) {
                 completions.add(category.getName());
             }
 
@@ -186,7 +185,7 @@ public class CommandManager {
                 final PlayerInventory inventory = player.getInventory();
                 final ItemStack itemStack = inventory.getItemInMainHand();
 
-                book.getEnchantments(itemStack).forEach((enchantment, _) -> completions.add(enchantment.getName()));
+                bookSettings.getEnchantments(itemStack).forEach((enchantment, _) -> completions.add(enchantment.getName()));
 
                 if (itemStack.hasData(DataComponentTypes.ENCHANTMENTS)) {
                     final ItemEnchantments component = itemStack.getData(DataComponentTypes.ENCHANTMENTS);
@@ -203,7 +202,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("enchantments"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            for (final CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+            for (final CEnchantment enchantment : bookSettings.getRegisteredEnchantments()) {
                 completions.add(enchantment.getName().replace(" ", "_"));
             }
 
@@ -217,7 +216,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("custom_enchantments"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            for (final CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+            for (final CEnchantment enchantment : bookSettings.getRegisteredEnchantments()) {
                 completions.add(enchantment.getName().replace(" ", "_"));
             }
 
@@ -227,7 +226,7 @@ public class CommandManager {
         commandManager.registerSuggestion(SuggestionKey.of("enchantments_info"), (context) -> {
             final List<String> completions = new ArrayList<>();
 
-            for (final CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+            for (final CEnchantment enchantment : bookSettings.getRegisteredEnchantments()) {
                 completions.add(enchantment.getName().replace(" ", "_"));
             }
 

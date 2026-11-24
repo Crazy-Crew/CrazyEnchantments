@@ -20,7 +20,7 @@ import java.util.Optional;
 @NullMarked
 public abstract class TerritorySupport<B, L> {
 
-    protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    protected final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     protected final Server server = this.plugin.getServer();
 

@@ -1,27 +1,19 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.ryderbelserion.common.api.enums.messages.Messages;
-import com.ryderbelserion.common.api.enums.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.ryderbelserion.common.utils.ConfigUtils;
-import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,29 +21,13 @@ import java.util.Map;
 
 public class SlotCrystalListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
-    private static ItemStack slot_crystal;
-
-    public void load() {
-        final CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
-
-        slot_crystal = new ItemBuilder()
-                .setMaterial(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Item").getString("RED_WOOL"))
-                .setName(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Name").getString("Error getting slot crystal name."))
-                .setItemModel(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Model.Namespace").getString(""),
-                        ConfigUtils.getNode(config, "Settings.Slot_Crystal.Model.Key").getString(""))
-                .setLore(StringUtils.getStringList(config.node(ConfigUtils.getString("Settings.Slot_Crystal.Lore"))))
-                .setGlow(ConfigUtils.getNode(config, "Settings.Slot_Crystal.Glowing").getBoolean(false))
-                .addKey(DataKeys.slot_crystal.getNamespacedKey(), "").build();
-    }
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -63,12 +39,10 @@ public class SlotCrystalListener implements Listener {
 
         if (item == null || item.isEmpty() || !isSlotCrystal(crystalItem) || isSlotCrystal(item)) return;
 
-        final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-        int maxEnchants = crazyManager.getPlayerMaxEnchantments(player);
-        int enchAmount = this.enchantmentBookSettings.getEnchantmentAmount(item, crazyManager.checkVanillaLimit());
-        int baseEnchants = crazyManager.getPlayerBaseEnchantments(player);
-        int limiter = crazyManager.getEnchantmentLimiter(item);
+        int maxEnchants = this.crazyManager.getPlayerMaxEnchantments(player);
+        int enchAmount = this.bookSettings.getEnchantmentAmount(item, this.crazyManager.checkVanillaLimit());
+        int baseEnchants = this.crazyManager.getPlayerBaseEnchantments(player);
+        int limiter = this.crazyManager.getEnchantmentLimiter(item);
 
         event.setCancelled(true);
 
@@ -92,7 +66,7 @@ public class SlotCrystalListener implements Listener {
 
         crystalItem.setAmount(crystalItem.getAmount() - 1);
         event.getCursor().setAmount(crystalItem.getAmount());
-        event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, -1));
+        event.setCurrentItem(this.crazyManager.changeEnchantmentLimiter(item, -1));
 
         final Map<String, String> placeholders = new HashMap<>();
 
@@ -108,17 +82,5 @@ public class SlotCrystalListener implements Listener {
         if (crystalItem == null || crystalItem.isEmpty()) return false;
 
         return crystalItem.getPersistentDataContainer().has(DataKeys.slot_crystal.getNamespacedKey());
-    }
-
-    public ItemStack getSlotCrystal(final int amount) {
-        final ItemStack itemStack = slot_crystal.clone();
-
-        itemStack.setAmount(amount);
-
-        return itemStack;
-    }
-
-    public ItemStack getSlotCrystal() {
-        return getSlotCrystal(1);
     }
 }

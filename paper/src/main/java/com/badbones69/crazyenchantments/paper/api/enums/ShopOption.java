@@ -2,15 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
-import net.kyori.adventure.audience.Audience;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
-import java.util.Map;
 
 public enum ShopOption {
 
@@ -77,6 +69,9 @@ public enum ShopOption {
             "<yellow>Cost: <yellow><b>$500"
     ));
 
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
     private final boolean buyable;
     private final String namePath;
     private final String lorePath;
@@ -93,40 +88,6 @@ public enum ShopOption {
         this.lorePath = lorePath;
         this.buyable = buyable;
         this.path = path;
-    }
-
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    private final CrazyPlatform platform = this.plugin.getPlatform();
-
-    private final Map<ShopOption, CEOption> shopOptions = this.platform.getShopOptions();
-
-    public ItemStack getItem(final Audience player) {
-        return getItemBuilder().build(player);
-    }
-
-    public ItemStack getItem() {
-        return getItem(Audience.empty());
-    }
-
-    public ItemBuilder getItemBuilder() {
-        return this.shopOptions.get(this).itemBuilder();
-    }
-
-    public int getSlot() {
-        return this.shopOptions.get(this).slot();
-    }
-
-    public boolean isInGUI() {
-        return this.shopOptions.get(this).inGUI();
-    }
-
-    public int getCost() {
-        return this.shopOptions.get(this).cost();
-    }
-
-    public Currency getCurrency() {
-        return this.shopOptions.get(this).currency();
     }
 
     public String getPath() {

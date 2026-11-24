@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -27,13 +26,9 @@ import java.util.concurrent.TimeUnit;
 //todo() register gkit permissions
 public class CEPlayer {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Server server = this.plugin.getServer();
-
-    @NotNull
-    private final Methods methods = this.plugin.getStarter().getMethods();
 
     private final String playerName;
     private final UUID uuid;
@@ -122,7 +117,7 @@ public class CEPlayer {
 
                 }
 
-                this.methods.addItemToInventory(player, item);
+                Methods.addItemToInventory(player, item);
             }
 
             new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {

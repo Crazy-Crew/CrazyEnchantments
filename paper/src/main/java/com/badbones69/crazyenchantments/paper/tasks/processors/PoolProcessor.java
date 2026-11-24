@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class PoolProcessor {
 
-    private final CrazyEnchantments plugin =  JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin =  CrazyEnchantments.getPlugin();
 
     private ThreadPoolExecutor executor = null;
 

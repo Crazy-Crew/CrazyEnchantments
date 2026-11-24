@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.types.interfaces;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.migrator.enums.MigrationType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
@@ -23,6 +23,8 @@ public abstract class IMigrator {
 
     protected final CrazyPlatform platform = this.plugin.getPlatform();
 
+    protected final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
+
     protected final FusionPaper fusion = this.platform.getFusion();
 
     protected final FileManager fileManager = this.platform.getFileManager();
@@ -31,9 +33,7 @@ public abstract class IMigrator {
 
     protected final Path path = this.platform.getDataPath();
 
-    protected final Starter starter = this.plugin.getStarter();
-
-    protected final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
+    protected final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     protected final CommandSender sender;
     protected final MigrationType type;

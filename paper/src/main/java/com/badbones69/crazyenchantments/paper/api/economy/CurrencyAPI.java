@@ -1,29 +1,27 @@
 package com.badbones69.crazyenchantments.paper.api.economy;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
+import com.badbones69.crazyenchantments.paper.api.objects.CEOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.ryderbelserion.fusion.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 
 public class CurrencyAPI {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyPlatform platform = this.plugin.getPlatform();
 
     private final FusionPaper fusion = this.platform.getFusion();
 
-    @NotNull
-    private final Starter starter = plugin.getStarter();
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     /**
      * Get the amount that a player has from a specific currency.
@@ -34,7 +32,7 @@ public class CurrencyAPI {
     public int getCurrency(Player player, Currency currency) {
         try {
             return switch (currency) {
-                case VAULT -> (int) this.starter.getVaultSupport().getVault().getBalance(player);
+                case VAULT -> (int) this.crazyManager.getVaultSupport().getVault().getBalance(player);
                 case XP_LEVEL -> player.getLevel();
                 case XP_TOTAL -> getTotalExperience(player);
             };
@@ -66,7 +64,9 @@ public class CurrencyAPI {
      * @param option The ShopOption you wish to use.
      */
     public void takeCurrency(Player player, ShopOption option) {
-        takeCurrency(player, option.getCurrency(), option.getCost());
+        final String path = option.getPath();
+
+        this.platform.getOption(path).ifPresentOrElse(action -> takeCurrency(player, action.currency(), action.cost()), () -> this.fusion.log(Level.error, "<red>Failed to take money from %s using %s option", player.getName(), path));
     }
     
     /**
@@ -78,7 +78,7 @@ public class CurrencyAPI {
     public void takeCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> this.starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
+                case VAULT -> this.crazyManager.getVaultSupport().getVault().withdrawPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
@@ -94,7 +94,7 @@ public class CurrencyAPI {
     public void giveCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> this.starter.getVaultSupport().getVault().depositPlayer(player, amount);
+                case VAULT -> this.crazyManager.getVaultSupport().getVault().depositPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
@@ -128,7 +128,18 @@ public class CurrencyAPI {
      * @return True if they have enough to buy it or false if they don't.
      */
     public boolean canBuy(Player player, ShopOption option) {
-        return canBuy(player, option.getCurrency(), option.getCost());
+        final String path = option.getPath();
+        final Optional<CEOption> optional = this.platform.getOption(path);
+
+        if (optional.isEmpty()) {
+            this.fusion.log(Level.error, "<red>Failed to check if player can buy %s due to %s not being present!", player.getName(), path);
+
+            return false;
+        }
+
+        final CEOption index = optional.get();
+
+        return canBuy(player, index.currency(), index.cost());
     }
     
     /**
@@ -188,7 +199,7 @@ public class CurrencyAPI {
      */
     public void loadCurrency() {
         if (this.fusion.isModReady("Vault")) {
-            this.starter.setVaultSupport(new VaultSupport());
+            this.crazyManager.setVaultSupport(new VaultSupport());
 
             return;
         }

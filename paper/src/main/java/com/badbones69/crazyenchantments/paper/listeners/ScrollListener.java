@@ -2,7 +2,8 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyItems;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.ryderbelserion.common.api.enums.messages.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -32,7 +33,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.*;
@@ -41,29 +41,13 @@ import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
-    private final Methods methods = this.starter.getMethods();
+    private final CrazyItems items = this.platform.getCrazyItems();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    private String suffix;
-    private boolean countVanillaEnchantments;
-    private boolean useSuffix;
-    private boolean blackScrollChanceToggle;
-    private int blackScrollChance;
-
-    public void loadScrollControl() {
-        final @NotNull CommentedConfigurationNode config = Files.CONFIG.getConfiguration();
-
-        this.suffix = config.node("Settings", "TransmogScroll", "Amount-of-Enchantments").getString(" &7[&6&n%amount%&7]");
-        this.countVanillaEnchantments = config.node("Settings", "TransmogScroll", "Count-Vanilla-Enchantments").getBoolean(true);
-        this.useSuffix = config.node("Settings", "TransmogScroll", "Amount-Toggle").getBoolean(true);
-        this.blackScrollChance = config.node("Settings", "BlackScroll", "Chance").getInt(75);
-        this.blackScrollChanceToggle = config.node("Settings", "BlackScroll", "Chance-Toggle").getBoolean(false);
-    }
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onScrollUse(InventoryClickEvent event) {
@@ -89,14 +73,14 @@ public class ScrollListener implements Listener {
 
         switch (type.getConfigName()) {
             case "BlackScroll" -> {
-                if (this.methods.isInventoryFull(player)) return;
+                if (Methods.isInventoryFull(player)) return;
 
-                final List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
+                final List<CEnchantment> enchantments = this.bookSettings.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     event.setCancelled(true);
-                    player.setItemOnCursor(this.methods.removeItem(scroll));
+                    player.setItemOnCursor(Methods.removeItem(scroll));
 
-                    if (this.blackScrollChanceToggle && !RandomUtils.isChanceLess(this.blackScrollChance, 100)) {
+                    if (this.items.isBlackScrollChanceToggle() && !RandomUtils.isChanceLess(this.items.getBlackScrollChance(), 100)) {
                         Messages.black_scroll_unsuccessful.sendMessage(player);
 
                         return;
@@ -104,8 +88,8 @@ public class ScrollListener implements Listener {
 
                     final CEnchantment enchantment = enchantments.get(ThreadLocalRandom.current().nextInt(enchantments.size()));
 
-                    player.getInventory().addItem(new CEBook(enchantment, this.enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook(player));
-                    event.setCurrentItem(this.enchantmentBookSettings.removeEnchantment(item, enchantment));
+                    player.getInventory().addItem(new CEBook(enchantment, this.bookSettings.getLevel(item, enchantment), 1).buildBook(player));
+                    event.setCurrentItem(this.bookSettings.removeEnchantment(item, enchantment));
                 }
             }
 
@@ -118,7 +102,7 @@ public class ScrollListener implements Listener {
 
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
 
-                        player.setItemOnCursor(this.methods.removeItem(scroll));
+                        player.setItemOnCursor(Methods.removeItem(scroll));
 
                         return;
                     }
@@ -126,7 +110,7 @@ public class ScrollListener implements Listener {
             }
 
             case "TransmogScroll" -> {
-                if (this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
+                if (this.bookSettings.getEnchantments(item).isEmpty()) return;
                 if (item.lore() == null) return;
 
                 final ItemStack orderedItem = newOrderNewEnchantments(item.clone());
@@ -137,7 +121,7 @@ public class ScrollListener implements Listener {
 
                 event.setCurrentItem(orderedItem);
 
-                player.setItemOnCursor(this.methods.removeItem(scroll));
+                player.setItemOnCursor(Methods.removeItem(scroll));
             }
         }
     }
@@ -199,7 +183,7 @@ public class ScrollListener implements Listener {
 
         if (data == null) return item; // Only order if it has CE_Enchants
 
-        for (final CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
+        for (final CEnchantment enchantment : this.bookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
 
             enchantments.put(enchantment,ColorUtils.stripStringColour((enchantment.getCustomName() + " " + NumberUtils.toRoman(data.getLevel(enchantment.getName())))).length());
@@ -291,7 +275,7 @@ public class ScrollListener implements Listener {
     }
 
     private void useSuffix(final ItemStack item, final List<CEnchantment> newEnchantmentOrder) {
-        if (this.useSuffix) {
+        if (this.items.isUseSuffix()) {
             final boolean hasName = item.hasData(DataComponentTypes.ITEM_NAME);
 
             String newName = hasName ? ColorUtils.toLegacy(item.getData(DataComponentTypes.ITEM_NAME)) :
@@ -299,7 +283,7 @@ public class ScrollListener implements Listener {
 
             if (hasName) {
                 for (int i = 0; i <= 100; i++) {
-                    String suffixWithAmount = this.suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
+                    String suffixWithAmount = this.items.getSuffix().replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
 
                     if (!newName.endsWith(suffixWithAmount)) continue;
 
@@ -309,9 +293,9 @@ public class ScrollListener implements Listener {
                 }
             }
 
-            String amount = String.valueOf(this.countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
+            String amount = String.valueOf(this.items.isCountVanillaEnchantments() ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
 
-            item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.suffix.replace("%Amount%", amount).replace("%amount%", amount)));
+            item.setData(DataComponentTypes.ITEM_NAME, ColorUtils.legacyTranslateColourCodes(newName + this.items.getSuffix().replace("%Amount%", amount).replace("%amount%", amount)));
         }
     }
 

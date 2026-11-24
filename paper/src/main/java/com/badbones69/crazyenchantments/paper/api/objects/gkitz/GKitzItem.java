@@ -1,24 +1,22 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.CrazyPlatform;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GKitzItem {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final EnchantmentBookSettings bookSettings = this.platform.getBookSettings();
     
     private final ItemBuilder itemBuilder;
     private final HashMap<CEnchantment, Integer> ceEnchantments;
@@ -54,7 +52,7 @@ public class GKitzItem {
         ItemStack item = this.itemBuilder.build(player);
 
         for (Map.Entry<CEnchantment, Integer> enchantment : this.ceEnchantments.entrySet()) {
-            this.crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
+            this.bookSettings.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
         }
 
         return item;
