@@ -43,7 +43,7 @@ public class ScramblerListener implements Listener {
 
     private final ComponentLogger logger = this.plugin.getComponentLogger();
 
-    private final HashMap<Player, ScheduledTask> roll = new HashMap<>();
+    private final Map<UUID, ScheduledTask> roll = new HashMap<>();
 
     public void openScrambler(Player player, ItemStack book) {
         final Inventory inventory = this.server.createInventory(null, 27, this.items.getGuiName());
@@ -59,7 +59,7 @@ public class ScramblerListener implements Listener {
     }
 
     private void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
-        this.roll.put(player, new FoliaScheduler(this.plugin, null, player) {
+        this.roll.put(player.getUniqueId(), new FoliaScheduler(this.plugin, null, player) {
             int time = 1;
             int full = 0;
             int open = 0;
@@ -100,7 +100,7 @@ public class ScramblerListener implements Listener {
 
                         cancel();
 
-                        roll.remove(player);
+                        roll.remove(player.getUniqueId());
 
                         final ItemStack item = inventory.getItem(13);
 
@@ -213,12 +213,13 @@ public class ScramblerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
-        try {
-            this.roll.get(player).cancel();
-            this.roll.remove(player);
-        } catch (Exception ignored) {}
+        final UUID uuid = player.getUniqueId();
+
+        if (this.roll.containsKey(uuid)) {
+            this.roll.remove(uuid).cancel();
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
